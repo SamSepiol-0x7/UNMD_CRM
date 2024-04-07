@@ -1,0 +1,227 @@
+<UserControl
+	x:Class="ASC.View.ACP.StatusesView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:cnv="clr-namespace:ASC.Converters" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:asc="clr-namespace:ASC" xmlns:acp="clr-namespace:ASC.ViewModels.ACP" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:acp1="clr-namespace:ASC.View.ACP"
+	Loaded="{DXEvent OnLoad()}">
+	<FrameworkElement.DataContext>
+		<acp:StatusesViewModel />
+	</FrameworkElement.DataContext>
+	<FrameworkElement.Resources>
+		<ResourceDictionary>
+			<asc:BindingProxy
+				Data="{Binding}"
+				x:Key="BindingProxy" />
+			<cnv:ListInt2ValueConverter
+				x:Key="Int2ValueConverter" />
+			<cnv:TimeSpanConverter
+				x:Key="TimeSpanConverter" />
+		</ResourceDictionary>
+	</FrameworkElement.Resources>
+	<Grid>
+		<StackPanel
+			Orientation="Horizontal"
+			HorizontalAlignment="Left"
+			VerticalAlignment="Top"
+			Margin="10,10,0,0">
+			<Label
+				Content="{DynamicResource Status}"
+				ContentStringFormat="{}{0}:" />
+			<TextBox
+				Width="150"
+				Margin="5,0,0,0"
+				Text="{Binding NewStatusName, Mode=TwoWay}" />
+			<Label
+				Content="{DynamicResource Actions}"
+				ContentStringFormat="{}{0}:"
+				Margin="5,0,0,0" />
+			<dxe:ComboBoxEdit
+				Width="150"
+				Margin="5,0,0,0"
+				SeparatorString=" / "
+				ValueMember="Id"
+				IsTextEditable="False"
+				DisplayMember="Name"
+				EditValue="{Binding NewStatusActions, Mode=TwoWay, Converter={StaticResource Int2ValueConverter}}"
+				ItemsSource="{Binding Actions}">
+				<dxe:BaseEdit.StyleSettings>
+					<dxe:CheckedComboBoxStyleSettings />
+				</dxe:BaseEdit.StyleSettings>
+			</dxe:ComboBoxEdit>
+			<Button
+				Content="{DynamicResource Add}"
+				Margin="5,0,0,0"
+				Command="{Binding AddNewStatusCommand}" />
+		</StackPanel>
+		<dxg:GridControl
+			SelectionMode="Row"
+			Margin="0,37,0,45"
+			ItemsSource="{Binding Statuses}"
+			SelectedItem="{Binding SelectedStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+			<dxg:GridColumn
+				FieldName="{DynamicResource Delete}"
+				AllowEditing="False"
+				ReadOnly="True"
+				Width="70"
+				HorizontalHeaderContentAlignment="Center">
+				<dxg:ColumnBase.DisplayTemplate>
+					<ControlTemplate>
+						<Grid>
+							<Button
+								VerticalAlignment="Center"
+								HorizontalAlignment="Center"
+								IsEnabled="{Binding RowData.Row.AllowEditing}"
+								Command="{Binding Data.DeleteStatusCommand, Source={StaticResource BindingProxy}}">
+								<Image
+									Source="../../Resources/trash.png"
+									Style="{StaticResource 16X16Image}" />
+							</Button>
+						</Grid>
+					</ControlTemplate>
+				</dxg:ColumnBase.DisplayTemplate>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				FieldName="{DynamicResource Status}"
+				MinWidth="200">
+				<dxg:ColumnBase.CellTemplate>
+					<DataTemplate>
+						<dxe:TextEdit
+							EditValue="{Binding RowData.Row.Name, Mode=TwoWay}"
+							IsEnabled="{Binding RowData.Row.AllowEditing}" />
+					</DataTemplate>
+				</dxg:ColumnBase.CellTemplate>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				AllowEditing="True"
+				ReadOnly="False"
+				Width="*"
+				FieldName="{DynamicResource NextState}">
+				<dxg:ColumnBase.CellTemplate>
+					<DataTemplate>
+						<dxe:ComboBoxEdit
+							SeparatorString=" / "
+							ValueMember="Id"
+							IsTextEditable="False"
+							DisplayMember="Name"
+							EditValue="{Binding RowData.Row.Contains, Mode=TwoWay, Converter={StaticResource Int2ValueConverter}}"
+							ItemsSource="{Binding Path=View.DataContext.SortedStatuses}">
+							<dxe:BaseEdit.StyleSettings>
+								<dxe:CheckedComboBoxStyleSettings />
+							</dxe:BaseEdit.StyleSettings>
+						</dxe:ComboBoxEdit>
+					</DataTemplate>
+				</dxg:ColumnBase.CellTemplate>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				FieldName="{DynamicResource Actions}"
+				ReadOnly="False"
+				AllowEditing="True"
+				Width="*">
+				<dxg:ColumnBase.CellTemplate>
+					<DataTemplate>
+						<dxe:ComboBoxEdit
+							SeparatorString=" / "
+							ValueMember="Id"
+							IsTextEditable="False"
+							DisplayMember="Name"
+							EditValue="{Binding RowData.Row.Actions, Mode=TwoWay, Converter={StaticResource Int2ValueConverter}}"
+							ItemsSource="{Binding Path=View.DataContext.Actions}">
+							<dxe:BaseEdit.StyleSettings>
+								<dxe:CheckedComboBoxStyleSettings />
+							</dxe:BaseEdit.StyleSettings>
+						</dxe:ComboBoxEdit>
+					</DataTemplate>
+				</dxg:ColumnBase.CellTemplate>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				FieldName="{DynamicResource Roles}"
+				ReadOnly="False"
+				AllowEditing="True"
+				Width="*">
+				<dxg:ColumnBase.CellTemplate>
+					<DataTemplate>
+						<dxe:ComboBoxEdit
+							SeparatorString=" / "
+							ValueMember="id"
+							IsTextEditable="False"
+							DisplayMember="name"
+							EditValue="{Binding RowData.Row.Roles, Mode=TwoWay, Converter={StaticResource Int2ValueConverter}}"
+							ItemsSource="{Binding Path=View.DataContext.Roles}">
+							<dxe:BaseEdit.StyleSettings>
+								<dxe:CheckedComboBoxStyleSettings />
+							</dxe:BaseEdit.StyleSettings>
+						</dxe:ComboBoxEdit>
+					</DataTemplate>
+				</dxg:ColumnBase.CellTemplate>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				FieldName="{DynamicResource Color}"
+				HorizontalHeaderContentAlignment="Center"
+				ReadOnly="False"
+				AllowEditing="True"
+				MinWidth="100">
+				<dxg:ColumnBase.CellTemplate>
+					<DataTemplate>
+						<dxe:PopupColorEdit
+							NullValue="#00000000"
+							ShowNoColorButton="True"
+							NoColorButtonContent="{DynamicResource NoColor}"
+							Color="{Binding RowData.Row.Color, Mode=TwoWay}" />
+					</DataTemplate>
+				</dxg:ColumnBase.CellTemplate>
+				<dxg:ColumnBase.EditSettings>
+					<dxe:PopupColorEditSettings
+						ShowNoColorButton="True" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				FieldName="{DynamicResource Terms}"
+				ReadOnly="False"
+				AllowEditing="True"
+				MinWidth="100">
+				<dxg:ColumnBase.CellTemplate>
+					<DataTemplate>
+						<dxe:TextEdit
+							AllowSpinOnMouseWheel="True"
+							MaskUseAsDisplayFormat="True"
+							Mask="\d{2}, ([0-1]\d|2[0-3]):([0-5]\d)"
+							MaskType="RegEx"
+							EditValue="{Binding RowData.Row.Terms, Mode=TwoWay, Converter={StaticResource TimeSpanConverter}}" />
+					</DataTemplate>
+				</dxg:ColumnBase.CellTemplate>
+			</dxg:GridColumn>
+			<dxg:GridControl.View>
+				<dxg:TableView
+					ShowTotalSummary="False"
+					AllowScrollAnimation="True"
+					NavigationStyle="Cell"
+					ColumnFilterPopupMode="Excel"
+					AllowEditing="True"
+					AllowGrouping="False"
+					AllowColumnMoving="False"
+					ShowGroupPanel="False"
+					ShowColumnHeaders="True"
+					AllowMoveColumnToDropArea="False"
+					ShowBandsPanel="True"
+					ShowIndicator="False"
+					AllowBestFit="True"
+					AllowColumnFiltering="False"
+					ShowSelectionRectangle="False"
+					ShowFixedTotalSummary="False"
+					SummariesIgnoreNullValues="True" />
+			</dxg:GridControl.View>
+		</dxg:GridControl>
+		<StackPanel
+			Orientation="Horizontal"
+			VerticalAlignment="Bottom"
+			HorizontalAlignment="Right">
+			<dx:SimpleButton
+				Content="{DynamicResource Restore}"
+				Margin="0,0,10,10"
+				Command="{Binding RestoreCommand}" />
+		</StackPanel>
+		<Label
+			Content="{DynamicResource CustomizeNote}"
+			Foreground="#FF0000FF"
+			HorizontalAlignment="Left"
+			Margin="10,0,0,10"
+			VerticalAlignment="Bottom" />
+	</Grid>
+</UserControl>

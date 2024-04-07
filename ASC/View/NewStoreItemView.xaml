@@ -1,0 +1,579 @@
+<UserControl
+	x:Class="ASC.View.NewStoreItemView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" xmlns:sys="clr-namespace:System;assembly=mscorlib" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:asc="clr-namespace:ASC" xmlns:extensions="clr-namespace:ASC.Extensions" xmlns:controls="clr-namespace:ASC.View.Controls" xmlns:objects="clr-namespace:ASC.Objects" xmlns:itemCard="clr-namespace:ASC.View.ItemCard"
+	Name="NewStoreItemViewUC" xmlns:view="clr-namespace:ASC.View">
+	<dxmvvm:Interaction.Behaviors>
+		<dxmvvm:EventToCommand
+			EventTriggerBase_x0060_1.EventName="KeyUp"
+			PassEventArgsToCommand="True"
+			Command="{Binding CloseOnEscapeCommand}" />
+	</dxmvvm:Interaction.Behaviors>
+	<FrameworkElement.Resources>
+		<ResourceDictionary>
+			<dxmvvm:StringToVisibilityConverter
+				x:Key="StringToVisibilityConverter" />
+			<ControlTemplate
+				x:Key="ItemLookUpControlTemplate">
+				<!--Неизвестный ID соединения: 2-->
+				<dxg:GridControl
+					Name="PART_GridControl"
+					Tag="MatchingItemsGrid">
+					<dxmvvm:Interaction.Behaviors>
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="Loaded"
+							Command="{Binding GridInitCommand}"
+							CommandParameter="{Binding ElementName=PART_GridControl}" />
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="Unloaded"
+							Command="{Binding GridUnloadedCommand}"
+							CommandParameter="{Binding ElementName=PART_GridControl}" />
+						<extensions:GridLayoutHelper>
+							<dxmvvm:Interaction.Behaviors>
+								<dxmvvm:EventToCommand
+									EventTriggerBase_x0060_1.EventName="LayoutChanged"
+									Command="{Binding LayoutChangedCommand}"
+									CommandParameter="{Binding ElementName=PART_GridControl}" />
+							</dxmvvm:Interaction.Behaviors>
+						</extensions:GridLayoutHelper>
+					</dxmvvm:Interaction.Behaviors>
+					<dxg:GridControl.Columns>
+						<dxg:GridColumn
+							FieldName="Articul"
+							Header="{DynamicResource ArticulNoDots}">
+							<dxg:ColumnBase.EditSettings>
+								<dxe:TextEditSettings
+									Mask="d6"
+									MaskType="Numeric"
+									HorizontalContentAlignment="Center"
+									MaskUseAsDisplayFormat="True" />
+							</dxg:ColumnBase.EditSettings>
+						</dxg:GridColumn>
+						<dxg:GridColumn
+							FieldName="Name"
+							Header="{DynamicResource ItemName}">
+							<dxg:ColumnBase.CellTemplate>
+								<DataTemplate>
+									<StackPanel
+										VerticalAlignment="Center"
+										Margin="5,3"
+										Orientation="Vertical">
+										<TextBlock
+											TextWrapping="Wrap"
+											FontWeight="Bold"
+											Text="{Binding RowData.Row.Name}" />
+										<TextBlock
+											TextWrapping="Wrap"
+											Text="{Binding Path=RowData.Row.Description, StringFormat=[{0}], FallbackValue=---}"
+											Visibility="{Binding Path=RowData.Row.Description, Converter={StaticResource StringToVisibilityConverter}}" />
+									</StackPanel>
+								</DataTemplate>
+							</dxg:ColumnBase.CellTemplate>
+						</dxg:GridColumn>
+						<dxg:GridColumn
+							FieldName="State"
+							Header="{DynamicResource State}"
+							HorizontalHeaderContentAlignment="Center">
+							<dxg:ColumnBase.EditSettings>
+								<dxe:ComboBoxEditSettings
+									AllowDefaultButton="False"
+									DisplayMember="name"
+									ValueMember="id"
+									ItemsSource="{Binding DataContext.States, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" />
+							</dxg:ColumnBase.EditSettings>
+						</dxg:GridColumn>
+						<dxg:GridColumn
+							FieldName="Pn"
+							Header="{DynamicResource PN}" />
+						<dxg:GridColumn
+							FieldName="Available"
+							Header="{DynamicResource Available}" />
+					</dxg:GridControl.Columns>
+					<dxg:GridControl.View>
+						<dxg:TableView
+							Name="view"
+							AutoWidth="False"
+							ShowTotalSummary="True"
+							WaitIndicatorType="Panel"
+							SearchPanelCriteriaOperatorType="And"
+							RowMinHeight="{Binding Employee.UiSettings.RowHeight, Source={x:Static objects:OfflineData.Instance}}"
+							FontSize="{Binding Employee.UiSettings.FontSize, Source={x:Static objects:OfflineData.Instance}}" />
+					</dxg:GridControl.View>
+					<dxg:GridControl.TotalSummary>
+						<dxg:GridSummaryItem
+							FieldName="Articul"
+							DisplayFormat=" {0:N0}"
+							SummaryType="Count" />
+					</dxg:GridControl.TotalSummary>
+				</dxg:GridControl>
+			</ControlTemplate>
+		</ResourceDictionary>
+	</FrameworkElement.Resources>
+	<DockPanel
+		MaxWidth="900"
+		MaxHeight="700"
+		Margin="10">
+		<DockPanel
+			Dock="Top">
+			<TextBlock
+				DockPanel.Dock="Left"
+				Style="{StaticResource DialogTitle}"
+				Text="{Binding Title}" />
+			<StackPanel
+				Orientation="Horizontal"
+				HorizontalAlignment="Right"
+				DockPanel.Dock="Right">
+				<dx:SimpleButton
+					Command="{Binding PrevItemCommand}"
+					Glyph="{DXImageGrayscale Image=Prev_16x16.png}" />
+				<dx:SimpleButton
+					Margin="5,0,0,0"
+					Command="{Binding NextItemCommand}"
+					Glyph="{DXImageGrayscale Image=Next_16x16.png}" />
+			</StackPanel>
+		</DockPanel>
+		<StackPanel
+			Margin="0,10,0,0"
+			HorizontalAlignment="Right"
+			VerticalAlignment="Bottom"
+			DockPanel.Dock="Bottom"
+			Orientation="Horizontal">
+			<dx:SimpleButton
+				Style="{StaticResource SaveButton}"
+				Content="{DynamicResource Complete}"
+				Command="{Binding SaveCommand}"
+				Glyph="{DXImageGrayscale Image=Apply_16x16.png}" />
+			<dx:SimpleButton
+				Style="{StaticResource SaveButton}"
+				Content="{DynamicResource Add}"
+				Margin="10,0,0,0"
+				Command="{Binding AddNextCommand}"
+				Glyph="{DXImageGrayscale Image=Add_16x16.png}" />
+			<dx:SimpleButton
+				ToolTip="[Esc]"
+				Style="{StaticResource CancelButton}"
+				Content="{DynamicResource Close}"
+				Margin="10,0,0,0"
+				Command="{Binding CloseCommand}" />
+		</StackPanel>
+		<dxlc:LayoutControl
+			Padding="0"
+			Orientation="Horizontal">
+			<FrameworkElement.Resources>
+				<ResourceDictionary>
+					<Style
+						TargetType="{x:Type dxlc:LayoutItem}"
+						x:Key="{x:Type dxlc:LayoutItem}">
+						<Setter
+							Property="dxlc:LayoutItem.LabelPosition"
+							Value="Top" />
+					</Style>
+				</ResourceDictionary>
+			</FrameworkElement.Resources>
+			<dxlc:LayoutGroup
+				MaxWidth="250"
+				Orientation="Vertical">
+				<dxlc:LayoutItem
+					MaxWidth="300"
+					MaxHeight="350"
+					Visibility="{Binding DataContext.Store.it_vis_photo, ElementName=NewStoreItemViewUC, Converter={dx:BooleanToVisibilityConverter}}">
+					<controls:ImagesAddView
+						DataContext="{Binding ImagesAddlViewModel}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					LabelPosition="Left"
+					HorizontalContentAlignment="Right"
+					Label="{DynamicResource GoodsOnlyForSc}">
+					<dxe:CheckEdit
+						EditValue="{Binding Item.NotForSale, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					LabelPosition="Left"
+					HorizontalContentAlignment="Right"
+					Label="{DynamicResource IShop}"
+					Visibility="{Binding online_store, Source={x:Static asc:Auth.Config}, Converter={dxmvvm:NumericToVisibilityConverter}}">
+					<dxe:CheckEdit
+						EditValue="{Binding Item.ShopEnable, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutGroup
+					Orientation="Vertical"
+					Visibility="{Binding Item.ShopEnable, Converter={dx:BooleanToVisibilityConverter}}">
+					<dxlc:LayoutItem
+						Label="{DynamicResource IShopTitle}"
+						Visibility="{Binding online_store, Source={x:Static asc:Auth.Config}, Converter={dxmvvm:NumericToVisibilityConverter}}">
+						<dxe:TextEdit
+							MaxLength="254"
+							AcceptsReturn="True"
+							TextWrapping="Wrap"
+							EditValue="{Binding Item.ShopTitle, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource IShopDescriptionNoDots}"
+						Visibility="{Binding online_store, Source={x:Static asc:Auth.Config}, Converter={dxmvvm:NumericToVisibilityConverter}}">
+						<dxe:TextEdit
+							VerticalContentAlignment="Top"
+							VerticalScrollBarVisibility="Auto"
+							AcceptsReturn="True"
+							TextWrapping="Wrap"
+							EditValue="{Binding Item.ShopDescription, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+			</dxlc:LayoutGroup>
+			<dxlc:LayoutGroup
+				Orientation="Vertical"
+				MinWidth="600">
+				<dxlc:LayoutGroup
+					Orientation="Horizontal">
+					<dxlc:LayoutItem
+						Label="{DynamicResource ItemName}">
+						<Grid>
+							<dxg:LookUpEdit
+								Name="LookUpEdit"
+								HorizontalAlignment="Stretch"
+								IsPopupAutoWidth="False"
+								dxe:PopupContentTemplate="{StaticResource ItemLookUpControlTemplate}"
+								MinWidth="150"
+								dxe:PopupMaxWidth="600"
+								AutoPopulateColumns="False"
+								dxe:NullValueButtonPlacement="None"
+								dxe:AllowDefaultButton="False"
+								dxe:ItemsSource="{Binding Items}">
+								<dxmvvm:Interaction.Behaviors>
+									<dxmvvm:EventToCommand
+										EventTriggerBase_x0060_1.EventName="EditValueChanged"
+										PassEventArgsToCommand="True"
+										Command="{Binding ItemNameSearchChangedCommand}" />
+									<dxmvvm:EventToCommand
+										EventTriggerBase_x0060_1.EventName="Loaded"
+										Command="{Binding LookUpEditLoadedCommand}"
+										CommandParameter="{Binding ElementName=LookUpEdit}" />
+								</dxmvvm:Interaction.Behaviors>
+								<dxg:LookUpEdit.StyleSettings>
+									<dxg:LookUpEditStyleSettings />
+								</dxg:LookUpEdit.StyleSettings>
+							</dxg:LookUpEdit>
+							<dxe:ButtonEdit
+								EditValuePostMode="Delayed"
+								EditValuePostDelay="300"
+								AllowDefaultButton="False"
+								HorizontalAlignment="Stretch"
+								EditValue="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+								<dxmvvm:Interaction.Behaviors>
+									<dxmvvm:FocusBehavior
+										FocusDelay="0:0:0.2" />
+								</dxmvvm:Interaction.Behaviors>
+								<dxe:ButtonEdit.Buttons>
+									<dxe:ButtonInfo
+										GlyphKind="Cancel"
+										Command="{Binding ClearItemCommand}" />
+									<dxe:ButtonInfo
+										GlyphKind="DropDown"
+										Command="{Binding ToggleItemNamePopupCommand}" />
+								</dxe:ButtonEdit.Buttons>
+							</dxe:ButtonEdit>
+						</Grid>
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						HorizontalAlignment="Right"
+						Label="{DynamicResource Category}">
+						<dxg:LookUpEdit
+							MinWidth="100"
+							dxe:ShowError="False"
+							dxe:PopupContentTemplate="{StaticResource StoreCategories}"
+							AutoPopulateColumns="False"
+							dxe:ValueMember="id"
+							dxe:DisplayMember="name"
+							dxe:EditValue="{Binding Item.CategoryId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+							dxe:ItemsSource="{Binding Categories}">
+							<dxmvvm:Interaction.Behaviors>
+								<dxmvvm:EventToCommand
+									EventTriggerBase_x0060_1.EventName="SelectedIndexChanged"
+									Command="{Binding CategoryChangedCommand}" />
+							</dxmvvm:Interaction.Behaviors>
+						</dxg:LookUpEdit>
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+				<dxlc:LayoutItem
+					Label="{DynamicResource Description}"
+					Visibility="{Binding Store.it_vis_description, Converter={dx:BooleanToVisibilityConverter}}">
+					<dxe:TextEdit
+						VerticalContentAlignment="Top"
+						MaxHeight="150"
+						VerticalScrollBarVisibility="Auto"
+						MinWidth="150"
+						TextWrapping="Wrap"
+						AcceptsReturn="True"
+						EditValue="{Binding Item.Description, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutGroup
+					Orientation="Horizontal">
+					<dxlc:LayoutItem
+						Label="{DynamicResource Count}">
+						<dxe:SpinEdit
+							Name="TextBoxItemCount"
+							ShowError="False"
+							AllowSpinOnMouseWheel="False"
+							MinValue="1"
+							IsFloatValue="False"
+							Background="#00FFFFFF"
+							HorizontalContentAlignment="Right"
+							BorderThickness="0"
+							EditValueType="{x:Type sys:Int32}"
+							EditValue="{Binding Item.InCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+							<dxmvvm:Interaction.Behaviors>
+								<dxmvvm:EventToCommand
+									EventTriggerBase_x0060_1.EventName="EditValueChanged"
+									Command="{Binding CountChangedCommand}" />
+							</dxmvvm:Interaction.Behaviors>
+						</dxe:SpinEdit>
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource PurchaseCost}">
+						<dxe:SpinEdit
+							Name="inPrice"
+							MinWidth="100"
+							MaskUseAsDisplayFormat="True"
+							MaskType="Numeric"
+							AllowSpinOnMouseWheel="False"
+							Mask="N2"
+							MinValue="0"
+							Background="#00FFFFFF"
+							BorderThickness="0"
+							EditValue="{Binding Item.InPrice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+							<dxmvvm:Interaction.Behaviors>
+								<dxmvvm:EventToCommand
+									EventTriggerBase_x0060_1.EventName="EditValueChanged"
+									Command="{Binding CountChangedCommand}" />
+								<extensions:SelectAllOnMouseUpBehavior />
+							</dxmvvm:Interaction.Behaviors>
+							<dxe:ButtonEdit.Buttons>
+								<dxe:ButtonInfoCollection>
+									<dxe:ButtonInfo
+										ToolTip="{DynamicResource MaterialPriceToolTip}"
+										GlyphKind="Refresh"
+										Visibility="{Binding Item.Units, Converter={StaticResource NumericToVisibility}}"
+										Command="{Binding SetPriceForAllCommand}" />
+								</dxe:ButtonInfoCollection>
+							</dxe:ButtonEdit.Buttons>
+							<FrameworkElement.Style>
+								<Style
+									TargetType="{x:Type dxe:SpinEdit}">
+									<Setter
+										Property="dxe:BaseEdit.IsReadOnly"
+										Value="False" />
+									<Setter
+										Property="Foreground"
+										Value="#FF000000" />
+									<Style.Triggers>
+										<DataTrigger
+											Value="3"
+											Binding="{Binding PriceOption}">
+											<Setter
+												Property="dxe:BaseEdit.IsReadOnly"
+												Value="True" />
+											<Setter
+												Property="Foreground"
+												Value="#FF008000" />
+										</DataTrigger>
+									</Style.Triggers>
+								</Style>
+							</FrameworkElement.Style>
+						</dxe:SpinEdit>
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource Summ}">
+						<dxe:TextEdit
+							IsReadOnly="True"
+							Style="{StaticResource NumericTextBox}"
+							EditValue="{Binding Item.InSumm, Mode=OneWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource Units}">
+						<dxe:ComboBoxEdit
+							MinWidth="100"
+							DisplayMember="Name"
+							ValueMember="UnitInt"
+							EditValue="{Binding Item.Units, Mode=TwoWay}"
+							ItemsSource="{Binding Units}">
+							<dxmvvm:Interaction.Behaviors>
+								<dxmvvm:EventToCommand
+									EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+									PassEventArgsToCommand="True"
+									Command="{Binding ComboBoxClickCommand}" />
+							</dxmvvm:Interaction.Behaviors>
+						</dxe:ComboBoxEdit>
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+				<dxlc:LayoutGroup
+					Orientation="Horizontal">
+					<dxlc:LayoutItem
+						Label="{DynamicResource PriceForSc}"
+						Visibility="{Binding it_vis_price_for_sc, Source={x:Static asc:Auth.Config}, Converter={dx:BooleanToVisibilityConverter}}">
+						<dxe:TextEdit
+							Style="{StaticResource NumericTextBox}"
+							EditValue="{Binding Item.Price, Mode=TwoWay}">
+							<dxmvvm:Interaction.Behaviors>
+								<extensions:SelectAllOnMouseUpBehavior />
+							</dxmvvm:Interaction.Behaviors>
+						</dxe:TextEdit>
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource PriceOpt3}"
+						Visibility="{Binding it_vis_opt3, Source={x:Static asc:Auth.Config}, Converter={dx:BooleanToVisibilityConverter}}">
+						<dxe:TextEdit
+							Style="{StaticResource NumericTextBox}"
+							EditValue="{Binding Item.Price5, Mode=TwoWay}">
+							<dxmvvm:Interaction.Behaviors>
+								<extensions:SelectAllOnMouseUpBehavior />
+							</dxmvvm:Interaction.Behaviors>
+						</dxe:TextEdit>
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource PriceOpt2}"
+						Visibility="{Binding it_vis_opt2, Source={x:Static asc:Auth.Config}, Converter={dx:BooleanToVisibilityConverter}}">
+						<dxe:TextEdit
+							Style="{StaticResource NumericTextBox}"
+							EditValue="{Binding Item.Price4, Mode=TwoWay}">
+							<dxmvvm:Interaction.Behaviors>
+								<extensions:SelectAllOnMouseUpBehavior />
+							</dxmvvm:Interaction.Behaviors>
+						</dxe:TextEdit>
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource PriceOpt}"
+						Visibility="{Binding it_vis_opt, Source={x:Static asc:Auth.Config}, Converter={dx:BooleanToVisibilityConverter}}">
+						<dxe:TextEdit
+							Style="{StaticResource NumericTextBox}"
+							EditValue="{Binding Item.Price3, Mode=TwoWay}">
+							<dxmvvm:Interaction.Behaviors>
+								<extensions:SelectAllOnMouseUpBehavior />
+							</dxmvvm:Interaction.Behaviors>
+						</dxe:TextEdit>
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource PriceForSale}"
+						Visibility="{Binding it_vis_rozn, Source={x:Static asc:Auth.Config}, Converter={dx:BooleanToVisibilityConverter}}">
+						<dxe:TextEdit
+							Style="{StaticResource NumericTextBox}"
+							EditValue="{Binding Item.Price2, Mode=TwoWay}">
+							<dxmvvm:Interaction.Behaviors>
+								<extensions:SelectAllOnMouseUpBehavior />
+							</dxmvvm:Interaction.Behaviors>
+						</dxe:TextEdit>
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+				<dxlc:LayoutGroup
+					Orientation="Horizontal">
+					<dxlc:LayoutItem
+						Label="{DynamicResource State}">
+						<dxe:ComboBoxEdit
+							DisplayMember="name"
+							ValueMember="id"
+							EditValue="{Binding Item.State, Mode=TwoWay}"
+							ItemsSource="{Binding States}">
+							<dxmvvm:Interaction.Behaviors>
+								<dxmvvm:EventToCommand
+									EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+									PassEventArgsToCommand="True"
+									Command="{Binding ComboBoxClickCommand}" />
+							</dxmvvm:Interaction.Behaviors>
+						</dxe:ComboBoxEdit>
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource Warranty}"
+						Visibility="{Binding Store.it_vis_warranty, Converter={dx:BooleanToVisibilityConverter}}">
+						<dxe:ComboBoxEdit
+							DisplayMember="Name"
+							ValueMember="Days"
+							EditValue="{Binding Item.Warranty, Mode=TwoWay}"
+							ItemsSource="{Binding WarrantyOptionses}">
+							<dxmvvm:Interaction.Behaviors>
+								<dxmvvm:EventToCommand
+									EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+									PassEventArgsToCommand="True"
+									Command="{Binding ComboBoxClickCommand}" />
+							</dxmvvm:Interaction.Behaviors>
+						</dxe:ComboBoxEdit>
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource DealerWarranty}"
+						Visibility="{Binding Store.it_vis_warranty_dealer, Converter={dx:BooleanToVisibilityConverter}}">
+						<dxe:ComboBoxEdit
+							DisplayMember="Name"
+							ValueMember="Days"
+							EditValue="{Binding Item.DealerWarranty, Mode=TwoWay}"
+							ItemsSource="{Binding WarrantyOptionses}">
+							<dxmvvm:Interaction.Behaviors>
+								<dxmvvm:EventToCommand
+									EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+									PassEventArgsToCommand="True"
+									Command="{Binding ComboBoxClickCommand}" />
+							</dxmvvm:Interaction.Behaviors>
+						</dxe:ComboBoxEdit>
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource Box}">
+						<dxe:ComboBoxEdit
+							ShowError="False"
+							DisplayMember="name"
+							ValueMember="name"
+							HorizontalAlignment="Stretch"
+							ValidateOnTextInput="False"
+							AutoComplete="True"
+							ItemsSource="{Binding Boxes}"
+							Text="{Binding Item.BoxName, Mode=TwoWay}">
+							<dxmvvm:Interaction.Behaviors>
+								<dxmvvm:EventToCommand
+									EventTriggerBase_x0060_1.EventName="ProcessNewValue"
+									PassEventArgsToCommand="True"
+									Command="{Binding NewBoxInputCommand}" />
+							</dxmvvm:Interaction.Behaviors>
+						</dxe:ComboBoxEdit>
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+				<dxlc:LayoutItem
+					Label="{DynamicResource PN}"
+					Visibility="{Binding Store.it_vis_pn, Converter={dx:BooleanToVisibilityConverter}}">
+					<dxe:TextEdit
+						MinWidth="150"
+						AcceptsReturn="True"
+						TextWrapping="Wrap"
+						EditValue="{Binding Item.Pn, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutGroup
+					Orientation="Horizontal" />
+				<dxlc:LayoutGroup
+					Orientation="Horizontal">
+					<dxlc:LayoutItem
+						Label="{DynamicResource Sn}"
+						Visibility="{Binding Store.it_vis_sn, Converter={dx:BooleanToVisibilityConverter}}">
+						<dxe:TextEdit
+							MaxLength="254"
+							TextWrapping="Wrap"
+							MinWidth="150"
+							EditValue="{Binding Item.Sn, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource BarCode}"
+						Visibility="{Binding Store.it_vis_barcode, Converter={dx:BooleanToVisibilityConverter}}">
+						<dxe:TextEdit
+							MaxLength="254"
+							MinWidth="150"
+							EditValue="{Binding Item.Barcode, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+				<dxlc:LayoutItem
+					Label="{DynamicResource Notes}">
+					<dxe:TextEdit
+						MaxLength="254"
+						MinWidth="150"
+						TextWrapping="Wrap"
+						AcceptsReturn="True"
+						EditValue="{Binding Item.Notes, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem>
+					<itemCard:ProductAttributesView
+						DataContext="{Binding ProductAttributesViewModel}" />
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+		</dxlc:LayoutControl>
+	</DockPanel>
+</UserControl>

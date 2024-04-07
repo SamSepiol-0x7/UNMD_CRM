@@ -1,0 +1,111 @@
+<UserControl
+	x:Class="ASC.View.WithdrawFundsView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:ASC.View" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:objects="clr-namespace:ASC.Objects" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:extensions="clr-namespace:ASC.Extensions"
+	Loaded="{DXEvent OnLoad()}">
+	<DockPanel
+		MaxWidth="600">
+		<StackPanel
+			Orientation="Horizontal"
+			DockPanel.Dock="Top"
+			Margin="10">
+			<TextBlock
+				Text="{DynamicResource WithdrawOrDepositFunds}"
+				Style="{StaticResource DialogTitle}" />
+		</StackPanel>
+		<StackPanel
+			Margin="10"
+			Orientation="Horizontal"
+			VerticalAlignment="Bottom"
+			DockPanel.Dock="Bottom"
+			HorizontalAlignment="Right">
+			<Button
+				VerticalAlignment="Center"
+				Content="{DynamicResource Do}"
+				Command="{Binding WithdrawFundsCommand}" />
+			<dx:SimpleButton
+				Margin="10,0,0,0"
+				Style="{StaticResource CancelButton}"
+				Command="{Binding CloseDocumentCommand}" />
+		</StackPanel>
+		<dxlc:LayoutControl
+			MinWidth="450"
+			Orientation="Vertical">
+			<dxlc:LayoutItem
+				Label="{DynamicResource Office}"
+				Visibility="{Binding OfficesVisible, FallbackValue=Visible, Converter={dx:BooleanToVisibilityConverter}}">
+				<dxe:ComboBoxEdit
+					ShowError="False"
+					ValueMember="id"
+					DisplayMember="name"
+					PopupMaxHeight="250"
+					IsTextEditable="False"
+					EditValue="{Binding WithdrawOffice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+					ItemsSource="{Binding Offices, Source={x:Static objects:OfflineData.Instance}}">
+					<dxmvvm:Interaction.Behaviors>
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+							PassEventArgsToCommand="True"
+							Command="{Binding ComboBoxClickCommand}" />
+					</dxmvvm:Interaction.Behaviors>
+				</dxe:ComboBoxEdit>
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource CoWorker}">
+				<dxe:ComboBoxEdit
+					ShowError="False"
+					HorizontalContentAlignment="Left"
+					DisplayMember="Fio"
+					ValueMember="Uid"
+					EditValue="{Binding SelectedUser, Mode=TwoWay}"
+					ItemsSource="{Binding AdminUsers, Source={x:Static objects:OfflineData.Instance}}">
+					<dxmvvm:Interaction.Behaviors>
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+							PassEventArgsToCommand="True"
+							Command="{Binding ComboBoxClickCommand}" />
+					</dxmvvm:Interaction.Behaviors>
+				</dxe:ComboBoxEdit>
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem>
+				<dxe:ComboBoxEdit
+					DisplayMember="Value"
+					ValueMember="Key"
+					EditValue="{Binding WithdrawMode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+					ItemsSource="{Binding WithdrawModeSource}">
+					<dxmvvm:Interaction.Behaviors>
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+							PassEventArgsToCommand="True"
+							Command="{Binding ComboBoxClickCommand}" />
+					</dxmvvm:Interaction.Behaviors>
+				</dxe:ComboBoxEdit>
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource PaymentSystem}">
+				<dxe:ComboBoxEdit
+					ShowError="False"
+					HorizontalContentAlignment="Left"
+					DisplayMember="Name"
+					ValueMember="Id"
+					EditValue="{Binding SelectedPaymentSystem, Mode=TwoWay}"
+					ItemsSource="{Binding PaymentOptions}">
+					<dxmvvm:Interaction.Behaviors>
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+							PassEventArgsToCommand="True"
+							Command="{Binding ComboBoxClickCommand}" />
+					</dxmvvm:Interaction.Behaviors>
+				</dxe:ComboBoxEdit>
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource Summ}">
+				<dxe:TextEdit
+					Style="{StaticResource NumericTextBox}"
+					EditValue="{Binding WithdrawSumm, Mode=TwoWay}">
+					<dxmvvm:Interaction.Behaviors>
+						<extensions:SelectAllOnMouseUpBehavior />
+					</dxmvvm:Interaction.Behaviors>
+				</dxe:TextEdit>
+			</dxlc:LayoutItem>
+		</dxlc:LayoutControl>
+	</DockPanel>
+</UserControl>

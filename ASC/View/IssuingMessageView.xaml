@@ -1,0 +1,74 @@
+<UserControl
+	x:Class="ASC.View.IssuingMessageView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:ASC.View" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm">
+	<DockPanel
+		Width="850">
+		<StackPanel
+			DockPanel.Dock="Top"
+			Orientation="Horizontal"
+			HorizontalAlignment="Left">
+			<TextBlock
+				Text="{DynamicResource IssuingMessage}"
+				FontSize="18"
+				Margin="0,0,5,0" />
+		</StackPanel>
+		<StackPanel
+			DockPanel.Dock="Bottom"
+			Orientation="Horizontal"
+			HorizontalAlignment="Right">
+			<dx:SimpleButton
+				Style="{StaticResource SaveButton}"
+				Margin="0,0,16,0"
+				Command="{Binding SaveIssuingMessageCommand}" />
+			<dx:SimpleButton
+				Style="{StaticResource CancelButton}"
+				Command="{Binding CloseIssuingMessageCommand}" />
+		</StackPanel>
+		<dxlc:LayoutControl
+			Orientation="Horizontal"
+			ItemSpace="40"
+			Margin="0,28"
+			Padding="2">
+			<FrameworkElement.Resources>
+				<ResourceDictionary>
+					<Style
+						TargetType="{x:Type dxlc:LayoutGroup}"
+						x:Key="InnerLayoutGroup" />
+					<Style
+						TargetType="{x:Type dxlc:LayoutGroup}"
+						x:Key="{x:Type dxlc:LayoutGroup}">
+						<Setter
+							Property="dxlc:LayoutControlBase.ItemSpace"
+							Value="15" />
+					</Style>
+					<Style
+						TargetType="{x:Type Button}"
+						x:Key="{x:Type Button}">
+						<Setter
+							Property="Height"
+							Value="38" />
+					</Style>
+					<Style
+						TargetType="{x:Type dxlc:LayoutItem}"
+						BasedOn="{StaticResource LeftMenuLayout}"
+						x:Key="{x:Type dxlc:LayoutItem}">
+						<Setter
+							Property="dxlc:LayoutItem.ElementSpace"
+							Value="10" />
+					</Style>
+				</ResourceDictionary>
+			</FrameworkElement.Resources>
+			<dxlc:LayoutGroup
+				Orientation="Vertical"
+				Style="{StaticResource InnerLayoutGroup}">
+				<dxlc:LayoutItem>
+					<dxe:TextEdit
+						Height="80"
+						HorizontalContentAlignment="Left"
+						VerticalContentAlignment="Top"
+						AcceptsReturn="True"
+						EditValue="{Binding Repair.issued_msg, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+		</dxlc:LayoutControl>
+	</DockPanel>
+</UserControl>

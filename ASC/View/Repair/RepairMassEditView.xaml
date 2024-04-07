@@ -1,0 +1,145 @@
+<UserControl
+	x:Class="ASC.View.Repair.RepairMassEditView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:ASC.View.Repair" xmlns:dxwui="http://schemas.devexpress.com/winfx/2008/xaml/windowsui" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:objects="clr-namespace:ASC.Objects" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" xmlns:extensions="clr-namespace:ASC.Extensions" xmlns:system="clr-namespace:System;assembly=mscorlib"
+	Loaded="{DXEvent OnLoad()}">
+	<DockPanel>
+		<dxwui:AppBar
+			DockPanel.Dock="Bottom"
+			Background="#3f3f3f"
+			HorizontalAlignment="Stretch"
+			VerticalAlignment="Bottom"
+			ItemSpacing="5"
+			HideMode="AlwaysVisible">
+			<dxwui:AppBarButton
+				Label="{DynamicResource Add}"
+				HorizontalAlignment="Center"
+				Command="{Binding AddItemCommand}"
+				Glyph="{dx:DXImageGrayscale Image=New_32x32.png}" />
+			<dxwui:AppBarButton
+				Label="{DynamicResource Delete}"
+				HorizontalAlignment="Center"
+				Command="{Binding RemoveItemCommand}"
+				Glyph="{dx:DXImageGrayscale Image=New_32x32.png}" />
+			<dxwui:AppBarButton
+				Label="{DynamicResource Save}"
+				HorizontalAlignment="Center"
+				Command="{Binding UpdateCommand}"
+				Glyph="{dx:DXImageGrayscale Image=Save_32x32.png}" />
+		</dxwui:AppBar>
+		<dxe:ButtonEdit
+			MinWidth="150"
+			DockPanel.Dock="Top"
+			HorizontalAlignment="Left"
+			MaskType="Numeric"
+			MaskUseAsDisplayFormat="True"
+			Mask="N0"
+			Margin="10,5"
+			AllowNullInput="True"
+			NullText="{DynamicResource OrderNumber}"
+			AllowDefaultButton="False"
+			EditValueType="{x:Type system:Int32}"
+			EditValue="{Binding OrderInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+			<dxmvvm:Interaction.Behaviors>
+				<dxmvvm:EventToCommand
+					EventTriggerBase_x0060_1.EventName="KeyUp"
+					PassEventArgsToCommand="True"
+					Command="{Binding OnOrderNumberInputKeyUpCommand}" />
+				<dxmvvm:FocusBehavior />
+			</dxmvvm:Interaction.Behaviors>
+			<dxe:ButtonEdit.Buttons>
+				<dxe:ButtonInfo
+					ButtonKind="Simple"
+					GlyphKind="Plus"
+					Command="{Binding OnOrderNumberInputAddCommand}" />
+			</dxe:ButtonEdit.Buttons>
+		</dxe:ButtonEdit>
+		<dxg:GridControl
+			Name="RepairMassEditorGrid"
+			Tag="RepairMassEditorGrid"
+			HorizontalAlignment="Stretch"
+			VerticalAlignment="Stretch"
+			SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+			ItemsSource="{Binding Items}">
+			<dxmvvm:Interaction.Behaviors>
+				<dxmvvm:EventToCommand
+					EventTriggerBase_x0060_1.EventName="Loaded"
+					Command="{Binding GridInitCommand}"
+					CommandParameter="{Binding ElementName=RepairMassEditorGrid}" />
+				<dxmvvm:EventToCommand
+					EventTriggerBase_x0060_1.EventName="Unloaded"
+					Command="{Binding GridUnloadedCommand}"
+					CommandParameter="{Binding ElementName=RepairMassEditorGrid}" />
+				<extensions:GridLayoutHelper>
+					<dxmvvm:Interaction.Behaviors>
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="LayoutChanged"
+							Command="{Binding LayoutChangedCommand}"
+							CommandParameter="{Binding ElementName=RepairMassEditorGrid}" />
+					</dxmvvm:Interaction.Behaviors>
+				</extensions:GridLayoutHelper>
+			</dxmvvm:Interaction.Behaviors>
+			<dxg:GridControl.Columns>
+				<dxg:GridColumn
+					Name="Id"
+					Header="{DynamicResource Id}"
+					FieldName="{DynamicResource Id}"
+					ReadOnly="True"
+					HorizontalHeaderContentAlignment="Center"
+					Binding="{Binding Id, Mode=OneWay}">
+					<dxg:ColumnBase.EditSettings>
+						<dxe:TextEditSettings
+							HorizontalContentAlignment="Center"
+							MaskType="Numeric"
+							Mask="d6"
+							MaskUseAsDisplayFormat="True" />
+					</dxg:ColumnBase.EditSettings>
+				</dxg:GridColumn>
+				<dxg:GridColumn
+					Name="Device"
+					Header="{DynamicResource Device}"
+					FieldName="{DynamicResource Title}"
+					ReadOnly="True"
+					HorizontalHeaderContentAlignment="Center"
+					Binding="{Binding Title, Mode=OneWay}" />
+				<dxg:GridColumn
+					Name="Box"
+					FieldName="{DynamicResource Box}"
+					SortMode="Value"
+					AllowSorting="True"
+					HorizontalHeaderContentAlignment="Center"
+					Binding="{Binding BoxId, Mode=TwoWay}">
+					<dxg:ColumnBase.EditSettings>
+						<dxe:ComboBoxEditSettings
+							AutoComplete="True"
+							ValueMember="id"
+							DisplayMember="name"
+							AllowNullInput="True"
+							NullValueButtonPlacement="EditBox"
+							ItemsSource="{Binding Boxes}" />
+					</dxg:ColumnBase.EditSettings>
+				</dxg:GridColumn>
+			</dxg:GridControl.Columns>
+			<dxg:GridControl.View>
+				<dxg:TableView
+					Name="TableView"
+					ShowIndicator="False"
+					AllowEditing="True"
+					AllowGrouping="False"
+					AllowColumnMoving="True"
+					AllowMoveColumnToDropArea="False"
+					ShowBandsPanel="False"
+					AllowRowFixing="None"
+					ShowBandsInCustomizationForm="False"
+					ShowGroupPanel="False"
+					ShowColumnHeaders="True"
+					CheckBoxSelectorColumnWidth="20"
+					UseIndicatorForSelection="True"
+					BestFitMode="VisibleRows"
+					BestFitArea="Rows"
+					NavigationStyle="Cell"
+					FocusedRowHandle="{Binding FocusedRow, Mode=TwoWay}"
+					RowMinHeight="{Binding Employee.UiSettings.RowHeight, Source={x:Static objects:OfflineData.Instance}}"
+					FontSize="{Binding Employee.UiSettings.FontSize, Source={x:Static objects:OfflineData.Instance}}" />
+			</dxg:GridControl.View>
+		</dxg:GridControl>
+	</DockPanel>
+</UserControl>

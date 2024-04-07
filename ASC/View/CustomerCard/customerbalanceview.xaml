@@ -1,0 +1,135 @@
+<UserControl
+	x:Class="ASC.ClientCard.CustomerBalanceView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars" xmlns:objects="clr-namespace:ASC.Objects" xmlns:extensions="clr-namespace:ASC.Extensions" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:clientcard="clr-namespace:ASC.ClientCard"
+	DataContext="{Binding Path=CustomerBalanceViewModel, Source={StaticResource ViewModelLocator}}">
+	<Grid>
+		<dxb:ToolBarControl
+			Style="{StaticResource DefaulToolBar}"
+			Height="30">
+			<dxb:BarButtonItem
+				Content="{DynamicResource Print}"
+				KeyGesture="Ctrl+P"
+				Description="{DynamicResource Print}"
+				Command="{Binding View.Commands.ShowPrintPreview, ElementName=TableBalance}"
+				Glyph="{dx:DXImageGrayscale Image=Print_16x16.png}" />
+		</dxb:ToolBarControl>
+		<dxg:GridControl
+			Name="TableBalance"
+			Tag="CustomerBalanceGrid"
+			ShowBorder="False"
+			Margin="0,30,0,0"
+			SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+			ItemsSource="{Binding Items}"
+			ShowLoadingPanel="{Binding IsLoadingData}"
+			DXSerializer.AllowProperty="TableBalance_OnAllowProperty">
+			<dxmvvm:Interaction.Behaviors>
+				<dxmvvm:EventToCommand
+					EventTriggerBase_x0060_1.EventName="Loaded"
+					Command="{Binding GridInitCommand}"
+					CommandParameter="{Binding ElementName=TableBalance}" />
+				<dxmvvm:EventToCommand
+					EventTriggerBase_x0060_1.EventName="Unloaded"
+					Command="{Binding GridUnloadedCommand}"
+					CommandParameter="{Binding ElementName=TableBalance}" />
+				<extensions:GridLayoutHelper>
+					<dxmvvm:Interaction.Behaviors>
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="LayoutChanged"
+							Command="{Binding LayoutChangedCommand}"
+							CommandParameter="{Binding ElementName=TableBalance}" />
+					</dxmvvm:Interaction.Behaviors>
+				</extensions:GridLayoutHelper>
+			</dxmvvm:Interaction.Behaviors>
+			<dxg:GridColumn
+				Name="Id"
+				FieldName="ID"
+				HorizontalHeaderContentAlignment="Center"
+				Width="100"
+				VisibleIndex="0"
+				Binding="{Binding id}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:TextEditSettings
+						HorizontalContentAlignment="Center"
+						MaskType="Numeric"
+						Mask="d6"
+						MaskUseAsDisplayFormat="True" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				Name="Date"
+				FieldName="{DynamicResource Date}"
+				HorizontalHeaderContentAlignment="Center"
+				Width="120"
+				Binding="{Binding created}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:TextEditSettings
+						HorizontalContentAlignment="Center"
+						MaskType="DateTime"
+						Mask="dd.MM.yyyy  HH:mm"
+						MaskUseAsDisplayFormat="True" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				Name="Summ"
+				FieldName="{DynamicResource Summ}"
+				HorizontalHeaderContentAlignment="Center"
+				Width="120"
+				Binding="{Binding summ}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:TextEditSettings
+						Style="{StaticResource GridClassicOrNot}" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				Name="Reason"
+				FieldName="{DynamicResource Reason}"
+				Width="*"
+				HorizontalHeaderContentAlignment="Center"
+				Binding="{Binding reason}" />
+			<dxg:GridColumn
+				Name="Employee"
+				FieldName="{DynamicResource User}"
+				HorizontalHeaderContentAlignment="Center"
+				Binding="{Binding users.FioShort}" />
+			<dxg:GridColumn
+				Name="Office"
+				FieldName="{DynamicResource Office}"
+				MinWidth="150"
+				HorizontalHeaderContentAlignment="Center"
+				Binding="{Binding offices.name}" />
+			<dxg:GridControl.View>
+				<dxg:TableView
+					RowStyle="{StaticResource RowStyle}"
+					BestFitMode="VisibleRows"
+					BestFitArea="All"
+					AllowFilterEditor="False"
+					AllowPerPixelScrolling="True"
+					AllowEditing="False"
+					ShowIndicator="False"
+					AllowBestFit="True"
+					ShowTotalSummary="True"
+					AllowGrouping="False"
+					AllowColumnMoving="True"
+					ShowGroupPanel="False"
+					NavigationStyle="Cell"
+					RowMinHeight="{Binding Employee.UiSettings.RowHeight, Source={x:Static objects:OfflineData.Instance}}"
+					FontSize="{Binding Employee.UiSettings.FontSize, Source={x:Static objects:OfflineData.Instance}}">
+					<dxmvvm:Interaction.Behaviors>
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="RowDoubleClick"
+							Command="{Binding BalanceDoubleClickCommand}" />
+					</dxmvvm:Interaction.Behaviors>
+				</dxg:TableView>
+			</dxg:GridControl.View>
+			<dxg:GridControl.TotalSummary>
+				<dxg:GridSummaryItem
+					DisplayFormat=" {0:N0}"
+					SummaryType="Count"
+					FieldName="ID" />
+				<dxg:GridSummaryItem
+					DisplayFormat=" {0:N2}"
+					SummaryType="Sum"
+					FieldName="{DynamicResource Summ}" />
+			</dxg:GridControl.TotalSummary>
+		</dxg:GridControl>
+	</Grid>
+</UserControl>

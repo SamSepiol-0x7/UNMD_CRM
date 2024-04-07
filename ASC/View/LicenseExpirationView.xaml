@@ -1,0 +1,62 @@
+<UserControl
+	x:Class="ASC.View.LicenseExpirationView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:ASC.View" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+	KeyUp="{DXEvent OnKeyUp(@args)}">
+	<FrameworkElement.Resources>
+		<ResourceDictionary>
+			<ImageBrush
+				Stretch="UniformToFill"
+				ImageSource="pack://application:,,,/ASC.Common;component/Resources/lic_expires.jpg"
+				x:Key="background" />
+			<Style
+				TargetType="{x:Type TextBlock}"
+				x:Key="{x:Type TextBlock}">
+				<Setter
+					Property="Foreground"
+					Value="#FFFFFFFF" />
+			</Style>
+		</ResourceDictionary>
+	</FrameworkElement.Resources>
+	<Grid
+		Width="350"
+		Height="450"
+		Background="{StaticResource background}">
+		<TextBlock
+			HorizontalAlignment="Left"
+			VerticalAlignment="Top"
+			Margin="10"
+			Text="ASC"
+			FontWeight="Bold"
+			FontSize="18" />
+		<TextBlock
+			HorizontalAlignment="Left"
+			VerticalAlignment="Top"
+			Margin="10,35"
+			Text="{Binding Title, Mode=OneWay}" />
+		<StackPanel
+			Margin="0,150"
+			VerticalAlignment="Top"
+			Orientation="Vertical"
+			HorizontalAlignment="Stretch">
+			<TextBlock
+				FontSize="14"
+				HorizontalAlignment="Center"
+				Text="{Binding Text, Mode=OneWay}" />
+			<TextBlock
+				HorizontalAlignment="Center"
+				Margin="0,15,0,0"
+				FontWeight="Bold"
+				FontSize="21"
+				Visibility="{Binding ExpireDaysVisible, Converter={dx:BooleanToVisibilityConverter}}"
+				Text="{Binding ExpireDays, Mode=OneWay}" />
+		</StackPanel>
+		<dx:SimpleButton
+			VerticalAlignment="Bottom"
+			HorizontalAlignment="Center"
+			Margin="10"
+			ToolTip="[Esc]"
+			MinWidth="100"
+			ButtonKind="Simple"
+			Content="OK"
+			Command="{Binding CloseCommand}" />
+	</Grid>
+</UserControl>

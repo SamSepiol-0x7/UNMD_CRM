@@ -1,0 +1,375 @@
+<dxwui:NavigationPage
+	x:Class="ASC.TaskManager.TaskManagerView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:ASC.TaskManager" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:dxwui="http://schemas.devexpress.com/winfx/2008/xaml/windowsui" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:asc="clr-namespace:ASC" xmlns:objects="clr-namespace:ASC.Objects" xmlns:extensions="clr-namespace:ASC.Extensions"
+	dxwui:NavigationCacheMode="Disabled"
+	Loaded="{DXEvent OnLoad()}">
+	<FrameworkElement.DataContext>
+		<local:TaskManagerViewModel />
+	</FrameworkElement.DataContext>
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition
+				Width="280" />
+			<ColumnDefinition
+				Width="39*" />
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition
+				Height="101*" />
+			<RowDefinition
+				Height="90" />
+		</Grid.RowDefinitions>
+		<dxlc:LayoutControl
+			ItemStyle="{StaticResource LeftMenuLayout}"
+			Orientation="Vertical"
+			ItemSpace="5"
+			Padding="10">
+			<dxlc:LayoutItem
+				Label="{StaticResource Direction}">
+				<dxe:ComboBoxEdit
+					DisplayMember="Value"
+					ValueMember="Key"
+					EditValue="{Binding SelectedDirection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+					ItemsSource="{Binding Direction}">
+					<dxmvvm:Interaction.Behaviors>
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+							PassEventArgsToCommand="True"
+							Command="{Binding ComboBoxClickCommand}" />
+					</dxmvvm:Interaction.Behaviors>
+				</dxe:ComboBoxEdit>
+			</dxlc:LayoutItem>
+			<dxlc:LayoutGroup
+				Orientation="Vertical"
+				Visibility="{Binding IncomingFiltersVisible, Converter={dx:BooleanToVisibilityConverter}}">
+				<dxlc:LayoutItem
+					Label="{DynamicResource User}"
+					IsEnabled="{Binding AllowUserSelect}">
+					<dxe:ComboBoxEdit
+						ValueMember="Id"
+						DisplayMember="FioShort"
+						PopupMaxHeight="250"
+						IsTextEditable="False"
+						EditValue="{Binding SelectedUser, UpdateSourceTrigger=PropertyChanged}"
+						ItemsSource="{Binding ActiveUsersWithAll, Source={x:Static objects:OfflineData.Instance}}">
+						<dxmvvm:Interaction.Behaviors>
+							<dxmvvm:EventToCommand
+								EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+								PassEventArgsToCommand="True"
+								Command="{Binding ComboBoxClickCommand}" />
+						</dxmvvm:Interaction.Behaviors>
+					</dxe:ComboBoxEdit>
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+			<dxlc:LayoutItem
+				Label="{DynamicResource Type}">
+				<dxe:ComboBoxEdit
+					DisplayMember="Value"
+					ValueMember="Key"
+					EditValue="{Binding SelectedTaskType, UpdateSourceTrigger=PropertyChanged}"
+					ItemsSource="{Binding TaskTypes}">
+					<dxmvvm:Interaction.Behaviors>
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+							PassEventArgsToCommand="True"
+							Command="{Binding ComboBoxClickCommand}" />
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="EditValueChanged"
+							PassEventArgsToCommand="True"
+							Command="{Binding TaskTypeChangedCommand}" />
+					</dxmvvm:Interaction.Behaviors>
+				</dxe:ComboBoxEdit>
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource Status}">
+				<dxe:ComboBoxEdit
+					DisplayMember="Value"
+					ValueMember="Key"
+					EditValue="{Binding SelectedTaskStatus, UpdateSourceTrigger=PropertyChanged}"
+					ItemsSource="{Binding TaskStatuses}">
+					<dxmvvm:Interaction.Behaviors>
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+							PassEventArgsToCommand="True"
+							Command="{Binding ComboBoxClickCommand}" />
+					</dxmvvm:Interaction.Behaviors>
+				</dxe:ComboBoxEdit>
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource Priority}">
+				<dxe:ComboBoxEdit
+					DisplayMember="Value"
+					ValueMember="Key"
+					ItemsSource="{Binding Priorities}"
+					EditValue="{Binding SelectedPriority, UpdateSourceTrigger=PropertyChanged}">
+					<dxmvvm:Interaction.Behaviors>
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+							PassEventArgsToCommand="True"
+							Command="{Binding ComboBoxClickCommand}" />
+					</dxmvvm:Interaction.Behaviors>
+				</dxe:ComboBoxEdit>
+			</dxlc:LayoutItem>
+			<dxlc:LayoutGroup
+				Orientation="Horizontal"
+				View="GroupBox"
+				Header="{DynamicResource PeriodNoDots}">
+				<FrameworkElement.Style>
+					<Style
+						TargetType="{x:Type dxlc:LayoutGroup}">
+						<Setter
+							Property="Visibility"
+							Value="Visible" />
+						<Style.Triggers>
+							<DataTrigger
+								Value="-1"
+								Binding="{Binding SelectedTaskStatus}">
+								<Setter
+									Property="Visibility"
+									Value="Collapsed" />
+							</DataTrigger>
+						</Style.Triggers>
+					</Style>
+				</FrameworkElement.Style>
+				<dxlc:LayoutItem>
+					<dxe:DateEdit
+						AllowNullInput="False"
+						PopupMaxHeight="250"
+						EditValue="{Binding Period.From, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="-"
+					VerticalAlignment="Center"
+					LabelVerticalAlignment="Center"
+					Width="5"
+					LabelHorizontalAlignment="Center" />
+				<dxlc:LayoutItem>
+					<dxe:DateEdit
+						AllowNullInput="False"
+						PopupMaxHeight="250"
+						EditValue="{Binding Period.To, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					VerticalAlignment="Center"
+					LabelVerticalAlignment="Center"
+					Width="20"
+					LabelHorizontalAlignment="Center">
+					<Button
+						Content="3"
+						Padding="0"
+						ContentTemplate="{StaticResource LeftRight}"
+						Command="{Binding Period.MinusDayCommand}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					VerticalAlignment="Center"
+					LabelVerticalAlignment="Center"
+					Width="20"
+					LabelHorizontalAlignment="Center">
+					<Button
+						Content="4"
+						Padding="0"
+						ContentTemplate="{StaticResource LeftRight}"
+						Command="{Binding Period.PlusDayCommand}" />
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+		</dxlc:LayoutControl>
+		<Border
+			BorderThickness="1,1,0,0"
+			BorderBrush="#FFA9A9A9"
+			Grid.Column="1">
+			<dxg:GridControl
+				Name="tableView1"
+				Tag="TasksGrid"
+				Style="{StaticResource DeDefTable}"
+				Margin="0,0,0,0"
+				AllowInitiallyFocusedRow="False"
+				ItemsSource="{Binding Tasks}"
+				SelectedItem="{Binding SelectedTask, Mode=TwoWay}"
+				SelectedItems="{Binding SelectedTasks, Mode=TwoWay}">
+				<dxmvvm:Interaction.Behaviors>
+					<dxmvvm:EventToCommand
+						EventTriggerBase_x0060_1.EventName="Loaded"
+						Command="{Binding GridInitCommand}"
+						CommandParameter="{Binding ElementName=tableView1}" />
+					<dxmvvm:EventToCommand
+						EventTriggerBase_x0060_1.EventName="Unloaded"
+						Command="{Binding GridUnloadedCommand}"
+						CommandParameter="{Binding ElementName=tableView1}" />
+					<extensions:GridLayoutHelper>
+						<dxmvvm:Interaction.Behaviors>
+							<dxmvvm:EventToCommand
+								EventTriggerBase_x0060_1.EventName="LayoutChanged"
+								Command="{Binding LayoutChangedCommand}"
+								CommandParameter="{Binding ElementName=tableView1}" />
+						</dxmvvm:Interaction.Behaviors>
+					</extensions:GridLayoutHelper>
+				</dxmvvm:Interaction.Behaviors>
+				<dxg:GridColumn
+					FieldName="№"
+					HorizontalHeaderContentAlignment="Center"
+					Width="100"
+					VisibleIndex="0"
+					Binding="{Binding idt}">
+					<dxg:ColumnBase.EditSettings>
+						<dxe:TextEditSettings
+							HorizontalContentAlignment="Center"
+							MaskType="Numeric"
+							Mask="d6"
+							MaskUseAsDisplayFormat="True" />
+					</dxg:ColumnBase.EditSettings>
+				</dxg:GridColumn>
+				<dxg:GridColumn
+					FieldName="{DynamicResource Date}"
+					HorizontalHeaderContentAlignment="Center"
+					Width="120"
+					Binding="{Binding start_datetime, Converter={StaticResource UtcToLocalDateTimeConverter}}">
+					<dxg:ColumnBase.EditSettings>
+						<dxe:TextEditSettings
+							HorizontalContentAlignment="Center"
+							MaskType="DateTime"
+							Mask="dd.MM.yyyy HH:mm"
+							MaskUseAsDisplayFormat="True" />
+					</dxg:ColumnBase.EditSettings>
+				</dxg:GridColumn>
+				<dxg:GridColumn
+					Width="60"
+					FieldName="{DynamicResource Type}"
+					HorizontalHeaderContentAlignment="Center"
+					Binding="{Binding Image}">
+					<dxg:ColumnBase.EditSettings>
+						<dxe:ImageEditSettings
+							HorizontalContentAlignment="Center"
+							MaxWidth="16"
+							ShowMenu="False" />
+					</dxg:ColumnBase.EditSettings>
+				</dxg:GridColumn>
+				<dxg:GridColumn
+					Width="10*"
+					FieldName="{DynamicResource Title}"
+					HorizontalHeaderContentAlignment="Center"
+					Binding="{Binding title}" />
+				<dxg:GridColumn
+					Width="75"
+					FieldName="{DynamicResource Priority}"
+					HorizontalHeaderContentAlignment="Center"
+					Binding="{Binding priority, Converter={StaticResource PriorityToPictureConverter}}">
+					<dxg:ColumnBase.EditSettings>
+						<dxe:ImageEditSettings
+							HorizontalContentAlignment="Center"
+							MaxWidth="16"
+							VerticalContentAlignment="Center"
+							ShowMenu="False" />
+					</dxg:ColumnBase.EditSettings>
+				</dxg:GridColumn>
+				<dxg:GridColumn
+					Width="10*"
+					FieldName="{DynamicResource CoWorker}"
+					HorizontalHeaderContentAlignment="Center"
+					Binding="{Binding TaskUsers, Mode=OneWay}" />
+				<dxg:GridColumn
+					Width="100"
+					FieldName="{DynamicResource Status}"
+					HorizontalHeaderContentAlignment="Center"
+					Binding="{Binding state, Mode=OneWay, Converter={StaticResource StatusToTextConverter}}" />
+				<dxg:GridControl.View>
+					<dxg:TableView
+						ShowTotalSummary="False"
+						AllowScrollAnimation="True"
+						NavigationStyle="Row"
+						ColumnFilterPopupMode="Excel"
+						AllowEditing="False"
+						AllowGrouping="False"
+						AllowColumnMoving="True"
+						ShowGroupPanel="False"
+						ShowColumnHeaders="True"
+						AllowMoveColumnToDropArea="False"
+						ShowBandsPanel="True"
+						ShowIndicator="False"
+						AllowBestFit="True"
+						AllowColumnFiltering="False"
+						ShowSelectionRectangle="False"
+						ShowFixedTotalSummary="False"
+						SummariesIgnoreNullValues="True"
+						RowMinHeight="{Binding Employee.UiSettings.RowHeight, Source={x:Static objects:OfflineData.Instance}}"
+						FontSize="{Binding Employee.UiSettings.FontSize, Source={x:Static objects:OfflineData.Instance}}"
+						ShowCheckBoxSelectorColumn="{Binding ShowCheckBoxSelectorColumn, Mode=TwoWay}">
+						<dxmvvm:Interaction.Behaviors>
+							<dxmvvm:EventToCommand
+								EventTriggerBase_x0060_1.EventName="RowDoubleClick"
+								Command="{Binding ItemDoubleClickCommand}" />
+						</dxmvvm:Interaction.Behaviors>
+						<dxg:TableView.RowStyle>
+							<Style
+								TargetType="{x:Type dxg:RowControl}">
+								<Style.Triggers>
+									<DataTrigger
+										Value="Focused"
+										Binding="{Binding Path=SelectionState}">
+										<Setter
+											Property="Background"
+											Value="{DynamicResource UiSelectedRowColor}" />
+									</DataTrigger>
+									<DataTrigger
+										Value="2"
+										Binding="{Binding Row.state}">
+										<Setter
+											Property="Background"
+											Value="#FFA9A9A9" />
+										<Setter
+											Property="FrameworkElement.ToolTip"
+											Value="{StaticResource ArchiveTask}" />
+									</DataTrigger>
+								</Style.Triggers>
+							</Style>
+						</dxg:TableView.RowStyle>
+					</dxg:TableView>
+				</dxg:GridControl.View>
+			</dxg:GridControl>
+		</Border>
+		<dxwui:AppBar
+			Background="#3f3f3f"
+			HorizontalAlignment="Stretch"
+			VerticalAlignment="Stretch"
+			ItemSpacing="5"
+			HideMode="AlwaysVisible"
+			Grid.Row="1"
+			Grid.ColumnSpan="2">
+			<dxwui:AppBarButton
+				Label="{DynamicResource Create}"
+				Command="{Binding NewTaskCommand}"
+				Glyph="{dx:DXImageGrayscale Image=New_32x32.png}" />
+			<dxwui:AppBarButton
+				Label="{DynamicResource CancelTask}"
+				Command="{Binding CancelSelectedTasksCommand}"
+				Visibility="{Binding IsEnabled, Converter={StaticResource BooleanToVisibilityConverter}, RelativeSource={RelativeSource Self}}"
+				Glyph="{dx:DXImageGrayscale Image=Cancel_32x32.png}" />
+			<dxwui:AppBarButton
+				Label="{DynamicResource Refresh}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Command="{Binding Period.RefreshCommand}"
+				Glyph="{dx:DXImageGrayscale Image=Refresh_32x32.png}" />
+			<dxwui:AppBarButton
+				Label="{DynamicResource Print}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Command="{Binding View.Commands.ShowPrintPreview, ElementName=tableView1}"
+				Glyph="{dx:DXImageGrayscale Image=Print_32x32.png}" />
+			<dxg:GridSearchControl
+				dxe:SearchTextPostDelay="300"
+				dxe:PostMode="Delayed"
+				dxe:ShowMRUButton="False"
+				ActualShowButtonClose="False"
+				HorizontalAlignment="Right"
+				Margin="23"
+				dxe:ShowClearButton="True"
+				Width="200"
+				dxe:SearchText="{Binding Query, Mode=TwoWay}">
+				<dxmvvm:Interaction.Behaviors>
+					<dxmvvm:FocusBehavior />
+				</dxmvvm:Interaction.Behaviors>
+			</dxg:GridSearchControl>
+		</dxwui:AppBar>
+	</Grid>
+</dxwui:NavigationPage>

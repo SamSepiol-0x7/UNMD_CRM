@@ -1,0 +1,49 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	<SolidColorBrush
+		Color="#FF595959"
+		x:Key="TreeViewItem.TreeArrow.Static.Checked.Fill" />
+	<SolidColorBrush
+		Color="#FF262626"
+		x:Key="TreeViewItem.TreeArrow.Static.Checked.Stroke" />
+	<SolidColorBrush
+		Color="#FF1BBBFA"
+		x:Key="TreeViewItem.TreeArrow.MouseOver.Stroke" />
+	<SolidColorBrush
+		Color="Transparent"
+		x:Key="TreeViewItem.TreeArrow.MouseOver.Fill" />
+	<SolidColorBrush
+		Color="#FF262626"
+		x:Key="TreeViewItem.TreeArrow.MouseOver.Checked.Stroke" />
+	<SolidColorBrush
+		Color="#FF595959"
+		x:Key="TreeViewItem.TreeArrow.MouseOver.Checked.Fill" />
+	<PathGeometry
+		Figures="M0,0 L0,6 L6,0 z"
+		x:Key="TreeArrow" />
+	<SolidColorBrush
+		Color="Transparent"
+		x:Key="TreeViewItem.TreeArrow.Static.Fill" />
+	<SolidColorBrush
+		Color="#FF989898"
+		x:Key="TreeViewItem.TreeArrow.Static.Stroke" />
+	<SolidColorBrush
+		Color="#FF707070"
+		x:Key="ButtonNormalBorder" />
+	<Geometry
+		x:Key="DownArrowGeometry">M 0 0 L 3.5 4 L 7 0 Z</Geometry>
+	<LinearGradientBrush
+		EndPoint="0,20"
+		MappingMode="Absolute"
+		StartPoint="0,0"
+		x:Key="TextBoxBorder">
+		<GradientStop
+			Color="#ABADB3"
+			Offset="0.05" />
+		<GradientStop
+			Color="#E2E3EA"
+			Offset="0.07" />
+		<GradientStop
+			Color="#E3E9EF"
+			Offset="1" />
+	</LinearGradientBrush>
+</ResourceDictionary>

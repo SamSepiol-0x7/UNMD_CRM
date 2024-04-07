@@ -1,0 +1,201 @@
+<UserControl
+	x:Class="ASC.View.Charts.StatusCheckView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:ASC.View.Charts" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:objects="clr-namespace:ASC.Objects" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:dxwui="http://schemas.devexpress.com/winfx/2008/xaml/windowsui" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:extensions="clr-namespace:ASC.Extensions" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" xmlns:properties="clr-namespace:ASC.Properties" xmlns:controls="clr-namespace:ASC.View.Controls">
+	<DockPanel>
+		<dxwui:AppBar
+			DockPanel.Dock="Bottom"
+			Background="#3f3f3f"
+			HorizontalAlignment="Stretch"
+			VerticalAlignment="Stretch"
+			ItemSpacing="0"
+			HideMode="AlwaysVisible"
+			Grid.Row="1">
+			<dxwui:AppBarButton
+				Label="{DynamicResource Refresh}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Command="{Binding RefreshCommand}"
+				Glyph="{dx:DXImageGrayscale Image=Refresh_32x32.png}" />
+			<dxg:GridSearchControl
+				dxe:SearchTextPostDelay="300"
+				dxe:PostMode="Delayed"
+				dxe:ShowMRUButton="False"
+				ActualShowButtonClose="False"
+				HorizontalAlignment="Right"
+				Margin="23"
+				dxe:ShowClearButton="True"
+				Width="200"
+				dxe:SearchText="{Binding Query, Mode=TwoWay}">
+				<dxmvvm:Interaction.Behaviors>
+					<dxmvvm:FocusBehavior />
+				</dxmvvm:Interaction.Behaviors>
+			</dxg:GridSearchControl>
+		</dxwui:AppBar>
+		<DockPanel
+			Dock="Left">
+			<dxlc:LayoutControl
+				DockPanel.Dock="Left"
+				ItemStyle="{StaticResource LeftMenuLayout}"
+				Orientation="Vertical"
+				ItemSpace="5"
+				Padding="10"
+				Visibility="{Binding ElementName=ExpandButton, Path=IsChecked, Converter={dxmvvm:BooleanToVisibilityConverter}}">
+				<controls:PeriodView />
+			</dxlc:LayoutControl>
+			<Grid
+				DockPanel.Dock="Left">
+				<ToggleButton
+					Name="ExpandButton"
+					Padding="0"
+					Margin="0"
+					Style="{StaticResource HideButtonStyleLeft}"
+					VerticalAlignment="Center"
+					IsChecked="{Binding Path=KassaSidebarExpanded, Source={x:Static properties:Settings.Default}}" />
+			</Grid>
+		</DockPanel>
+		<Border
+			HorizontalAlignment="Stretch"
+			VerticalAlignment="Stretch"
+			BorderThickness="1,1,0,0"
+			BorderBrush="#FFA9A9A9">
+			<dxg:GridControl
+				Name="TableView1"
+				Tag="StatusChecksGrid"
+				Style="{StaticResource DeDefTable}"
+				AllowInitiallyFocusedRow="False"
+				Margin="0,0,0,0"
+				ItemsSource="{Binding Items}"
+				SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+				<dxmvvm:Interaction.Behaviors>
+					<dxmvvm:EventToCommand
+						EventTriggerBase_x0060_1.EventName="Loaded"
+						Command="{Binding GridInitCommand}"
+						CommandParameter="{Binding ElementName=TableView1}" />
+					<dxmvvm:EventToCommand
+						EventTriggerBase_x0060_1.EventName="Unloaded"
+						Command="{Binding GridUnloadedCommand}"
+						CommandParameter="{Binding ElementName=TableView1}" />
+					<extensions:GridLayoutHelper>
+						<dxmvvm:Interaction.Behaviors>
+							<dxmvvm:EventToCommand
+								EventTriggerBase_x0060_1.EventName="LayoutChanged"
+								Command="{Binding LayoutChangedCommand}"
+								CommandParameter="{Binding ElementName=TableView1}" />
+						</dxmvvm:Interaction.Behaviors>
+					</extensions:GridLayoutHelper>
+				</dxmvvm:Interaction.Behaviors>
+				<dxg:GridColumn
+					Name="Date"
+					FieldName="{DynamicResource Date}"
+					HorizontalHeaderContentAlignment="Center"
+					Width="120"
+					Binding="{Binding Created, Converter={StaticResource UtcToLocalDateTimeConverter}}">
+					<dxg:ColumnBase.EditSettings>
+						<dxe:TextEditSettings
+							HorizontalContentAlignment="Center"
+							MaskType="DateTime"
+							Mask="dd.MM.yyyy  HH:mm"
+							MaskUseAsDisplayFormat="True" />
+					</dxg:ColumnBase.EditSettings>
+				</dxg:GridColumn>
+				<dxg:GridColumn
+					Name="RepairId"
+					Width="100"
+					FieldName="{DynamicResource Repair}"
+					HorizontalHeaderContentAlignment="Center"
+					Binding="{Binding RepairId}">
+					<dxg:ColumnBase.EditSettings>
+						<dxe:TextEditSettings
+							NullText="---"
+							HorizontalContentAlignment="Center"
+							MaskType="Numeric"
+							Mask="d6"
+							MaskUseAsDisplayFormat="True" />
+					</dxg:ColumnBase.EditSettings>
+				</dxg:GridColumn>
+				<dxg:GridColumn
+					Name="IpAddress"
+					FieldName="IP"
+					HorizontalHeaderContentAlignment="Center"
+					Width="150"
+					Binding="{Binding IpAddress}">
+					<dxg:ColumnBase.EditSettings>
+						<dxe:TextEditSettings
+							HorizontalContentAlignment="Center"
+							NullText="---" />
+					</dxg:ColumnBase.EditSettings>
+				</dxg:GridColumn>
+				<dxg:GridColumn
+					Name="UserAgent"
+					FieldName="User Agent"
+					HorizontalHeaderContentAlignment="Center"
+					Width="150*"
+					Binding="{Binding UserAgent}">
+					<dxg:ColumnBase.EditSettings>
+						<dxe:TextEditSettings
+							HorizontalContentAlignment="Left"
+							TextWrapping="Wrap"
+							NullText="---" />
+					</dxg:ColumnBase.EditSettings>
+				</dxg:GridColumn>
+				<dxg:GridControl.View>
+					<dxg:TableView
+						ShowTotalSummary="True"
+						AllowScrollAnimation="True"
+						NavigationStyle="Row"
+						ColumnFilterPopupMode="Excel"
+						AllowEditing="False"
+						AllowGrouping="False"
+						AllowColumnMoving="True"
+						ShowGroupPanel="False"
+						ShowColumnHeaders="True"
+						AllowMoveColumnToDropArea="False"
+						ShowSearchPanelMode="Never"
+						ShowBandsPanel="True"
+						ShowIndicator="False"
+						AllowBestFit="True"
+						AllowColumnFiltering="False"
+						ShowSelectionRectangle="False"
+						ShowFixedTotalSummary="False"
+						SummariesIgnoreNullValues="True"
+						RowMinHeight="{Binding Employee.UiSettings.RowHeight, Source={x:Static objects:OfflineData.Instance}}"
+						FontSize="{Binding Employee.UiSettings.FontSize, Source={x:Static objects:OfflineData.Instance}}">
+						<dxmvvm:Interaction.Behaviors>
+							<dxmvvm:EventToCommand
+								EventTriggerBase_x0060_1.EventName="RowDoubleClick"
+								Command="{Binding ItemRowDoubleClickCommand}" />
+						</dxmvvm:Interaction.Behaviors>
+						<dxg:TableView.RowStyle>
+							<Style
+								BasedOn="{StaticResource RowStyle}"
+								TargetType="{x:Type dxg:RowControl}">
+								<Setter
+									Property="FrameworkElement.ContextMenu">
+									<Setter.Value>
+										<ContextMenu>
+											<MenuItem
+												Header="{DynamicResource RepairCard}"
+												Command="{Binding View.DataContext.ItemRowDoubleClickCommand}" />
+											<MenuItem
+												Header="{DynamicResource ClientCard}"
+												Command="{Binding View.DataContext.NavigateCustomerCardCommand}" />
+											<MenuItem
+												Header="Copy IP"
+												Command="{Binding View.DataContext.CopyIdAddressCommand}" />
+										</ContextMenu>
+									</Setter.Value>
+								</Setter>
+							</Style>
+						</dxg:TableView.RowStyle>
+					</dxg:TableView>
+				</dxg:GridControl.View>
+				<dxg:GridControl.TotalSummary>
+					<dxg:GridSummaryItem
+						DisplayFormat=" {0:N0}"
+						SummaryType="Count"
+						FieldName="{DynamicResource Date}" />
+				</dxg:GridControl.TotalSummary>
+			</dxg:GridControl>
+		</Border>
+	</DockPanel>
+</UserControl>

@@ -1,0 +1,251 @@
+<dx:ThemedWindow
+	x:Class="ASC.RealizatorPay.RealizatorPayView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:properties="clr-namespace:ASC.Properties" xmlns:asc="clr-namespace:ASC" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
+	Name="RealizPayWindow"
+	MinWidth="800"
+	MinHeight="600"
+	Title="{DynamicResource RealizatorPay}"
+	Style="{StaticResource DefaulWindow}" xmlns:realizatorpay="clr-namespace:ASC.RealizatorPay"
+	Top="{Binding RealizPayTop, Source={x:Static properties:Settings.Default}, Mode=TwoWay}"
+	Left="{Binding RealizPayLeft, Source={x:Static properties:Settings.Default}, Mode=TwoWay}"
+	Height="{Binding RealizPayHeight, Source={x:Static properties:Settings.Default}, Mode=TwoWay}"
+	Width="{Binding RealizPayWidth, Source={x:Static properties:Settings.Default}, Mode=TwoWay}"
+	WindowState="{Binding RealizPayState, Source={x:Static properties:Settings.Default}, Mode=TwoWay}"
+	DataContext="{Binding PayViewModel, RelativeSource={RelativeSource Self}}">
+	<FrameworkElement.Resources>
+		<ResourceDictionary>
+			<asc:BindingProxy
+				Data="{Binding}"
+				x:Key="BindingProxy" />
+		</ResourceDictionary>
+	</FrameworkElement.Resources>
+	<Grid>
+		<Button
+			Style="{StaticResource ButtomButton}"
+			Margin="0,0,10,10"
+			Command="{Binding CloseCommand}">
+			<StackPanel
+				Orientation="Horizontal">
+				<Image
+					Source="/ASC;component/Resources/close.png"
+					Width="16"
+					Height="16" />
+				<Label
+					Content="{DynamicResource Close}"
+					Margin="10,0,0,0" />
+			</StackPanel>
+		</Button>
+		<dxg:GridControl
+			Name="tableView1"
+			Style="{StaticResource DeDefTable}"
+			Margin="0,37,0,45"
+			ItemsSource="{Binding SoldItems}"
+			SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+			<dxg:GridColumn
+				FieldName="{DynamicResource ArticulNoDots}"
+				HorizontalHeaderContentAlignment="Center"
+				Width="100"
+				VisibleIndex="0"
+				Binding="{Binding item_id}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:TextEditSettings
+						HorizontalContentAlignment="Center"
+						MaskType="Numeric"
+						Mask="d6"
+						MaskUseAsDisplayFormat="True" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				FieldName="{DynamicResource Date}"
+				HorizontalHeaderContentAlignment="Center"
+				Binding="{Binding docs.created}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:TextEditSettings
+						HorizontalContentAlignment="Center"
+						MaskType="DateTime"
+						Mask="dd.MM.yyyy"
+						MaskUseAsDisplayFormat="True" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				FieldName="{DynamicResource ItemName}"
+				MinWidth="250"
+				HorizontalHeaderContentAlignment="Center"
+				Binding="{Binding name}" />
+			<dxg:GridColumn
+				FieldName="{DynamicResource Description}"
+				HorizontalHeaderContentAlignment="Center"
+				Binding="{Binding store_items.description}"
+				Visible="{Binding Data.PrintDescription, Source={StaticResource BindingProxy}}" />
+			<dxg:GridColumn
+				FieldName="{DynamicResource Sold}"
+				HorizontalHeaderContentAlignment="Center"
+				Binding="{Binding count}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:TextEditSettings
+						HorizontalContentAlignment="Center" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				FieldName="{DynamicResource Summ}"
+				HorizontalHeaderContentAlignment="Center"
+				Width="100"
+				Binding="{Binding RealizatorPart}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:TextEditSettings
+						HorizontalContentAlignment="Center"
+						MaskType="Numeric"
+						Mask="N0"
+						MaskUseAsDisplayFormat="True" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				AllowPrinting="False"
+				AllowEditing="True"
+				ReadOnly="False"
+				FieldName="{DynamicResource Select}"
+				HorizontalHeaderContentAlignment="Center"
+				Width="100">
+				<dxg:BaseColumn.HeaderTemplate>
+					<DataTemplate>
+						<StackPanel
+							Orientation="Horizontal">
+							<Label
+								Content="{DynamicResource Select}" />
+							<CheckBox
+								ToolTip="{DynamicResource SelectAll}"
+								Margin="5,0,0,0"
+								IsChecked="{Binding DataContext.SelectAll, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ElementName=RealizPayWindow}" />
+						</StackPanel>
+					</DataTemplate>
+				</dxg:BaseColumn.HeaderTemplate>
+				<dxg:ColumnBase.CellTemplate>
+					<DataTemplate>
+						<dxe:CheckEdit
+							HorizontalAlignment="Center"
+							VerticalAlignment="Center"
+							IsChecked="{Binding RowData.Row.isSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+							<dxmvvm:Interaction.Behaviors>
+								<dxmvvm:EventToCommand
+									EventTriggerBase_x0060_1.EventName="EditValueChanged"
+									Command="{Binding Data.SelectionChangedCommand, Source={StaticResource BindingProxy}}" />
+							</dxmvvm:Interaction.Behaviors>
+						</dxe:CheckEdit>
+					</DataTemplate>
+				</dxg:ColumnBase.CellTemplate>
+			</dxg:GridColumn>
+			<dxg:GridControl.TotalSummary>
+				<dxg:GridSummaryItem
+					DisplayFormat=" {0:N0}"
+					SummaryType="Sum"
+					FieldName="{DynamicResource Summ}" />
+			</dxg:GridControl.TotalSummary>
+			<dxg:GridControl.View>
+				<dxg:TableView
+					AllowColumnMoving="True" />
+			</dxg:GridControl.View>
+		</dxg:GridControl>
+		<Button
+			Style="{StaticResource ButtomButton}"
+			Margin="0,0,130,10"
+			Command="{Binding PayCommand}">
+			<StackPanel
+				Orientation="Horizontal">
+				<Image
+					Source="/ASC;component/Resources/save.png"
+					Width="16"
+					Height="16" />
+				<Label
+					Content="{DynamicResource Pay}"
+					Margin="10,0,0,0" />
+			</StackPanel>
+		</Button>
+		<StackPanel
+			Orientation="Horizontal"
+			VerticalAlignment="Bottom"
+			HorizontalAlignment="Left"
+			Margin="10,0,0,10">
+			<Label
+				Content="{DynamicResource Selected}"
+				ContentStringFormat="{}{0}:"
+				HorizontalAlignment="Left"
+				VerticalAlignment="Center" />
+			<TextBlock
+				VerticalAlignment="Center"
+				FontWeight="Bold"
+				Margin="5,0,0,0"
+				Text="{Binding CountSelected}" />
+			<Label
+				Content="{DynamicResource OnSumm}"
+				ContentStringFormat="{}{0}:"
+				Margin="5,0,0,0"
+				VerticalAlignment="Center" />
+			<TextBlock
+				VerticalAlignment="Center"
+				FontWeight="Bold"
+				Margin="5,0,0,0"
+				Text="{Binding SummSelected, StringFormat=N0}" />
+			<CheckBox
+				Content="{DynamicResource CreateRko}"
+				Style="{StaticResource DefCheckBox}"
+				VerticalAlignment="Center"
+				Margin="5,0,0,0"
+				IsChecked="{Binding CreateRko, Mode=TwoWay}" />
+			<CheckBox
+				Content="{DynamicResource PrintRko}"
+				Style="{StaticResource DefCheckBox}"
+				VerticalAlignment="Center"
+				Margin="5,0,0,0"
+				IsChecked="{Binding PrintRko, Mode=TwoWay}" />
+			<CheckBox
+				Content="{DynamicResource IsCorrectInput}"
+				Style="{StaticResource DefCheckBox}"
+				VerticalAlignment="Center"
+				Margin="5,0,0,0"
+				IsChecked="{Binding IsCorrectInput, Mode=TwoWay}" />
+		</StackPanel>
+		<StackPanel
+			Orientation="Horizontal"
+			HorizontalAlignment="Stretch"
+			Margin="10,10,0,0"
+			VerticalAlignment="Top">
+			<Button
+				Command="{Binding View.Commands.ShowPrintPreview, ElementName=tableView1}">
+				<Image
+					Source="../Resources/print.png"
+					Style="{StaticResource 16X16Image}" />
+			</Button>
+			<CheckBox
+				Content="{DynamicResource PrintDescription}"
+				Margin="5,0,0,0"
+				IsChecked="{Binding PrintDescription}" />
+			<Separator />
+			<Label
+				Margin="5,0,0,0"
+				Content="{DynamicResource ClientId}"
+				ContentStringFormat="{}{0}:"
+				HorizontalAlignment="Left"
+				VerticalAlignment="Center" />
+			<TextBox
+				Margin="5,0,0,0"
+				IsReadOnly="True"
+				HorizontalAlignment="Left"
+				VerticalContentAlignment="Center"
+				VerticalAlignment="Center"
+				Width="70"
+				Text="{Binding Customer.Id, StringFormat={}{0:D6}, Mode=OneWay}" />
+			<StackPanel
+				Orientation="Horizontal">
+				<Label
+					Content="{DynamicResource Client}"
+					ContentStringFormat="{}{0}:" />
+				<TextBox
+					Margin="5,0,0,0"
+					IsReadOnly="True"
+					Width="100"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Center"
+					Text="{Binding Customer.FioOrUrName, Mode=OneWay}" />
+			</StackPanel>
+		</StackPanel>
+	</Grid>
+</dx:ThemedWindow>

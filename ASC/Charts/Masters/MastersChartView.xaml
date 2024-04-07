@@ -1,0 +1,575 @@
+<UserControl
+	x:Class="ASC.Charts.Masters.MastersChartView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:dxc="http://schemas.devexpress.com/winfx/2008/xaml/charts" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:dxwui="http://schemas.devexpress.com/winfx/2008/xaml/windowsui" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" xmlns:asc="clr-namespace:ASC" xmlns:converters="clr-namespace:ASC.Converters" xmlns:objects="clr-namespace:ASC.Objects" xmlns:extensions="clr-namespace:ASC.Extensions" xmlns:controls="clr-namespace:ASC.View.Controls" xmlns:masters="clr-namespace:ASC.Charts.Masters"
+	Loaded="{DXEvent OnLoad()}">
+	<FrameworkElement.Resources>
+		<ResourceDictionary>
+			<converters:StateToWorkshopOptionsName
+				x:Key="StateToWorkshopOptionsName" />
+		</ResourceDictionary>
+	</FrameworkElement.Resources>
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition
+				Width="Auto" />
+			<ColumnDefinition
+				Width="343*" />
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition
+				Height="50*" />
+			<RowDefinition
+				Height="50*" />
+			<RowDefinition
+				Height="90" />
+		</Grid.RowDefinitions>
+		<dxlc:LayoutControl
+			Orientation="Vertical"
+			ItemSpace="5"
+			Padding="10"
+			Grid.RowSpan="2">
+			<dxlc:LayoutGroup
+				Orientation="Vertical"
+				View="GroupBox"
+				Header="{DynamicResource Overview}">
+				<FrameworkElement.Resources>
+					<ResourceDictionary>
+						<Style
+							TargetType="{x:Type dxlc:LayoutItem}"
+							x:Key="{x:Type dxlc:LayoutItem}">
+							<Setter
+								Property="HorizontalContentAlignment"
+								Value="Right" />
+						</Style>
+					</ResourceDictionary>
+				</FrameworkElement.Resources>
+				<dxlc:LayoutItem
+					Label="{DynamicResource Repairs}">
+					<TextBlock
+						Text="{Binding Report.Total, Mode=OneWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource MaxPrice}">
+					<TextBlock
+						Text="{Binding Report.MaxPrice, Mode=OneWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource MinPrice}">
+					<TextBlock
+						Text="{Binding Report.MinPrice, Mode=OneWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource AveragePrice}">
+					<TextBlock
+						Text="{Binding Report.AveragePrice, Mode=OneWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource AverageWorksPrice}">
+					<TextBlock
+						Text="{Binding Report.AverageWorksPrice, Mode=OneWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource SalaryAverageCheque}">
+					<TextBlock
+						Text="{Binding Report.SalaryAverageCheque, Mode=OneWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource Warranty}">
+					<TextBlock
+						Text="{Binding Report.Warranty, Mode=OneWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource NotRepaired}">
+					<TextBlock
+						Text="{Binding Report.WithoutRepair, Mode=OneWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource OutRepairOk}">
+					<TextBlock
+						Text="{Binding Report.Normal, Mode=OneWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource RepairsPerDay2}">
+					<TextBlock
+						Text="{Binding Report.RepairsPerDay, Mode=OneWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource AverageRepairTime}">
+					<TextBlock
+						Text="{Binding Report.AverageRepairTime, Mode=OneWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="Исключить ремонты без оплаты в мин. чеке">
+					<dxe:CheckEdit
+						EditValue="{Binding Report.ExcludeZeroFromMinPrice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+			<dxlc:LayoutItem
+				Label="{DynamicResource Office}">
+				<dxe:ComboBoxEdit
+					AutoComplete="False"
+					DisplayMember="name"
+					ValueMember="id"
+					EditValue="{Binding SelectedOffice, Mode=TwoWay}"
+					ItemsSource="{Binding OfficesWithAll, Source={x:Static objects:OfflineData.Instance}}">
+					<dxmvvm:Interaction.Behaviors>
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="EditValueChanged"
+							Command="{Binding CriteriaChangedCommand}" />
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+							PassEventArgsToCommand="True"
+							Command="{Binding ComboBoxClickCommand}" />
+					</dxmvvm:Interaction.Behaviors>
+				</dxe:ComboBoxEdit>
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource CoWorker}">
+				<dxe:ComboBoxEdit
+					DisplayMember="Fio"
+					ValueMember="Uid"
+					EditValue="{Binding SelectedUser, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+					ItemsSource="{Binding Users}">
+					<dxmvvm:Interaction.Behaviors>
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="EditValueChanged"
+							Command="{Binding CriteriaChangedCommand}" />
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+							PassEventArgsToCommand="True"
+							Command="{Binding ComboBoxClickCommand}" />
+					</dxmvvm:Interaction.Behaviors>
+				</dxe:ComboBoxEdit>
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource Device}">
+				<dxe:ComboBoxEdit
+					DisplayMember="Name"
+					ValueMember="Id"
+					EditValue="{Binding SelectedDeviceId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+					ItemsSource="{Binding Devices}">
+					<dxmvvm:Interaction.Behaviors>
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="EditValueChanged"
+							Command="{Binding CriteriaChangedCommand}" />
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+							PassEventArgsToCommand="True"
+							Command="{Binding ComboBoxClickCommand}" />
+					</dxmvvm:Interaction.Behaviors>
+				</dxe:ComboBoxEdit>
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource State}">
+				<dxe:ComboBoxEdit
+					DisplayMember="Value"
+					ValueMember="Key"
+					EditValue="{Binding SelectedState, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+					ItemsSource="{Binding States}">
+					<dxmvvm:Interaction.Behaviors>
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="EditValueChanged"
+							Command="{Binding CriteriaChangedCommand}" />
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+							PassEventArgsToCommand="True"
+							Command="{Binding ComboBoxClickCommand}" />
+					</dxmvvm:Interaction.Behaviors>
+				</dxe:ComboBoxEdit>
+			</dxlc:LayoutItem>
+			<controls:PeriodView />
+			<dxlc:LayoutItem
+				Visibility="{Binding SelectedUser, Converter={StaticResource NumericToVisibility}}">
+				<dxc:ChartControl
+					Padding="0"
+					BorderThickness="0"
+					HorizontalAlignment="Stretch"
+					VerticalAlignment="Stretch"
+					AnimationMode="OnDataChanged"
+					Background="{x:Null}"
+					DataSource="{Binding Report.Pie}">
+					<dxc:ChartControl.Diagram>
+						<dxc:SimpleDiagram2D>
+							<dxc:PieSeries2D
+								AnimationAutoStartMode="SetStartState"
+								HoleRadiusPercent="0"
+								LabelsVisibility="True"
+								ArgumentDataMember="Key"
+								ValueDataMember="Value">
+								<dxc:PieSeries2D.Model>
+									<dxc:GlassPie2DModel />
+								</dxc:PieSeries2D.Model>
+								<dxc:PieSeries2D.PointAnimation>
+									<dxc:Pie2DFlyInAnimation
+										Duration="0:0:1"
+										PointOrder="Random" />
+								</dxc:PieSeries2D.PointAnimation>
+								<dxc:Series.Label>
+									<dxc:SeriesLabel
+										Foreground="#FFFFFFFF"
+										PieSeries.LabelPosition="Inside"
+										Indent="0"
+										TextPattern="{}{A}: {V} ({VP:p2})"
+										Visibility="Visible"
+										RenderMode="Rectangle"
+										ResolveOverlappingMode="Default" />
+								</dxc:Series.Label>
+							</dxc:PieSeries2D>
+						</dxc:SimpleDiagram2D>
+					</dxc:ChartControl.Diagram>
+				</dxc:ChartControl>
+			</dxlc:LayoutItem>
+		</dxlc:LayoutControl>
+		<dxc:ChartControl
+			Grid.Column="1"
+			Grid.Row="1"
+			DataSource="{Binding Report.Chart}">
+			<dxc:ChartControl.Diagram>
+				<dxc:XYDiagram2D
+					SeriesDataMember="SeriesDataMember"
+					AllowSeriesBitmapCaching="False">
+					<dxc:XYDiagram2D.AxisX>
+						<dxc:AxisX2D>
+							<dxc:AxisX2D.DateTimeScaleOptions>
+								<dxc:AutomaticDateTimeScaleOptions
+									AggregateFunction="Sum" />
+							</dxc:AxisX2D.DateTimeScaleOptions>
+						</dxc:AxisX2D>
+					</dxc:XYDiagram2D.AxisX>
+					<dxc:XYDiagram2D.AxisY>
+						<dxc:AxisY2D>
+							<dxc:Axis.Title>
+								<dxc:AxisTitle
+									Content="{DynamicResource Summ}" />
+							</dxc:Axis.Title>
+						</dxc:AxisY2D>
+					</dxc:XYDiagram2D.AxisY>
+					<dxc:XYDiagram2D.DefaultPane>
+						<dxc:Pane>
+							<dxc:BarStackedSeries2D.TotalLabel>
+								<dxc:StackedBarTotalLabel
+									TextPattern="Итого:&#xA;{TV:F1}"
+									ConnectorVisible="True" />
+							</dxc:BarStackedSeries2D.TotalLabel>
+						</dxc:Pane>
+					</dxc:XYDiagram2D.DefaultPane>
+					<dxc:Diagram.SeriesTemplate>
+						<dxc:BarStackedSeries2D
+							ArgumentScaleType="DateTime"
+							ValueScaleType="Numerical"
+							LabelsVisibility="False"
+							ArgumentDataMember="ArgumentDataMember"
+							ValueDataMember="ValueDataMember">
+							<dxc:BarSeries2D.Model>
+								<dxc:FlatGlassBar2DModel />
+							</dxc:BarSeries2D.Model>
+						</dxc:BarStackedSeries2D>
+					</dxc:Diagram.SeriesTemplate>
+				</dxc:XYDiagram2D>
+			</dxc:ChartControl.Diagram>
+			<dxc:ChartControl.Legend>
+				<dxc:Legend />
+			</dxc:ChartControl.Legend>
+			<dxc:ChartControlBase.Titles>
+				<dxc:Title
+					Dock="Top"
+					HorizontalAlignment="Center"
+					FontSize="22"
+					Content="{DynamicResource MastersChart}" />
+			</dxc:ChartControlBase.Titles>
+		</dxc:ChartControl>
+		<Border
+			BorderThickness="1,1,0,0"
+			BorderBrush="#FFA9A9A9"
+			Grid.Column="1"
+			Grid.Row="0">
+			<dxg:GridControl
+				Name="TableView1"
+				Tag="EmployeesReportGrid"
+				Style="{StaticResource DeDefTable}"
+				Margin="0,0,0,0"
+				ItemsSource="{Binding Report.Repairs}"
+				SelectedItem="{Binding SelectedRepair, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+				DXSerializer.AllowProperty="TableView1_OnAllowProperty">
+				<dxmvvm:Interaction.Behaviors>
+					<dxmvvm:EventToCommand
+						EventTriggerBase_x0060_1.EventName="Loaded"
+						Command="{Binding GridInitCommand}"
+						CommandParameter="{Binding ElementName=TableView1}" />
+					<dxmvvm:EventToCommand
+						EventTriggerBase_x0060_1.EventName="Unloaded"
+						Command="{Binding GridUnloadedCommand}"
+						CommandParameter="{Binding ElementName=TableView1}" />
+					<extensions:GridLayoutHelper>
+						<dxmvvm:Interaction.Behaviors>
+							<dxmvvm:EventToCommand
+								EventTriggerBase_x0060_1.EventName="LayoutChanged"
+								Command="{Binding LayoutChangedCommand}"
+								CommandParameter="{Binding ElementName=TableView1}" />
+						</dxmvvm:Interaction.Behaviors>
+					</extensions:GridLayoutHelper>
+				</dxmvvm:Interaction.Behaviors>
+				<dxg:GridControl.Columns>
+					<dxg:GridColumn
+						FieldName="ID"
+						HorizontalHeaderContentAlignment="Center"
+						Width="100"
+						VisibleIndex="0"
+						Binding="{Binding Id}">
+						<dxg:ColumnBase.EditSettings>
+							<dxe:TextEditSettings
+								HorizontalContentAlignment="Center"
+								MaskType="Numeric"
+								Mask="d6"
+								MaskUseAsDisplayFormat="True" />
+						</dxg:ColumnBase.EditSettings>
+					</dxg:GridColumn>
+					<dxg:GridColumn
+						FieldName="{DynamicResource OutDate}"
+						HorizontalHeaderContentAlignment="Center"
+						Width="120"
+						Binding="{Binding OutDate, Converter={StaticResource UtcToLocalDateTimeConverter}}">
+						<dxg:ColumnBase.EditSettings>
+							<dxe:TextEditSettings
+								HorizontalContentAlignment="Center"
+								MaskType="DateTime"
+								Mask="dd.MM.yyyy  HH:mm"
+								MaskUseAsDisplayFormat="True" />
+						</dxg:ColumnBase.EditSettings>
+					</dxg:GridColumn>
+					<dxg:GridColumn
+						MinWidth="100"
+						FieldName="{DynamicResource DeviceInfo}"
+						HorizontalHeaderContentAlignment="Center"
+						Binding="{Binding FullDeviceName}" />
+					<dxg:GridColumn
+						Name="Status"
+						FieldName="{DynamicResource Status}"
+						HorizontalHeaderContentAlignment="Center"
+						Binding="{Binding Status, Converter={StaticResource StateToWorkshopOptionsName}, Mode=OneWay}">
+						<dxg:ColumnBase.CellTemplate>
+							<DataTemplate>
+								<Border
+									Background="{Binding RowData.Row.StatusColorHtml}">
+									<TextBlock
+										HorizontalAlignment="Left"
+										Padding="5,0,5,0"
+										VerticalAlignment="Center"
+										Text="{Binding RowData.Row.Status, Converter={StaticResource StateToWorkshopOptionsName}, Mode=OneWay}" />
+								</Border>
+							</DataTemplate>
+						</dxg:ColumnBase.CellTemplate>
+					</dxg:GridColumn>
+					<dxg:GridColumn
+						MinWidth="100"
+						FieldName="{DynamicResource Masters}"
+						HorizontalHeaderContentAlignment="Center"
+						Binding="{Binding Masters}" />
+					<dxg:GridColumn
+						Width="130"
+						FieldName="{DynamicResource RepairCost}"
+						HorizontalHeaderContentAlignment="Center"
+						Binding="{Binding RealRepairCost, Mode=OneWay}">
+						<dxg:ColumnBase.EditSettings>
+							<dxe:TextEditSettings
+								Mask="N2"
+								MaskType="Numeric"
+								MaskUseAsDisplayFormat="True" />
+						</dxg:ColumnBase.EditSettings>
+					</dxg:GridColumn>
+					<dxg:GridColumn
+						Width="120"
+						FieldName="{DynamicResource WorkAmount}"
+						HorizontalHeaderContentAlignment="Center"
+						Binding="{Binding AllWorksCost, Mode=OneWay}">
+						<dxg:ColumnBase.EditSettings>
+							<dxe:TextEditSettings
+								Mask="N2"
+								MaskType="Numeric"
+								MaskUseAsDisplayFormat="True" />
+						</dxg:ColumnBase.EditSettings>
+					</dxg:GridColumn>
+					<dxg:GridColumn
+						Width="120"
+						FieldName="{DynamicResource ItemsAmount}"
+						HorizontalHeaderContentAlignment="Center"
+						Binding="{Binding AllPartsCost, Mode=OneWay}">
+						<dxg:ColumnBase.EditSettings>
+							<dxe:TextEditSettings
+								Mask="N2"
+								MaskType="Numeric"
+								MaskUseAsDisplayFormat="True" />
+						</dxg:ColumnBase.EditSettings>
+					</dxg:GridColumn>
+					<dxg:GridColumn
+						Width="110"
+						FieldName="{DynamicResource AllMasterPart}"
+						HorizontalHeaderContentAlignment="Center"
+						Binding="{Binding AllMastersPart, Mode=OneWay}">
+						<dxg:ColumnBase.EditSettings>
+							<dxe:TextEditSettings
+								Mask="N2"
+								MaskType="Numeric"
+								MaskUseAsDisplayFormat="True" />
+						</dxg:ColumnBase.EditSettings>
+					</dxg:GridColumn>
+					<dxg:GridColumn
+						Width="110"
+						FieldName="{DynamicResource AllManagersPart}"
+						HorizontalHeaderContentAlignment="Center"
+						Binding="{Binding ManagerPart, Mode=OneWay}">
+						<dxg:ColumnBase.EditSettings>
+							<dxe:TextEditSettings
+								Mask="N2"
+								MaskType="Numeric"
+								MaskUseAsDisplayFormat="True" />
+						</dxg:ColumnBase.EditSettings>
+					</dxg:GridColumn>
+					<dxg:GridColumn
+						Name="Profit"
+						Width="110"
+						FieldName="{DynamicResource Profit}"
+						HorizontalHeaderContentAlignment="Center"
+						Binding="{Binding Profit, Mode=OneWay}">
+						<dxg:ColumnBase.EditSettings>
+							<dxe:TextEditSettings
+								Mask="N2"
+								MaskType="Numeric"
+								MaskUseAsDisplayFormat="True" />
+						</dxg:ColumnBase.EditSettings>
+					</dxg:GridColumn>
+					<dxg:GridColumn
+						Name="GoodsProfit"
+						Width="110"
+						FieldName="{DynamicResource GoodsProfit}"
+						HorizontalHeaderContentAlignment="Center"
+						Binding="{Binding GoodsProfit, Mode=OneWay}">
+						<dxg:ColumnBase.EditSettings>
+							<dxe:TextEditSettings
+								Mask="N2"
+								MaskType="Numeric"
+								MaskUseAsDisplayFormat="True" />
+						</dxg:ColumnBase.EditSettings>
+					</dxg:GridColumn>
+					<dxg:GridColumn
+						Name="TotalProfit"
+						Width="110"
+						FieldName="{DynamicResource TotalProfit}"
+						HorizontalHeaderContentAlignment="Center"
+						Binding="{Binding TotalProfit, Mode=OneWay}">
+						<dxg:ColumnBase.EditSettings>
+							<dxe:TextEditSettings
+								Mask="N2"
+								MaskType="Numeric"
+								MaskUseAsDisplayFormat="True" />
+						</dxg:ColumnBase.EditSettings>
+					</dxg:GridColumn>
+					<dxg:GridColumn
+						Name="CustomerVisitSource"
+						Width="110"
+						FieldName="{DynamicResource VisitSource}"
+						HorizontalHeaderContentAlignment="Center"
+						ReadOnly="True"
+						Binding="{Binding CustomerVisitSource, Mode=OneWay}">
+						<dxg:ColumnBase.EditSettings>
+							<dxe:ComboBoxEditSettings
+								DisplayMember="name"
+								ValueMember="id"
+								ItemsSource="{Binding VisitSources}" />
+						</dxg:ColumnBase.EditSettings>
+					</dxg:GridColumn>
+				</dxg:GridControl.Columns>
+				<dxg:GridControl.TotalSummary>
+					<dxg:GridSummaryItem
+						DisplayFormat=" {0}"
+						SummaryType="Count"
+						FieldName="ID" />
+					<dxg:GridSummaryItem
+						DisplayFormat=" {0:N2}"
+						SummaryType="Sum"
+						FieldName="{DynamicResource RepairCost}" />
+					<dxg:GridSummaryItem
+						DisplayFormat=" {0:N2}"
+						SummaryType="Sum"
+						FieldName="{DynamicResource WorkAmount}" />
+					<dxg:GridSummaryItem
+						DisplayFormat=" {0:N2}"
+						SummaryType="Sum"
+						FieldName="{DynamicResource ItemsAmount}" />
+					<dxg:GridSummaryItem
+						DisplayFormat=" {0:N2}"
+						SummaryType="Sum"
+						FieldName="{DynamicResource AllMasterPart}" />
+					<dxg:GridSummaryItem
+						DisplayFormat=" {0:N2}"
+						SummaryType="Sum"
+						FieldName="{DynamicResource AllManagersPart}" />
+					<dxg:GridSummaryItem
+						DisplayFormat=" {0:N2}"
+						SummaryType="Sum"
+						FieldName="{DynamicResource Profit}" />
+					<dxg:GridSummaryItem
+						DisplayFormat=" {0:N2}"
+						SummaryType="Sum"
+						FieldName="{DynamicResource GoodsProfit}" />
+					<dxg:GridSummaryItem
+						DisplayFormat=" {0:N2}"
+						SummaryType="Sum"
+						FieldName="{DynamicResource TotalProfit}" />
+				</dxg:GridControl.TotalSummary>
+				<dxg:GridControl.View>
+					<dxg:TableView
+						IsSynchronizedWithCurrentItem="True"
+						ShowTotalSummary="True"
+						AllowScrollAnimation="True"
+						NavigationStyle="Row"
+						ColumnFilterPopupMode="Excel"
+						AllowEditing="False"
+						AllowGrouping="False"
+						AllowColumnMoving="True"
+						ShowGroupPanel="False"
+						ShowColumnHeaders="True"
+						AllowMoveColumnToDropArea="False"
+						ShowSearchPanelMode="Never"
+						ShowBandsPanel="True"
+						ShowIndicator="False"
+						AllowBestFit="True"
+						AllowColumnFiltering="True"
+						ShowSelectionRectangle="False"
+						ShowFixedTotalSummary="False"
+						SummariesIgnoreNullValues="True"
+						RowMinHeight="{Binding Employee.UiSettings.RowHeight, Source={x:Static objects:OfflineData.Instance}}"
+						FontSize="{Binding Employee.UiSettings.FontSize, Source={x:Static objects:OfflineData.Instance}}">
+						<dxmvvm:Interaction.Behaviors>
+							<dxmvvm:EventToCommand
+								EventTriggerBase_x0060_1.EventName="RowDoubleClick"
+								Command="{Binding RepairDoubleClickCommand}" />
+						</dxmvvm:Interaction.Behaviors>
+					</dxg:TableView>
+				</dxg:GridControl.View>
+			</dxg:GridControl>
+		</Border>
+		<dxwui:AppBar
+			Grid.ColumnSpan="2"
+			Background="#3f3f3f"
+			HorizontalAlignment="Stretch"
+			VerticalAlignment="Stretch"
+			ItemSpacing="0"
+			HideMode="AlwaysVisible"
+			Grid.Row="2">
+			<dxwui:AppBarButton
+				Label="{DynamicResource Print}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Command="{Binding View.Commands.ShowPrintPreview, ElementName=TableView1}"
+				Glyph="{dx:DXImageGrayscale Image=Print_32x32.png}" />
+			<dxwui:AppBarButton
+				Label="{DynamicResource Refresh}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Command="{Binding RefreshCommand}"
+				Glyph="{dx:DXImageGrayscale Image=Refresh_32x32.png}" />
+		</dxwui:AppBar>
+	</Grid>
+</UserControl>

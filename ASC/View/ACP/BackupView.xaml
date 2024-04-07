@@ -1,0 +1,125 @@
+<UserControl
+	x:Class="ASC.View.ACP.BackupView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:properties="clr-namespace:ASC.Properties" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:acp="clr-namespace:ASC.ViewModels.ACP" xmlns:sys="clr-namespace:System;assembly=mscorlib" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:acp1="clr-namespace:ASC.View.ACP">
+	<FrameworkElement.DataContext>
+		<acp:BackupViewModel />
+	</FrameworkElement.DataContext>
+	<Grid>
+		<dx:SimpleButton
+			Content="{DynamicResource Save}"
+			HorizontalAlignment="Right"
+			VerticalAlignment="Bottom"
+			Margin="0,0,10,10"
+			Command="{Binding SaveCommand}"
+			Glyph="{DXImageGrayscale Image=Save_16x16.png}" />
+		<dxlc:LayoutControl
+			Orientation="Vertical"
+			HorizontalAlignment="Left"
+			VerticalAlignment="Top">
+			<dxlc:LayoutGroup
+				View="GroupBox"
+				Header="{DynamicResource Backup}"
+				Orientation="Vertical">
+				<dxlc:LayoutItem
+					Label="{DynamicResource Path}">
+					<dxe:ButtonEdit
+						IsReadOnly="True"
+						AllowDefaultButton="False"
+						MinWidth="200"
+						Text="{Binding BackupPath, Source={x:Static properties:Settings.Default}, Mode=OneWay}">
+						<dxe:ButtonEdit.Buttons>
+							<dxe:ButtonInfo
+								Content="{DynamicResource Browse}"
+								Command="{Binding SelectBackupPathCommand}" />
+						</dxe:ButtonEdit.Buttons>
+					</dxe:ButtonEdit>
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource ExcludePhotos}">
+					<CheckBox
+						IsChecked="{Binding ExcludePhotos, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					HorizontalContentAlignment="Right">
+					<dx:SimpleButton
+						MinWidth="150"
+						Content="Backup"
+						Command="{Binding BackupCommand}"
+						Glyph="{DXImageGrayscale Image=Save_16x16.png}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					HorizontalContentAlignment="Right">
+					<dx:SimpleButton
+						MinWidth="150"
+						Content="Restore"
+						Command="{Binding RestoreCommand}"
+						Glyph="{DXImageGrayscale Image=Reset_16x16.png}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					HorizontalContentAlignment="Right">
+					<dx:SimpleButton
+						MinWidth="150"
+						Content="{DynamicResource Cancel}"
+						Command="{Binding BackupStopCommand}"
+						Glyph="{DXImageGrayscale Image=Cancel_16x16.png}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem>
+					<ProgressBar
+						Minimum="0"
+						Height="10"
+						Maximum="{Binding TotalRows}"
+						Value="{Binding Progress}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutGroup
+					View="GroupBox"
+					Header="{DynamicResource Schedule}"
+					Orientation="Vertical">
+					<dxlc:LayoutItem
+						Label="{DynamicResource EnableAutoBackup}">
+						<CheckBox
+							IsChecked="{Binding Config.backup_enable, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource ExcludePhotos}">
+						<CheckBox
+							IsChecked="{Binding Config.backup_images, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource Time}">
+						<dxe:DateEdit
+							Mask="HH:mm"
+							MaskUseAsDisplayFormat="True"
+							IsEnabled="{Binding Config.backup_enable, Mode=OneWay}"
+							EditValue="{Binding Config.backup_time, Mode=TwoWay}">
+							<dxe:BaseEdit.StyleSettings>
+								<dxe:DateEditPickerStyleSettings />
+							</dxe:BaseEdit.StyleSettings>
+						</dxe:DateEdit>
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+			</dxlc:LayoutGroup>
+			<dxlc:LayoutGroup
+				View="GroupBox"
+				Header="{DynamicResource RepairsCounter}"
+				Orientation="Vertical"
+				HorizontalAlignment="Left">
+				<dxlc:LayoutItem>
+					<dxe:SpinEdit
+						MaxValue="899999"
+						MinValue="1"
+						IsFloatValue="False"
+						ShowError="False"
+						MaskType="Numeric"
+						Mask="D"
+						EditValueType="{x:Type sys:Int32}"
+						EditValue="{Binding RepairsCounter, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem>
+					<Button
+						Margin="0,5,0,0"
+						Content="{DynamicResource Set}"
+						Command="{Binding SetRepairCounterCommand}" />
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+		</dxlc:LayoutControl>
+	</Grid>
+</UserControl>

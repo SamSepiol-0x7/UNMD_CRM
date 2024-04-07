@@ -1,0 +1,172 @@
+<UserControl
+	x:Class="ASC.CallsChartView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:dxc="http://schemas.devexpress.com/winfx/2008/xaml/charts" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:callsChart="clr-namespace:ASC.Charts.CallsChart" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:dxwui="http://schemas.devexpress.com/winfx/2008/xaml/windowsui" xmlns:controls="clr-namespace:ASC.View.Controls" xmlns:asc="clr-namespace:ASC"
+	DataContext="{dxmvvm:ViewModelSource Type={x:Type callsChart:CallsChartViewModel}}">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition
+				Height="337*" />
+			<RowDefinition
+				Height="90" />
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition
+				Width="Auto" />
+			<ColumnDefinition
+				Width="619*" />
+		</Grid.ColumnDefinitions>
+		<dxlc:LayoutControl
+			ItemStyle="{StaticResource LeftMenuLayout}"
+			Orientation="Vertical"
+			ItemSpace="5"
+			Padding="10">
+			<dxlc:LayoutGroup
+				Orientation="Vertical"
+				View="GroupBox"
+				Header="{DynamicResource Overview}">
+				<dxlc:LayoutItem
+					Label="{DynamicResource TotalCalls}">
+					<Label
+						Content="{Binding TotalCalls}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource Incoming}"
+					Visibility="{Binding IoVisibility}">
+					<Label
+						Content="{Binding TotalInCalls}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource Outcoming}"
+					Visibility="{Binding IoVisibility}">
+					<Label
+						Content="{Binding TotalOutCalls}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource TotalCallsLenght}">
+					<Label
+						Content="{Binding TotalCallsLenght}" />
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+			<controls:PeriodView />
+			<dxlc:LayoutItem
+				Label="{DynamicResource Direction}">
+				<ComboBox
+					DisplayMemberPath="Name"
+					SelectedValuePath="Id"
+					ItemsSource="{Binding Optionses}"
+					SelectedValue="{Binding SelectedOption, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource CoWorker}">
+				<ComboBox
+					SelectedValue="0"
+					SelectedValuePath="id"
+					ItemsSource="{Binding Users}"
+					SelectedItem="{Binding SelectedUser, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+							<TextBlock>
+								<TextBlock.Text>
+									<MultiBinding
+										StringFormat="{}{1} {2} {3} {0}">
+										<Binding
+											Path="sip_user_id" />
+										<Binding
+											Path="surname" />
+										<Binding
+											Path="name" />
+										<Binding
+											Path="patronymic" />
+									</MultiBinding>
+								</TextBlock.Text>
+							</TextBlock>
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+				</ComboBox>
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource PhoneShort}">
+				<ComboBox
+					SelectedValue="0"
+					DisplayMemberPath="phone"
+					SelectedValuePath="id"
+					SelectedItem="{Binding SelectedExtDevice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+					ItemsSource="{Binding VoipExtDeviceses}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource Type}">
+				<dx:RadioButtonList
+					VerticalAlignment="Center"
+					SelectionMode="Single"
+					SelectedValuePath="Key"
+					DisplayMemberPath="Value"
+					ItemsSource="{Binding ClientTypes}"
+					SelectedValue="{Binding CallClientType, Mode=TwoWay}">
+					<ItemsControl.ItemsPanel>
+						<ItemsPanelTemplate>
+							<StackPanel
+								Orientation="Horizontal" />
+						</ItemsPanelTemplate>
+					</ItemsControl.ItemsPanel>
+				</dx:RadioButtonList>
+			</dxlc:LayoutItem>
+		</dxlc:LayoutControl>
+		<dxc:ChartControl
+			Grid.Column="1"
+			DataSource="{Binding ChartData}">
+			<dxc:ChartControlBase.Titles>
+				<dxc:Title
+					Dock="Top"
+					HorizontalAlignment="Center"
+					FontSize="22"
+					Content="{DynamicResource PeriodCalls}" />
+			</dxc:ChartControlBase.Titles>
+			<dxc:XYDiagram2D
+				AllowSeriesBitmapCaching="False">
+				<dxc:XYDiagram2D.DefaultPane>
+					<dxc:Pane
+						MirrorHeight="40" />
+				</dxc:XYDiagram2D.DefaultPane>
+				<dxc:XYDiagram2D.AxisX>
+					<dxc:AxisX2D>
+						<dxc:AxisX2D.DateTimeScaleOptions>
+							<dxc:AutomaticDateTimeScaleOptions
+								AggregateFunction="Sum" />
+						</dxc:AxisX2D.DateTimeScaleOptions>
+					</dxc:AxisX2D>
+				</dxc:XYDiagram2D.AxisX>
+				<dxc:XYDiagram2D.AxisY>
+					<dxc:AxisY2D>
+						<dxc:Axis.Title>
+							<dxc:AxisTitle
+								Content="{DynamicResource Calls}" />
+						</dxc:Axis.Title>
+					</dxc:AxisY2D>
+				</dxc:XYDiagram2D.AxisY>
+				<dxc:BarSideBySideSeries2D
+					ColorEach="True"
+					ArgumentDataMember="Key"
+					ValueDataMember="Value">
+					<dxc:BarSeries2D.Model>
+						<dxc:FlatGlassBar2DModel />
+					</dxc:BarSeries2D.Model>
+				</dxc:BarSideBySideSeries2D>
+			</dxc:XYDiagram2D>
+		</dxc:ChartControl>
+		<dxwui:AppBar
+			Grid.ColumnSpan="2"
+			Background="#3f3f3f"
+			HorizontalAlignment="Stretch"
+			VerticalAlignment="Stretch"
+			ItemSpacing="0"
+			HideMode="AlwaysVisible"
+			Grid.Row="1">
+			<dxwui:AppBarButton
+				Label="{DynamicResource Refresh}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Command="{Binding RefreshCommand}"
+				Glyph="{dx:DXImageGrayscale Image=Refresh_32x32.png}" />
+		</dxwui:AppBar>
+	</Grid>
+</UserControl>

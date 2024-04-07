@@ -1,0 +1,301 @@
+<UserControl
+	x:Class="ASC.RepairsChart.RepairsChartView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:dxc="http://schemas.devexpress.com/winfx/2008/xaml/charts" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:ASC.RepairsChart" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:dxwui="http://schemas.devexpress.com/winfx/2008/xaml/windowsui" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" xmlns:asc="clr-namespace:ASC" xmlns:objects="clr-namespace:ASC.Objects" xmlns:controls="clr-namespace:ASC.View.Controls"
+	DataContext="{dxmvvm:ViewModelSource Type=local:RepairsChartViewModel}">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition
+				Height="50*" />
+			<RowDefinition
+				Height="90" />
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition
+				Width="Auto" />
+			<ColumnDefinition
+				Width="447*" />
+		</Grid.ColumnDefinitions>
+		<dxlc:LayoutControl
+			ItemStyle="{StaticResource LeftMenuLayout}"
+			Orientation="Vertical"
+			ItemSpace="5"
+			Padding="10"
+			Grid.RowSpan="2">
+			<dxlc:LayoutGroup
+				Orientation="Vertical"
+				View="GroupBox"
+				Header="{DynamicResource Overview}">
+				<FrameworkElement.Resources>
+					<ResourceDictionary>
+						<Style
+							TargetType="{x:Type dxlc:LayoutItem}"
+							x:Key="{x:Type dxlc:LayoutItem}">
+							<Setter
+								Property="HorizontalContentAlignment"
+								Value="Right" />
+						</Style>
+					</ResourceDictionary>
+				</FrameworkElement.Resources>
+				<FrameworkElement.Style>
+					<Style
+						TargetType="{x:Type dxlc:LayoutGroup}">
+						<Setter
+							Property="Visibility"
+							Value="Collapsed" />
+						<Style.Triggers>
+							<DataTrigger
+								Value="1"
+								Binding="{Binding TypeInOut}">
+								<Setter
+									Property="Visibility"
+									Value="Visible" />
+							</DataTrigger>
+						</Style.Triggers>
+					</Style>
+				</FrameworkElement.Style>
+				<dxlc:LayoutItem
+					Label="{DynamicResource AveragePrice}">
+					<TextBlock
+						FontSize="11"
+						FontWeight="Bold"
+						Text="{Binding Stat.AveragePrice}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource MaxPrice}">
+					<TextBlock
+						FontSize="11"
+						FontWeight="Bold"
+						Text="{Binding Stat.MaxPrice}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource MinPrice}">
+					<TextBlock
+						FontSize="11"
+						FontWeight="Bold"
+						Text="{Binding Stat.MinPrice}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource RepairsPerDay}">
+					<TextBlock
+						FontSize="11"
+						FontWeight="Bold"
+						Text="{Binding Stat.RepairsPerDay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource ReadyAndInService}">
+					<TextBlock
+						FontSize="11"
+						FontWeight="Bold"
+						Text="{Binding Stat.ReadyRepairOk}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource OrdersNotOkTooltip}">
+					<TextBlock
+						FontSize="11"
+						FontWeight="Bold"
+						Text="{Binding Stat.ReadyRepairNotOk}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource OutWithoutRepair}">
+					<TextBlock
+						FontSize="11"
+						FontWeight="Bold"
+						Text="{Binding Stat.TotalNoRepairOut}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource OutRepairOk}">
+					<TextBlock
+						FontSize="11"
+						FontWeight="Bold"
+						Text="{Binding Stat.TotalRepairOk}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource OutRepairOkWarranty}">
+					<TextBlock
+						FontSize="11"
+						FontWeight="Bold"
+						Text="{Binding Stat.TotalRepairOkWarranty}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource TotalRepairOut}">
+					<TextBlock
+						FontSize="11"
+						FontWeight="Bold"
+						Text="{Binding Stat.TotalRepairOut}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="Исключить ремонты без оплаты в мин. чеке">
+					<dxe:CheckEdit
+						EditValue="{Binding ExcludeZeroFromMinPrice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+						<dxmvvm:Interaction.Behaviors>
+							<dxmvvm:EventToCommand
+								EventTriggerBase_x0060_1.EventName="EditValueChanged"
+								Command="{Binding ExcludeZeroChangedCommand}" />
+						</dxmvvm:Interaction.Behaviors>
+					</dxe:CheckEdit>
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+			<dxlc:LayoutGroup
+				Orientation="Vertical"
+				View="GroupBox"
+				Header="{DynamicResource Overview}">
+				<FrameworkElement.Resources>
+					<ResourceDictionary>
+						<Style
+							TargetType="{x:Type dxlc:LayoutItem}"
+							x:Key="{x:Type dxlc:LayoutItem}">
+							<Setter
+								Property="HorizontalContentAlignment"
+								Value="Right" />
+						</Style>
+					</ResourceDictionary>
+				</FrameworkElement.Resources>
+				<FrameworkElement.Style>
+					<Style
+						TargetType="{x:Type dxlc:LayoutGroup}">
+						<Setter
+							Property="Visibility"
+							Value="Collapsed" />
+						<Style.Triggers>
+							<DataTrigger
+								Value="0"
+								Binding="{Binding TypeInOut}">
+								<Setter
+									Property="Visibility"
+									Value="Visible" />
+							</DataTrigger>
+						</Style.Triggers>
+					</Style>
+				</FrameworkElement.Style>
+				<dxlc:LayoutItem
+					Label="{DynamicResource RepairsPerDay}">
+					<TextBlock
+						FontSize="11"
+						FontWeight="Bold"
+						Text="{Binding Stat.RepairsPerDay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource WarrantyRepairIn}">
+					<TextBlock
+						FontSize="11"
+						FontWeight="Bold"
+						Text="{Binding Stat.WarrantyRepairIn}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource RepeatIn}">
+					<TextBlock
+						FontSize="11"
+						FontWeight="Bold"
+						Text="{Binding Stat.RepeatIn}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource TotalRepairIn}">
+					<TextBlock
+						FontSize="11"
+						FontWeight="Bold"
+						Text="{Binding Stat.TotalRepairIn}" />
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+			<controls:PeriodView />
+			<dxlc:LayoutItem
+				Label="{DynamicResource Office}">
+				<ComboBox
+					DisplayMemberPath="name"
+					SelectedValuePath="id"
+					SelectedValue="{Binding SelectedOffice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+					ItemsSource="{Binding OfficesWithAll, Source={x:Static objects:OfflineData.Instance}}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource Devices}">
+				<ComboBox
+					DisplayMemberPath="Name"
+					SelectedValuePath="Id"
+					SelectedValue="{Binding SelectedDeviceId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+					ItemsSource="{Binding Devices}"
+					SelectedItem="{Binding SelectedDevice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource Makers}">
+				<ComboBox
+					SelectedValuePath="Id"
+					DisplayMemberPath="Name"
+					ItemsSource="{Binding DeviceMakers}"
+					SelectedValue="{Binding SelectedDeviceMaker, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem>
+				<dx:RadioButtonList
+					SelectionMode="Single"
+					SelectedValuePath="Key"
+					DisplayMemberPath="Value"
+					ItemsSource="{Binding Types}"
+					SelectedValue="{Binding TypeInOut, Mode=TwoWay}">
+					<ItemsControl.ItemsPanel>
+						<ItemsPanelTemplate>
+							<StackPanel
+								Orientation="Horizontal" />
+						</ItemsPanelTemplate>
+					</ItemsControl.ItemsPanel>
+				</dx:RadioButtonList>
+			</dxlc:LayoutItem>
+		</dxlc:LayoutControl>
+		<dxwui:AppBar
+			Grid.ColumnSpan="2"
+			Background="#3f3f3f"
+			HorizontalAlignment="Stretch"
+			VerticalAlignment="Stretch"
+			ItemSpacing="0"
+			HideMode="AlwaysVisible"
+			Grid.Row="2">
+			<dxwui:AppBarButton
+				Label="{DynamicResource Refresh}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Command="{Binding RefreshCommand}"
+				Glyph="{dx:DXImageGrayscale Image=Refresh_32x32.png}" />
+		</dxwui:AppBar>
+		<dxc:ChartControl
+			Grid.Column="1"
+			DataSource="{Binding ChartData}">
+			<dxc:ChartControl.Diagram>
+				<dxc:XYDiagram2D
+					AllowSeriesBitmapCaching="False">
+					<dxc:XYDiagram2D.DefaultPane>
+						<dxc:Pane
+							MirrorHeight="40" />
+					</dxc:XYDiagram2D.DefaultPane>
+					<dxc:XYDiagram2D.AxisX>
+						<dxc:AxisX2D>
+							<dxc:AxisX2D.DateTimeScaleOptions>
+								<dxc:AutomaticDateTimeScaleOptions
+									AggregateFunction="Sum" />
+							</dxc:AxisX2D.DateTimeScaleOptions>
+						</dxc:AxisX2D>
+					</dxc:XYDiagram2D.AxisX>
+					<dxc:XYDiagram2D.AxisY>
+						<dxc:AxisY2D>
+							<dxc:Axis.Title>
+								<dxc:AxisTitle
+									Content="{DynamicResource Repairs}" />
+							</dxc:Axis.Title>
+						</dxc:AxisY2D>
+					</dxc:XYDiagram2D.AxisY>
+					<dxc:BarSideBySideSeries2D
+						ColorEach="True"
+						ArgumentDataMember="Date"
+						ValueDataMember="Total">
+						<dxc:BarSeries2D.Model>
+							<dxc:FlatGlassBar2DModel />
+						</dxc:BarSeries2D.Model>
+					</dxc:BarSideBySideSeries2D>
+				</dxc:XYDiagram2D>
+			</dxc:ChartControl.Diagram>
+			<dxc:ChartControlBase.Titles>
+				<dxc:Title
+					Dock="Top"
+					HorizontalAlignment="Center"
+					FontSize="22"
+					Content="{DynamicResource PeriodRepairs}" />
+			</dxc:ChartControlBase.Titles>
+		</dxc:ChartControl>
+	</Grid>
+</UserControl>

@@ -1,0 +1,278 @@
+<UserControl
+	x:Class="ASC.Documents.DocumentsView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:converters="clr-namespace:ASC.Converters" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" xmlns:dxwui="http://schemas.devexpress.com/winfx/2008/xaml/windowsui" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:documents="clr-namespace:ASC.Documents" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:asc="clr-namespace:ASC" xmlns:properties="clr-namespace:ASC.Properties" xmlns:objects="clr-namespace:ASC.Objects" xmlns:controls="clr-namespace:ASC.View.Controls"
+	Name="DocumentsUc"
+	DataContext="{dxmvvm:ViewModelSource Type={x:Type documents:DocumentsViewModel}}">
+	<FrameworkElement.Resources>
+		<ResourceDictionary>
+			<converters:BoolInverterConverter
+				x:Key="BoolInverterConverter" />
+		</ResourceDictionary>
+	</FrameworkElement.Resources>
+	<DockPanel>
+		<dxwui:AppBar
+			DockPanel.Dock="Bottom"
+			Background="#3f3f3f"
+			HorizontalAlignment="Stretch"
+			VerticalAlignment="Stretch"
+			ItemSpacing="5"
+			HideMode="AlwaysVisible">
+			<dxwui:AppBarButton
+				Label="{DynamicResource Refresh}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Command="{Binding Period.RefreshCommand}"
+				Glyph="{dx:DXImageGrayscale Image=Refresh_32x32.png}" />
+			<dxwui:AppBarButton
+				Label="{DynamicResource Print}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Command="{Binding View.Commands.ShowPrintPreview, ElementName=tableView1}"
+				Glyph="{dx:DXImageGrayscale Image=Print_32x32.png}" />
+			<dxg:GridSearchControl
+				Style="{StaticResource BottomGridSearchControl}"
+				dxe:SearchText="{Binding SearchQuery, Mode=TwoWay}" />
+		</dxwui:AppBar>
+		<DockPanel
+			Dock="Left">
+			<dxlc:LayoutControl
+				ItemStyle="{StaticResource LeftMenuLayout}"
+				Orientation="Vertical"
+				ItemSpace="5"
+				Padding="10,10,0,10"
+				Visibility="{Binding ElementName=ExpandButton, Path=IsChecked, Converter={dxmvvm:BooleanToVisibilityConverter}}">
+				<dxlc:LayoutItem
+					Label="{DynamicResource DocumentTypes}"
+					IsEnabled="{Binding ReturnOnSelect, Converter={StaticResource BoolInverterConverter}}">
+					<dxe:ComboBoxEdit
+						ValueMember="Id"
+						DisplayMember="Name"
+						PopupMaxHeight="250"
+						IsTextEditable="False"
+						EditValue="{Binding DocumentsType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+						ItemsSource="{Binding Dt}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource DocumentInOffice}">
+					<dxe:CheckEdit
+						IsChecked="{Binding DocsInOffice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+				</dxlc:LayoutItem>
+				<controls:PeriodView />
+			</dxlc:LayoutControl>
+			<Grid
+				DockPanel.Dock="Left">
+				<ToggleButton
+					Name="ExpandButton"
+					Padding="0"
+					Margin="0"
+					Style="{StaticResource HideButtonStyleLeft}"
+					VerticalAlignment="Center"
+					IsChecked="{Binding Path=DocsSidebarExpanded, Source={x:Static properties:Settings.Default}}" />
+			</Grid>
+		</DockPanel>
+		<Border
+			BorderThickness="1,1,0,0"
+			BorderBrush="#FFA9A9A9">
+			<dxg:GridControl
+				Name="tableView1"
+				Style="{StaticResource DeDefTable}"
+				Margin="0,0,0,0"
+				AllowInitiallyFocusedRow="False"
+				ItemsSource="{Binding Items}"
+				SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+				DXSerializer.AllowProperty="TableView1_OnAllowProperty">
+				<FrameworkElement.ContextMenu>
+					<ContextMenu>
+						<MenuItem
+							Header="{DynamicResource CreateInvoice}"
+							Visibility="{Binding Path=IsEnabled, Converter={StaticResource BooleanToVisibilityConverter}, RelativeSource={RelativeSource Self}}"
+							Command="{Binding CreateInvoiceCommand}" />
+						<MenuItem
+							Header="{DynamicResource ClientCard}"
+							Visibility="{Binding Path=IsEnabled, Converter={StaticResource BooleanToVisibilityConverter}, RelativeSource={RelativeSource Self}}"
+							Command="{Binding OpenCustomerCardCommand}">
+							<MenuItem.Icon>
+								<Image
+									Source="{dx:DXImageOffice2013 Image=Employee_16x16.png}" />
+							</MenuItem.Icon>
+						</MenuItem>
+						<MenuItem
+							Header="{DynamicResource DealerCard}"
+							Visibility="{Binding Path=IsEnabled, Converter={StaticResource BooleanToVisibilityConverter}, RelativeSource={RelativeSource Self}}"
+							Command="{Binding OpenDealerCardCommand}">
+							<MenuItem.Icon>
+								<Image
+									Source="{dx:DXImageOffice2013 Image=Employee_16x16.png}" />
+							</MenuItem.Icon>
+						</MenuItem>
+					</ContextMenu>
+				</FrameworkElement.ContextMenu>
+				<dxg:GridColumn
+					FieldName="№"
+					HorizontalHeaderContentAlignment="Center"
+					Width="100"
+					VisibleIndex="0"
+					Binding="{Binding id}">
+					<dxg:ColumnBase.EditSettings>
+						<dxe:TextEditSettings
+							HorizontalContentAlignment="Center"
+							MaskType="Numeric"
+							Mask="d6"
+							MaskUseAsDisplayFormat="True" />
+					</dxg:ColumnBase.EditSettings>
+				</dxg:GridColumn>
+				<dxg:GridColumn
+					FieldName="{DynamicResource Date}"
+					HorizontalHeaderContentAlignment="Center"
+					Width="120"
+					Binding="{Binding created, Converter={StaticResource UtcToLocalDateTimeConverter}}">
+					<dxg:ColumnBase.EditSettings>
+						<dxe:TextEditSettings
+							HorizontalContentAlignment="Center"
+							MaskType="DateTime"
+							Mask="dd.MM.yyyy HH:mm"
+							MaskUseAsDisplayFormat="True" />
+					</dxg:ColumnBase.EditSettings>
+				</dxg:GridColumn>
+				<dxg:GridColumn
+					FieldName="{DynamicResource Summ}"
+					HorizontalHeaderContentAlignment="Center"
+					Width="90"
+					Binding="{Binding TotalFormatted}" />
+				<dxg:GridColumn
+					FieldName="{DynamicResource CashOrder}"
+					HorizontalHeaderContentAlignment="Center"
+					Width="100"
+					Binding="{Binding OrderId}">
+					<dxg:ColumnBase.EditSettings>
+						<dxe:TextEditSettings
+							HorizontalContentAlignment="Center"
+							MaskType="Numeric"
+							Mask="d6"
+							MaskUseAsDisplayFormat="True" />
+					</dxg:ColumnBase.EditSettings>
+				</dxg:GridColumn>
+				<dxg:GridColumn
+					HorizontalHeaderContentAlignment="Center"
+					Width="150"
+					FieldName="{DynamicResource Type}"
+					Binding="{Binding Type}" />
+				<dxg:GridColumn
+					Width="5*"
+					FieldName="{DynamicResource Office}"
+					HorizontalHeaderContentAlignment="Center"
+					Binding="{Binding Office}" />
+				<dxg:GridColumn
+					Width="5*"
+					FieldName="{DynamicResource Counterparty}"
+					HorizontalHeaderContentAlignment="Center"
+					Binding="{Binding Customer.FioOrUrName, FallbackValue=---}">
+					<dxg:ColumnBase.EditSettings>
+						<dxe:TextEditSettings
+							NullText="---" />
+					</dxg:ColumnBase.EditSettings>
+				</dxg:GridColumn>
+				<dxg:GridColumn
+					Width="10*"
+					FieldName="{DynamicResource User}"
+					HorizontalHeaderContentAlignment="Center"
+					Binding="{Binding User}" />
+				<dxg:GridControl.View>
+					<dxg:TableView
+						ShowTotalSummary="True"
+						AllowPerPixelScrolling="True"
+						AllowScrollAnimation="True"
+						NavigationStyle="Row"
+						ColumnFilterPopupMode="Excel"
+						AllowEditing="False"
+						AllowGrouping="False"
+						AllowColumnMoving="True"
+						ShowGroupPanel="False"
+						ShowColumnHeaders="True"
+						AllowMoveColumnToDropArea="False"
+						ShowBandsPanel="True"
+						ShowIndicator="False"
+						AllowBestFit="True"
+						AllowColumnFiltering="False"
+						ShowSelectionRectangle="False"
+						ShowFixedTotalSummary="False"
+						SummariesIgnoreNullValues="True"
+						RowMinHeight="{Binding Employee.UiSettings.RowHeight, Source={x:Static objects:OfflineData.Instance}}"
+						FontSize="{Binding Employee.UiSettings.FontSize, Source={x:Static objects:OfflineData.Instance}}">
+						<dxmvvm:Interaction.Behaviors>
+							<dxmvvm:EventToCommand
+								EventTriggerBase_x0060_1.EventName="RowDoubleClick"
+								Command="{Binding ItemDoubleClickCommand}" />
+						</dxmvvm:Interaction.Behaviors>
+						<dxg:TableView.RowStyle>
+							<Style
+								BasedOn="{StaticResource RowStyle}"
+								TargetType="{x:Type dxg:RowControl}">
+								<Style.Triggers>
+									<DataTrigger
+										Value="Focused"
+										Binding="{Binding Path=SelectionState}">
+										<Setter
+											Property="Background"
+											Value="{DynamicResource UiSelectedRowColor}" />
+									</DataTrigger>
+									<DataTrigger
+										Value="3"
+										Binding="{Binding Row.state}">
+										<Setter
+											Property="Background"
+											Value="#FF90EE90" />
+										<Setter
+											Property="FrameworkElement.ToolTip"
+											Value="{StaticResource ReserveItems}" />
+									</DataTrigger>
+									<DataTrigger
+										Value="4"
+										Binding="{Binding Row.state}">
+										<Setter
+											Property="Background"
+											Value="#FFD3D3D3" />
+										<Setter
+											Property="FrameworkElement.ToolTip"
+											Value="{StaticResource CancelledReserve}" />
+									</DataTrigger>
+									<DataTrigger
+										Value="7"
+										Binding="{Binding Row.state}">
+										<Setter
+											Property="Background"
+											Value="#FFD3D3D3" />
+										<Setter
+											Property="FrameworkElement.ToolTip"
+											Value="{StaticResource RnCancelled}" />
+									</DataTrigger>
+									<DataTrigger
+										Value="8"
+										Binding="{Binding Row.state}">
+										<Setter
+											Property="Background"
+											Value="#FFD3D3D3" />
+										<Setter
+											Property="FrameworkElement.ToolTip"
+											Value="{StaticResource PnCancelled}" />
+									</DataTrigger>
+								</Style.Triggers>
+							</Style>
+						</dxg:TableView.RowStyle>
+					</dxg:TableView>
+				</dxg:GridControl.View>
+				<dxg:GridControl.TotalSummary>
+					<dxg:GridSummaryItem
+						DisplayFormat=" {0:N0}"
+						SummaryType="Count"
+						FieldName="№" />
+					<dxg:GridSummaryItem
+						DisplayFormat=" {0:N2}"
+						SummaryType="Sum"
+						FieldName="{DynamicResource Summ}" />
+				</dxg:GridControl.TotalSummary>
+			</dxg:GridControl>
+		</Border>
+	</DockPanel>
+</UserControl>

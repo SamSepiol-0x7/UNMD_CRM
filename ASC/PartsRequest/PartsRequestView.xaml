@@ -1,0 +1,342 @@
+<UserControl
+	x:Class="ASC.PartsRequest.PartsRequestView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:converters="clr-namespace:ASC.Converters" xmlns:asc="clr-namespace:ASC" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:sys="clr-namespace:System;assembly=mscorlib" xmlns:dxwui="http://schemas.devexpress.com/winfx/2008/xaml/windowsui" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:partsRequest="clr-namespace:ASC.PartsRequest" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:objects="clr-namespace:ASC.Objects" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+	DataContext="{dxmvvm:ViewModelSource Type={x:Type partsRequest:PartsRequestViewModel}}">
+	<FrameworkElement.Resources>
+		<ResourceDictionary>
+			<converters:RadioBoolToIntConverter
+				x:Key="RadioBoolToIntConverter" />
+			<converters:IntReserveState2StringConverter
+				x:Key="State2StringConverter" />
+			<converters:ZeroVisibilityConverter
+				x:Key="ZeroVisibilityConverter" />
+		</ResourceDictionary>
+	</FrameworkElement.Resources>
+	<DockPanel>
+		<dxwui:AppBar
+			DockPanel.Dock="Bottom"
+			Background="#3f3f3f"
+			HorizontalAlignment="Stretch"
+			VerticalAlignment="Bottom"
+			ItemSpacing="5"
+			HideMode="AlwaysVisible">
+			<dxwui:AppBarButton
+				Label="{DynamicResource Item}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Command="{Binding OpenItemCardCommand}"
+				Glyph="{dx:DXImageGrayscale Image=Index_32x32.png}" />
+			<dxwui:AppBarButton
+				Label="{DynamicResource RequestItem}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Command="{Binding RequestPartCommand}"
+				Visibility="{Binding RequestPartVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+				Glyph="{dx:DXImageGrayscale Image=ShoppingCart_32x32.png}" />
+			<dxwui:AppBarButton
+				Label="{DynamicResource Reject}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Command="{Binding RejectRequestCommand}"
+				Visibility="{Binding Rejectable, Converter={StaticResource BooleanToVisibilityConverter}}"
+				Glyph="{dx:DXImageGrayscale Image=Cancel_32x32.png}" />
+			<dxwui:AppBarButton
+				Label="{DynamicResource Substract}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Command="{Binding SubstractCommand}"
+				Visibility="{Binding IsEnabled, Converter={StaticResource BooleanToVisibilityConverter}, RelativeSource={RelativeSource Self}}"
+				Glyph="{dx:DXImageGrayscale Image=Close_32x32.png}" />
+			<dxwui:AppBarButton
+				Label="{DynamicResource Repair}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Command="{Binding OpenRepairCardCommand}"
+				Visibility="{Binding IsEnabled, Converter={StaticResource BooleanToVisibilityConverter}, RelativeSource={RelativeSource Self}}"
+				Glyph="{dx:DXImageGrayscale Image=Customization_32x32.png}" />
+			<dxwui:AppBarButton
+				Label="{DynamicResource GiveGood}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Command="{Binding GivePartCommand}"
+				Visibility="{Binding GivePartVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+				Glyph="{dx:DXImageGrayscale Image=Apply_32x32.png}" />
+			<dxwui:AppBarButton
+				Label="{DynamicResource Back2Store}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Command="{Binding Back2StoreCommand}"
+				Visibility="{Binding IsEnabled, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed, RelativeSource={RelativeSource Self}}"
+				Glyph="{dx:DXImageGrayscale Image=DoublePrev_32x32.png}" />
+			<dxwui:AppBarButton
+				Label="{DynamicResource RemoveItemFromRepair}"
+				Width="150"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Command="{Binding Back2MasterCommand}"
+				Visibility="{Binding IsEnabled, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed, RelativeSource={RelativeSource Self}}"
+				Glyph="{dx:DXImageGrayscale Image=DoublePrev_32x32.png}" />
+		</dxwui:AppBar>
+		<dxlc:LayoutControl
+			MaxWidth="800"
+			Orientation="Vertical">
+			<dxlc:LayoutGroup
+				Orientation="Vertical"
+				View="GroupBox"
+				Header="{DynamicResource Info}">
+				<dxlc:LayoutItem
+					Label="{DynamicResource ItemName}">
+					<TextBox
+						IsReadOnly="True"
+						Text="{Binding Reserve.store_items.name, Mode=OneWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutGroup
+					Orientation="Horizontal">
+					<dxlc:LayoutGroup
+						Orientation="Vertical">
+						<dxlc:LayoutItem
+							Label="{DynamicResource ArticulNoDots}">
+							<TextBox
+								IsReadOnly="True"
+								Text="{Binding Reserve.store_items.articul, StringFormat={}{0:D6}}" />
+						</dxlc:LayoutItem>
+						<dxlc:LayoutItem
+							Label="UID">
+							<TextBox
+								IsReadOnly="True"
+								Text="{Binding Reserve.store_items.UID, Mode=OneWay}" />
+						</dxlc:LayoutItem>
+						<dxlc:LayoutGroup
+							Orientation="Horizontal">
+							<dxlc:LayoutItem
+								Label="{DynamicResource Available}">
+								<TextBox
+									IsReadOnly="True"
+									Text="{Binding Reserve.store_items.Available, Mode=OneWay}" />
+							</dxlc:LayoutItem>
+							<dxlc:LayoutItem
+								Label="{DynamicResource Box}">
+								<dxe:TextEdit
+									IsReadOnly="True"
+									EditValue="{Binding Reserve.store_items.boxes.name, Mode=OneWay}" />
+							</dxlc:LayoutItem>
+						</dxlc:LayoutGroup>
+						<dxlc:LayoutGroup
+							Orientation="Horizontal">
+							<dxlc:LayoutItem
+								Label="{DynamicResource PriceForSale}">
+								<dxe:TextEdit
+									MaskType="Numeric"
+									Mask="N2"
+									MaskUseAsDisplayFormat="True"
+									HorizontalContentAlignment="Right"
+									IsReadOnly="True"
+									EditValue="{Binding Reserve.store_items.Price2Raw, Mode=OneWay}" />
+							</dxlc:LayoutItem>
+							<dxlc:LayoutItem
+								Label="{DynamicResource PriceForSc}">
+								<dxe:TextEdit
+									MaskType="Numeric"
+									Mask="N2"
+									MaskUseAsDisplayFormat="True"
+									HorizontalContentAlignment="Right"
+									IsReadOnly="True"
+									EditValue="{Binding Reserve.store_items.Price1Formatted, Mode=OneWay}" />
+							</dxlc:LayoutItem>
+						</dxlc:LayoutGroup>
+					</dxlc:LayoutGroup>
+					<dxlc:LayoutGroup
+						Orientation="Vertical"
+						MaxWidth="500">
+						<dxlc:LayoutItem
+							Label="{DynamicResource Notes}"
+							LabelPosition="Top">
+							<TextBox
+								Height="80"
+								AcceptsReturn="True"
+								TextWrapping="Wrap"
+								Text="{Binding Reserve.notes}" />
+						</dxlc:LayoutItem>
+					</dxlc:LayoutGroup>
+				</dxlc:LayoutGroup>
+			</dxlc:LayoutGroup>
+			<dxlc:LayoutGroup
+				Orientation="Vertical"
+				View="GroupBox"
+				Header="{DynamicResource Options}">
+				<dxlc:LayoutItem
+					Label="{DynamicResource Count}"
+					HorizontalContentAlignment="Left">
+					<dxe:SpinEdit
+						MinWidth="80"
+						IsFloatValue="False"
+						MinValue="1"
+						EditValueType="{x:Type sys:Int32}"
+						MaxValue="{Binding Reserve.store_items.Available}"
+						EditValue="{Binding Reserve.count, Mode=TwoWay}">
+						<FrameworkElement.Style>
+							<Style
+								TargetType="{x:Type dxe:SpinEdit}">
+								<Setter
+									Property="IsEnabled"
+									Value="False" />
+								<Style.Triggers>
+									<DataTrigger
+										Value="0"
+										Binding="{Binding Reserve.state}">
+										<Setter
+											Property="IsEnabled"
+											Value="True" />
+									</DataTrigger>
+								</Style.Triggers>
+							</Style>
+						</FrameworkElement.Style>
+					</dxe:SpinEdit>
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource Price}"
+					HorizontalContentAlignment="Left">
+					<dxe:TextEdit
+						MinWidth="80"
+						EditValue="{Binding Reserve.price}">
+						<FrameworkElement.Style>
+							<Style
+								BasedOn="{StaticResource NumericTextBox}"
+								TargetType="{x:Type dxe:TextEdit}">
+								<Setter
+									Property="dxe:BaseEdit.IsReadOnly"
+									Value="False" />
+								<Style.Triggers>
+									<MultiDataTrigger>
+										<MultiDataTrigger.Conditions>
+											<Condition
+												Value="True"
+												Binding="{Binding IsRequest}" />
+											<Condition
+												Value="0"
+												Binding="{Binding Reserve.state}" />
+										</MultiDataTrigger.Conditions>
+										<MultiDataTrigger.Setters>
+											<Setter
+												Property="dxe:BaseEdit.IsReadOnly"
+												Value="True" />
+										</MultiDataTrigger.Setters>
+									</MultiDataTrigger>
+								</Style.Triggers>
+							</Style>
+						</FrameworkElement.Style>
+					</dxe:TextEdit>
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource CoWorker}"
+					Visibility="{Binding GivePartVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+					<dxe:ComboBoxEdit
+						ShowError="False"
+						ValueMember="Id"
+						DisplayMember="Fio"
+						EditValue="{Binding Reserve.to_user, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+						ItemsSource="{Binding Employees}">
+						<dxmvvm:Interaction.Behaviors>
+							<dxmvvm:EventToCommand
+								EventTriggerBase_x0060_1.EventName="EditValueChanged"
+								Command="{Binding UserChangedCommand}" />
+							<dxmvvm:EventToCommand
+								EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+								PassEventArgsToCommand="True"
+								Command="{Binding ComboBoxClickCommand}" />
+						</dxmvvm:Interaction.Behaviors>
+					</dxe:ComboBoxEdit>
+				</dxlc:LayoutItem>
+				<dxlc:LayoutGroup
+					Orientation="Horizontal">
+					<dxlc:LayoutItem
+						Label="{DynamicResource State}">
+						<dxe:TextEdit
+							IsReadOnly="True"
+							EditValue="{Binding Reserve.state, Converter={StaticResource State2StringConverter}, Mode=OneWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource Sn}">
+						<dxe:ButtonEdit
+							MaxLength="250"
+							AllowDefaultButton="False"
+							EditValue="{Binding Reserve.sn, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+							<dxe:ButtonEdit.Buttons>
+								<dxe:ButtonInfo
+									GlyphKind="Apply"
+									Command="{Binding UpdateSnCommand}" />
+							</dxe:ButtonEdit.Buttons>
+						</dxe:ButtonEdit>
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+				<dxlc:LayoutItem
+					Label="{DynamicResource Repair}"
+					HorizontalAlignment="Left"
+					Visibility="{Binding Reserve.repair_id, Converter={StaticResource NumericToVisibility}}">
+					<dxe:TextEdit
+						MaskType="Numeric"
+						Mask="d6"
+						MinWidth="80"
+						MaskUseAsDisplayFormat="True"
+						IsReadOnly="True"
+						EditValue="{Binding Reserve.repair_id, Mode=OneWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource Column}"
+					Visibility="{Binding Reserve.state, Converter={StaticResource ZeroVisibilityConverter}}">
+					<StackPanel
+						Orientation="Horizontal">
+						<RadioButton
+							GroupName="PriceCol"
+							Content="{DynamicResource Retail}"
+							HorizontalAlignment="Left"
+							VerticalAlignment="Top"
+							IsChecked="{Binding PriceCol, Converter={StaticResource RadioBoolToIntConverter}, ConverterParameter=2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+							Visibility="{Binding Path=it_vis_rozn, Source={x:Static asc:Auth.Config}, Converter={StaticResource BooleanToVisibilityConverter}}" />
+						<RadioButton
+							GroupName="PriceCol"
+							Content="{DynamicResource PriceOpt}"
+							HorizontalAlignment="Left"
+							Margin="5,0,0,0"
+							VerticalAlignment="Top"
+							IsChecked="{Binding PriceCol, Converter={StaticResource RadioBoolToIntConverter}, ConverterParameter=3, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+							Visibility="{Binding Path=it_vis_opt, Source={x:Static asc:Auth.Config}, Converter={StaticResource BooleanToVisibilityConverter}}" />
+						<RadioButton
+							GroupName="PriceCol"
+							Content="{DynamicResource PriceOpt}"
+							ContentStringFormat="{}{0} 2"
+							HorizontalAlignment="Left"
+							Margin="5,0,0,0"
+							VerticalAlignment="Top"
+							IsChecked="{Binding PriceCol, Converter={StaticResource RadioBoolToIntConverter}, ConverterParameter=4, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+							Visibility="{Binding Path=it_vis_opt2, Source={x:Static asc:Auth.Config}, Converter={StaticResource BooleanToVisibilityConverter}}" />
+						<RadioButton
+							GroupName="PriceCol"
+							Content="{DynamicResource PriceOpt}"
+							ContentStringFormat="{}{0} 3"
+							HorizontalAlignment="Left"
+							Margin="5,0,0,0"
+							VerticalAlignment="Top"
+							IsChecked="{Binding PriceCol, Converter={StaticResource RadioBoolToIntConverter}, ConverterParameter=5, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+							Visibility="{Binding Path=it_vis_opt3, Source={x:Static asc:Auth.Config}, Converter={StaticResource BooleanToVisibilityConverter}}" />
+						<RadioButton
+							GroupName="PriceCol"
+							Content="{DynamicResource PriceForSc}"
+							HorizontalAlignment="Left"
+							Margin="5,0,0,0"
+							VerticalAlignment="Top"
+							IsChecked="{Binding PriceCol, Converter={StaticResource RadioBoolToIntConverter}, ConverterParameter=1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+							Visibility="{Binding Path=it_vis_price_for_sc, Source={x:Static asc:Auth.Config}, Converter={StaticResource BooleanToVisibilityConverter}}" />
+					</StackPanel>
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+		</dxlc:LayoutControl>
+	</DockPanel>
+</UserControl>

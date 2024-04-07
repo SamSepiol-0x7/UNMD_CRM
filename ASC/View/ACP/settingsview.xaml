@@ -1,0 +1,667 @@
+<dxwui:NavigationPage
+	x:Class="ASC.SettingsView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:sys="clr-namespace:System;assembly=mscorlib" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:dxwui="http://schemas.devexpress.com/winfx/2008/xaml/windowsui" xmlns:acp="clr-namespace:ASC.View.ACP" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:objects="clr-namespace:ASC.Objects" xmlns:converters="clr-namespace:ASC.Converters"
+	Name="ACPView" xmlns:asc="clr-namespace:ASC"
+	DataContext="{Binding AcpModel, RelativeSource={RelativeSource Self}}"
+	Loaded="{DXEvent OnLoad()}">
+	<FrameworkElement.Resources>
+		<ResourceDictionary>
+			<converters:IEnumerableObjectsToIntsConverter
+				x:Key="EnumerableObjectsToIntsConverter" />
+		</ResourceDictionary>
+	</FrameworkElement.Resources>
+	<dxlc:LayoutControl
+		ItemStyle="{StaticResource LeftMenuLayoutAcp}"
+		Orientation="Horizontal"
+		HorizontalAlignment="Left"
+		VerticalAlignment="Top">
+		<dxlc:LayoutGroup
+			MaxWidth="500"
+			HorizontalAlignment="Left"
+			Orientation="Vertical">
+			<dxlc:LayoutGroup
+				ItemLabelsAlignment="Local"
+				View="GroupBox"
+				Header="{DynamicResource RegionalSettings}"
+				Orientation="Vertical">
+				<dxlc:LayoutItem
+					Label="{DynamicResource Currency}">
+					<ComboBox
+						HorizontalAlignment="Left"
+						DisplayMemberPath="Name"
+						SelectedValuePath="Code"
+						MinWidth="120"
+						SelectedValue="{Binding Config.currency, Mode=TwoWay}"
+						ItemsSource="{Binding Currency.Currencies}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource ClassicKassa}">
+					<CheckBox
+						IsChecked="{Binding Config.classic_kassa, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource TimeZone}">
+					<ComboBox
+						SelectedValuePath="Id"
+						DisplayMemberPath="DisplayName"
+						MinWidth="150"
+						ItemsSource="{Binding TimeZonesList}"
+						SelectedValue="{Binding Config.time_zone, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource MobilePhone}">
+					<dxe:TextEdit
+						MinWidth="150"
+						EditValue="{Binding Config.phone_mask1, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource CityPhone}">
+					<dxe:TextEdit
+						MinWidth="150"
+						EditValue="{Binding Config.phone_mask2, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+			<dxlc:LayoutGroup
+				View="GroupBox"
+				Header="{DynamicResource PriceCols}"
+				Orientation="Vertical">
+				<dxlc:LayoutItem
+					Label="{DynamicResource Opt}">
+					<CheckBox
+						IsChecked="{Binding Config.it_vis_opt, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource PriceOpt2}">
+					<CheckBox
+						IsChecked="{Binding Config.it_vis_opt2, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource PriceOpt3}">
+					<CheckBox
+						IsChecked="{Binding Config.it_vis_opt3, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource PriceForSale}">
+					<CheckBox
+						IsChecked="{Binding Config.it_vis_rozn, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource PriceForSc}">
+					<CheckBox
+						IsChecked="{Binding Config.it_vis_price_for_sc, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+			<dxlc:LayoutGroup
+				View="GroupBox"
+				Header="{DynamicResource Extensions}"
+				Orientation="Vertical">
+				<dxlc:LayoutItem
+					Label="{DynamicResource VoIp}">
+					<dxe:ComboBoxEdit
+						NullText="Off"
+						NullValueButtonPlacement="EditBox"
+						MinWidth="150"
+						DisplayMember="Name"
+						ValueMember="Id"
+						ItemsSource="{Binding VoIPClients}"
+						EditValue="{Binding VoIP, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+						IsEnabled="{Binding Valid}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource RealizatorWorks}">
+					<CheckBox
+						IsChecked="{Binding Config.realizator_enable}"
+						IsEnabled="{Binding Valid}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource IShopWorks}">
+					<dxe:ComboBoxEdit
+						NullText="Off"
+						NullValueButtonPlacement="EditBox"
+						MinWidth="150"
+						DisplayMember="Name"
+						ValueMember="Id"
+						ItemsSource="{Binding OnlineStores}"
+						EditValue="{Binding Config.online_store, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+						IsEnabled="{Binding Valid}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource RefillingCartridges}">
+					<CheckBox
+						IsChecked="{Binding Config.cartridge_enable}"
+						IsEnabled="{Binding Valid}" />
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+			<acp:AsteriskRealtimeView
+				DataContext="{Binding AsteriskRealtimeViewModel}"
+				Visibility="{Binding DataContext.AsteriskRealtimeVisible, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=ACPView}" />
+			<acp:CloudVoIPView
+				DataContext="{Binding CloudVoIPViewModel}"
+				dxmvvm:ViewModelExtensions.Parameter="{Binding DataContext.VoIP, UpdateSourceTrigger=PropertyChanged, ElementName=ACPView}"
+				Visibility="{Binding DataContext.CloudVoIPVisible, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=ACPView}" />
+			<acp:OnlineStoreView
+				Visibility="{Binding Config.online_store, Converter={dxmvvm:NumericToVisibilityConverter}}" />
+			<dxlc:LayoutGroup
+				View="GroupBox"
+				Header="{DynamicResource Repairs}"
+				Orientation="Vertical">
+				<dxlc:LayoutItem
+					Label="{DynamicResource NewRepairMasterSet}">
+					<CheckBox
+						IsChecked="{Binding Config.is_master_set_on_new, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource ForceVisitSource}">
+					<CheckBox
+						IsChecked="{Binding Config.visit_source_force, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource SnRequired}">
+					<CheckBox
+						IsChecked="{Binding Config.is_sn_req, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource CartridgeSnRequired}">
+					<CheckBox
+						IsChecked="{Binding Config.is_cartridge_sn_req, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource HistoryBySn}">
+					<CheckBox
+						IsChecked="{Binding Config.history_by_sn, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource PhotoInRequired}">
+					<CheckBox
+						IsChecked="{Binding Config.is_photo_required, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource PhotoOutRequired}">
+					<CheckBox
+						IsChecked="{Binding Config.is_photo_out_req, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource DiagRequired}">
+					<CheckBox
+						IsChecked="{Binding Config.diag_required, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource ManualMaker}">
+					<CheckBox
+						IsChecked="{Binding Config.manual_maker, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource PriceAssignedByManager}">
+					<CheckBox
+						IsChecked="{Binding Config.rep_price_by_manager, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource DebtRep2Salary}">
+					<CheckBox
+						IsChecked="{Binding Config.debt_rep_2_salary, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource RepCompanyAutoSelect}">
+					<CheckBox
+						IsChecked="{Binding Config.rep_auto_company, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource VendorWarrantyEnable}">
+					<CheckBox
+						IsChecked="{Binding Config.vw_enable, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource CardAutoCloseTime}">
+					<dxe:SpinEdit
+						MinWidth="50"
+						ToolTip="{DynamicResource CardAutoCloseTimeTip}"
+						IsFloatValue="False"
+						MinValue="0"
+						MaxValue="86400"
+						EditValueType="{x:Type sys:Int32}"
+						EditValue="{Binding Config.card_close_time, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource ImagesInRepairCard}">
+					<dxe:SpinEdit
+						MinWidth="50"
+						IsFloatValue="False"
+						MinValue="1"
+						MaxValue="20"
+						ShowError="False"
+						EditValueType="{x:Type sys:Int32}"
+						Value="{Binding Config.rep_img_limit, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+			<dxlc:LayoutGroup
+				View="GroupBox"
+				Orientation="Vertical"
+				Header="{Binding AutoAssignSettingViewModel.Name}">
+				<dxlc:LayoutItem
+					Label="{DynamicResource Users}">
+					<dxe:ComboBoxEdit
+						IsTextEditable="False"
+						ValueMember="Id"
+						DisplayMember="Fio"
+						EditValue="{Binding AutoAssignSettingViewModel.AutoAssignUsers, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource EnumerableObjectsToIntsConverter}}"
+						ItemsSource="{Binding ActiveUsers, Source={x:Static objects:OfflineData.Instance}}">
+						<dxe:BaseEdit.StyleSettings>
+							<dxe:CheckedComboBoxStyleSettings />
+						</dxe:BaseEdit.StyleSettings>
+					</dxe:ComboBoxEdit>
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="Макс. заказов в день">
+					<dxe:SpinEdit
+						ToolTip="Максимальное кол-во заказов для одного мастера в сутки"
+						MinWidth="50"
+						IsFloatValue="False"
+						EditValueType="{x:Type sys:Int32}"
+						Value="{Binding AutoAssignSettingViewModel.DayLimit, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="Статусы min">
+					<dxe:ComboBoxEdit
+						IsTextEditable="False"
+						ValueMember="Id"
+						DisplayMember="Name"
+						EditValue="{Binding AutoAssignSettingViewModel.StatusList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource EnumerableObjectsToIntsConverter}}"
+						ItemsSource="{Binding AutoAssignSettingViewModel.Statuses}">
+						<dxe:BaseEdit.StyleSettings>
+							<dxe:CheckedComboBoxStyleSettings />
+						</dxe:BaseEdit.StyleSettings>
+					</dxe:ComboBoxEdit>
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+			<dxlc:LayoutGroup
+				View="GroupBox"
+				Header="{DynamicResource Clients}"
+				Orientation="Vertical">
+				<dxlc:LayoutItem
+					Label="{DynamicResource PatronymicRequired}">
+					<CheckBox
+						IsChecked="{Binding Config.is_patronymic_required, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource EmailRequired}">
+					<CheckBox
+						IsChecked="{Binding Config.email_required, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource AddressRequired}">
+					<CheckBox
+						IsChecked="{Binding Config.address_required, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource PhoneRequired}">
+					<CheckBox
+						IsChecked="{Binding Config.phone_required, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource ClientsAreDealers}">
+					<CheckBox
+						IsChecked="{Binding Config.clients_are_dealers, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+			<dxlc:LayoutItem
+				Label="{DynamicResource AutoSwitchKeyboardLayout}">
+				<CheckBox
+					IsChecked="{Binding Config.auto_switch_layout, Mode=TwoWay}" />
+			</dxlc:LayoutItem>
+		</dxlc:LayoutGroup>
+		<dxlc:LayoutGroup
+			HorizontalAlignment="Left"
+			Orientation="Vertical">
+			<dxlc:LayoutGroup
+				View="GroupBox"
+				Header="{DynamicResource TaskTerms}"
+				Orientation="Vertical">
+				<dxlc:LayoutItem
+					Label="{DynamicResource GivePart2CoWorkerTime}">
+					<dxe:SpinEdit
+						MinWidth="50"
+						IsFloatValue="False"
+						EditValueType="{x:Type sys:Int32}"
+						EditValue="{Binding Config.give2user_time, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource DiagAcceptTime}">
+					<dxe:SpinEdit
+						IsFloatValue="False"
+						MinWidth="50"
+						Value="{Binding Config.diag_accept_time, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+			<dxlc:LayoutGroup
+				View="GroupBox"
+				Orientation="Vertical"
+				Header="{DynamicResource Items}">
+				<dxlc:LayoutItem
+					Label="{DynamicResource DefaultReserveDays}">
+					<dxe:SpinEdit
+						MinWidth="50"
+						IsFloatValue="False"
+						MinValue="1"
+						MaxValue="40"
+						EditValueType="{x:Type sys:Int32}"
+						EditValue="{Binding Config.default_reserve_days, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource ImagesInItemCard}">
+					<dxe:SpinEdit
+						IsFloatValue="False"
+						MinWidth="50"
+						MinValue="1"
+						MaxValue="10"
+						ShowError="False"
+						EditValueType="{x:Type sys:Int32}"
+						Value="{Binding Config.item_img_limit, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource PnReasonRequired}">
+					<CheckBox
+						IsChecked="{Binding Config.is_reason_req, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+			<dxlc:LayoutGroup
+				Orientation="Vertical"
+				View="GroupBox"
+				Header="{DynamicResource Warranty}">
+				<dxlc:LayoutItem
+					Label="{DynamicResource DefaultServiceWarranty}">
+					<ComboBox
+						MinWidth="100"
+						DisplayMemberPath="Name"
+						SelectedValuePath="Days"
+						ItemsSource="{Binding WarrantyList}"
+						SelectedValue="{Binding Config.default_works_warranty, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource DefaultItemsNewWarranty}">
+					<ComboBox
+						DisplayMemberPath="Name"
+						SelectedValuePath="Days"
+						ItemsSource="{Binding WarrantyList}"
+						SelectedValue="{Binding Config.default_items_warranty, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource DefaultItemsUsedWarranty}">
+					<ComboBox
+						DisplayMemberPath="Name"
+						SelectedValuePath="Days"
+						ItemsSource="{Binding WarrantyList}"
+						SelectedValue="{Binding Config.default_items_used_warranty, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource DefaultItemsRepWarranty}">
+					<ComboBox
+						DisplayMemberPath="Name"
+						SelectedValuePath="Days"
+						ItemsSource="{Binding WarrantyList}"
+						SelectedValue="{Binding Config.default_items_rep_warranty, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource DefaultItemsRazbWarranty}">
+					<ComboBox
+						DisplayMemberPath="Name"
+						SelectedValuePath="Days"
+						ItemsSource="{Binding WarrantyList}"
+						SelectedValue="{Binding Config.default_items_razb_warranty, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource DefaultItemsOtherWarranty}">
+					<ComboBox
+						DisplayMemberPath="Name"
+						SelectedValuePath="Days"
+						ItemsSource="{Binding WarrantyList}"
+						SelectedValue="{Binding Config.default_items_other_warranty, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+			<dxlc:LayoutGroup
+				ItemLabelsAlignment="Local"
+				View="GroupBox"
+				Orientation="Vertical"
+				Header="{Binding InformSettingsViewModel.Name}">
+				<dxlc:LayoutGroup
+					Orientation="Horizontal">
+					<dxlc:LayoutItem
+						Label="{DynamicResource CommentsNotification}">
+						<CheckBox
+							IsChecked="{Binding InformSettingsViewModel.InformComment, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						ToolTip="{DynamicResource Color}">
+						<dxe:PopupColorEdit
+							ShowNoColorButton="True"
+							NoColorButtonContent="{DynamicResource NoColor}"
+							DisplayMode="Color"
+							Color="{Binding InformSettingsViewModel.InformCommentColor, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+				<dxlc:LayoutGroup
+					Orientation="Horizontal">
+					<dxlc:LayoutItem
+						Label="{DynamicResource StatusNotification}">
+						<dxe:PopupColorEdit
+							ShowNoColorButton="True"
+							NoColorButtonContent="{DynamicResource NoColor}"
+							DisplayMode="Color"
+							Color="{Binding InformSettingsViewModel.InformStatusColor, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+				<dxlc:LayoutGroup
+					Orientation="Horizontal">
+					<dxlc:LayoutItem
+						Label="{DynamicResource SmsNotification}">
+						<CheckBox
+							IsChecked="{Binding InformSettingsViewModel.InformSms, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						ToolTip="{DynamicResource Color}">
+						<dxe:PopupColorEdit
+							ShowNoColorButton="True"
+							NoColorButtonContent="{DynamicResource NoColor}"
+							DisplayMode="Color"
+							Color="{Binding InformSettingsViewModel.InformSmsColor, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+				<dxlc:LayoutGroup
+					Orientation="Horizontal">
+					<dxlc:LayoutItem
+						Label="{DynamicResource TermsNotification}">
+						<dxe:PopupColorEdit
+							ShowNoColorButton="True"
+							NoColorButtonContent="{DynamicResource NoColor}"
+							DisplayMode="Color"
+							Color="{Binding InformSettingsViewModel.InformTermsColor, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+				<dxlc:LayoutGroup
+					Orientation="Horizontal">
+					<dxlc:LayoutItem
+						Label="{DynamicResource DeviceMatchNotification}">
+						<CheckBox
+							IsChecked="{Binding InformSettingsViewModel.InformTaskMatch, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						ToolTip="{DynamicResource Color}">
+						<dxe:PopupColorEdit
+							ShowNoColorButton="True"
+							NoColorButtonContent="{DynamicResource NoColor}"
+							DisplayMode="Color"
+							Color="{Binding InformSettingsViewModel.InformTaskMatchColor, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+				<dxlc:LayoutGroup
+					Orientation="Horizontal">
+					<dxlc:LayoutItem
+						Label="{DynamicResource CustomTaskNotification}">
+						<CheckBox
+							IsChecked="{Binding InformSettingsViewModel.InformTaskCustom, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						ToolTip="{DynamicResource Color}">
+						<dxe:PopupColorEdit
+							ShowNoColorButton="True"
+							NoColorButtonContent="{DynamicResource NoColor}"
+							DisplayMode="Color"
+							Color="{Binding InformSettingsViewModel.InformTaskCustomColor, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+				<dxlc:LayoutGroup
+					Orientation="Horizontal">
+					<dxlc:LayoutItem
+						Label="{DynamicResource PartRequestNotification}">
+						<CheckBox
+							IsChecked="{Binding InformSettingsViewModel.InformIntRequest, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						ToolTip="{DynamicResource Color}">
+						<dxe:PopupColorEdit
+							ShowNoColorButton="True"
+							NoColorButtonContent="{DynamicResource NoColor}"
+							DisplayMode="Color"
+							Color="{Binding InformSettingsViewModel.InformIntRequestColor, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+				<dxlc:LayoutGroup
+					Orientation="Horizontal">
+					<dxlc:LayoutItem
+						Label="{DynamicResource SiteRequestNotification}">
+						<CheckBox
+							IsChecked="{Binding InformSettingsViewModel.InformTaskRequest, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						ToolTip="{DynamicResource Color}">
+						<dxe:PopupColorEdit
+							ShowNoColorButton="True"
+							NoColorButtonContent="{DynamicResource NoColor}"
+							DisplayMode="Color"
+							AllowNullInput="True"
+							Color="{Binding InformSettingsViewModel.InformTaskRequestColor, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+				<dxlc:LayoutGroup
+					Orientation="Horizontal">
+					<dxlc:LayoutItem
+						Label="{DynamicResource CallNotification}">
+						<CheckBox
+							IsChecked="{Binding InformSettingsViewModel.InformCall, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						ToolTip="{DynamicResource Color}">
+						<dxe:PopupColorEdit
+							ShowNoColorButton="True"
+							NoColorButtonContent="{DynamicResource NoColor}"
+							DisplayMode="Color"
+							Color="{Binding InformSettingsViewModel.InformCallColor, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+				<dxlc:LayoutGroup
+					Orientation="Horizontal">
+					<dxlc:LayoutItem
+						Label="{DynamicResource BuyRequestNotification}">
+						<CheckBox
+							IsChecked="{Binding InformSettingsViewModel.InformPartRequest, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						ToolTip="{DynamicResource Color}">
+						<dxe:PopupColorEdit
+							ShowNoColorButton="True"
+							NoColorButtonContent="{DynamicResource NoColor}"
+							DisplayMode="Color"
+							Color="{Binding InformSettingsViewModel.InformPartRequestColor, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+			</dxlc:LayoutGroup>
+			<dxlc:LayoutGroup
+				View="GroupBox"
+				Orientation="Vertical"
+				Header="{DynamicResource PrintDocumentsSettings}">
+				<dxlc:LayoutItem
+					Label="{DynamicResource PrintPko}">
+					<CheckBox
+						IsChecked="{Binding Config.qs_print_pko, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource PrintRn}">
+					<CheckBox
+						IsChecked="{Binding Config.qs_print_rn, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource PrintPn}">
+					<CheckBox
+						IsChecked="{Binding Config.qs_print_pn, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource PrintRko}">
+					<CheckBox
+						IsChecked="{Binding Config.qs_print_rko, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource PrintWarrantyDocument}">
+					<CheckBox
+						IsChecked="{Binding Config.print_warranty, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource PrintWorksDocument}">
+					<CheckBox
+						IsChecked="{Binding Config.print_works, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource PrintDiagnosticDocument}">
+					<CheckBox
+						IsChecked="{Binding Config.print_diagnostic, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource PrintRejectDocument}">
+					<CheckBox
+						IsChecked="{Binding Config.print_reject, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource RkoOnPn}">
+					<CheckBox
+						IsChecked="{Binding Config.rko_on_pn, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource PrintCheck2}">
+					<CheckBox
+						IsChecked="{Binding Config.print_check, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource PrintNewRepairRepot}">
+					<CheckBox
+						IsChecked="{Binding DocumentsPrintSettings.PrintNewRepairReport, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource PrintRepairStickers}">
+					<CheckBox
+						IsChecked="{Binding DocumentsPrintSettings.PrintRepStickers, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource PrintNewCartridgeReport}">
+					<CheckBox
+						IsChecked="{Binding DocumentsPrintSettings.PrintNewCartridgeReport, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource PrintCartridgeStickers}">
+					<CheckBox
+						IsChecked="{Binding DocumentsPrintSettings.PrintCartridgeStickers, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					HorizontalContentAlignment="Right"
+					Label="{DynamicResource DefRepairStickerCopies}">
+					<dxe:SpinEdit
+						MinWidth="50"
+						IsFloatValue="False"
+						MinValue="1"
+						MaxValue="10"
+						HorizontalAlignment="Left"
+						VerticalAlignment="Center"
+						Margin="5,0,0,0"
+						EditValueType="{x:Type sys:Int32}"
+						EditValue="{Binding Config.rep_stickers_copy, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+		</dxlc:LayoutGroup>
+	</dxlc:LayoutControl>
+</dxwui:NavigationPage>

@@ -1,0 +1,83 @@
+<UserControl
+	x:Class="ASC.View.ACP.VendorWarrantyView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:ASC.View.ACP" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:controls="clr-namespace:ASC.View.Controls"
+	Loaded="{DXEvent OnLoaded()}"
+	Unloaded="{DXEvent OnUnloaded()}"
+	KeyUp="{DXEvent OnKeyUp(@args)}">
+	<DockPanel>
+		<StackPanel
+			DockPanel.Dock="Top"
+			Orientation="Horizontal">
+			<TextBlock
+				Style="{StaticResource DialogTitle}"
+				Text="{Binding Title, Mode=OneWay, FallbackValue=Title}" />
+		</StackPanel>
+		<StackPanel
+			Margin="0,10,0,0"
+			HorizontalAlignment="Right"
+			VerticalAlignment="Bottom"
+			DockPanel.Dock="Bottom"
+			Orientation="Horizontal">
+			<dx:SimpleButton
+				Style="{StaticResource SaveButton}"
+				Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={BooleanToVisibilityConverter}}"
+				Command="{Binding UpdateCommand}"
+				Glyph="{DXImageGrayscale Image=Save_16x16.png}" />
+			<dx:SimpleButton
+				Style="{StaticResource SaveButton}"
+				Content="{DynamicResource Create}"
+				Margin="10,0,0,0"
+				Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={BooleanToVisibilityConverter}}"
+				Command="{Binding CreateCommand}"
+				Glyph="{DXImageGrayscale Image=New_16x16.png}" />
+			<dx:SimpleButton
+				ToolTip="[Esc]"
+				Style="{StaticResource CancelButton}"
+				Content="{DynamicResource Close}"
+				Margin="10,0,0,0"
+				Command="{Binding CloseCommand}" />
+		</StackPanel>
+		<dxlc:LayoutControl
+			Orientation="Vertical"
+			ItemSpace="5"
+			Padding="0">
+			<FrameworkElement.Resources>
+				<ResourceDictionary>
+					<Style
+						TargetType="{x:Type dxlc:LayoutItem}"
+						x:Key="{x:Type dxlc:LayoutItem}">
+						<Setter
+							Property="dxlc:LayoutItem.LabelPosition"
+							Value="Top" />
+					</Style>
+				</ResourceDictionary>
+			</FrameworkElement.Resources>
+			<dxlc:LayoutItem
+				Label="{DynamicResource Name}">
+				<dxe:TextEdit
+					MinWidth="500"
+					NullText="{DynamicResource Name}"
+					MaxLength="254"
+					EditValue="{Binding Item.name, Mode=TwoWay}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="Поставщик гарантии от вендора">
+				<controls:CustomerSearchView
+					DataContext="{Binding WorksAgentViewModel}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="Поставщик ЗИП">
+				<controls:CustomerSearchView
+					DataContext="{Binding PartsAgentViewModel}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				LabelPosition="Left"
+				HorizontalContentAlignment="Right"
+				Label="{DynamicResource Archive}"
+				Visibility="{Binding Item.id, Converter={dxmvvm:NumericToVisibilityConverter}}">
+				<dxe:CheckEdit
+					Margin="0,5,0,0"
+					EditValue="{Binding Item.archive, Mode=TwoWay}" />
+			</dxlc:LayoutItem>
+		</dxlc:LayoutControl>
+	</DockPanel>
+</UserControl>

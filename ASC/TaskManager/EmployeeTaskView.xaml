@@ -1,0 +1,389 @@
+<dxwui:NavigationPage
+	x:Class="ASC.TaskManager.EmployeeTaskView" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/presentation" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:taskManager="clr-namespace:ASC.TaskManager" xmlns:converters="clr-namespace:ASC.Converters" xmlns:dxwui="http://schemas.devexpress.com/winfx/2008/xaml/windowsui" xmlns:objects="clr-namespace:ASC.Objects" xmlns:view="clr-namespace:ASC.View" xmlns:dxBinding="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:comments="clr-namespace:ASC.RepairCard.Comments"
+	Name="EmployeeTaskViewPage"
+	dxwui:NavigationCacheMode="Disabled"
+	DataContext="{dxmvvm:ViewModelSource taskManager:EmployeeTaskViewModel}"
+	Loaded="{dxBinding:DXEvent OnLoaded()}">
+	<FrameworkElement.Resources>
+		<ResourceDictionary>
+			<converters:IEnumerableObjectsToIntsConverter
+				x:Key="EnumerableObjectsToIntsConverter" />
+			<dxmvvm:StringToVisibilityConverter
+				x:Key="StringToVisibilityConverter" />
+			<Style
+				TargetType="{x:Type dxe:ComboBoxEdit}"
+				x:Key="{x:Type dxe:ComboBoxEdit}">
+				<Setter
+					Property="MinHeight"
+					Value="{StaticResource editorHeight}" />
+				<Setter
+					Property="FontSize"
+					Value="{StaticResource editorFontSize}" />
+				<Setter
+					Property="Foreground"
+					Value="{StaticResource editorFontBrush}" />
+			</Style>
+			<Style
+				TargetType="{x:Type dxe:DateEdit}"
+				x:Key="{x:Type dxe:DateEdit}">
+				<Setter
+					Property="MinHeight"
+					Value="{StaticResource editorHeight}" />
+				<Setter
+					Property="FontSize"
+					Value="{StaticResource editorFontSize}" />
+				<Setter
+					Property="Foreground"
+					Value="{StaticResource editorFontBrush}" />
+			</Style>
+			<Style
+				TargetType="{x:Type dxe:TextEdit}"
+				x:Key="{x:Type dxe:TextEdit}">
+				<Setter
+					Property="MinHeight"
+					Value="{StaticResource editorHeight}" />
+				<Setter
+					Property="FontSize"
+					Value="{StaticResource editorFontSize}" />
+				<Setter
+					Property="Foreground"
+					Value="{StaticResource editorFontBrush}" />
+			</Style>
+			<Style
+				TargetType="{x:Type dxe:ButtonEdit}"
+				x:Key="{x:Type dxe:ButtonEdit}">
+				<Setter
+					Property="MinHeight"
+					Value="{StaticResource editorHeight}" />
+				<Setter
+					Property="FontSize"
+					Value="{StaticResource editorFontSize}" />
+				<Setter
+					Property="Foreground"
+					Value="{StaticResource editorFontBrush}" />
+			</Style>
+		</ResourceDictionary>
+	</FrameworkElement.Resources>
+	<DockPanel
+		VerticalAlignment="Stretch">
+		<StackPanel
+			DockPanel.Dock="Top"
+			Margin="10,10,0,0"
+			Orientation="Horizontal"
+			HorizontalAlignment="Left">
+			<TextBlock
+				Text="{DynamicResource Task}"
+				FontSize="18"
+				Margin="0,0,5,0" />
+			<StackPanel
+				Orientation="Horizontal"
+				Visibility="{Binding Task.Id, Converter={StaticResource NumericToVisibility}}">
+				<TextBlock
+					FontSize="18"
+					Margin="5,0,0,0"
+					Text="{Binding Task.Id, StringFormat={}{0:D6}}" />
+				<TextBlock
+					FontSize="18"
+					Text="." />
+				<TextBlock
+					FontSize="18"
+					Text="{DynamicResource DateCreate}"
+					Margin="5,0,0,0" />
+				<TextBlock
+					FontSize="18"
+					Margin="5,0,0,0"
+					Text="{Binding Task.Created, StringFormat=dd.MM.yyyy HH:mm, Converter={StaticResource UtcToLocalDateTimeConverter}}" />
+			</StackPanel>
+		</StackPanel>
+		<dxwui:AppBar
+			DockPanel.Dock="Bottom"
+			Background="#3f3f3f"
+			HorizontalAlignment="Stretch"
+			VerticalAlignment="Stretch"
+			ItemSpacing="0"
+			HideMode="AlwaysVisible">
+			<dxwui:AppBarButton
+				Name="SaveButton"
+				Label="{DynamicResource Save}"
+				Visibility="{Binding IsEnabled, Converter={StaticResource BooleanToVisibilityConverter}, RelativeSource={RelativeSource Self}}"
+				Command="{Binding SaveCommand}"
+				Glyph="{dx:DXImageGrayscale Image=Save_32x32.png}" />
+			<dxwui:AppBarSeparator
+				Visibility="{Binding Visibility, ElementName=SaveButton}" />
+			<dxwui:AppBarButton
+				Label="{DynamicResource RepairCard}"
+				Visibility="{Binding Task.RepairId, Converter={StaticResource NumericToVisibility}}"
+				Command="{Binding RepairCardOpenCommand}"
+				Glyph="{dx:DXImageGrayscale Image=Customization_32x32.png}" />
+			<dxwui:AppBarButton
+				Label="{DynamicResource ItemCard}"
+				Visibility="{Binding Task.ItemId, Converter={StaticResource NumericToVisibility}}"
+				Command="{Binding ItemCardOpenCommand}"
+				Glyph="{dx:DXImageGrayscale Image=FullShoppingCart_32x32.png}" />
+			<dxwui:AppBarButton
+				Label="{DynamicResource Request}"
+				Visibility="{Binding TaskIsPartsRequest, Converter={StaticResource BooleanToVisibilityConverter}}"
+				Command="{Binding PartRequestOpenCommand}"
+				Glyph="{dx:DXImageGrayscale Image=FullShoppingCart_32x32.png}" />
+			<dxwui:AppBarButton
+				Label="{DynamicResource Create}"
+				Visibility="{Binding ExistTaskInvert, Converter={StaticResource BooleanToVisibilityConverter}}"
+				Command="{Binding CreateAndCloseCommand}"
+				Glyph="{dx:DXImageGrayscale Image=New_32x32.png}" />
+		</dxwui:AppBar>
+		<dxlc:LayoutControl
+			Width="850"
+			Orientation="Vertical"
+			ItemSpace="10"
+			Margin="0,10,0,0"
+			Padding="2">
+			<FrameworkElement.Resources>
+				<ResourceDictionary>
+					<Style
+						TargetType="{x:Type dxlc:LayoutGroup}"
+						x:Key="InnerLayoutGroup" />
+					<Style
+						TargetType="{x:Type dxlc:LayoutGroup}"
+						x:Key="{x:Type dxlc:LayoutGroup}">
+						<Setter
+							Property="dxlc:LayoutControlBase.ItemSpace"
+							Value="15" />
+					</Style>
+					<Style
+						TargetType="{x:Type Button}"
+						x:Key="{x:Type Button}">
+						<Setter
+							Property="Height"
+							Value="38" />
+					</Style>
+					<Style
+						TargetType="{x:Type dxlc:LayoutItem}"
+						BasedOn="{StaticResource LeftMenuLayout}"
+						x:Key="{x:Type dxlc:LayoutItem}">
+						<Setter
+							Property="dxlc:LayoutItem.ElementSpace"
+							Value="10" />
+					</Style>
+				</ResourceDictionary>
+			</FrameworkElement.Resources>
+			<dxlc:LayoutGroup
+				Orientation="Horizontal"
+				VerticalAlignment="Top">
+				<dxlc:LayoutGroup
+					Orientation="Vertical"
+					HorizontalAlignment="Left"
+					MinWidth="350"
+					MaxWidth="390">
+					<dxlc:LayoutGroup
+						Orientation="Vertical"
+						Style="{StaticResource InnerLayoutGroup}">
+						<dxlc:LayoutItem
+							Label="{DynamicResource Owner}"
+							Visibility="{Binding OwnerVisible, FallbackValue=Collapsed, Converter={dx:BooleanToVisibilityConverter}}">
+							<dxe:ComboBoxEdit
+								IsEnabled="False"
+								IsTextEditable="False"
+								ValueMember="Id"
+								DisplayMember="Fio"
+								EditValue="{Binding Task.CreatorId, Mode=TwoWay}"
+								ItemsSource="{Binding ActiveUsers, Source={x:Static objects:OfflineData.Instance}}" />
+						</dxlc:LayoutItem>
+						<dxlc:LayoutItem
+							Label="{DynamicResource ResponsibleUsers}"
+							Visibility="{Binding ExistTaskInvert, Converter={StaticResource BooleanToVisibilityConverter}}">
+							<dxe:ComboBoxEdit
+								IsTextEditable="False"
+								ValueMember="Id"
+								DisplayMember="Fio"
+								EditValue="{Binding Task.ResponsibleUsers, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource EnumerableObjectsToIntsConverter}}"
+								ItemsSource="{Binding ActiveUsers, Source={x:Static objects:OfflineData.Instance}}">
+								<dxe:BaseEdit.StyleSettings>
+									<dxe:CheckedComboBoxStyleSettings />
+								</dxe:BaseEdit.StyleSettings>
+							</dxe:ComboBoxEdit>
+						</dxlc:LayoutItem>
+					</dxlc:LayoutGroup>
+					<dxlc:LayoutGroup
+						Orientation="Vertical"
+						Style="{StaticResource InnerLayoutGroup}">
+						<dxlc:LayoutItem
+							Label="{DynamicResource StartDate}">
+							<dxe:DateEdit
+								MaskType="DateTimeAdvancingCaret"
+								Mask="g"
+								MaskUseAsDisplayFormat="True"
+								IsEnabled="{Binding ExistTaskInvert}"
+								DateTime="{Binding Task.Start, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource UtcToLocalDateTimeConverter}}">
+								<dxe:BaseEdit.StyleSettings>
+									<dxe:DateEditPickerStyleSettings />
+								</dxe:BaseEdit.StyleSettings>
+							</dxe:DateEdit>
+						</dxlc:LayoutItem>
+					</dxlc:LayoutGroup>
+					<dxlc:LayoutGroup
+						Orientation="Vertical"
+						Style="{StaticResource InnerLayoutGroup}">
+						<dxlc:LayoutItem
+							Label="{DynamicResource Status}"
+							Visibility="{Binding Task.Id, Converter={StaticResource NumericToVisibility}}">
+							<dxe:ComboBoxEdit
+								DisplayMember="Value"
+								ValueMember="Key"
+								Style="{StaticResource ComboBoxStatusEditStyle}"
+								IsEnabled="{Binding ExistTask}"
+								EditValue="{Binding Task.Status, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+								ItemsSource="{Binding TaskStatuses}">
+								<dxmvvm:Interaction.Behaviors>
+									<dxmvvm:EventToCommand
+										EventTriggerBase_x0060_1.EventName="EditValueChanged"
+										Command="{Binding StatusChangedCommand}" />
+								</dxmvvm:Interaction.Behaviors>
+							</dxe:ComboBoxEdit>
+						</dxlc:LayoutItem>
+						<dxlc:LayoutItem
+							Label="{DynamicResource Priority}">
+							<dxe:ComboBoxEdit
+								DisplayMember="Value"
+								ValueMember="Key"
+								Style="{StaticResource PriorityComboBox}"
+								IsEnabled="{Binding ExistTaskInvert}"
+								ItemsSource="{Binding Priorities}"
+								EditValue="{Binding Task.Priority, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+						</dxlc:LayoutItem>
+						<dxlc:LayoutItem
+							Label="{DynamicResource Email}"
+							Visibility="{Binding Task.Email, Converter={StaticResource StringToVisibilityConverter}}">
+							<dxe:ButtonEdit
+								AllowDefaultButton="False"
+								IsReadOnly="{Binding ExistTask}"
+								EditValue="{Binding Task.Email, Mode=OneWay}">
+								<dxe:ButtonInfo
+									GlyphKind="User"
+									Command="{Binding MailToCommand}">
+									<Image
+										Stretch="None"
+										Source="{dx:DXImageGrayscale Image=SendFile_16x16.png}" />
+								</dxe:ButtonInfo>
+							</dxe:ButtonEdit>
+						</dxlc:LayoutItem>
+						<dxlc:LayoutItem
+							Label="{DynamicResource Phone}"
+							Visibility="{Binding Task.Tel, Converter={StaticResource StringToVisibilityConverter}}">
+							<dxe:ButtonEdit
+								AllowDefaultButton="False"
+								IsReadOnly="{Binding ExistTask}"
+								EditValue="{Binding Task.Tel, Mode=OneWay}">
+								<dxe:ButtonInfo
+									ToolTip="{DynamicResource Call}"
+									GlyphKind="User"
+									Command="{Binding CallToCommand}">
+									<Image
+										Source="pack://application:,,,/ASC;component/Resources/MobilePhone.png"
+										Stretch="None" />
+								</dxe:ButtonInfo>
+								<dxe:ButtonInfo
+									ToolTip="{DynamicResource Sms}"
+									GlyphKind="User"
+									Command="{Binding SmsToCommand}">
+									<Image
+										Stretch="None"
+										Source="{dx:DXImageGrayscale Image=SendFile_16x16.png}" />
+								</dxe:ButtonInfo>
+							</dxe:ButtonEdit>
+						</dxlc:LayoutItem>
+					</dxlc:LayoutGroup>
+					<dxlc:LayoutItem
+						Label="{DynamicResource Type}"
+						Visibility="{Binding ExistTaskInvert, Converter={StaticResource BooleanToVisibilityConverter}}">
+						<dxe:ComboBoxEdit
+							DisplayMember="Value"
+							ValueMember="Key"
+							EditValue="{Binding Task.Type, UpdateSourceTrigger=PropertyChanged}"
+							ItemsSource="{Binding TaskTypes}">
+							<dxmvvm:Interaction.Behaviors>
+								<dxmvvm:EventToCommand
+									EventTriggerBase_x0060_1.EventName="EditValueChanged"
+									Command="{Binding TaskTypeChangedCommand}" />
+							</dxmvvm:Interaction.Behaviors>
+						</dxe:ComboBoxEdit>
+					</dxlc:LayoutItem>
+					<dxlc:LayoutGroup
+						Orientation="Vertical"
+						Visibility="{Binding DeviceMatchVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+						<dxlc:LayoutItem
+							Label="{DynamicResource LabelDeviceType}">
+							<dxe:ComboBoxEdit
+								DisplayMember="Name"
+								ValueMember="Id"
+								IsReadOnly="{Binding ExistTask}"
+								EditValue="{Binding Task.MatchDevice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+								ItemsSource="{Binding Devices}">
+								<dxmvvm:Interaction.Behaviors>
+									<dxmvvm:EventToCommand
+										EventTriggerBase_x0060_1.EventName="EditValueChanged"
+										Command="{Binding DeviceChangedCommand}" />
+								</dxmvvm:Interaction.Behaviors>
+							</dxe:ComboBoxEdit>
+						</dxlc:LayoutItem>
+						<dxlc:LayoutItem
+							Label="{DynamicResource Label1Copy}">
+							<dxe:ComboBoxEdit
+								DisplayMember="Name"
+								ValueMember="Id"
+								IsReadOnly="{Binding ExistTask}"
+								EditValue="{Binding Task.MatchMaker, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+								ItemsSource="{Binding Makers}" />
+						</dxlc:LayoutItem>
+						<dxlc:LayoutItem
+							Label="{DynamicResource DeviceMatch}">
+							<dxe:TextEdit
+								EditValue="{Binding Task.MatchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+						</dxlc:LayoutItem>
+					</dxlc:LayoutGroup>
+				</dxlc:LayoutGroup>
+				<dxlc:LayoutGroup
+					Orientation="Vertical"
+					VerticalAlignment="Top">
+					<dxlc:LayoutGroup
+						Orientation="Vertical"
+						Style="{StaticResource InnerLayoutGroup}">
+						<dxlc:LayoutItem
+							Label="{DynamicResource Subject}">
+							<dxe:TextEdit
+								MaxLength="254"
+								IsReadOnly="{Binding ExistTask}"
+								EditValue="{Binding Task.Subject}" />
+						</dxlc:LayoutItem>
+						<dxlc:LayoutItem
+							LabelPosition="Top"
+							Label="{DynamicResource Description}"
+							VerticalAlignment="Stretch"
+							LabelVerticalAlignment="Top">
+							<dxe:TextEdit
+								VerticalAlignment="Top"
+								MaxLength="16000"
+								VerticalScrollBarVisibility="Auto"
+								VerticalContentAlignment="Top"
+								AcceptsReturn="True"
+								TextWrapping="Wrap"
+								IsReadOnly="{Binding ExistTask}"
+								EditValue="{Binding Task.Message, UpdateSourceTrigger=PropertyChanged}" />
+						</dxlc:LayoutItem>
+					</dxlc:LayoutGroup>
+				</dxlc:LayoutGroup>
+			</dxlc:LayoutGroup>
+			<dxlc:LayoutGroup
+				Margin="0,0,0,10"
+				Header="{DynamicResource Comments}"
+				View="GroupBox"
+				VerticalAlignment="Bottom"
+				Visibility="{Binding Task.Id, Converter={dxmvvm:NumericToVisibilityConverter}}">
+				<dxlc:LayoutItem
+					MaxHeight="300">
+					<comments:Comments
+						dxmvvm:ViewModelExtensions.ParentViewModel="{Binding DataContext, ElementName=EmployeeTaskViewPage}" />
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+		</dxlc:LayoutControl>
+	</DockPanel>
+</dxwui:NavigationPage>

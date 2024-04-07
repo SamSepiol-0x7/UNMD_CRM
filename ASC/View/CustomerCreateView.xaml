@@ -1,0 +1,21 @@
+<UserControl
+	x:Class="ASC.View.CustomerCreateView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:ASC.View" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core">
+	<DockPanel>
+		<StackPanel
+			HorizontalAlignment="Right"
+			DockPanel.Dock="Bottom"
+			Orientation="Horizontal">
+			<dx:SimpleButton
+				Margin="10,0,0,0"
+				Content="{DynamicResource Save}"
+				Command="{Binding CreateCustomerCommand}"
+				Glyph="{DXImageGrayscale Image=Save_16x16.png}" />
+			<dx:SimpleButton
+				Margin="10,0,0,0"
+				Content="{DynamicResource Cancel}"
+				Command="{Binding CloseCardCommand}"
+				Glyph="{DXImageGrayscale Image=Close_16x16.png}" />
+		</StackPanel>
+		<local:CustomerEditCommonView />
+	</DockPanel>
+</UserControl>

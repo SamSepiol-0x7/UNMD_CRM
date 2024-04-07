@@ -1,0 +1,40 @@
+<UserControl
+	x:Class="ASC.View.PaymentSystemEditView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:ASC.View" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors">
+	<DockPanel
+		MaxWidth="600">
+		<StackPanel
+			Margin="10"
+			Orientation="Horizontal"
+			VerticalAlignment="Bottom"
+			DockPanel.Dock="Bottom"
+			HorizontalAlignment="Right">
+			<dx:SimpleButton
+				Style="{StaticResource SaveButton}"
+				Command="{Binding SavePaymentSystemCommand}" />
+			<dx:SimpleButton
+				Margin="10,0,0,0"
+				Style="{StaticResource CancelButton}"
+				Command="{Binding CloseDocumentCommand}" />
+		</StackPanel>
+		<dxlc:LayoutControl
+			MinWidth="450"
+			Orientation="Vertical">
+			<dxlc:LayoutItem
+				Label="{DynamicResource Name}">
+				<dxe:TextEdit
+					EditValue="{Binding SelectedPaymentSystem.name, Mode=TwoWay}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource Data}">
+				<dxe:TextEdit
+					EditValue="{Binding SelectedPaymentSystem.system_data, Mode=TwoWay}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource On}"
+				Visibility="{Binding SelectedPaymentSystem.id, Converter={StaticResource NumericToVisibility}, FallbackValue=Collapsed}">
+				<dxe:CheckEdit
+					EditValue="{Binding SelectedPaymentSystem.is_enable, Mode=TwoWay}" />
+			</dxlc:LayoutItem>
+		</dxlc:LayoutControl>
+	</DockPanel>
+</UserControl>

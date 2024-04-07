@@ -1,0 +1,13 @@
+<UserControl
+	x:Class="ASC.View.Controls.StoreCategorySelectView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:ASC.View.Controls" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+	Loaded="{DXEvent OnLoaded()}"
+	DataContext="{Binding Path=StoreCategorySelectViewModel, Source={StaticResource ViewModelLocator}}">
+	<dxg:LookUpEdit
+		PopupContentTemplate="{StaticResource StoreCategories}"
+		ShowError="False"
+		AutoPopulateColumns="False"
+		ValueMember="id"
+		DisplayMember="name"
+		p7:EditValue="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+		p7:ItemsSource="{Binding Items}" xmlns:p7="http://schemas.devexpress.com/winfx/2008/xaml/editors" />
+</UserControl>

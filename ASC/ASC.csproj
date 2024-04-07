@@ -1,0 +1,2655 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{5C6829B4-953A-4C02-A9B3-85901E881069}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ASC</RootNamespace>
+    <AssemblyName>ASC</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60DC8134-EBA5-43B8-BCC9-BB4BC16C2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>ASC.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AegisImplicitMail">
+      <HintPath>..\..\ASC_3.7.1184_CRACK\AegisImplicitMail.dll</HintPath>
+    </Reference>
+    <Reference Include="ASC.ACL">
+      <HintPath>..\..\ASC_3.7.1184_CRACK\ASC.ACL.dll</HintPath>
+    </Reference>
+    <Reference Include="ASC.Common">
+      <HintPath>..\..\ASC_3.7.1184_CRACK\ASC.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="ASC.Updater">
+      <HintPath>..\..\ASC_3.7.1184_CRACK\ASC.Updater.dll</HintPath>
+    </Reference>
+    <Reference Include="ASC.Voip">
+      <HintPath>..\..\ASC_3.7.1184_CRACK\ASC.Voip.dll</HintPath>
+    </Reference>
+    <Reference Include="AsterNET">
+      <HintPath>..\..\ASC_3.7.1184_CRACK\AsterNET.dll</HintPath>
+    </Reference>
+    <Reference Include="Atol.Drivers10.Fptr">
+      <HintPath>..\..\ASC_3.7.1184_CRACK\Atol.Drivers10.Fptr.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac">
+      <HintPath>..\..\ASC_3.7.1184_CRACK\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="dbup-core">
+      <HintPath>..\..\ASC_3.7.1184_CRACK\dbup-core.dll</HintPath>
+    </Reference>
+    <Reference Include="dbup-mysql">
+      <HintPath>..\..\ASC_3.7.1184_CRACK\dbup-mysql.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Data.v17.2">
+      <HintPath>..\..\ASC_3.7.1184_CRACK\DevExpress.Data.v17.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.DataAccess.v17.2">
+      <HintPath>..\..\ASC_3.7.1184_CRACK\DevExpress.DataAccess.v17.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Images.v17.2">
+      <HintPath>..\..\ASC_3.7.1184_CRACK\DevExpress.Images.v17.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Mvvm.v17.2">
+      <HintPath>..\..\ASC_3.7.1184_CRACK\DevExpress.Mvvm.v17.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.PivotGrid.v17.2.Core">
+      <HintPath>..\..\ASC_3.7.1184_CRACK\DevExpress.PivotGrid.v17.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Printing.v17.2.Core">
+      <HintPath>..\..\ASC_3.7.1184_CRACK\DevExpress.Printing.v17.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Charts.v17.2">
+      <HintPath>..\..\ASC_3.7.1184_CRACK\DevExpress.Xpf.Charts.v17.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Controls.v17.2">
+      <HintPath>..\..\ASC_3.7.1184_CRACK\DevExpress.Xpf.Controls.v17.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Core.v17.2">
+      <HintPath>..\..\ASC_3.7.1184_CRACK\DevExpress.Xpf.Core.v17.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Diagram.v17.2">
+      <HintPath>..\..\ASC_3.7.1184_CRACK\DevExpress.Xpf.Diagram.v17.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Docking.v17.2">
+      <HintPath>..\..\ASC_3.7.1184_CRACK\DevExpress.Xpf.Docking.v17.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Grid.v17.2">
+      <HintPath>..\..\ASC_3.7.1184_CRACK\DevExpress.Xpf.Grid.v17.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Grid.v17.2.Core">
+      <HintPath>..\..\ASC_3.7.1184_CRACK\DevExpress.Xpf.Grid.v17.2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Grid.v17.2.Extensions">
+      <HintPath>..\..\ASC_3.7.1184_CRACK\DevExpress.Xpf.Grid.v17.2.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.LayoutControl.v17.2">
+      <HintPath>..\..\ASC_3.7.1184_CRACK\DevExpress.Xpf.LayoutControl.v17.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Printing.v17.2">
+      <HintPath>..\..\ASC_3.7.1184_CRACK\DevExpress.Xpf.Printing.v17.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.ReportDesigner.v17.2">
+      <HintPath>..\..\ASC_3.7.1184_CRACK\DevExpress.Xpf.ReportDesigner.v17.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.RichEdit.v17.2">
+      <HintPath>..\..\ASC_3.7.1184_CRACK\DevExpress.Xpf.RichEdit.v17.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraPrinting.v17.2">
+      <HintPath>..\..\ASC_3.7.1184_CRACK\DevExpress.XtraPrinting.v17.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraReports.v17.2">
+      <HintPath>..\..\ASC_3.7.1184_CRACK\DevExpress.XtraReports.v17.2.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework">
+      <HintPath>..\..\ASC_3.7.1184_CRACK\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="ExcelDataReader">
+      <HintPath>..\..\ASC_3.7.1184_CRACK\ExcelDataReader.dll</HintPath>
+    </Reference>
+    <Reference Include="ExcelDataReader.DataSet">
+      <HintPath>..\..\ASC_3.7.1184_CRACK\ExcelDataReader.DataSet.dll</HintPath>
+    </Reference>
+    <Reference Include="Flurl">
+      <HintPath>..\..\ASC_3.7.1184_CRACK\Flurl.dll</HintPath>
+    </Reference>
+    <Reference Include="Flurl.Http">
+      <HintPath>..\..\ASC_3.7.1184_CRACK\Flurl.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\..\ASC_3.7.1184_CRACK\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="MySql.Data">
+      <HintPath>..\..\ASC_3.7.1184_CRACK\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="MySqlBackup">
+      <HintPath>..\..\ASC_3.7.1184_CRACK\MySqlBackup.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\ASC_3.7.1184_CRACK\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog">
+      <HintPath>..\..\ASC_3.7.1184_CRACK\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="PawnHunter.Numerals">
+      <HintPath>..\..\ASC_3.7.1184_CRACK\PawnHunter.Numerals.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="SBRFPinpad">
+      <HintPath>..\..\ASC_3.7.1184_CRACK\SBRFPinpad.dll</HintPath>
+    </Reference>
+    <Reference Include="SmsRu">
+      <HintPath>..\..\ASC_3.7.1184_CRACK\SmsRu.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Vlc.DotNet.Core">
+      <HintPath>..\..\ASC_3.7.1184_CRACK\Vlc.DotNet.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Vlc.DotNet.Forms">
+      <HintPath>..\..\ASC_3.7.1184_CRACK\Vlc.DotNet.Forms.dll</HintPath>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="WindowsFormsIntegration" />
+    <Reference Include="DevExpress.Mvvm.v17.2.ViewModel" />
+    <Reference Include="mscorlib" />
+    <Reference Include="DevExpress.RichEdit.v17.2.Core" />
+    <Reference Include="DevExpress.Diagram.v17.2.Core" />
+  </ItemGroup>
+  <ItemGroup>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="--f__AnonymousType0.cs" />
+    <Compile Include="--f__AnonymousType1.cs" />
+    <Compile Include="--f__AnonymousType10.cs" />
+    <Compile Include="--f__AnonymousType11.cs" />
+    <Compile Include="--f__AnonymousType12.cs" />
+    <Compile Include="--f__AnonymousType13.cs" />
+    <Compile Include="--f__AnonymousType14.cs" />
+    <Compile Include="--f__AnonymousType15.cs" />
+    <Compile Include="--f__AnonymousType16.cs" />
+    <Compile Include="--f__AnonymousType17.cs" />
+    <Compile Include="--f__AnonymousType2.cs" />
+    <Compile Include="--f__AnonymousType3.cs" />
+    <Compile Include="--f__AnonymousType4.cs" />
+    <Compile Include="--f__AnonymousType5.cs" />
+    <Compile Include="--f__AnonymousType6.cs" />
+    <Compile Include="--f__AnonymousType7.cs" />
+    <Compile Include="--f__AnonymousType8.cs" />
+    <Compile Include="--f__AnonymousType9.cs" />
+    <Compile Include="--PropertyChangedEventArgs.cs" />
+    <Compile Include="-PrivateImplementationDetails-.cs" />
+    <Compile Include="About\AboutView.xaml.cs">
+      <DependentUpon>AboutView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="About\AboutViewModel.cs" />
+    <Compile Include="additional_payments.cs" />
+    <Compile Include="alembic_version.cs" />
+    <Compile Include="Annotations\AspChildControlTypeAttribute.cs" />
+    <Compile Include="Annotations\AspDataFieldAttribute.cs" />
+    <Compile Include="Annotations\AspDataFieldsAttribute.cs" />
+    <Compile Include="Annotations\AspMethodPropertyAttribute.cs" />
+    <Compile Include="Annotations\AspMvcActionAttribute.cs" />
+    <Compile Include="Annotations\AspMvcActionSelectorAttribute.cs" />
+    <Compile Include="Annotations\AspMvcAreaAttribute.cs" />
+    <Compile Include="Annotations\AspMvcAreaMasterLocationFormatAttribute.cs" />
+    <Compile Include="Annotations\AspMvcAreaPartialViewLocationFormatAttribute.cs" />
+    <Compile Include="Annotations\AspMvcAreaViewLocationFormatAttribute.cs" />
+    <Compile Include="Annotations\AspMvcControllerAttribute.cs" />
+    <Compile Include="Annotations\AspMvcDisplayTemplateAttribute.cs" />
+    <Compile Include="Annotations\AspMvcEditorTemplateAttribute.cs" />
+    <Compile Include="Annotations\AspMvcMasterAttribute.cs" />
+    <Compile Include="Annotations\AspMvcMasterLocationFormatAttribute.cs" />
+    <Compile Include="Annotations\AspMvcModelTypeAttribute.cs" />
+    <Compile Include="Annotations\AspMvcPartialViewAttribute.cs" />
+    <Compile Include="Annotations\AspMvcPartialViewLocationFormatAttribute.cs" />
+    <Compile Include="Annotations\AspMvcSuppressViewErrorAttribute.cs" />
+    <Compile Include="Annotations\AspMvcTemplateAttribute.cs" />
+    <Compile Include="Annotations\AspMvcViewAttribute.cs" />
+    <Compile Include="Annotations\AspMvcViewComponentAttribute.cs" />
+    <Compile Include="Annotations\AspMvcViewComponentViewAttribute.cs" />
+    <Compile Include="Annotations\AspMvcViewLocationFormatAttribute.cs" />
+    <Compile Include="Annotations\AspRequiredAttributeAttribute.cs" />
+    <Compile Include="Annotations\AspTypePropertyAttribute.cs" />
+    <Compile Include="Annotations\AssertionConditionAttribute.cs" />
+    <Compile Include="Annotations\AssertionConditionType.cs" />
+    <Compile Include="Annotations\AssertionMethodAttribute.cs" />
+    <Compile Include="Annotations\BaseTypeRequiredAttribute.cs" />
+    <Compile Include="Annotations\CanBeNullAttribute.cs" />
+    <Compile Include="Annotations\CannotApplyEqualityOperatorAttribute.cs" />
+    <Compile Include="Annotations\CollectionAccessAttribute.cs" />
+    <Compile Include="Annotations\CollectionAccessType.cs" />
+    <Compile Include="Annotations\ContractAnnotationAttribute.cs" />
+    <Compile Include="Annotations\HtmlAttributeValueAttribute.cs" />
+    <Compile Include="Annotations\HtmlElementAttributesAttribute.cs" />
+    <Compile Include="Annotations\ImplicitNotNullAttribute.cs" />
+    <Compile Include="Annotations\ImplicitUseKindFlags.cs" />
+    <Compile Include="Annotations\ImplicitUseTargetFlags.cs" />
+    <Compile Include="Annotations\InstantHandleAttribute.cs" />
+    <Compile Include="Annotations\InvokerParameterNameAttribute.cs" />
+    <Compile Include="Annotations\ItemCanBeNullAttribute.cs" />
+    <Compile Include="Annotations\ItemNotNullAttribute.cs" />
+    <Compile Include="Annotations\LinqTunnelAttribute.cs" />
+    <Compile Include="Annotations\LocalizationRequiredAttribute.cs" />
+    <Compile Include="Annotations\MacroAttribute.cs" />
+    <Compile Include="Annotations\MeansImplicitUseAttribute.cs" />
+    <Compile Include="Annotations\MustUseReturnValueAttribute.cs" />
+    <Compile Include="Annotations\NoEnumerationAttribute.cs" />
+    <Compile Include="Annotations\NoReorder.cs" />
+    <Compile Include="Annotations\NotifyPropertyChangedInvocatorAttribute.cs" />
+    <Compile Include="Annotations\NotNullAttribute.cs" />
+    <Compile Include="Annotations\PathReferenceAttribute.cs" />
+    <Compile Include="Annotations\ProvidesContextAttribute.cs" />
+    <Compile Include="Annotations\PublicAPIAttribute.cs" />
+    <Compile Include="Annotations\PureAttribute.cs" />
+    <Compile Include="Annotations\RazorDirectiveAttribute.cs" />
+    <Compile Include="Annotations\RazorHelperCommonAttribute.cs" />
+    <Compile Include="Annotations\RazorImportNamespaceAttribute.cs" />
+    <Compile Include="Annotations\RazorInjectionAttribute.cs" />
+    <Compile Include="Annotations\RazorLayoutAttribute.cs" />
+    <Compile Include="Annotations\RazorSectionAttribute.cs" />
+    <Compile Include="Annotations\RazorWriteLiteralMethodAttribute.cs" />
+    <Compile Include="Annotations\RazorWriteMethodAttribute.cs" />
+    <Compile Include="Annotations\RazorWriteMethodParameterAttribute.cs" />
+    <Compile Include="Annotations\RegexPatternAttribute.cs" />
+    <Compile Include="Annotations\SourceTemplateAttribute.cs" />
+    <Compile Include="Annotations\StringFormatMethodAttribute.cs" />
+    <Compile Include="Annotations\TerminatesProgramAttribute.cs" />
+    <Compile Include="Annotations\UsedImplicitlyAttribute.cs" />
+    <Compile Include="Annotations\ValueProviderAttribute.cs" />
+    <Compile Include="Annotations\XamlItemBindingOfItemsControlAttribute.cs" />
+    <Compile Include="Annotations\XamlItemsControlAttribute.cs" />
+    <Compile Include="api_failed_logins.cs" />
+    <Compile Include="api_status_checks.cs" />
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ArticulSearchView.cs" />
+    <Compile Include="ArticulSearch\ArticulSearchViewModel.cs" />
+    <Compile Include="auseceEntities.cs" />
+    <Compile Include="Auth.xaml.cs">
+      <DependentUpon>Auth.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="balance.cs" />
+    <Compile Include="banks.cs" />
+    <Compile Include="BindingProxy.cs" />
+    <Compile Include="Bootstrapper.cs" />
+    <Compile Include="boxes.cs" />
+    <Compile Include="buyout.cs" />
+    <Compile Include="CallsChartView.cs" />
+    <Compile Include="Calls\CallsView.xaml.cs">
+      <DependentUpon>CallsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Calls\CallsViewModel.cs" />
+    <Compile Include="cartridge_cards.cs" />
+    <Compile Include="cash_orders.cs" />
+    <Compile Include="CBRF.cs" />
+    <Compile Include="cdr.cs" />
+    <Compile Include="CgsImageViewer.xaml.cs">
+      <DependentUpon>CgsImageViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Charts\CallConversions\CallConversions.cs" />
+    <Compile Include="Charts\CallConversions\CallConversionsView.xaml.cs">
+      <DependentUpon>CallConversionsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Charts\CallConversions\CallConversionsViewModel.cs" />
+    <Compile Include="Charts\CallsChart\CallsChartViewModel.cs" />
+    <Compile Include="Charts\CommonChartView.xaml.cs">
+      <DependentUpon>CommonChartView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Charts\CommonChartViewModel.cs" />
+    <Compile Include="Charts\Masters\MastersChartView.xaml.cs">
+      <DependentUpon>MastersChartView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Charts\Masters\MastersChartViewModel.cs" />
+    <Compile Include="Charts\PartsChart\PartsChartView.xaml.cs">
+      <DependentUpon>PartsChartView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Charts\RepairStatuses\RepairStatusesView.xaml.cs">
+      <DependentUpon>RepairStatusesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Charts\RepairStatuses\RepairStatusesViewModel.cs" />
+    <Compile Include="Charts\RepairStatuses\StatusesChart.cs" />
+    <Compile Include="Charts\SalesCategoriesChart\SalesCategoriesChartView.xaml.cs">
+      <DependentUpon>SalesCategoriesChartView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Charts\SalesChart\SalesChartView.xaml.cs">
+      <DependentUpon>SalesChartView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Charts\VisitSource\VisitSourceChartPoint.cs" />
+    <Compile Include="Charts\VisitSource\VisitSourceView.xaml.cs">
+      <DependentUpon>VisitSourceView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Charts\VisitSource\VisitSourceViewModel.cs" />
+    <Compile Include="Charts\WithdrawFunds\WithdrawFundsView.xaml.cs">
+      <DependentUpon>WithdrawFundsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Charts\WithdrawFunds\WithdrawFundsViewModel.cs" />
+    <Compile Include="ClientCard\CustomerBalanceView.cs" />
+    <Compile Include="ClientCard\CustomerCallsView.cs" />
+    <Compile Include="ClientCard\CustomerDealerView.cs" />
+    <Compile Include="ClientCard\CustomerEditView.cs" />
+    <Compile Include="ClientCard\CustomerFinancesView.cs" />
+    <Compile Include="ClientCard\CustomerHistoryView.cs" />
+    <Compile Include="ClientCard\CustomerInvoicesView.cs" />
+    <Compile Include="ClientCard\CustomerOverviewView.cs" />
+    <Compile Include="ClientCard\CustomerPurchasesView.cs" />
+    <Compile Include="ClientCard\CustomerRepairsView.cs" />
+    <Compile Include="ClientCard\CustomerSalesView.cs" />
+    <Compile Include="clients.cs" />
+    <Compile Include="ClientsView.cs" />
+    <Compile Include="Clients\ClientsViewModel.cs" />
+    <Compile Include="comments.cs" />
+    <Compile Include="companies.cs" />
+    <Compile Include="config.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="ConvertersStack.cs" />
+    <Compile Include="Converters\AclBooleanConverter.cs" />
+    <Compile Include="Converters\ApiStatusCheckConverters.cs" />
+    <Compile Include="Converters\Bool2ColorConverter.cs" />
+    <Compile Include="Converters\BoolInverterConverter.cs" />
+    <Compile Include="Converters\BoolToDefaultBooleanConverter.cs" />
+    <Compile Include="Converters\BoolVisiblityInverterConverter.cs" />
+    <Compile Include="Converters\BytesToString.cs" />
+    <Compile Include="Converters\ClassicOrNotAndZero2EmptyConverter.cs" />
+    <Compile Include="Converters\ConfigConverter.cs" />
+    <Compile Include="Converters\Content2HtmlConverter.cs" />
+    <Compile Include="Converters\ConverterIntToAbs.cs" />
+    <Compile Include="Converters\custConverter.cs" />
+    <Compile Include="Converters\FieldsBooleanConverter.cs" />
+    <Compile Include="Converters\FieldsVisibilityConverter.cs" />
+    <Compile Include="Converters\FieldValuesConverter.cs" />
+    <Compile Include="Converters\FirstUpperConverter.cs" />
+    <Compile Include="Converters\IEnumerableObjectsToIntsConverter.cs" />
+    <Compile Include="Converters\Image2BitmapImage.cs" />
+    <Compile Include="Converters\Int2ColorConverter.cs" />
+    <Compile Include="Converters\IntReserveState2StringConverter.cs" />
+    <Compile Include="Converters\IntToWarrantyOptionsName.cs" />
+    <Compile Include="Converters\IsEqualOrGreaterThanVisConverter.cs" />
+    <Compile Include="Converters\IsNullConverter.cs" />
+    <Compile Include="Converters\ListConverter.cs" />
+    <Compile Include="Converters\ListInt2ValueConverter.cs" />
+    <Compile Include="Converters\ListString2ValueConverter.cs" />
+    <Compile Include="Converters\LockVisiblityConverter.cs" />
+    <Compile Include="Converters\NumericNegationConverter.cs" />
+    <Compile Include="Converters\PrefixValueConverter.cs" />
+    <Compile Include="Converters\ProductAttributesConverter.cs" />
+    <Compile Include="Converters\ProductsConverter.cs" />
+    <Compile Include="Converters\Progress2Color.cs" />
+    <Compile Include="Converters\RadioBoolToIntConverter.cs" />
+    <Compile Include="Converters\StateToWorkshopOptionsName.cs" />
+    <Compile Include="Converters\StoreTakingStatusToColorConverter.cs" />
+    <Compile Include="Converters\StringDateTimeConverter.cs" />
+    <Compile Include="Converters\StringToLengthConverter.cs" />
+    <Compile Include="Converters\TimeSpanConverter.cs" />
+    <Compile Include="Converters\ToUpperValueConverter.cs" />
+    <Compile Include="Converters\UtcToLocalDateTimeConverter.cs" />
+    <Compile Include="Converters\VisiblityPermissions.cs" />
+    <Compile Include="Converters\ZeroVisibilityConverter.cs" />
+    <Compile Include="Core.cs" />
+    <Compile Include="Currency.2.cs" />
+    <Compile Include="currency.cs" />
+    <Compile Include="c_workshop.cs" />
+    <Compile Include="DAL\ContextFactory.cs" />
+    <Compile Include="DAL\IContextFactory.cs" />
+    <Compile Include="dealer_payments.cs" />
+    <Compile Include="devices.cs" />
+    <Compile Include="device_makers.cs" />
+    <Compile Include="device_models.cs" />
+    <Compile Include="docs.cs" />
+    <Compile Include="DocumentLoss.xaml.cs">
+      <DependentUpon>DocumentLoss.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Documents\DocumentsView.xaml.cs">
+      <DependentUpon>DocumentsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Documents\DocumentsViewModel.cs" />
+    <Compile Include="doc_templates.cs" />
+    <Compile Include="DrvFRLib\DrvFR.cs" />
+    <Compile Include="DrvFRLib\IDrvFR.cs" />
+    <Compile Include="DrvFRLib\IDrvFR10.cs" />
+    <Compile Include="DrvFRLib\IDrvFR11.cs" />
+    <Compile Include="DrvFRLib\IDrvFR12.cs" />
+    <Compile Include="DrvFRLib\IDrvFR13.cs" />
+    <Compile Include="DrvFRLib\IDrvFR14.cs" />
+    <Compile Include="DrvFRLib\IDrvFR2.cs" />
+    <Compile Include="DrvFRLib\IDrvFR3.cs" />
+    <Compile Include="DrvFRLib\IDrvFR4.cs" />
+    <Compile Include="DrvFRLib\IDrvFR44.cs" />
+    <Compile Include="DrvFRLib\IDrvFR45.cs" />
+    <Compile Include="DrvFRLib\IDrvFR46.cs" />
+    <Compile Include="DrvFRLib\IDrvFR47.cs" />
+    <Compile Include="DrvFRLib\IDrvFR48.cs" />
+    <Compile Include="DrvFRLib\IDrvFR6.cs" />
+    <Compile Include="DrvFRLib\IDrvFR7.cs" />
+    <Compile Include="DrvFRLib\IDrvFR8.cs" />
+    <Compile Include="DrvFRLib\IDrvFR9.cs" />
+    <Compile Include="dummy_ptr\{3382b079-b393-4732-a4c6-c0f2f9fdfbbe}.cs" />
+    <Compile Include="EFExtensions\CommitHelper.cs" />
+    <Compile Include="EFExtensions\ProductEx.cs" />
+    <Compile Include="EmailForm\EmailView.xaml.cs">
+      <DependentUpon>EmailView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Exceptions\AsccrmException.cs" />
+    <Compile Include="export_cat_match.cs" />
+    <Compile Include="export_items.cs" />
+    <Compile Include="extensions.cs" />
+    <Compile Include="Extensions\ADPs.cs" />
+    <Compile Include="Extensions\Asterisk\AsteriskRealtime.cs" />
+    <Compile Include="Extensions\BindableSelectedItemBehavior.cs" />
+    <Compile Include="Extensions\BindingHelper.cs" />
+    <Compile Include="Extensions\BoxHeaderDataTemplateSelector.cs" />
+    <Compile Include="Extensions\CloseOnClickBehaviour.cs" />
+    <Compile Include="Extensions\ColorHelper.cs" />
+    <Compile Include="Extensions\ColumnResizeGrip.cs" />
+    <Compile Include="Extensions\ComboBoxEditSmart.cs" />
+    <Compile Include="Extensions\CustomReportDesignerClassicView.cs" />
+    <Compile Include="Extensions\DatePickerCalendar.cs" />
+    <Compile Include="Extensions\DatePickerDateFormat.cs" />
+    <Compile Include="Extensions\DateTimeExtensions.cs" />
+    <Compile Include="Extensions\DiagramOrgChartBehaviorEx.cs" />
+    <Compile Include="Extensions\EFFExt.cs" />
+    <Compile Include="Extensions\EpochtaSms\EpochtaException.cs" />
+    <Compile Include="Extensions\EpochtaSms\EpochtaSmsClient.cs" />
+    <Compile Include="Extensions\FEExten.cs" />
+    <Compile Include="Extensions\GridControlEx.cs" />
+    <Compile Include="Extensions\GridControlMasterBahavior.cs" />
+    <Compile Include="Extensions\GridLayoutHelper.cs" />
+    <Compile Include="Extensions\GridSummaryItemEx.cs" />
+    <Compile Include="Extensions\ImageEditEx.cs" />
+    <Compile Include="Extensions\ImageEditTakePictureButtonEx.cs" />
+    <Compile Include="Extensions\ImageHelpers.cs" />
+    <Compile Include="Extensions\IncludeAllExt.cs" />
+    <Compile Include="Extensions\KKT\AtolKkt.cs" />
+    <Compile Include="Extensions\KKT\KktBase.cs" />
+    <Compile Include="Extensions\LayoutChangedType.cs" />
+    <Compile Include="Extensions\Mango\MangoOffice.cs" />
+    <Compile Include="Extensions\Mango\MangoVPBXClient.cs" />
+    <Compile Include="Extensions\Megafon\Megafon.cs" />
+    <Compile Include="Extensions\Megafon\MegafonApiOptions.cs" />
+    <Compile Include="Extensions\MyEventArgs.cs" />
+    <Compile Include="Extensions\NaturalComparer.cs" />
+    <Compile Include="Extensions\NaturalComparerException.cs" />
+    <Compile Include="Extensions\NaturalComparerOptions.cs" />
+    <Compile Include="Extensions\NoErrorSpinEdit.cs" />
+    <Compile Include="Extensions\ObservableCollectionEx.cs" />
+    <Compile Include="Extensions\ObservableRangeCollection.cs" />
+    <Compile Include="Extensions\OpenCart\Models\Customer.cs" />
+    <Compile Include="Extensions\OpenCart\Models\Order.cs" />
+    <Compile Include="Extensions\OpenCart\Models\OrderStatus.cs" />
+    <Compile Include="Extensions\OpenCart\Models\Product.cs" />
+    <Compile Include="Extensions\OpenCart\Models\Total.cs" />
+    <Compile Include="Extensions\OpenCart\OpenCartStore.cs" />
+    <Compile Include="Extensions\Pinpad\SBRFPinpad.cs" />
+    <Compile Include="Extensions\PropertyChangeNotifier.cs" />
+    <Compile Include="Extensions\Rostelecom\RostelecomApi.cs" />
+    <Compile Include="Extensions\SelectAllOnMouseUpBehavior.cs" />
+    <Compile Include="Extensions\SmsC\ISMSC.cs" />
+    <Compile Include="Extensions\SmsC\SMSC.cs" />
+    <Compile Include="Extensions\SmsC\SMSCClient.cs" />
+    <Compile Include="Extensions\SmsRu\SmsRuClient.cs" />
+    <Compile Include="Extensions\String.cs" />
+    <Compile Include="Extensions\Transliteration.cs" />
+    <Compile Include="Extensions\TransliterationType.cs" />
+    <Compile Include="Extensions\VisualTreeHelperEx.cs" />
+    <Compile Include="Extensions\WorkshopExtensions.cs" />
+    <Compile Include="Extensions\Zadarma\ZadarmaApi.cs" />
+    <Compile Include="fields.cs" />
+    <Compile Include="field_values.cs" />
+    <Compile Include="GClass0.cs" />
+    <Compile Include="Generators.cs" />
+    <Compile Include="HistoryV2.cs" />
+    <Compile Include="hooks.cs" />
+    <Compile Include="iaxfriends.cs" />
+    <Compile Include="IdNamePair.cs" />
+    <Compile Include="IHistoryV2.cs" />
+    <Compile Include="images.cs" />
+    <Compile Include="InItems.cs" />
+    <Compile Include="Input\KeyPressedArgs.cs" />
+    <Compile Include="Input\LowLevelKeyboardListener.cs" />
+    <Compile Include="Interfaces\IAcpModuleSettings.cs" />
+    <Compile Include="Interfaces\ICashOrderSelect.cs" />
+    <Compile Include="Interfaces\ICashOrderService.cs" />
+    <Compile Include="Interfaces\ICustomerSearchViewModel.cs" />
+    <Compile Include="Interfaces\ICustomerSelect.cs" />
+    <Compile Include="Interfaces\ICustomerService.cs" />
+    <Compile Include="Interfaces\ICVMActions.cs" />
+    <Compile Include="Interfaces\IDocumentSelect.cs" />
+    <Compile Include="Interfaces\IEmployeeService.cs" />
+    <Compile Include="Interfaces\IExport.cs" />
+    <Compile Include="Interfaces\IGoodsInvoiceReport.cs" />
+    <Compile Include="Interfaces\IImagesEdit.cs" />
+    <Compile Include="Interfaces\IImageService.cs" />
+    <Compile Include="Interfaces\IInternalReserveModel.cs" />
+    <Compile Include="Interfaces\IInvoiceItemAdd.cs" />
+    <Compile Include="Interfaces\IInvoiceSelect.cs" />
+    <Compile Include="Interfaces\IIsDataLoading.cs" />
+    <Compile Include="Interfaces\IItemsSelect.cs" />
+    <Compile Include="Interfaces\IKktCheque.cs" />
+    <Compile Include="Interfaces\IKoViewModel.cs" />
+    <Compile Include="Interfaces\IMyItemSelect.cs" />
+    <Compile Include="Interfaces\IOfficesViewModel.cs" />
+    <Compile Include="Interfaces\IOptions.cs" />
+    <Compile Include="Interfaces\IOrderService.cs" />
+    <Compile Include="Interfaces\IPaymentSystemService.cs" />
+    <Compile Include="Interfaces\IPinpad.cs" />
+    <Compile Include="Interfaces\IPinpadResult.cs" />
+    <Compile Include="Interfaces\IPopupViewModel.cs" />
+    <Compile Include="Interfaces\IRefreshable.cs" />
+    <Compile Include="Interfaces\IRepairModel.cs" />
+    <Compile Include="Interfaces\IRepairSelect.cs" />
+    <Compile Include="Interfaces\IReturnOnSelect.cs" />
+    <Compile Include="Interfaces\ISmsClient.cs" />
+    <Compile Include="Interfaces\ISmsService.cs" />
+    <Compile Include="Interfaces\ISoundService.cs" />
+    <Compile Include="Interfaces\IStatusViewModel.cs" />
+    <Compile Include="Interfaces\ISticker.cs" />
+    <Compile Include="Interfaces\IStoreService.cs" />
+    <Compile Include="Interfaces\IViewName.cs" />
+    <Compile Include="Interfaces\IWorkshopService.cs" />
+    <Compile Include="Interfaces\IWorksSelect.cs" />
+    <Compile Include="invoice.cs" />
+    <Compile Include="Invoice\IInvoiceFactory.cs" />
+    <Compile Include="Invoice\IInvoiceStrategy.cs" />
+    <Compile Include="Invoice\InvoiceBaseViewModel.cs" />
+    <Compile Include="Invoice\InvoiceFactory.cs" />
+    <Compile Include="Invoice\InvoiceStrategy.cs" />
+    <Compile Include="Invoice\InvoiceView.xaml.cs">
+      <DependentUpon>InvoiceView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Invoice\InvoiceViewModel.cs" />
+    <Compile Include="Invoice\NewInvoiceView.xaml.cs">
+      <DependentUpon>NewInvoiceView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Invoice\NewInvoiceViewModel.cs" />
+    <Compile Include="Invoice\NewVATInvoiceView.xaml.cs">
+      <DependentUpon>NewVATInvoiceView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Invoice\NewVATInvoiceViewModel.cs" />
+    <Compile Include="Invoice\PackingListFactory.cs" />
+    <Compile Include="Invoice\PackingListView.xaml.cs">
+      <DependentUpon>PackingListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Invoice\PackingListViewModel.cs" />
+    <Compile Include="Invoice\VATInvoiceFactory.cs" />
+    <Compile Include="Invoice\WorksListFactory.cs" />
+    <Compile Include="Invoice\WorksListView.xaml.cs">
+      <DependentUpon>WorksListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Invoice\WorksListViewModel.cs" />
+    <Compile Include="invoice_items.cs" />
+    <Compile Include="in_sms.cs" />
+    <Compile Include="ItemsArrival\ItemsArrivalModel.cs" />
+    <Compile Include="ItemsArrival\ItemsArrivalViewModel.cs" />
+    <Compile Include="ItemsBuyout\ItemsBuyoutView.xaml.cs">
+      <DependentUpon>ItemsBuyoutView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ItemsCancellation\ItemsCancellationView.xaml.cs">
+      <DependentUpon>ItemsCancellationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ItemsCancellation\ItemsCancellationViewModel.cs" />
+    <Compile Include="ItemsExport\Core\ExportBase.cs" />
+    <Compile Include="ItemsExport\Core\ExportFormat.cs" />
+    <Compile Include="ItemsExport\ExportItemsModel.cs" />
+    <Compile Include="ItemsExport\ExportItemsViewModel.cs" />
+    <Compile Include="ItemsExport\ExportJSON.cs" />
+    <Compile Include="ItemsExport\ExportXML.cs" />
+    <Compile Include="ItemsExport\ItemsExportView.xaml.cs">
+      <DependentUpon>ItemsExportView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ItemsExport\Models\Attribute.cs" />
+    <Compile Include="ItemsExport\Models\ExportProducts.cs" />
+    <Compile Include="ItemsExport\Models\Product.cs" />
+    <Compile Include="ItemsSale\ItemsSaleModel.cs" />
+    <Compile Include="ItemsSale\ItemsSaleView.xaml.cs">
+      <DependentUpon>ItemsSaleView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ItemsSale\ItemsSaleViewModel.cs" />
+    <Compile Include="items_state.cs" />
+    <Compile Include="Kassa\KassaBalanceView.xaml.cs">
+      <DependentUpon>KassaBalanceView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Kassa\KassaSaldoView.xaml.cs">
+      <DependentUpon>KassaSaldoView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Kassa\KassaView.xaml.cs">
+      <DependentUpon>KassaView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Kassa\KassaViewModel.cs" />
+    <Compile Include="kkt.cs" />
+    <Compile Include="kkt_employee.cs" />
+    <Compile Include="Lang.cs" />
+    <Compile Include="Localization.cs" />
+    <Compile Include="logs.cs" />
+    <Compile Include="ManagerChangeView.cs" />
+    <Compile Include="materials.cs" />
+    <Compile Include="media_info.cs" />
+    <Compile Include="meetme.cs" />
+    <Compile Include="Messages\OpenCompanyEditMessage.cs" />
+    <Compile Include="Messages\OpenOfficeCreateMessage.cs" />
+    <Compile Include="Messages\OpenOfficeEditMessage.cs" />
+    <Compile Include="Models\AuthModel.cs" />
+    <Compile Include="Models\BackupModel.cs" />
+    <Compile Include="Models\Barcode.cs" />
+    <Compile Include="Models\Boxes.cs" />
+    <Compile Include="Models\BoxesModel.cs" />
+    <Compile Include="Models\ChartModel.cs" />
+    <Compile Include="Models\ClientsModel.cs" />
+    <Compile Include="Models\CompaniesModel.cs" />
+    <Compile Include="Models\ConfigModel.cs" />
+    <Compile Include="Models\CustomizeModel.cs" />
+    <Compile Include="Models\DealerModel.cs" />
+    <Compile Include="Models\DeployDatabaseModel.cs" />
+    <Compile Include="Models\DocumentLossModel.cs" />
+    <Compile Include="Models\DocumentsModel.cs" />
+    <Compile Include="Models\GenericModel.cs" />
+    <Compile Include="Models\GenericRepository.cs" />
+    <Compile Include="Models\IKassa.cs" />
+    <Compile Include="Models\InternalReserveModel.cs" />
+    <Compile Include="Models\InvoiceModel.cs" />
+    <Compile Include="Models\ItemsModel.cs" />
+    <Compile Include="Models\KassaModel.cs" />
+    <Compile Include="Models\LockCardModel.cs" />
+    <Compile Include="Models\MediaModel.cs" />
+    <Compile Include="Models\OfficesModel.cs" />
+    <Compile Include="Models\PreviousRepair.cs" />
+    <Compile Include="Models\PrinterModel.cs" />
+    <Compile Include="Models\Realizator.cs" />
+    <Compile Include="Models\RealizatorStat.cs" />
+    <Compile Include="Models\RepairDeviceInfo.cs" />
+    <Compile Include="Models\RepairMassEditModel.cs" />
+    <Compile Include="Models\RepairModel.cs" />
+    <Compile Include="Models\RepairPaymentInfo.cs" />
+    <Compile Include="Models\RepairStatusLogModel.cs" />
+    <Compile Include="Models\ReportPrintModel.cs" />
+    <Compile Include="Models\SalesInfo2.cs" />
+    <Compile Include="Models\SalesReportDto.cs" />
+    <Compile Include="Models\ShtrihM.cs" />
+    <Compile Include="Models\SiteOrderTask.cs" />
+    <Compile Include="Models\SmsModel.cs" />
+    <Compile Include="Models\StatusCheckModel.cs" />
+    <Compile Include="Models\StickersModel.cs" />
+    <Compile Include="Models\StoreModel.cs" />
+    <Compile Include="Models\UserRepairStatusLogsModel.cs" />
+    <Compile Include="Models\UsersModel.cs" />
+    <Compile Include="Models\VoipModel.cs" />
+    <Compile Include="musiconhold.cs" />
+    <Compile Include="NewRepairView.cs" />
+    <Compile Include="NewRepair\NewRepairViewModel.cs" />
+    <Compile Include="notifications.cs" />
+    <Compile Include="Objects\Activity.cs" />
+    <Compile Include="Objects\AdditionalPayment.cs" />
+    <Compile Include="Objects\AscCDR.cs" />
+    <Compile Include="Objects\AscConfig.cs" />
+    <Compile Include="Objects\AscImage.cs" />
+    <Compile Include="Objects\AscNotification.cs" />
+    <Compile Include="Objects\AscSms.cs" />
+    <Compile Include="Objects\AscTask.cs" />
+    <Compile Include="Objects\Box.cs" />
+    <Compile Include="Objects\Cartridge.cs" />
+    <Compile Include="Objects\CartridgeCard.cs" />
+    <Compile Include="Objects\CartridgeColors.cs" />
+    <Compile Include="Objects\CartridgeEx.cs" />
+    <Compile Include="Objects\CartridgeIssueReport.cs" />
+    <Compile Include="Objects\CartridgeReport.cs" />
+    <Compile Include="Objects\CashInOrder.cs" />
+    <Compile Include="Objects\CashOrder.cs" />
+    <Compile Include="Objects\CashOutOrder.cs" />
+    <Compile Include="Objects\Category.cs" />
+    <Compile Include="Objects\ChartData.cs" />
+    <Compile Include="Objects\Company.cs" />
+    <Compile Include="Objects\Converters\AdditionalPaymentConverters.cs" />
+    <Compile Include="Objects\Converters\ArticulConverters.cs" />
+    <Compile Include="Objects\Converters\AttributeConverters.cs" />
+    <Compile Include="Objects\Converters\BoxesToIBoxConverter.cs" />
+    <Compile Include="Objects\Converters\CartridgeCardConverter.cs" />
+    <Compile Include="Objects\Converters\CartridgeConverters.cs" />
+    <Compile Include="Objects\Converters\CashOrderConverters.cs" />
+    <Compile Include="Objects\Converters\CategoryConverters.cs" />
+    <Compile Include="Objects\Converters\CdrMapper.cs" />
+    <Compile Include="Objects\Converters\CompanyConverters.cs" />
+    <Compile Include="Objects\Converters\CustomerConverter.cs" />
+    <Compile Include="Objects\Converters\DeviceMapper.cs" />
+    <Compile Include="Objects\Converters\DeviceModelMapper.cs" />
+    <Compile Include="Objects\Converters\EmployeeConverter.cs" />
+    <Compile Include="Objects\Converters\GoodsConverters.cs" />
+    <Compile Include="Objects\Converters\ImagesMapper.cs" />
+    <Compile Include="Objects\Converters\InvoiceItemsMapper.cs" />
+    <Compile Include="Objects\Converters\InvoiceMapper.cs" />
+    <Compile Include="Objects\Converters\ManufacturerMapper.cs" />
+    <Compile Include="Objects\Converters\NotificationConverters.cs" />
+    <Compile Include="Objects\Converters\OfficeConverters.cs" />
+    <Compile Include="Objects\Converters\PackingListItemsMapper.cs" />
+    <Compile Include="Objects\Converters\PackingListMapper.cs" />
+    <Compile Include="Objects\Converters\PaymentDetailsMapper.cs" />
+    <Compile Include="Objects\Converters\RealizationItemConverters.cs" />
+    <Compile Include="Objects\Converters\SaleItemConverters.cs" />
+    <Compile Include="Objects\Converters\SmsConverters.cs" />
+    <Compile Include="Objects\Converters\StatisticsPbxMapper.cs" />
+    <Compile Include="Objects\Converters\StoreDocumentConverters.cs" />
+    <Compile Include="Objects\Converters\StoreItemMapper.cs" />
+    <Compile Include="Objects\Converters\StoreItemsToGoodsConverter.cs" />
+    <Compile Include="Objects\Converters\TaskConverters.cs" />
+    <Compile Include="Objects\Converters\TelConverters.cs" />
+    <Compile Include="Objects\Converters\UserActivityConverter.cs" />
+    <Compile Include="Objects\Converters\VATInvoiceMapper.cs" />
+    <Compile Include="Objects\Converters\WorkshopToRepairCardConverter.cs" />
+    <Compile Include="Objects\Converters\WorksListMapper.cs" />
+    <Compile Include="Objects\Customer.cs" />
+    <Compile Include="Objects\CustomerCard.cs" />
+    <Compile Include="Objects\Customers\BuyerOfGoodsCard.cs" />
+    <Compile Include="Objects\Device.cs" />
+    <Compile Include="Objects\Employee.cs" />
+    <Compile Include="Objects\EmployeeActivityReport.cs" />
+    <Compile Include="Objects\EmployeeRepairsReport.cs" />
+    <Compile Include="Objects\EmployyeActivity.cs" />
+    <Compile Include="Objects\FinancesFlowReportGroup.cs" />
+    <Compile Include="Objects\FinancesFlowReportItem.cs" />
+    <Compile Include="Objects\Goods.cs" />
+    <Compile Include="Objects\Holiday.cs" />
+    <Compile Include="Objects\Hook.cs" />
+    <Compile Include="Objects\ImageLite.cs" />
+    <Compile Include="Objects\Invoice.cs" />
+    <Compile Include="Objects\InvoiceBase.cs" />
+    <Compile Include="Objects\InvoiceEmail.cs" />
+    <Compile Include="Objects\InvoiceItem.cs" />
+    <Compile Include="Objects\ItemOperation.cs" />
+    <Compile Include="Objects\ItemsDocument.cs" />
+    <Compile Include="Objects\Manufacturer.cs" />
+    <Compile Include="Objects\Material.cs" />
+    <Compile Include="Objects\Office.cs" />
+    <Compile Include="Objects\OfflineData.cs" />
+    <Compile Include="Objects\PackingList.cs" />
+    <Compile Include="Objects\PaymentDetails.cs" />
+    <Compile Include="Objects\Pinpad.cs" />
+    <Compile Include="Objects\PinpadResult.cs" />
+    <Compile Include="Objects\PrepaidType.cs" />
+    <Compile Include="Objects\Product.cs" />
+    <Compile Include="Objects\RealizationItem.cs" />
+    <Compile Include="Objects\RepairCard.cs" />
+    <Compile Include="Objects\RepairCardForReport.cs" />
+    <Compile Include="Objects\RepairCardLayoutVisibility.cs" />
+    <Compile Include="Objects\Reports\BuyoutReport.cs" />
+    <Compile Include="Objects\Reports\CashOrderReport.cs" />
+    <Compile Include="Objects\Reports\GoodsInvoiceReport.cs" />
+    <Compile Include="Objects\Reports\GoodsMoveDocument.cs" />
+    <Compile Include="Objects\Reports\GoodsMoveReport.cs" />
+    <Compile Include="Objects\Reports\GoodsStickerReport.cs" />
+    <Compile Include="Objects\Reports\IGoodsMoveDocument.cs" />
+    <Compile Include="Objects\Reports\RepairLostDocReport.cs" />
+    <Compile Include="Objects\Reports\RepairReport.cs" />
+    <Compile Include="Objects\Result.2.cs" />
+    <Compile Include="Objects\Result.cs" />
+    <Compile Include="Objects\SaleDocument.cs" />
+    <Compile Include="Objects\SaleItem.cs" />
+    <Compile Include="Objects\SellerPaymentDetails.cs" />
+    <Compile Include="Objects\SlipReport.cs" />
+    <Compile Include="Objects\StoreBox.cs" />
+    <Compile Include="Objects\StoreCategory.cs" />
+    <Compile Include="Objects\StoreDocument.cs" />
+    <Compile Include="Objects\StoreGroup.cs" />
+    <Compile Include="Objects\TimeOfWork.cs" />
+    <Compile Include="Objects\Toner.cs" />
+    <Compile Include="Objects\UiSettings.cs" />
+    <Compile Include="Objects\UsersActivity.cs" />
+    <Compile Include="Objects\VATInvoice.cs" />
+    <Compile Include="Objects\WorkDay.cs" />
+    <Compile Include="Objects\WorkPartObject.cs" />
+    <Compile Include="Objects\WorkshopBox.cs" />
+    <Compile Include="Objects\WorksList.cs" />
+    <Compile Include="OfficeChangeView.cs" />
+    <Compile Include="offices.cs" />
+    <Compile Include="Options\CallsOptions.cs" />
+    <Compile Include="Options\CameraOptions.cs" />
+    <Compile Include="Options\CancellationOptions.cs" />
+    <Compile Include="Options\ClientInformOptions.cs" />
+    <Compile Include="Options\DocumentOptions.cs" />
+    <Compile Include="Options\DocumentReasonOptions.cs" />
+    <Compile Include="Options\ExportOptions.cs" />
+    <Compile Include="Options\ImportOptions.cs" />
+    <Compile Include="Options\InvoiceOptions.cs" />
+    <Compile Include="Options\ItemsOptions.cs" />
+    <Compile Include="Options\KkmProtocolOptions.cs" />
+    <Compile Include="Options\MoneyMove.cs" />
+    <Compile Include="Options\OrderOptions.cs" />
+    <Compile Include="Options\PaymentOptions.cs" />
+    <Compile Include="Options\PhoneOptions.cs" />
+    <Compile Include="Options\PriceOptions.cs" />
+    <Compile Include="Options\StockTakingOptions.cs" />
+    <Compile Include="Options\WarrantyOptions.cs" />
+    <Compile Include="Options\WorkshopOptions.cs" />
+    <Compile Include="order_items.cs" />
+    <Compile Include="out_sms.cs" />
+    <Compile Include="PanAndZoomViewer.cs" />
+    <Compile Include="PartsRequest\PartsRequestModel.cs" />
+    <Compile Include="PartsRequest\PartsRequestView.xaml.cs">
+      <DependentUpon>PartsRequestView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PartsRequest\PartsRequestViewModel.cs" />
+    <Compile Include="parts_request.cs" />
+    <Compile Include="parts_request_employees.cs" />
+    <Compile Include="payment_systems.cs" />
+    <Compile Include="payment_types.cs" />
+    <Compile Include="payment_type_users.cs" />
+    <Compile Include="PB.cs" />
+    <Compile Include="Period.cs" />
+    <Compile Include="permissions.cs" />
+    <Compile Include="permissions_roles.cs" />
+    <Compile Include="Persistence\Repositories\PackingListRepository.cs" />
+    <Compile Include="Persistence\Repositories\PaymentDetailRepository.cs" />
+    <Compile Include="Persistence\Repositories\VATInvoiceRepository.cs" />
+    <Compile Include="Persistence\Repositories\WokrsListRepository.cs" />
+    <Compile Include="Persistence\UoW.cs" />
+    <Compile Include="PhotoView.cs" />
+    <Compile Include="pinpad.cs" />
+    <Compile Include="pinpad_logs.cs" />
+    <Compile Include="PKO\PkoView.xaml.cs">
+      <DependentUpon>PkoView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PKO\PkoViewModel.cs" />
+    <Compile Include="Player\PlayerView.xaml.cs">
+      <DependentUpon>PlayerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Player\PlayerViewModel.cs" />
+    <Compile Include="Player\VlcControl.cs" />
+    <Compile Include="Player\VlcLibDirectoryNeededEventArgs.cs" />
+    <Compile Include="Poly\Reflection.cs" />
+    <Compile Include="PriceEditor\PriceEditorView.xaml.cs">
+      <DependentUpon>PriceEditorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PriceEditor\PriceEditorViewModel.cs" />
+    <Compile Include="PriceItemView.cs" />
+    <Compile Include="PriceWorksView.cs" />
+    <Compile Include="PriceWorks\ItemEditor\PriceItemViewModel.cs" />
+    <Compile Include="PriceWorks\PriceWorksViewModel.cs" />
+    <Compile Include="ProcessedByFody.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <DependentUpon>Settings.settings</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="ps_aors.cs" />
+    <Compile Include="ps_auths.cs" />
+    <Compile Include="ps_domain_aliases.cs" />
+    <Compile Include="ps_endpoints.cs" />
+    <Compile Include="ps_endpoint_id_ips.cs" />
+    <Compile Include="ps_globals.cs" />
+    <Compile Include="ps_registrations.cs" />
+    <Compile Include="ps_subscription_persistence.cs" />
+    <Compile Include="ps_systems.cs" />
+    <Compile Include="ps_transports.cs" />
+    <Compile Include="p_lists.cs" />
+    <Compile Include="queues.cs" />
+    <Compile Include="queue_members.cs" />
+    <Compile Include="queue_rules.cs" />
+    <Compile Include="RealizatorPay\PayModel.cs" />
+    <Compile Include="RealizatorPay\PayViewModel.cs" />
+    <Compile Include="RealizatorPay\RealizatorPayView.xaml.cs">
+      <DependentUpon>RealizatorPayView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RelayCommand.cs" />
+    <Compile Include="RepairCard\Admin\AdminView.xaml.cs">
+      <DependentUpon>AdminView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RepairCard\Admin\AdminViewModel.cs" />
+    <Compile Include="RepairCard\Admin\OrderCancellationView.xaml.cs">
+      <DependentUpon>OrderCancellationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RepairCard\Admin\OrderCancellationViewModel.cs" />
+    <Compile Include="RepairCard\Comments\Comments.xaml.cs">
+      <DependentUpon>Comments.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RepairCard\Comments\CommentsViewModel.cs" />
+    <Compile Include="RepairCard\Header\HeaderView.xaml.cs">
+      <DependentUpon>HeaderView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RepairCard\Header\HeaderViewModel.cs" />
+    <Compile Include="RepairCard\History\RepairHistoryView.xaml.cs">
+      <DependentUpon>RepairHistoryView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RepairCard\History\RepairHistoryViewModel.cs" />
+    <Compile Include="RepairCard\ICard.cs" />
+    <Compile Include="RepairCard\Media\ImageContainer.cs" />
+    <Compile Include="RepairCard\Media\MediaView.xaml.cs">
+      <DependentUpon>MediaView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RepairCard\Media\MediaViewModel.cs" />
+    <Compile Include="RepairCard\PermissionsController.cs" />
+    <Compile Include="RepairCard\RepairCardCommonView.cs" />
+    <Compile Include="RepairCard\RepairCardView.xaml.cs">
+      <DependentUpon>RepairCardView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RepairCard\RepairCardViewModel.cs" />
+    <Compile Include="RepairCard\StatusViewModel.cs" />
+    <Compile Include="RepairCard\WorksAndParts\WpView.xaml.cs">
+      <DependentUpon>WpView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RepairCard\WorksAndParts\WpViewModel.cs" />
+    <Compile Include="RepairsChart\RepairsChartView.cs" />
+    <Compile Include="RepairsChart\RepairsChartViewModel.cs" />
+    <Compile Include="repair_status_logs.cs" />
+    <Compile Include="RequestsManager\RequestCardView.xaml.cs">
+      <DependentUpon>RequestCardView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RequestsManager\RequestCardViewModel.cs" />
+    <Compile Include="RequestsManager\RequestsManagerView.xaml.cs">
+      <DependentUpon>RequestsManagerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RequestsManager\RequestsManagerViewModel.cs" />
+    <Compile Include="RKO\RkoView.xaml.cs">
+      <DependentUpon>RkoView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RKO\RkoViewModel.cs" />
+    <Compile Include="roles.cs" />
+    <Compile Include="roles_users.cs" />
+    <Compile Include="salary.cs" />
+    <Compile Include="SalaryRate.cs" />
+    <Compile Include="Salary\SalaryModel.cs" />
+    <Compile Include="Salary\SalaryView.xaml.cs">
+      <DependentUpon>SalaryView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Salary\SalaryViewModel.cs" />
+    <Compile Include="schemaversions.cs" />
+    <Compile Include="SeedData.cs" />
+    <Compile Include="ServerInfo.cs" />
+    <Compile Include="Services\Abstract\IAdditionalFieldsService.cs" />
+    <Compile Include="Services\Abstract\IAdditionalPaymentsService.cs" />
+    <Compile Include="Services\Abstract\IAscMessageBoxService.cs" />
+    <Compile Include="Services\Abstract\IAuthService.cs" />
+    <Compile Include="Services\Abstract\IBuyoutService.cs" />
+    <Compile Include="Services\Abstract\ICallService.cs" />
+    <Compile Include="Services\Abstract\ICartridgeCardService.cs" />
+    <Compile Include="Services\Abstract\ICartridgeService.cs" />
+    <Compile Include="Services\Abstract\IDeviceModelService.cs" />
+    <Compile Include="Services\Abstract\IIntCommentsService.cs" />
+    <Compile Include="Services\Abstract\IInvoiceService.cs" />
+    <Compile Include="Services\Abstract\ILicenseService.cs" />
+    <Compile Include="Services\Abstract\ILoggerService.cs" />
+    <Compile Include="Services\Abstract\IMasterAutoAssignService.cs" />
+    <Compile Include="Services\Abstract\INavigationReportsService.cs" />
+    <Compile Include="Services\Abstract\INavigationService.cs" />
+    <Compile Include="Services\Abstract\INotificationService.cs" />
+    <Compile Include="Services\Abstract\IOfficeService.cs" />
+    <Compile Include="Services\Abstract\IPartsRequestService.cs" />
+    <Compile Include="Services\Abstract\IPriceEditorService.cs" />
+    <Compile Include="Services\Abstract\IPriceListService.cs" />
+    <Compile Include="Services\Abstract\IProductService.cs" />
+    <Compile Include="Services\Abstract\IRepairReportEmailService.cs" />
+    <Compile Include="Services\Abstract\IRepairStatusLogsService.cs" />
+    <Compile Include="Services\Abstract\IReportPrintService.cs" />
+    <Compile Include="Services\Abstract\IReportsService.cs" />
+    <Compile Include="Services\Abstract\IRolesService.cs" />
+    <Compile Include="Services\Abstract\ISettingsService.cs" />
+    <Compile Include="Services\Abstract\ITaskService.cs" />
+    <Compile Include="Services\Abstract\ITelService.cs" />
+    <Compile Include="Services\Abstract\IToasterService.cs" />
+    <Compile Include="Services\Abstract\IUserActivityService.cs" />
+    <Compile Include="Services\Abstract\IWaitIndicatorService.cs" />
+    <Compile Include="Services\Abstract\IWindowedDocumentService.cs" />
+    <Compile Include="Services\Abstract\IWorkshopHistoryService.cs" />
+    <Compile Include="Services\Abstract\IWorkshopPartService.cs" />
+    <Compile Include="Services\Abstract\IWorkshopStatusService.cs" />
+    <Compile Include="Services\Abstract\IWorkshopWorkService.cs" />
+    <Compile Include="Services\BoxService.cs" />
+    <Compile Include="Services\CashOrderService.cs" />
+    <Compile Include="Services\CompanyService.cs" />
+    <Compile Include="Services\Concrete\AdditionalFieldsService.cs" />
+    <Compile Include="Services\Concrete\AdditionalPaymentsService.cs" />
+    <Compile Include="Services\Concrete\AscMessageBoxService.cs" />
+    <Compile Include="Services\Concrete\AuthService.cs" />
+    <Compile Include="Services\Concrete\BuyoutService.cs" />
+    <Compile Include="Services\Concrete\CallService.cs" />
+    <Compile Include="Services\Concrete\CartridgeCardService.cs" />
+    <Compile Include="Services\Concrete\CartridgeService.cs" />
+    <Compile Include="Services\Concrete\DeviceModelService.cs" />
+    <Compile Include="Services\Concrete\IntCommentsService.cs" />
+    <Compile Include="Services\Concrete\InvoiceService.cs" />
+    <Compile Include="Services\Concrete\LicenseService.cs" />
+    <Compile Include="Services\Concrete\LoggerService.cs" />
+    <Compile Include="Services\Concrete\MasterAutoAssignService.cs" />
+    <Compile Include="Services\Concrete\NavigationService.cs" />
+    <Compile Include="Services\Concrete\NotificationService.cs" />
+    <Compile Include="Services\Concrete\OfficeService.cs" />
+    <Compile Include="Services\Concrete\PartsRequestService.cs" />
+    <Compile Include="Services\Concrete\PriceEditorService.cs" />
+    <Compile Include="Services\Concrete\PriceListService.cs" />
+    <Compile Include="Services\Concrete\ProductService.cs" />
+    <Compile Include="Services\Concrete\RepairReportEmailService.cs" />
+    <Compile Include="Services\Concrete\RepairStatusLogsService.cs" />
+    <Compile Include="Services\Concrete\ReportPrintService.cs" />
+    <Compile Include="Services\Concrete\ReportsService.cs" />
+    <Compile Include="Services\Concrete\RolesService.cs" />
+    <Compile Include="Services\Concrete\SettingsService.cs" />
+    <Compile Include="Services\Concrete\TaskService.cs" />
+    <Compile Include="Services\Concrete\TelService.cs" />
+    <Compile Include="Services\Concrete\ToasterService.cs" />
+    <Compile Include="Services\Concrete\ToastNotificationViewModel.cs" />
+    <Compile Include="Services\Concrete\UserActivityService.cs" />
+    <Compile Include="Services\Concrete\WaitIndicatorService.cs" />
+    <Compile Include="Services\Concrete\WindowedDocumentService.cs" />
+    <Compile Include="Services\Concrete\WorkshopHistoryService.cs" />
+    <Compile Include="Services\Concrete\WorkshopPartService.cs" />
+    <Compile Include="Services\Concrete\WorkshopStatusService.cs" />
+    <Compile Include="Services\Concrete\WorkshopWorkService.cs" />
+    <Compile Include="Services\CustomerService.cs" />
+    <Compile Include="Services\EmployeeService.cs" />
+    <Compile Include="Services\HookService.cs" />
+    <Compile Include="Services\IBoxService.cs" />
+    <Compile Include="Services\ICompanyService.cs" />
+    <Compile Include="Services\IHookService.cs" />
+    <Compile Include="Services\IKassaService.cs" />
+    <Compile Include="Services\ImageService.cs" />
+    <Compile Include="Services\IReportTemplateService.cs" />
+    <Compile Include="Services\IVendorService.cs" />
+    <Compile Include="Services\IWorkshopPriceService.cs" />
+    <Compile Include="Services\KassaService.cs" />
+    <Compile Include="Services\OrderService.cs" />
+    <Compile Include="Services\PaymentSystemService.cs" />
+    <Compile Include="Services\ReportTemplateService.cs" />
+    <Compile Include="Services\SmsService.cs" />
+    <Compile Include="Services\SoundService.cs" />
+    <Compile Include="Services\StoreService.cs" />
+    <Compile Include="Services\VendorService.cs" />
+    <Compile Include="Services\WorkshopPriceService.cs" />
+    <Compile Include="Services\WorkshopService.cs" />
+    <Compile Include="settings.cs" />
+    <Compile Include="SettingsView.cs" />
+    <Compile Include="SimpleClasses\ArticulSearchLite.cs" />
+    <Compile Include="SimpleClasses\AsteriskConfigCategory.cs" />
+    <Compile Include="SimpleClasses\AudioFileUploadResponse.cs" />
+    <Compile Include="SimpleClasses\CashOrdersLite.cs" />
+    <Compile Include="SimpleClasses\CategoryExpand.cs" />
+    <Compile Include="SimpleClasses\ClientAndDevices.cs" />
+    <Compile Include="SimpleClasses\ClientIdPhones.cs" />
+    <Compile Include="SimpleClasses\ClientTypes.cs" />
+    <Compile Include="SimpleClasses\DocsList.cs" />
+    <Compile Include="SimpleClasses\DocumentTemplateInfo.cs" />
+    <Compile Include="SimpleClasses\Email.cs" />
+    <Compile Include="SimpleClasses\ExtensionActions.cs" />
+    <Compile Include="SimpleClasses\ExtenVisObj.cs" />
+    <Compile Include="SimpleClasses\Fn.cs" />
+    <Compile Include="SimpleClasses\IdNameClass.cs" />
+    <Compile Include="SimpleClasses\LicenseVerify.cs" />
+    <Compile Include="SimpleClasses\PbUaRate.cs" />
+    <Compile Include="SimpleClasses\PhotoGroup.cs" />
+    <Compile Include="SimpleClasses\PhotoGroupSource.cs" />
+    <Compile Include="SimpleClasses\PhotoInfo.cs" />
+    <Compile Include="SimpleClasses\PhotoSource.cs" />
+    <Compile Include="SimpleClasses\PriceColumns.cs" />
+    <Compile Include="SimpleClasses\PrintOptions.cs" />
+    <Compile Include="SimpleClasses\QueueDiagram.cs" />
+    <Compile Include="SimpleClasses\RemoteValidation.cs" />
+    <Compile Include="SimpleClasses\RepairFieldsVisibility.cs" />
+    <Compile Include="SimpleClasses\RepairsStat.cs" />
+    <Compile Include="SimpleClasses\SalesInfo.cs" />
+    <Compile Include="SimpleClasses\SalesPerformance.cs" />
+    <Compile Include="SimpleClasses\Sms.cs" />
+    <Compile Include="SimpleClasses\SmsClientConfig.cs" />
+    <Compile Include="SimpleClasses\StatusActions.cs" />
+    <Compile Include="SimpleClasses\Statuses.cs" />
+    <Compile Include="SimpleClasses\StoreIntReserveLite.cs" />
+    <Compile Include="SimpleClasses\Tel.cs" />
+    <Compile Include="SimpleClasses\UserMaster.cs" />
+    <Compile Include="SimpleClasses\UserSalaryReport.cs" />
+    <Compile Include="SimpleClasses\ValidationResult.cs" />
+    <Compile Include="SimpleClasses\VisitTriggers.cs" />
+    <Compile Include="SimpleClasses\WorkDays.cs" />
+    <Compile Include="SimpleClasses\WorkshopLite.cs" />
+    <Compile Include="sippeers.cs" />
+    <Compile Include="sipusers.cs" />
+    <Compile Include="Sms\SmsSendView.xaml.cs">
+      <DependentUpon>SmsSendView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="sms_templates.cs" />
+    <Compile Include="StickersView.cs" />
+    <Compile Include="Stickers\StickersViewModel.cs" />
+    <Compile Include="Stocktaking\StocktakingView.xaml.cs">
+      <DependentUpon>StocktakingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Stocktaking\StocktakingViewModel.cs" />
+    <Compile Include="StoreChangeView.cs" />
+    <Compile Include="StoreManagement\StoreManagementView.xaml.cs">
+      <DependentUpon>StoreManagementView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="StoreManagement\StoreManagementViewModel.cs" />
+    <Compile Include="stores.cs" />
+    <Compile Include="StoreSimple\StoreSimpleViewModel.cs" />
+    <Compile Include="StoreSimple\StoreV2View.xaml.cs">
+      <DependentUpon>StoreV2View.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="store_cats.cs" />
+    <Compile Include="store_fields.cs" />
+    <Compile Include="store_int_reserve.cs" />
+    <Compile Include="store_items.cs" />
+    <Compile Include="store_sales.cs" />
+    <Compile Include="store_sub_types.cs" />
+    <Compile Include="store_types.cs" />
+    <Compile Include="System\IO\WrapStream.cs" />
+    <Compile Include="TabOnEnterBehavior.cs" />
+    <Compile Include="TabOnSpaceBehavior.cs" />
+    <Compile Include="TaskManager\EmployeeTaskView.xaml.cs">
+      <DependentUpon>EmployeeTaskView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TaskManager\EmployeeTaskViewModel.cs" />
+    <Compile Include="TaskManager\SiteOrderTaskView.xaml.cs">
+      <DependentUpon>SiteOrderTaskView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TaskManager\SiteOrderTaskViewModel.cs" />
+    <Compile Include="TaskManager\TaskCommonViewModel.cs" />
+    <Compile Include="TaskManager\TaskManagerView.xaml.cs">
+      <DependentUpon>TaskManagerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TaskManager\TaskManagerViewModel.cs" />
+    <Compile Include="tasks.cs" />
+    <Compile Include="task_employees.cs" />
+    <Compile Include="tel.cs" />
+    <Compile Include="users.cs" />
+    <Compile Include="users_activity.cs" />
+    <Compile Include="vat_invoice.cs" />
+    <Compile Include="vendors.cs" />
+    <Compile Include="ViewModels\AcceptNewViewModelBase.cs" />
+    <Compile Include="ViewModels\ACPV2ViewModel.cs" />
+    <Compile Include="ViewModels\ACP\AcpViewModel.cs" />
+    <Compile Include="ViewModels\ACP\AdditionalFieldEditViewModel.cs" />
+    <Compile Include="ViewModels\ACP\AdditionalFieldsListViewModel.cs" />
+    <Compile Include="ViewModels\ACP\AsteriskRealtimeViewModel.cs" />
+    <Compile Include="ViewModels\ACP\AutoAssignSettingsViewModel.cs" />
+    <Compile Include="ViewModels\ACP\BackupViewModel.cs" />
+    <Compile Include="ViewModels\ACP\CloudVoIPViewModel.cs" />
+    <Compile Include="ViewModels\ACP\CompaniesViewModel.cs" />
+    <Compile Include="ViewModels\ACP\CompanyEditViewModel.cs" />
+    <Compile Include="ViewModels\ACP\CompanyPaymentDetailsViewModel.cs" />
+    <Compile Include="ViewModels\ACP\DeviceCatalogViewModel.cs" />
+    <Compile Include="ViewModels\ACP\EmployeesViewModel.cs" />
+    <Compile Include="ViewModels\ACP\EndpointEditViewModel.cs" />
+    <Compile Include="ViewModels\ACP\FinancesViewModel.cs" />
+    <Compile Include="ViewModels\ACP\InformSettingsViewModel.cs" />
+    <Compile Include="ViewModels\ACP\NotifyViewModel.cs" />
+    <Compile Include="ViewModels\ACP\OfficeEditViewModel.cs" />
+    <Compile Include="ViewModels\ACP\OfficesViewModel.cs" />
+    <Compile Include="ViewModels\ACP\PaymentTypeEditViewModel.cs" />
+    <Compile Include="ViewModels\ACP\ProductAttributesListViewModel.cs" />
+    <Compile Include="ViewModels\ACP\ReportStorage.cs" />
+    <Compile Include="ViewModels\ACP\ReportsViewModel.cs" />
+    <Compile Include="ViewModels\ACP\RolesViewModel.cs" />
+    <Compile Include="ViewModels\ACP\StatusesViewModel.cs" />
+    <Compile Include="ViewModels\ACP\StoreViewModel.cs" />
+    <Compile Include="ViewModels\ACP\StructViewModel.cs" />
+    <Compile Include="ViewModels\ACP\VendorWarrantyListViewModel.cs" />
+    <Compile Include="ViewModels\ACP\VendorWarrantyViewModel.cs" />
+    <Compile Include="ViewModels\ACP\VisitSourcesViewModel.cs" />
+    <Compile Include="ViewModels\ACP\VoIPViewModel.cs" />
+    <Compile Include="ViewModels\Attributes\ComboBoxViewModel.cs" />
+    <Compile Include="ViewModels\Attributes\DatePickerViewModel.cs" />
+    <Compile Include="ViewModels\Attributes\IntegerViewModel.cs" />
+    <Compile Include="ViewModels\Attributes\PanelViewModel.cs" />
+    <Compile Include="ViewModels\AttributeValueEditViewModel.cs" />
+    <Compile Include="ViewModels\AutoMasterAssignViewModel.cs" />
+    <Compile Include="ViewModels\BaseSearchViewModel.cs" />
+    <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\BoxesReportViewModel.cs" />
+    <Compile Include="ViewModels\CartridgeCardsEditorViewModel.cs" />
+    <Compile Include="ViewModels\CartridgeCardViewModel.cs" />
+    <Compile Include="ViewModels\CartridgeIssueViewModel.cs" />
+    <Compile Include="ViewModels\CartringeArticulSearchViewModel.cs" />
+    <Compile Include="ViewModels\CategoriesMode.cs" />
+    <Compile Include="ViewModels\ChartBaseViewModel.cs" />
+    <Compile Include="ViewModels\Charts\BindingColumn.cs" />
+    <Compile Include="ViewModels\Charts\CashReport.cs" />
+    <Compile Include="ViewModels\Charts\Column.cs" />
+    <Compile Include="ViewModels\Charts\ColumnTemplateSelector.cs" />
+    <Compile Include="ViewModels\Charts\DashboardReport.cs" />
+    <Compile Include="ViewModels\Charts\DashboardReportItem.cs" />
+    <Compile Include="ViewModels\Charts\DashboardViewModel.cs" />
+    <Compile Include="ViewModels\Charts\EmployeeActivityDetailsViewModel.cs" />
+    <Compile Include="ViewModels\Charts\EmployeeHistoryViewModel.cs" />
+    <Compile Include="ViewModels\Charts\EmployeesActivityChartViewModel.cs" />
+    <Compile Include="ViewModels\Charts\FinancesChartViewModel.cs" />
+    <Compile Include="ViewModels\Charts\FinancesFlowReport.cs" />
+    <Compile Include="ViewModels\Charts\FinancesFlowReportViewModel.cs" />
+    <Compile Include="ViewModels\Charts\IFinancesFlowReport.cs" />
+    <Compile Include="ViewModels\Charts\LookupColumn.cs" />
+    <Compile Include="ViewModels\Charts\NameSumm.cs" />
+    <Compile Include="ViewModels\Charts\PartsChartViewModel.cs" />
+    <Compile Include="ViewModels\Charts\SalesCategoriesChartViewModel.cs" />
+    <Compile Include="ViewModels\Charts\SalesChartViewModel.cs" />
+    <Compile Include="ViewModels\Charts\SettingsType.cs" />
+    <Compile Include="ViewModels\Charts\StatusCheckViewModel.cs" />
+    <Compile Include="ViewModels\Charts\Summary.cs" />
+    <Compile Include="ViewModels\Charts\WiolinReportViewModel.cs" />
+    <Compile Include="ViewModels\Charts\WorkshopStatusByUserViewModel.cs" />
+    <Compile Include="ViewModels\Charts\ZnamenFinancesFlowReport.cs" />
+    <Compile Include="ViewModels\Charts\ZnamenFinancesFlowReportViewModel.cs" />
+    <Compile Include="ViewModels\CollectionViewModel.cs" />
+    <Compile Include="ViewModels\Controls\IStoreCategorySelect.cs" />
+    <Compile Include="ViewModels\Controls\IStoreSelect.cs" />
+    <Compile Include="ViewModels\Controls\RepairBoxViewModel.cs" />
+    <Compile Include="ViewModels\Controls\StoreCategorySelectViewModel.cs" />
+    <Compile Include="ViewModels\Controls\StoreSelectViewModel.cs" />
+    <Compile Include="ViewModels\CreateBoxViewModel.cs" />
+    <Compile Include="ViewModels\CustomerCallViewModel.cs" />
+    <Compile Include="ViewModels\CustomerCardViewModel.cs" />
+    <Compile Include="ViewModels\CustomerCard\CustomerBalanceViewModel.cs" />
+    <Compile Include="ViewModels\CustomerCard\CustomerCallsViewModel.cs" />
+    <Compile Include="ViewModels\CustomerCard\CustomerCollectionViewModel.cs" />
+    <Compile Include="ViewModels\CustomerCard\CustomerEditViewModel.cs" />
+    <Compile Include="ViewModels\CustomerCard\CustomerFinancesViewModel.cs" />
+    <Compile Include="ViewModels\CustomerCard\CustomerHistoryViewModel.cs" />
+    <Compile Include="ViewModels\CustomerCard\CustomerInvoicesViewModel.cs" />
+    <Compile Include="ViewModels\CustomerCard\CustomerPaymentDetailsViewModel.cs" />
+    <Compile Include="ViewModels\CustomerCard\CustomerPurchasesViewModel.cs" />
+    <Compile Include="ViewModels\CustomerCard\CustomerRepairsViewModel.cs" />
+    <Compile Include="ViewModels\CustomerCard\CustomerSalesViewModel.cs" />
+    <Compile Include="ViewModels\CustomerSearchViewModel.cs" />
+    <Compile Include="ViewModels\CustomizeViewModel.cs" />
+    <Compile Include="ViewModels\EmailViewModel.cs" />
+    <Compile Include="ViewModels\HamburgerMenuItemViewModel.cs" />
+    <Compile Include="ViewModels\IBaseViewModel.cs" />
+    <Compile Include="ViewModels\ILicenseExpirationViewModel.cs" />
+    <Compile Include="ViewModels\ImagesAddlViewModel.cs" />
+    <Compile Include="ViewModels\IssueRepairViewModel.cs" />
+    <Compile Include="ViewModels\ItemCardViewModel.cs" />
+    <Compile Include="ViewModels\ItemCard\IProductAttributesViewModel.cs" />
+    <Compile Include="ViewModels\ItemCard\ProductAttributesViewModel.cs" />
+    <Compile Include="ViewModels\ItemCard\ProductDocumentsViewModel.cs" />
+    <Compile Include="ViewModels\ItemCard\ProductEditViewModel.cs" />
+    <Compile Include="ViewModels\ItemCard\ProductHistoryViewModel.cs" />
+    <Compile Include="ViewModels\ItemCard\ProductOverviewViewModel.cs" />
+    <Compile Include="ViewModels\ItemsBuyoutViewModel.cs" />
+    <Compile Include="ViewModels\IVendorSelect.cs" />
+    <Compile Include="ViewModels\KassaBalanceViewModel.cs" />
+    <Compile Include="ViewModels\KassaSaldoViewModel.cs" />
+    <Compile Include="ViewModels\KktViewModel.cs" />
+    <Compile Include="ViewModels\LicenseExpirationViewModel.cs" />
+    <Compile Include="ViewModels\MenuViewModel.cs" />
+    <Compile Include="ViewModels\MergeCustomersViewModel.cs" />
+    <Compile Include="ViewModels\MoneyMoveViewModel.cs" />
+    <Compile Include="ViewModels\NewCartridgeViewModel.cs" />
+    <Compile Include="ViewModels\NewCustomerCallViewModel.cs" />
+    <Compile Include="ViewModels\NewProductViewModel.cs" />
+    <Compile Include="ViewModels\NotificationsPanelViewModel.cs" />
+    <Compile Include="ViewModels\OnUserCountViewModel.cs" />
+    <Compile Include="ViewModels\OnUserItemsViewModel.cs" />
+    <Compile Include="ViewModels\PhotoViewAddModel.cs" />
+    <Compile Include="ViewModels\PopupViewModel.cs" />
+    <Compile Include="ViewModels\PriceWorksCategoryViewModel.cs" />
+    <Compile Include="ViewModels\RepairCartridgeFullAdminViewModel.cs" />
+    <Compile Include="ViewModels\RepairCartridgeFullViewModel.cs" />
+    <Compile Include="ViewModels\RepairCartridgeViewModel.cs" />
+    <Compile Include="ViewModels\RepairDocumentsPrintViewModel.cs" />
+    <Compile Include="ViewModels\RepairMassEditViewModel.cs" />
+    <Compile Include="ViewModels\RepairSendSmsViewModel.cs" />
+    <Compile Include="ViewModels\ReportTemplateSelectorViewModel.cs" />
+    <Compile Include="ViewModels\SiteOrderProductsViewModel.cs" />
+    <Compile Include="ViewModels\SmsSendViewModel.cs" />
+    <Compile Include="ViewModels\StoreCategoriesViewModel.cs" />
+    <Compile Include="ViewModels\StoreViewModel.cs" />
+    <Compile Include="ViewModels\TelEditViewModel.cs" />
+    <Compile Include="ViewModels\UpdateViewModel.cs" />
+    <Compile Include="ViewModels\VendorSelectViewModel.cs" />
+    <Compile Include="ViewModels\ViewModelLocator.cs" />
+    <Compile Include="ViewModels\WithdrawFundsViewModel.cs" />
+    <Compile Include="ViewModels\WpExpressViewModel.cs" />
+    <Compile Include="ViewModel\ActionResponseViewModel.cs" />
+    <Compile Include="ViewModel\AddCustomerViewModel.cs" />
+    <Compile Include="ViewModel\AdditionalFieldAsLabelViewModel.cs" />
+    <Compile Include="ViewModel\AttributeBase.cs" />
+    <Compile Include="ViewModel\HistoryViewModel.cs" />
+    <Compile Include="ViewModel\IIdCallback.cs" />
+    <Compile Include="ViewModel\InvoiceItemViewModel.cs" />
+    <Compile Include="ViewModel\ManagerChangeViewModel.cs" />
+    <Compile Include="ViewModel\MasterChangeViewModel.cs" />
+    <Compile Include="ViewModel\OfficeChangeViewModel.cs" />
+    <Compile Include="ViewModel\PaymentDetailsViewModel.cs" />
+    <Compile Include="ViewModel\ProductsMoveViewModel.cs" />
+    <Compile Include="ViewModel\RepairChangeCommonViewModel.cs" />
+    <Compile Include="ViewModel\SmsListViewModel.cs" />
+    <Compile Include="View\ACPV2View.xaml.cs">
+      <DependentUpon>ACPV2View.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ACP\AsteriskRealtimeView.xaml.cs">
+      <DependentUpon>AsteriskRealtimeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ACP\BackupView.xaml.cs">
+      <DependentUpon>BackupView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ACP\BanksView.xaml.cs">
+      <DependentUpon>BanksView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ACP\CloudVoIPView.xaml.cs">
+      <DependentUpon>CloudVoIPView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ACP\CompaniesView.xaml.cs">
+      <DependentUpon>CompaniesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ACP\CompanyEditView.xaml.cs">
+      <DependentUpon>CompanyEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ACP\DeviceCatalogView.xaml.cs">
+      <DependentUpon>DeviceCatalogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ACP\EmployeesView.xaml.cs">
+      <DependentUpon>EmployeesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ACP\FinancesView.xaml.cs">
+      <DependentUpon>FinancesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ACP\NotifyView.xaml.cs">
+      <DependentUpon>NotifyView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ACP\OfficeEditView.xaml.cs">
+      <DependentUpon>OfficeEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ACP\OfficesView.xaml.cs">
+      <DependentUpon>OfficesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ACP\OnlineStoreView.xaml.cs">
+      <DependentUpon>OnlineStoreView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ACP\PaymentTypeEditView.xaml.cs">
+      <DependentUpon>PaymentTypeEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ACP\ReportsView.xaml.cs">
+      <DependentUpon>ReportsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ACP\RolesView.xaml.cs">
+      <DependentUpon>RolesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ACP\StatusesView.xaml.cs">
+      <DependentUpon>StatusesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ACP\StoreView.xaml.cs">
+      <DependentUpon>StoreView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ACP\StructView.xaml.cs">
+      <DependentUpon>StructView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ACP\VendorWarrantyListView.xaml.cs">
+      <DependentUpon>VendorWarrantyListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ACP\VendorWarrantyView.xaml.cs">
+      <DependentUpon>VendorWarrantyView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ACP\VisitSourcesView.xaml.cs">
+      <DependentUpon>VisitSourcesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ACP\VoIPView.xaml.cs">
+      <DependentUpon>VoIPView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ActionResponseView.xaml.cs">
+      <DependentUpon>ActionResponseView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\AdditionalFieldAsLabelView.xaml.cs">
+      <DependentUpon>AdditionalFieldAsLabelView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\AdditionalFieldEditView.xaml.cs">
+      <DependentUpon>AdditionalFieldEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Attributes\AttributeValueEditView.xaml.cs">
+      <DependentUpon>AttributeValueEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Attributes\IntegerView.xaml.cs">
+      <DependentUpon>IntegerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\AutoMasterAssignView.xaml.cs">
+      <DependentUpon>AutoMasterAssignView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\BoxesReportView.xaml.cs">
+      <DependentUpon>BoxesReportView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\BoxRepairView.xaml.cs">
+      <DependentUpon>BoxRepairView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\BoxStoreView.xaml.cs">
+      <DependentUpon>BoxStoreView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\CameraEditView.xaml.cs">
+      <DependentUpon>CameraEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\CanonPhotoAddView.xaml.cs">
+      <DependentUpon>CanonPhotoAddView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\CartridgeCardsEditorView.xaml.cs">
+      <DependentUpon>CartridgeCardsEditorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\CartridgeCardView.xaml.cs">
+      <DependentUpon>CartridgeCardView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\CartridgeIssueView.xaml.cs">
+      <DependentUpon>CartridgeIssueView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Charts\DashboardView.xaml.cs">
+      <DependentUpon>DashboardView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Charts\EmployeeActivityDetailsView.xaml.cs">
+      <DependentUpon>EmployeeActivityDetailsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Charts\EmployeesActivityChartView.xaml.cs">
+      <DependentUpon>EmployeesActivityChartView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Charts\FinancesChartView.xaml.cs">
+      <DependentUpon>FinancesChartView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Charts\FinancesFlowReportView.xaml.cs">
+      <DependentUpon>FinancesFlowReportView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Charts\StatusCheckView.xaml.cs">
+      <DependentUpon>StatusCheckView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Charts\WiolinReportView.xaml.cs">
+      <DependentUpon>WiolinReportView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Charts\WorkshopStatusByUserView.xaml.cs">
+      <DependentUpon>WorkshopStatusByUserView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Charts\ZnamenFinancesFlowReportView.xaml.cs">
+      <DependentUpon>ZnamenFinancesFlowReportView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ClientCard\CustomerPaymentDetailsView.cs" />
+    <Compile Include="View\ComboBoxView.xaml.cs">
+      <DependentUpon>ComboBoxView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Controls\CallsView.xaml.cs">
+      <DependentUpon>CallsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Controls\CustomerSearchView.xaml.cs">
+      <DependentUpon>CustomerSearchView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Controls\ImagesAddView.xaml.cs">
+      <DependentUpon>ImagesAddView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Controls\InvoiceCustomerSelectView.xaml.cs">
+      <DependentUpon>InvoiceCustomerSelectView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Controls\LookupItemsView.xaml.cs">
+      <DependentUpon>LookupItemsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Controls\MonthDatePickerView.xaml.cs">
+      <DependentUpon>MonthDatePickerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Controls\PeriodView.xaml.cs">
+      <DependentUpon>PeriodView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Controls\ReportTemplateSelectorView.xaml.cs">
+      <DependentUpon>ReportTemplateSelectorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Controls\StoreCategorySelectView.xaml.cs">
+      <DependentUpon>StoreCategorySelectView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Controls\StoreSelectView.xaml.cs">
+      <DependentUpon>StoreSelectView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Controls\VendorSelectView.xaml.cs">
+      <DependentUpon>VendorSelectView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\CreateBoxView.xaml.cs">
+      <DependentUpon>CreateBoxView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\CustomerCallView.xaml.cs">
+      <DependentUpon>CustomerCallView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\CustomerCard\ClientCardView.xaml.cs">
+      <DependentUpon>ClientCardView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\CustomerCreateView.xaml.cs">
+      <DependentUpon>CustomerCreateView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\CustomerEditCommonView.xaml.cs">
+      <DependentUpon>CustomerEditCommonView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\CustomizeView.xaml.cs">
+      <DependentUpon>CustomizeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\DatePickerView.xaml.cs">
+      <DependentUpon>DatePickerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\EmployeeEditView.cs" />
+    <Compile Include="View\EmployeeHistoryView.cs" />
+    <Compile Include="View\Employee\EmployeeSalaryRateView.xaml.cs">
+      <DependentUpon>EmployeeSalaryRateView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\EndpointEditView.xaml.cs">
+      <DependentUpon>EndpointEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\HistoryView.xaml.cs">
+      <DependentUpon>HistoryView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\InvoiceItemsView.xaml.cs">
+      <DependentUpon>InvoiceItemsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\InvoiceItemView.xaml.cs">
+      <DependentUpon>InvoiceItemView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\InvoicePreviewView.xaml.cs">
+      <DependentUpon>InvoicePreviewView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\InvoicesGridView.xaml.cs">
+      <DependentUpon>InvoicesGridView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\IssueRepairView.xaml.cs">
+      <DependentUpon>IssueRepairView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\IssuingMessageView.xaml.cs">
+      <DependentUpon>IssuingMessageView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ItemCard\ItemCardView.xaml.cs">
+      <DependentUpon>ItemCardView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ItemCard\ItemDocumentsView.xaml.cs">
+      <DependentUpon>ItemDocumentsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ItemCard\ItemEditView.xaml.cs">
+      <DependentUpon>ItemEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ItemCard\ItemOverviewView.xaml.cs">
+      <DependentUpon>ItemOverviewView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ItemCard\ProductAttributesView.xaml.cs">
+      <DependentUpon>ProductAttributesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ItemCard\ProductHistoryView.xaml.cs">
+      <DependentUpon>ProductHistoryView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\KktEditView.xaml.cs">
+      <DependentUpon>KktEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\KktView.xaml.cs">
+      <DependentUpon>KktView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\LicenseExpirationView.xaml.cs">
+      <DependentUpon>LicenseExpirationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MasterChangeView.xaml.cs">
+      <DependentUpon>MasterChangeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MergeCustomersView.xaml.cs">
+      <DependentUpon>MergeCustomersView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MoneyMoveView.xaml.cs">
+      <DependentUpon>MoneyMoveView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\NewCartridgeView.xaml.cs">
+      <DependentUpon>NewCartridgeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\NewCustomerCallView.xaml.cs">
+      <DependentUpon>NewCustomerCallView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\NewStoreItemView.xaml.cs">
+      <DependentUpon>NewStoreItemView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\OnUserCountView.xaml.cs">
+      <DependentUpon>OnUserCountView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\OnUserItemsView.xaml.cs">
+      <DependentUpon>OnUserItemsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\PanelView.xaml.cs">
+      <DependentUpon>PanelView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\PartRequestsView.xaml.cs">
+      <DependentUpon>PartRequestsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\PaymentDetailsListView.xaml.cs">
+      <DependentUpon>PaymentDetailsListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\PaymentDetailsView.xaml.cs">
+      <DependentUpon>PaymentDetailsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\PaymentSystemEditView.xaml.cs">
+      <DependentUpon>PaymentSystemEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\PhotoAddView.xaml.cs">
+      <DependentUpon>PhotoAddView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\PinpadEditView.xaml.cs">
+      <DependentUpon>PinpadEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ProductsMoveView.xaml.cs">
+      <DependentUpon>ProductsMoveView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\RepairBoxView.cs" />
+    <Compile Include="View\RepairCartridgeFullAdminView.xaml.cs">
+      <DependentUpon>RepairCartridgeFullAdminView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\RepairCartridgeFullView.xaml.cs">
+      <DependentUpon>RepairCartridgeFullView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\RepairCartridgeView.xaml.cs">
+      <DependentUpon>RepairCartridgeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\RepairDocumentsPrintView.xaml.cs">
+      <DependentUpon>RepairDocumentsPrintView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\RepairListView.xaml.cs">
+      <DependentUpon>RepairListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Repair\RepairMassEditView.xaml.cs">
+      <DependentUpon>RepairMassEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Repair\RepairSendSmsView.xaml.cs">
+      <DependentUpon>RepairSendSmsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Repair\StatusView.xaml.cs">
+      <DependentUpon>StatusView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\SelectCartridgeItemView.xaml.cs">
+      <DependentUpon>SelectCartridgeItemView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\SiteOrderDetailsView.xaml.cs">
+      <DependentUpon>SiteOrderDetailsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\SiteOrderProductsView.xaml.cs">
+      <DependentUpon>SiteOrderProductsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\SmsListView.xaml.cs">
+      <DependentUpon>SmsListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\StoreCategoriesView.xaml.cs">
+      <DependentUpon>StoreCategoriesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\StoreCategoryEditView.xaml.cs">
+      <DependentUpon>StoreCategoryEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\StorePartCountView.xaml.cs">
+      <DependentUpon>StorePartCountView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\StoreView.xaml.cs">
+      <DependentUpon>StoreView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\TelEditView.xaml.cs">
+      <DependentUpon>TelEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\UpdateView.xaml.cs">
+      <DependentUpon>UpdateView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\VisitSourceEditView.xaml.cs">
+      <DependentUpon>VisitSourceEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\WithdrawFundsView.xaml.cs">
+      <DependentUpon>WithdrawFundsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="visit_sources.cs" />
+    <Compile Include="voicemail.cs" />
+    <Compile Include="voip_ext_devices.cs" />
+    <Compile Include="works.cs" />
+    <Compile Include="workshop.cs" />
+    <Compile Include="workshop_cats.cs" />
+    <Compile Include="workshop_issued.cs" />
+    <Compile Include="workshop_parts.cs" />
+    <Compile Include="workshop_price.cs" />
+    <Compile Include="WorkspaceV2\WorkspaceV2View.xaml.cs">
+      <DependentUpon>WorkspaceV2View.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WorkspaceV2\WorkspaceV2ViewModel.cs" />
+    <Compile Include="Workspace\Repairs\RepairsView.xaml.cs">
+      <DependentUpon>RepairsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Workspace\Repairs\RepairsViewModel.cs" />
+    <Compile Include="Workspace\WorkspaceModel.cs" />
+    <Compile Include="w_lists.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="exe.licenses" />
+    <EmbeddedResource Include="Properties\Resources.resources" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="app.manifest" />
+    <None Include="Properties\Settings.settings">
+      <Generator>PublicSettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </ApplicationDefinition>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="About\AboutView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ArticulSearch\articulsearchview.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Auth.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Calls\CallsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CgsImageViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Charts\CallConversions\CallConversionsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Charts\CallsChart\callschartview.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Charts\CommonChartView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Charts\Masters\MastersChartView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Charts\PartsChart\PartsChartView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="charts\repairschart\repairschartview.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Charts\RepairStatuses\RepairStatusesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Charts\SalesCategoriesChart\SalesCategoriesChartView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Charts\SalesChart\SalesChartView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Charts\VisitSource\VisitSourceView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Charts\WithdrawFunds\WithdrawFundsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Clients\clientsview.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DocumentLoss.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Documents\DocumentsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EmailForm\EmailView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Invoice\InvoiceView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Invoice\NewInvoiceView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Invoice\NewVATInvoiceView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Invoice\PackingListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Invoice\WorksListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ItemsArrival\initems.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ItemsBuyout\ItemsBuyoutView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ItemsCancellation\ItemsCancellationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ItemsExport\ItemsExportView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ItemsSale\ItemsSaleView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Kassa\KassaBalanceView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Kassa\KassaSaldoView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Kassa\KassaView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="NewRepair\newrepairview.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PartsRequest\PartsRequestView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="photoview\photoview.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PKO\PkoView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Player\PlayerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PriceEditor\PriceEditorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PriceWorks\ItemEditor\priceitemview.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PriceWorks\priceworksview.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RealizatorPay\RealizatorPayView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RepairCard\Admin\AdminView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RepairCard\Admin\OrderCancellationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RepairCard\Comments\Comments.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RepairCard\Header\HeaderView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RepairCard\History\RepairHistoryView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RepairCard\Media\MediaView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RepairCard\RepairCardView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RepairCard\WorksAndParts\WpView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RequestsManager\RequestCardView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RequestsManager\RequestsManagerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RKO\RkoView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Salary\SalaryView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Sms\SmsSendView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Stickers\stickersview.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Stocktaking\StocktakingView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="StoreManagement\StoreManagementView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="StoreSimple\StoreV2View.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TaskManager\EmployeeTaskView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TaskManager\SiteOrderTaskView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TaskManager\TaskManagerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="themes\generic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="themes\shared.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ACPV2View.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ACP\AsteriskRealtimeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ACP\BackupView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ACP\BanksView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ACP\CloudVoIPView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ACP\CompaniesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ACP\CompanyEditView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ACP\DeviceCatalogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ACP\EmployeesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ACP\FinancesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ACP\NotifyView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ACP\OfficeEditView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ACP\OfficesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ACP\OnlineStoreView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ACP\PaymentTypeEditView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ACP\ReportsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ACP\RolesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ACP\settingsview.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ACP\StatusesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ACP\StoreView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ACP\StructView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ACP\VendorWarrantyListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ACP\VendorWarrantyView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ACP\VisitSourcesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ACP\VoIPView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ActionResponseView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\AdditionalFieldAsLabelView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\AdditionalFieldEditView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Attributes\AttributeValueEditView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Attributes\IntegerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\AutoMasterAssignView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\BoxesReportView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\BoxRepairView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\BoxStoreView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\CameraEditView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\CanonPhotoAddView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\CartridgeCardsEditorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\CartridgeCardView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\CartridgeIssueView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Charts\DashboardView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Charts\EmployeeActivityDetailsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Charts\EmployeesActivityChartView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Charts\FinancesChartView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Charts\FinancesFlowReportView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Charts\StatusCheckView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Charts\WiolinReportView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Charts\WorkshopStatusByUserView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Charts\ZnamenFinancesFlowReportView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ComboBoxView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Controls\CallsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Controls\CustomerSearchView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Controls\ImagesAddView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Controls\InvoiceCustomerSelectView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Controls\LookupItemsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Controls\MonthDatePickerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Controls\PeriodView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Controls\repairboxview.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Controls\ReportTemplateSelectorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Controls\StoreCategorySelectView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Controls\StoreSelectView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Controls\VendorSelectView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\CreateBoxView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\CustomerCallView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\CustomerCard\ClientCardView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\CustomerCard\customerbalanceview.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\CustomerCard\customercallsview.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\CustomerCard\customerdealerview.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\CustomerCard\customereditview.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\CustomerCard\customerfinancesview.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\CustomerCard\customerhistoryview.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\CustomerCard\customerinvoicesview.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\CustomerCard\customeroverviewview.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\CustomerCard\customerpaymentdetailsview.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\CustomerCard\customerpurchasesview.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\CustomerCard\customerrepairsview.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\CustomerCard\customersalesview.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\CustomerCreateView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\CustomerEditCommonView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\CustomizeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\DatePickerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Employee\employeeeditview.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Employee\employeehistoryview.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Employee\EmployeeSalaryRateView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\EndpointEditView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\HistoryView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\InvoiceItemsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\InvoiceItemView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\InvoicePreviewView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\InvoicesGridView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\IssueRepairView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\IssuingMessageView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ItemCard\ItemCardView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ItemCard\ItemDocumentsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ItemCard\ItemEditView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ItemCard\ItemOverviewView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ItemCard\ProductAttributesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ItemCard\ProductHistoryView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\KktEditView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\KktView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\LicenseExpirationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\managerchangeview.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MasterChangeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MergeCustomersView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MoneyMoveView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\NewCartridgeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\NewCustomerCallView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\NewStoreItemView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\officechangeview.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\OnUserCountView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\OnUserItemsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\PanelView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\PartRequestsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\PaymentDetailsListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\PaymentDetailsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\PaymentSystemEditView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\PhotoAddView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\PinpadEditView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ProductsMoveView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\RepairCartridgeFullAdminView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\RepairCartridgeFullView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\RepairCartridgeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\RepairDocumentsPrintView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\RepairListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Repair\RepairMassEditView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Repair\RepairSendSmsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Repair\StatusView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\SelectCartridgeItemView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\SiteOrderDetailsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\SiteOrderProductsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\SmsListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\StoreCategoriesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\StoreCategoryEditView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\storechangeview.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\StorePartCountView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\StoreView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\TelEditView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\UpdateView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\VisitSourceEditView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\WithdrawFundsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WorkspaceV2\WorkspaceV2View.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Workspace\Repairs\RepairsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icon.ico" />
+    <Resource Include="player\images\download.png" />
+    <Resource Include="player\images\pause.png" />
+    <Resource Include="player\images\play.png" />
+    <Resource Include="player\images\stop.png" />
+    <Resource Include="resources\add.png" />
+    <Resource Include="resources\add_photo.png" />
+    <Resource Include="resources\arrowleft.png" />
+    <Resource Include="resources\arrowright.png" />
+    <Resource Include="resources\ascbg.png" />
+    <Resource Include="resources\ascchristmasbg.png" />
+    <Resource Include="resources\auth_close.png" />
+    <Resource Include="resources\auth_close_hover.png" />
+    <Resource Include="resources\auth_settings.png" />
+    <Resource Include="resources\auth_settings_hover.png" />
+    <Resource Include="resources\back.png" />
+    <Resource Include="resources\bank.png" />
+    <Resource Include="resources\calls\phone_call_no_answer.png" />
+    <Resource Include="resources\calls\phone_call_ok.png" />
+    <Resource Include="resources\call_32.png" />
+    <Resource Include="resources\card_16x16.png" />
+    <Resource Include="resources\cash.png" />
+    <Resource Include="resources\close.png" />
+    <Resource Include="resources\contextmmenu\context1.png" />
+    <Resource Include="resources\contextmmenu\context2.png" />
+    <Resource Include="resources\contextmmenu\context3.png" />
+    <Resource Include="resources\contextmmenu\context4.png" />
+    <Resource Include="resources\contextmmenu\context5.png" />
+    <Resource Include="resources\contextmmenu\context6.png" />
+    <Resource Include="resources\contextmmenu\context7.png" />
+    <Resource Include="resources\contextmmenu\context8.png" />
+    <Resource Include="resources\credit_card.png" />
+    <Resource Include="resources\cube_16x16.png" />
+    <Resource Include="resources\edit.png" />
+    <Resource Include="resources\error.png" />
+    <Resource Include="resources\fire.png" />
+    <Resource Include="resources\fit_size24x24.png" />
+    <Resource Include="resources\flags\il.png" />
+    <Resource Include="resources\flags\ru.png" />
+    <Resource Include="resources\flags\ua.png" />
+    <Resource Include="resources\invoicestatuses\archive.png" />
+    <Resource Include="resources\invoicestatuses\paid.png" />
+    <Resource Include="resources\invoicestatuses\wait.png" />
+    <Resource Include="resources\loading.png" />
+    <Resource Include="resources\minimize.png" />
+    <Resource Include="resources\mobilephone.png" />
+    <Resource Include="resources\nofoto.png" />
+    <Resource Include="resources\nologo.png" />
+    <Resource Include="resources\orderbg.jpg" />
+    <Resource Include="resources\ordertypes\credit_card.png" />
+    <Resource Include="resources\ordertypes\favorite_14.png" />
+    <Resource Include="resources\ordertypes\information.png" />
+    <Resource Include="resources\ordertypes\laptop.png" />
+    <Resource Include="resources\ordertypes\money.png" />
+    <Resource Include="resources\ordertypes\reload_left.png" />
+    <Resource Include="resources\ordertypes\settings_15.png" />
+    <Resource Include="resources\ordertypes\shopping_cart.png" />
+    <Resource Include="resources\ordertypes\user_add.png" />
+    <Resource Include="resources\ordertypes\user_delete.png" />
+    <Resource Include="resources\phone_call.png" />
+    <Resource Include="resources\print.png" />
+    <Resource Include="resources\priorities\highpriority.png" />
+    <Resource Include="resources\priorities\lowpriority.png" />
+    <Resource Include="resources\priorities\mediumpriority.png" />
+    <Resource Include="resources\priorities\normalpriority.png" />
+    <Resource Include="resources\refresh.png" />
+    <Resource Include="resources\remove.png" />
+    <Resource Include="resources\rotate_left24x24.png" />
+    <Resource Include="resources\rotate_right24x24.png" />
+    <Resource Include="resources\save.png" />
+    <Resource Include="resources\spyglass24x24.png" />
+    <Resource Include="resources\statuses\cancelled.png" />
+    <Resource Include="resources\statuses\completed.png" />
+    <Resource Include="resources\statuses\deferred.png" />
+    <Resource Include="resources\statuses\empty.png" />
+    <Resource Include="resources\statuses\inprogress.png" />
+    <Resource Include="resources\statuses\needassistance.png" />
+    <Resource Include="resources\statuses\notstarted.png" />
+    <Resource Include="resources\success.png" />
+    <Resource Include="resources\trash.png" />
+    <Resource Include="resources\user.png" />
+    <Resource Include="resources\users.png" />
+    <Resource Include="resources\zadarma.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

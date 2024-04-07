@@ -1,0 +1,146 @@
+<UserControl
+	x:Class="ASC.View.CameraEditView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:ASC.View" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:objects="clr-namespace:ASC.Objects">
+	<FrameworkElement.Resources>
+		<ResourceDictionary>
+			<dxmvvm:NumericToVisibilityConverter
+				Inverse="True"
+				x:Key="NumericToVisibilityInv" />
+		</ResourceDictionary>
+	</FrameworkElement.Resources>
+	<DockPanel>
+		<StackPanel
+			DockPanel.Dock="Bottom"
+			Orientation="Horizontal"
+			HorizontalAlignment="Right"
+			Margin="10">
+			<Button
+				Content="{DynamicResource Test}"
+				Command="{Binding TestCameraCommand}" />
+			<dx:SimpleButton
+				Content="{DynamicResource Delete}"
+				Margin="5,0,0,0"
+				Visibility="{Binding SelectedCamera.id, Converter={StaticResource NumericToVisibility}}"
+				Command="{Binding RemoveCameraCommand}"
+				Glyph="{DXImageGrayscale Image=Delete_16x16.png}" />
+			<dx:SimpleButton
+				Content="{DynamicResource Cancel}"
+				Margin="5,0,0,0"
+				Command="{Binding CancelCommand}" />
+			<dx:SimpleButton
+				Content="{DynamicResource Save}"
+				Margin="5,0,0,0"
+				Visibility="{Binding SelectedCamera.id, Converter={StaticResource NumericToVisibility}}"
+				Command="{Binding SaveCamerasCommand}"
+				Glyph="{DXImageGrayscale Image=Save_16x16.png}" />
+			<dx:SimpleButton
+				Content="{DynamicResource Create}"
+				Margin="5,0,0,0"
+				Visibility="{Binding SelectedCamera.id, Converter={StaticResource NumericToVisibilityInv}}"
+				Command="{Binding CreateCameraCommand}"
+				Glyph="{DXImageGrayscale Image=New_16x16.png}" />
+		</StackPanel>
+		<GroupBox
+			Header="{DynamicResource CameraSettings}"
+			VerticalAlignment="Center">
+			<Grid>
+				<StackPanel
+					Orientation="Vertical"
+					HorizontalAlignment="Right"
+					VerticalAlignment="Top">
+					<StackPanel
+						Orientation="Horizontal"
+						HorizontalAlignment="Right">
+						<Label
+							Content="{DynamicResource Name}"
+							ContentStringFormat="{}{0}:" />
+						<TextBox
+							Width="130"
+							Margin="5,0,0,0"
+							Text="{Binding SelectedCamera.name, Mode=TwoWay}" />
+					</StackPanel>
+					<StackPanel
+						Orientation="Horizontal"
+						HorizontalAlignment="Right"
+						Margin="0,5,0,0">
+						<Label
+							Content="{DynamicResource Protocol}"
+							ContentStringFormat="{}{0}:" />
+						<ComboBox
+							Width="130"
+							Margin="5,0,0,0"
+							DisplayMemberPath="Name"
+							SelectedValuePath="ProtocolId"
+							SelectedValue="{Binding SelectedCamera.protocol, Mode=TwoWay}"
+							ItemsSource="{Binding CameraProtocols}" />
+					</StackPanel>
+					<StackPanel
+						Orientation="Horizontal"
+						HorizontalAlignment="Right"
+						Margin="0,5,0,0">
+						<Label
+							Content="{DynamicResource Codec}"
+							ContentStringFormat="{}{0}:" />
+						<ComboBox
+							Width="130"
+							Margin="5,0,0,0"
+							DisplayMemberPath="Value"
+							SelectedValuePath="Key"
+							SelectedValue="{Binding SelectedCamera.codec, Mode=TwoWay}"
+							ItemsSource="{Binding Codecs}" />
+					</StackPanel>
+					<StackPanel
+						Orientation="Horizontal"
+						HorizontalAlignment="Right"
+						Margin="0,5,0,0">
+						<Label
+							Content="{DynamicResource Path}"
+							ContentStringFormat="{}{0}:" />
+						<TextBox
+							Width="130"
+							Margin="5,0,0,0"
+							Text="{Binding SelectedCamera.cnn_string, Mode=TwoWay}" />
+					</StackPanel>
+					<StackPanel
+						Orientation="Horizontal"
+						HorizontalAlignment="Right"
+						Margin="0,5,0,0">
+						<Label
+							Content="{DynamicResource Username}"
+							ContentStringFormat="{}{0}:" />
+						<TextBox
+							Width="130"
+							Margin="5,0,0,0"
+							Text="{Binding SelectedCamera.login, Mode=TwoWay}" />
+					</StackPanel>
+					<StackPanel
+						Orientation="Horizontal"
+						HorizontalAlignment="Right"
+						Margin="0,5,0,0">
+						<Label
+							Content="{DynamicResource Password}"
+							ContentStringFormat="{}{0}:" />
+						<TextBox
+							Width="130"
+							Margin="5,0,0,0"
+							Text="{Binding SelectedCamera.password, Mode=TwoWay}" />
+					</StackPanel>
+					<StackPanel
+						Orientation="Horizontal"
+						HorizontalAlignment="Right"
+						Margin="0,5,0,0">
+						<Label
+							Content="{DynamicResource User}"
+							ContentStringFormat="{}{0}:" />
+						<ComboBox
+							Width="130"
+							Margin="5,0,0,0"
+							DisplayMemberPath="FioShort"
+							SelectedValuePath="Id"
+							SelectedValue="{Binding SelectedCamera.user, Mode=TwoWay}"
+							ItemsSource="{Binding ActiveUsers, Source={x:Static objects:OfflineData.Instance}}" />
+					</StackPanel>
+				</StackPanel>
+			</Grid>
+		</GroupBox>
+	</DockPanel>
+</UserControl>

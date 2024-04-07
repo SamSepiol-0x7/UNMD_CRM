@@ -1,0 +1,163 @@
+<UserControl
+	x:Class="ASC.View.Controls.CustomerSearchView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:ASC.View.Controls" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:extensions="clr-namespace:ASC.Extensions" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:objects="clr-namespace:ASC.Objects">
+	<FrameworkElement.Resources>
+		<ResourceDictionary>
+			<ControlTemplate
+				x:Key="ItemLookUpControlTemplate">
+				<dxg:GridControl
+					Name="PART_GridControl"
+					Tag="CustomerSearchGrid"
+					dx:DXSerializer.AllowProperty="{DXEvent AllowProperty(@args)}">
+					<dxmvvm:Interaction.Behaviors>
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="Loaded"
+							Command="{Binding GridInitCommand}"
+							CommandParameter="{Binding ElementName=PART_GridControl}" />
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="Unloaded"
+							Command="{Binding GridUnloadedCommand}"
+							CommandParameter="{Binding ElementName=PART_GridControl}" />
+						<extensions:GridLayoutHelper>
+							<dxmvvm:Interaction.Behaviors>
+								<dxmvvm:EventToCommand
+									EventTriggerBase_x0060_1.EventName="LayoutChanged"
+									Command="{Binding LayoutChangedCommand}"
+									CommandParameter="{Binding ElementName=PART_GridControl}" />
+							</dxmvvm:Interaction.Behaviors>
+						</extensions:GridLayoutHelper>
+					</dxmvvm:Interaction.Behaviors>
+					<dxg:GridControl.Columns>
+						<dxg:GridColumn
+							Name="Id"
+							FieldName="Id"
+							HorizontalHeaderContentAlignment="Center"
+							Width="100"
+							VisibleIndex="0">
+							<dxg:ColumnBase.EditSettings>
+								<dxe:TextEditSettings
+									HorizontalContentAlignment="Center"
+									MaskType="Numeric"
+									Mask="d6"
+									MaskUseAsDisplayFormat="True" />
+							</dxg:ColumnBase.EditSettings>
+						</dxg:GridColumn>
+						<dxg:GridColumn
+							Name="Customer"
+							Width="20*"
+							FieldName="{DynamicResource FullName++}"
+							HorizontalHeaderContentAlignment="Center"
+							Binding="{Binding FioOrUrName}" />
+						<dxg:GridColumn
+							Name="Balance"
+							FieldName="{DynamicResource Balance}"
+							HorizontalHeaderContentAlignment="Center"
+							Width="100"
+							Binding="{Binding Balance}">
+							<dxg:ColumnBase.EditSettings>
+								<dxe:TextEditSettings
+									HorizontalContentAlignment="Right"
+									MaskType="Numeric"
+									Mask="N2"
+									MaskUseAsDisplayFormat="True" />
+							</dxg:ColumnBase.EditSettings>
+						</dxg:GridColumn>
+						<dxg:GridColumn
+							Name="Repairs"
+							FieldName="{DynamicResource Repairs2}"
+							HorizontalHeaderContentAlignment="Center"
+							Width="100"
+							Binding="{Binding RepairsCount}">
+							<dxg:ColumnBase.EditSettings>
+								<dxe:TextEditSettings
+									HorizontalContentAlignment="Center" />
+							</dxg:ColumnBase.EditSettings>
+						</dxg:GridColumn>
+						<dxg:GridColumn
+							Name="Purchases"
+							FieldName="{DynamicResource Label92}"
+							HorizontalHeaderContentAlignment="Center"
+							Width="100"
+							Binding="{Binding PurchasesCount}">
+							<dxg:ColumnBase.EditSettings>
+								<dxe:TextEditSettings
+									HorizontalContentAlignment="Center" />
+							</dxg:ColumnBase.EditSettings>
+						</dxg:GridColumn>
+						<dxg:GridColumn
+							Name="Type"
+							AllowPrinting="False"
+							Width="50"
+							FieldName="{DynamicResource Type}"
+							HorizontalHeaderContentAlignment="Center"
+							Binding="{Binding Type, Converter={StaticResource ClientTypeToPictureConverter}}">
+							<dxg:ColumnBase.EditSettings>
+								<dxe:ImageEditSettings
+									HorizontalContentAlignment="Center"
+									MaxWidth="16"
+									VerticalContentAlignment="Center"
+									ShowMenu="False" />
+							</dxg:ColumnBase.EditSettings>
+						</dxg:GridColumn>
+						<dxg:GridColumn
+							Name="Phone"
+							Width="5*"
+							FieldName="{DynamicResource Phone}"
+							HorizontalHeaderContentAlignment="Center"
+							Binding="{Binding Phone}">
+							<dxg:ColumnBase.EditSettings>
+								<dxe:TextEditSettings
+									HorizontalContentAlignment="Center" />
+							</dxg:ColumnBase.EditSettings>
+						</dxg:GridColumn>
+					</dxg:GridControl.Columns>
+					<dxg:GridControl.View>
+						<dxg:TableView
+							Name="view"
+							AutoWidth="False"
+							ShowSelectionRectangle="False"
+							ShowTotalSummary="True"
+							WaitIndicatorType="Panel"
+							SearchPanelCriteriaOperatorType="And"
+							RowMinHeight="{Binding Employee.UiSettings.RowHeight, Source={x:Static objects:OfflineData.Instance}}"
+							FontSize="{Binding Employee.UiSettings.FontSize, Source={x:Static objects:OfflineData.Instance}}" />
+					</dxg:GridControl.View>
+					<dxg:GridControl.TotalSummary>
+						<dxg:GridSummaryItem
+							FieldName="Articul"
+							DisplayFormat=" {0:N0}"
+							SummaryType="Count" />
+					</dxg:GridControl.TotalSummary>
+				</dxg:GridControl>
+			</ControlTemplate>
+		</ResourceDictionary>
+	</FrameworkElement.Resources>
+	<dxg:LookUpEdit
+		Name="LookUpEdit"
+		IsPopupAutoWidth="False"
+		dxe:EditValuePostDelay="300"
+		dxe:EditValuePostMode="Delayed"
+		dxe:PopupContentTemplate="{StaticResource ItemLookUpControlTemplate}"
+		MinWidth="150"
+		dxe:DisplayMember="FioOrUrName"
+		dxe:ValueMember="Id"
+		dxe:PopupMaxWidth="800"
+		AutoPopulateColumns="False"
+		dxe:FilterCondition="Like"
+		dxe:IncrementalFiltering="False"
+		dxe:IsCaseSensitiveFilter="False"
+		dxe:IsTextEditable="True"
+		dxe:ImmediatePopup="True"
+		dxe:NullValueButtonPlacement="EditBox"
+		dxe:SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+		dxe:ItemsSource="{Binding Items, IsAsync=True}">
+		<dxmvvm:Interaction.Behaviors>
+			<dxmvvm:EventToCommand
+				EventTriggerBase_x0060_1.EventName="KeyUp"
+				Command="{Binding OnItemNameKeyUpCommand}"
+				CommandParameter="{Binding ElementName=LookUpEdit}" />
+		</dxmvvm:Interaction.Behaviors>
+		<dxg:LookUpEdit.StyleSettings>
+			<dxg:LookUpEditStyleSettings />
+		</dxg:LookUpEdit.StyleSettings>
+	</dxg:LookUpEdit>
+</UserControl>

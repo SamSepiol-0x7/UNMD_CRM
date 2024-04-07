@@ -1,0 +1,482 @@
+<UserControl
+	x:Class="ASC.View.ACP.DeviceCatalogView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:asc="clr-namespace:ASC" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:themes="http://schemas.devexpress.com/winfx/2008/xaml/editors/themekeys" xmlns:acp="clr-namespace:ASC.ViewModels.ACP" xmlns:acp1="clr-namespace:ASC.View.ACP"
+	dxmvvm:Interaction.Behaviors="">
+	<FrameworkElement.DataContext>
+		<acp:DeviceCatalogViewModel />
+	</FrameworkElement.DataContext>
+	<FrameworkElement.Resources>
+		<ResourceDictionary>
+			<asc:BindingProxy
+				Data="{Binding}"
+				x:Key="DataContextProxy" />
+			<Style
+				TargetType="{x:Type dxe:ButtonEdit}"
+				x:Key="{x:Type dxe:ButtonEdit}">
+				<Setter
+					Property="MinHeight"
+					Value="{StaticResource editorHeight}" />
+				<Setter
+					Property="FontSize"
+					Value="{StaticResource editorFontSize}" />
+				<Setter
+					Property="Foreground"
+					Value="{StaticResource editorFontBrush}" />
+			</Style>
+			<Style
+				TargetType="{x:Type dxe:ButtonInfo}"
+				x:Key="BaseButton">
+				<Setter
+					Property="dxe:ButtonInfoBase.Template">
+					<Setter.Value>
+						<DataTemplate>
+							<Button
+								Name="PART_Item"
+								Width="30"
+								Content="{Binding Content}"
+								Style="{DynamicResource {themes:ButtonsThemeKey ThemeName=Office2013LightGray, ThemeKeyExtensionInternalBase_x0060_1.ResourceKey=ButtonStyle}}" />
+						</DataTemplate>
+					</Setter.Value>
+				</Setter>
+			</Style>
+			<Style
+				TargetType="{x:Type dxe:ButtonInfo}"
+				BasedOn="{StaticResource BaseButton}"
+				x:Key="CreateButton">
+				<Setter
+					Property="dxe:ButtonInfo.GlyphKind"
+					Value="Apply" />
+				<Setter
+					Property="FrameworkContentElement.ToolTip"
+					Value="{DynamicResource Add}" />
+			</Style>
+			<Style
+				TargetType="{x:Type dxe:ButtonInfo}"
+				BasedOn="{StaticResource BaseButton}"
+				x:Key="UpdateButton">
+				<Setter
+					Property="dxe:ButtonInfo.GlyphKind"
+					Value="Edit" />
+				<Setter
+					Property="FrameworkContentElement.ToolTip"
+					Value="{DynamicResource Save}" />
+				<Setter
+					Property="dxe:ButtonInfoBase.IsLeft"
+					Value="True" />
+			</Style>
+		</ResourceDictionary>
+	</FrameworkElement.Resources>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition
+				Height="50*" />
+			<RowDefinition
+				Height="50*" />
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition
+				Width="25*" />
+			<ColumnDefinition
+				Width="25*" />
+			<ColumnDefinition
+				Width="25*" />
+			<ColumnDefinition
+				Width="25*" />
+		</Grid.ColumnDefinitions>
+		<DockPanel
+			Grid.Row="0"
+			Grid.Column="0"
+			Grid.RowSpan="2">
+			<Label
+				DockPanel.Dock="Top"
+				Content="{DynamicResource Devices}"
+				HorizontalAlignment="Left"
+				Margin="5,1,0,0"
+				VerticalAlignment="Top" />
+			<dxe:ButtonEdit
+				DockPanel.Dock="Bottom"
+				AllowDefaultButton="False"
+				Margin="5,0,5,1"
+				VerticalAlignment="Bottom"
+				EditValue="{Binding NewDeviceName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+				<dxmvvm:Interaction.Behaviors>
+					<dxmvvm:KeyToCommand
+						KeyGesture="Enter"
+						Command="{Binding AddNewDeviceCommand}" />
+				</dxmvvm:Interaction.Behaviors>
+				<dxe:ButtonInfo
+					Style="{StaticResource BaseButton}"
+					IsLeft="True"
+					GlyphKind="Custom"
+					Command="{Binding SetAsCartridgeCommand}">
+					<dxe:ButtonInfo.Content>
+						<Image
+							MaxHeight="16"
+							MinHeight="16"
+							Source="{dx:DXImageGrayscale Image=Print_16x16.png}" />
+					</dxe:ButtonInfo.Content>
+				</dxe:ButtonInfo>
+				<dxe:ButtonInfo
+					Style="{StaticResource UpdateButton}"
+					Command="{Binding UpdateDeviceCommand}" />
+				<dxe:ButtonInfo
+					Style="{StaticResource CreateButton}"
+					Command="{Binding AddNewDeviceCommand}" />
+			</dxe:ButtonEdit>
+			<ListBox
+				AllowDrop="True"
+				ItemContainerStyle="{DynamicResource ACPListBoxItemStyle}"
+				SelectedValuePath="Id"
+				HorizontalAlignment="Stretch"
+				Margin="5,5,5,0"
+				VerticalAlignment="Stretch"
+				ItemsSource="{Binding Devices}"
+				SelectedItem="{Binding SelectedDevice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<Grid
+							HorizontalAlignment="Stretch">
+							<TextBlock
+								VerticalAlignment="Center"
+								Padding="5"
+								Text="{Binding Name}" />
+							<Image
+								Margin="0,0,80,0"
+								Width="16"
+								Height="16"
+								HorizontalAlignment="Right"
+								VerticalAlignment="Center"
+								Visibility="{Binding Refill, Converter={StaticResource BooleanToVisibilityConverter}}"
+								Source="{dx:DXImage Image=Print_16x16.png}" />
+							<Button
+								Margin="0,0,55,0"
+								Style="{StaticResource UpDownButtons}"
+								Content="5"
+								CommandParameter="{Binding Id}"
+								Command="{Binding Data.ElementUpCommand, Source={StaticResource DataContextProxy}}" />
+							<Button
+								Margin="0,0,30,0"
+								Style="{StaticResource UpDownButtons}"
+								Content="6"
+								CommandParameter="{Binding Id}"
+								Command="{Binding Data.ElementDownCommand, Source={StaticResource DataContextProxy}}" />
+							<Button
+								Name="buttonDeviceDel"
+								Margin="0,0,5,0"
+								Style="{StaticResource UpDownButtons}"
+								VerticalContentAlignment="Center"
+								VerticalAlignment="Center"
+								CommandParameter="{Binding Id}"
+								Command="{Binding Data.DelDeviceCommand, Source={StaticResource DataContextProxy}}">
+								<Image
+									Stretch="Uniform"
+									Source="{dx:DXImage Image=Close_32x32.png}" />
+							</Button>
+						</Grid>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ListBox>
+		</DockPanel>
+		<DockPanel
+			Grid.Row="0"
+			Grid.Column="3"
+			Visibility="{Binding DeviceOptionsVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+			<Label
+				DockPanel.Dock="Top"
+				Content="{DynamicResource Complect}"
+				ContentStringFormat="{}{0}:"
+				HorizontalAlignment="Left"
+				Margin="5,1,0,0"
+				VerticalAlignment="Top" />
+			<dxe:ButtonEdit
+				DockPanel.Dock="Bottom"
+				AllowDefaultButton="False"
+				Margin="5,0,5,3"
+				VerticalAlignment="Bottom"
+				EditValue="{Binding NewComplect, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+				<dxmvvm:Interaction.Behaviors>
+					<dxmvvm:KeyToCommand
+						KeyGesture="Enter"
+						Command="{Binding AddNewComplectCommand}" />
+				</dxmvvm:Interaction.Behaviors>
+				<dxe:ButtonInfo
+					Style="{StaticResource CreateButton}"
+					Command="{Binding AddNewComplectCommand}" />
+			</dxe:ButtonEdit>
+			<ListBox
+				ItemContainerStyle="{DynamicResource ACPListBoxItemStyle}"
+				HorizontalAlignment="Stretch"
+				Margin="5,5,5,0"
+				VerticalAlignment="Stretch"
+				ItemsSource="{Binding Complect}">
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<Grid
+							HorizontalAlignment="Stretch">
+							<TextBlock
+								VerticalAlignment="Center"
+								Padding="5"
+								Text="{Binding}" />
+							<Button
+								Style="{StaticResource UpDownButtons}"
+								Content="5"
+								Margin="0,0,55,0"
+								CommandParameter="{Binding}"
+								Command="{Binding Data.ComplectUpCommand, Source={StaticResource DataContextProxy}}" />
+							<Button
+								Style="{StaticResource UpDownButtons}"
+								Content="6"
+								Margin="0,0,30,0"
+								CommandParameter="{Binding}"
+								Command="{Binding Data.ComplectDownCommand, Source={StaticResource DataContextProxy}}" />
+							<Button
+								Name="buttonDeviceDel"
+								Style="{StaticResource UpDownButtons}"
+								VerticalContentAlignment="Center"
+								VerticalAlignment="Center"
+								Margin="0,0,5,0"
+								CommandParameter="{Binding}"
+								Command="{Binding Data.DelComplectCommand, Source={StaticResource DataContextProxy}}">
+								<Image
+									Stretch="Uniform"
+									Source="{dx:DXImage Image=Close_32x32.png}" />
+							</Button>
+						</Grid>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ListBox>
+		</DockPanel>
+		<DockPanel
+			Grid.Column="1"
+			Grid.Row="0"
+			Grid.RowSpan="2">
+			<Label
+				DockPanel.Dock="Top"
+				Content="{DynamicResource Makers}"
+				HorizontalAlignment="Left"
+				Margin="5,1,0,0"
+				VerticalAlignment="Top" />
+			<dxe:ButtonEdit
+				DockPanel.Dock="Bottom"
+				AllowDefaultButton="False"
+				Margin="5,0,5,1"
+				VerticalAlignment="Bottom"
+				EditValue="{Binding NewDeviceMakers.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+				<dxmvvm:Interaction.Behaviors>
+					<dxmvvm:KeyToCommand
+						KeyGesture="Enter"
+						Command="{Binding AddNewDeviceMakerCommand}" />
+				</dxmvvm:Interaction.Behaviors>
+				<dxe:ButtonInfo
+					Style="{StaticResource UpdateButton}"
+					Command="{Binding UpdateMakerCommand}" />
+				<dxe:ButtonInfo
+					Style="{StaticResource CreateButton}"
+					Command="{Binding AddNewDeviceMakerCommand}" />
+			</dxe:ButtonEdit>
+			<ListBox
+				AllowDrop="True"
+				ItemContainerStyle="{DynamicResource ACPListBoxItemStyle}"
+				SelectedValuePath="Id"
+				HorizontalAlignment="Stretch"
+				Margin="5,5,5,0"
+				VerticalAlignment="Stretch"
+				SelectedItem="{Binding SelectedMaker, Mode=TwoWay}"
+				ItemsSource="{Binding DeviceMakers}">
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<Grid
+							HorizontalAlignment="Stretch">
+							<TextBlock
+								VerticalAlignment="Center"
+								Padding="5"
+								Text="{Binding Name}" />
+							<Button
+								Style="{StaticResource UpDownButtons}"
+								Content="5"
+								Margin="0,0,55,0"
+								CommandParameter="{Binding Id}"
+								Command="{Binding Data.ElementMakerUpCommand, Source={StaticResource DataContextProxy}}" />
+							<Button
+								Style="{StaticResource UpDownButtons}"
+								Content="6"
+								Margin="0,0,30,0"
+								CommandParameter="{Binding Id}"
+								Command="{Binding Data.ElementMakerDownCommand, Source={StaticResource DataContextProxy}}" />
+							<Button
+								Name="buttonDeviceDel"
+								Style="{StaticResource UpDownButtons}"
+								VerticalContentAlignment="Center"
+								VerticalAlignment="Center"
+								Margin="0,0,5,0"
+								CommandParameter="{Binding Id}"
+								Command="{Binding Data.DelDeviceMakerCommand, Source={StaticResource DataContextProxy}}">
+								<Image
+									Stretch="Uniform"
+									Source="{dx:DXImage Image=Close_32x32.png}" />
+							</Button>
+						</Grid>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ListBox>
+		</DockPanel>
+		<DockPanel
+			Grid.Column="2"
+			Grid.Row="0"
+			Grid.RowSpan="2"
+			Visibility="{Binding DeviceOptionsVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+			<Label
+				DockPanel.Dock="Top"
+				Content="{DynamicResource Faults}"
+				HorizontalAlignment="Left"
+				Margin="5,1,0,0"
+				VerticalAlignment="Top" />
+			<dxe:ButtonEdit
+				DockPanel.Dock="Bottom"
+				AllowDefaultButton="False"
+				Margin="5,0,5,1"
+				VerticalAlignment="Bottom"
+				EditValue="{Binding NewFault, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+				<dxmvvm:Interaction.Behaviors>
+					<dxmvvm:KeyToCommand
+						KeyGesture="Enter"
+						Command="{Binding AddNewFaultCommand}" />
+				</dxmvvm:Interaction.Behaviors>
+				<dxe:ButtonInfo
+					Style="{StaticResource CreateButton}"
+					Command="{Binding AddNewFaultCommand}" />
+			</dxe:ButtonEdit>
+			<ListBox
+				ItemContainerStyle="{DynamicResource ACPListBoxItemStyle}"
+				HorizontalAlignment="Stretch"
+				Margin="5,5,5,0"
+				VerticalAlignment="Stretch"
+				ItemsSource="{Binding Faults}">
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<Grid
+							HorizontalAlignment="Stretch">
+							<TextBlock
+								VerticalAlignment="Center"
+								Padding="5"
+								Text="{Binding}" />
+							<Button
+								Style="{StaticResource UpDownButtons}"
+								Content="5"
+								Margin="0,0,55,0"
+								CommandParameter="{Binding}"
+								Command="{Binding Data.FaultUpCommand, Source={StaticResource DataContextProxy}}" />
+							<Button
+								Style="{StaticResource UpDownButtons}"
+								Content="6"
+								Margin="0,0,30,0"
+								CommandParameter="{Binding}"
+								Command="{Binding Data.FaultDownCommand, Source={StaticResource DataContextProxy}}" />
+							<Button
+								Name="buttonDeviceDel"
+								Style="{StaticResource UpDownButtons}"
+								VerticalContentAlignment="Center"
+								VerticalAlignment="Center"
+								Margin="0,0,5,0"
+								CommandParameter="{Binding}"
+								Command="{Binding Data.DelFaultCommand, Source={StaticResource DataContextProxy}}">
+								<Image
+									Stretch="Uniform"
+									Source="{dx:DXImage Image=Close_32x32.png}" />
+							</Button>
+						</Grid>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ListBox>
+		</DockPanel>
+		<DockPanel
+			Grid.Row="1"
+			Grid.Column="3"
+			Visibility="{Binding DeviceOptionsVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+			<Label
+				DockPanel.Dock="Top"
+				Content="{DynamicResource Look}"
+				ContentStringFormat="{}{0}:"
+				HorizontalAlignment="Left"
+				VerticalAlignment="Top"
+				Margin="5,0,0,0" />
+			<dxe:ButtonEdit
+				DockPanel.Dock="Bottom"
+				AllowDefaultButton="False"
+				Margin="5,0,5,1"
+				VerticalAlignment="Bottom"
+				EditValue="{Binding NewLook, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+				<dxmvvm:Interaction.Behaviors>
+					<dxmvvm:KeyToCommand
+						KeyGesture="Enter"
+						Command="{Binding AddNewLookCommand}" />
+				</dxmvvm:Interaction.Behaviors>
+				<dxe:ButtonInfo
+					Style="{StaticResource CreateButton}"
+					Command="{Binding AddNewLookCommand}" />
+			</dxe:ButtonEdit>
+			<ListBox
+				ItemContainerStyle="{DynamicResource ACPListBoxItemStyle}"
+				HorizontalAlignment="Stretch"
+				Margin="5,5,5,0"
+				VerticalAlignment="Stretch"
+				ItemsSource="{Binding Look}">
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<Grid
+							HorizontalAlignment="Stretch">
+							<TextBlock
+								VerticalAlignment="Center"
+								Padding="5"
+								Text="{Binding}" />
+							<Button
+								Style="{StaticResource UpDownButtons}"
+								Content="5"
+								Margin="0,0,55,0"
+								CommandParameter="{Binding}"
+								Command="{Binding Data.LookUpCommand, Source={StaticResource DataContextProxy}}" />
+							<Button
+								Style="{StaticResource UpDownButtons}"
+								Content="6"
+								Margin="0,0,30,0"
+								CommandParameter="{Binding}"
+								Command="{Binding Data.LookDownCommand, Source={StaticResource DataContextProxy}}" />
+							<Button
+								Name="buttonDeviceDel"
+								Style="{StaticResource UpDownButtons}"
+								VerticalContentAlignment="Center"
+								VerticalAlignment="Center"
+								Margin="0,0,5,0"
+								CommandParameter="{Binding}"
+								Command="{Binding Data.DelLookCommand, Source={StaticResource DataContextProxy}}">
+								<Image
+									Stretch="Uniform"
+									Source="{dx:DXImage Image=Close_32x32.png}" />
+							</Button>
+						</Grid>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ListBox>
+		</DockPanel>
+		<GridSplitter
+			Grid.Column="1"
+			Grid.RowSpan="2"
+			HorizontalAlignment="Left"
+			Margin="-1,0,0,0"
+			VerticalAlignment="Stretch"
+			Width="3" />
+		<GridSplitter
+			Grid.Column="2"
+			Grid.RowSpan="2"
+			HorizontalAlignment="Left"
+			Margin="-1,0,0,0"
+			VerticalAlignment="Stretch"
+			Width="3" />
+		<GridSplitter
+			Grid.Column="3"
+			Grid.RowSpan="2"
+			HorizontalAlignment="Left"
+			Margin="-1,0,0,0"
+			VerticalAlignment="Stretch"
+			Width="3" />
+	</Grid>
+</UserControl>

@@ -1,0 +1,253 @@
+<UserControl
+	x:Class="ASC.View.ACP.FinancesView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:Converters="clr-namespace:ASC.Converters" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:System="clr-namespace:System;assembly=mscorlib" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:objects="clr-namespace:ASC.Objects" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:acp="clr-namespace:ASC.ViewModels.ACP" xmlns:acp1="clr-namespace:ASC.View.ACP">
+	<FrameworkElement.DataContext>
+		<acp:FinancesViewModel />
+	</FrameworkElement.DataContext>
+	<dxmvvm:Interaction.Behaviors>
+		<dxmvvm:EventToCommand
+			EventTriggerBase_x0060_1.EventName="Loaded"
+			Command="{Binding LoadedCommand}" />
+	</dxmvvm:Interaction.Behaviors>
+	<FrameworkElement.Resources>
+		<ResourceDictionary>
+			<Converters:BoolInverterConverter
+				x:Key="BoolInverterConverter" />
+		</ResourceDictionary>
+	</FrameworkElement.Resources>
+	<Grid>
+		<dxlc:LayoutControl
+			HorizontalAlignment="Left"
+			VerticalAlignment="Top"
+			Orientation="Vertical">
+			<dxlc:LayoutGroup
+				Orientation="Horizontal">
+				<dxlc:LayoutGroup
+					Height="250"
+					Width="300"
+					Orientation="Vertical"
+					View="GroupBox"
+					Header="{DynamicResource OtherPaymentSystems}">
+					<dxlc:LayoutItem
+						VerticalAlignment="Stretch"
+						LabelPosition="Top"
+						Label="{DynamicResource PaymentSystemsList}">
+						<dxe:ListBoxEdit
+							ShowError="False"
+							DisplayMember="name"
+							ItemsSource="{Binding PaymentSystems}"
+							SelectedItem="{Binding SelectedPaymentSystem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+							<dxmvvm:Interaction.Behaviors>
+								<dxmvvm:EventToCommand
+									EventTriggerBase_x0060_1.EventName="MouseDoubleClick"
+									Command="{Binding ShowPsEditCommand}" />
+							</dxmvvm:Interaction.Behaviors>
+						</dxe:ListBoxEdit>
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem>
+						<TextBlock
+							Foreground="#FF0000FF"
+							Text="{DynamicResource EditHelp}"
+							TextWrapping="Wrap" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						HorizontalContentAlignment="Right"
+						Label="{DynamicResource ShowArhive}">
+						<dxe:CheckEdit
+							EditValue="{Binding ShowArchivePaymentSystems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						HorizontalContentAlignment="Right">
+						<StackPanel
+							Orientation="Horizontal">
+							<dx:SimpleButton
+								Content="{DynamicResource Refresh}"
+								Command="{Binding RefreshPsCommand}"
+								Glyph="{DXImageGrayscale Image=Refresh_16x16.png}" />
+							<dx:SimpleButton
+								Content="{DynamicResource Create}"
+								Margin="5,0,0,0"
+								Command="{Binding ShowCreatePsCommand}"
+								Glyph="{DXImageGrayscale Image=Add_16x16.png}" />
+						</StackPanel>
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+				<dxlc:LayoutGroup
+					Height="250"
+					Width="300"
+					Orientation="Vertical"
+					View="GroupBox"
+					Header="{DynamicResource KkmSettings}">
+					<dxlc:LayoutItem
+						VerticalAlignment="Stretch"
+						LabelPosition="Top"
+						Label="{DynamicResource KktList}">
+						<dxe:ListBoxEdit
+							ShowError="False"
+							DisplayMember="name"
+							ItemsSource="{Binding Kkt}"
+							SelectedItem="{Binding SelectedKkt, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+							<dxmvvm:Interaction.Behaviors>
+								<dxmvvm:EventToCommand
+									EventTriggerBase_x0060_1.EventName="MouseDoubleClick"
+									Command="{Binding ShowKktEditCommand}" />
+							</dxmvvm:Interaction.Behaviors>
+						</dxe:ListBoxEdit>
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem>
+						<TextBlock
+							Foreground="#FF0000FF"
+							Text="{DynamicResource EditHelp}"
+							TextWrapping="Wrap" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						HorizontalContentAlignment="Right">
+						<StackPanel
+							Orientation="Horizontal">
+							<dx:SimpleButton
+								Content="{DynamicResource Refresh}"
+								Command="{Binding RefreshKktCommand}"
+								Glyph="{DXImageGrayscale Image=Refresh_16x16.png}" />
+							<dx:SimpleButton
+								Content="{DynamicResource Create}"
+								Margin="5,0,0,0"
+								Command="{Binding ShowCreateKktCommand}"
+								Glyph="{DXImageGrayscale Image=Add_16x16.png}" />
+						</StackPanel>
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+				<dxlc:LayoutGroup
+					Height="250"
+					Width="300"
+					Orientation="Vertical"
+					View="GroupBox"
+					Header="{DynamicResource PinpadSettings}">
+					<dxlc:LayoutItem
+						VerticalAlignment="Stretch"
+						LabelPosition="Top"
+						Label="{DynamicResource PinpadList}">
+						<dxe:ListBoxEdit
+							ShowError="False"
+							DisplayMember="name"
+							ItemsSource="{Binding Pinpads}"
+							SelectedItem="{Binding SelectedPinpad, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+							<dxmvvm:Interaction.Behaviors>
+								<dxmvvm:EventToCommand
+									EventTriggerBase_x0060_1.EventName="MouseDoubleClick"
+									Command="{Binding ShowPinpadEditCommand}" />
+							</dxmvvm:Interaction.Behaviors>
+						</dxe:ListBoxEdit>
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem>
+						<TextBlock
+							Foreground="#FF0000FF"
+							Text="{DynamicResource EditHelp}"
+							TextWrapping="Wrap" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						HorizontalContentAlignment="Right">
+						<StackPanel
+							Orientation="Horizontal">
+							<dx:SimpleButton
+								Content="{DynamicResource Refresh}"
+								Command="{Binding RefreshPinpadsCommand}"
+								Glyph="{DXImageGrayscale Image=Refresh_16x16.png}" />
+							<dx:SimpleButton
+								Content="{DynamicResource Create}"
+								Margin="5,0,0,0"
+								Command="{Binding ShowCreatePinpadCommand}"
+								Glyph="{DXImageGrayscale Image=Add_16x16.png}" />
+						</StackPanel>
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+				<dxlc:LayoutGroup
+					Height="250"
+					HorizontalAlignment="Left"
+					Orientation="Vertical"
+					View="GroupBox"
+					Header="{DynamicResource ExcangeOptions}">
+					<dxlc:LayoutItem>
+						<StackPanel
+							Orientation="Horizontal"
+							Margin="0,0,0,5">
+							<RadioButton
+								Content="{DynamicResource Auto}"
+								IsChecked="{Binding Config.exchange_type, Converter={StaticResource BoolInverterConverter}, Mode=TwoWay}" />
+							<ComboBox
+								DisplayMemberPath="Value"
+								SelectedValuePath="Key"
+								Width="91"
+								Margin="19,0,0,0"
+								SelectedValue="{Binding Config.exchange_source, Mode=TwoWay}"
+								ItemsSource="{Binding ExchangeRateSource}" />
+						</StackPanel>
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem>
+						<StackPanel
+							Orientation="Horizontal">
+							<RadioButton
+								Content="{DynamicResource Manual}"
+								IsChecked="{Binding Config.exchange_type, Mode=TwoWay}" />
+							<dxe:SpinEdit
+								MinValue="0"
+								IsFloatValue="True"
+								Width="91"
+								Margin="5,0,0,0"
+								EditValueType="{x:Type System:Double}"
+								EditValue="{Binding Config.exchange_rate, Mode=TwoWay}" />
+						</StackPanel>
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						VerticalAlignment="Bottom">
+						<dx:SimpleButton
+							Content="{DynamicResource Save}"
+							Command="{Binding SaveCommonCommand}"
+							Glyph="{DXImageGrayscale Image=Save_16x16.png}" />
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+			</dxlc:LayoutGroup>
+			<dxlc:LayoutGroup
+				Width="300"
+				View="GroupBox"
+				Orientation="Vertical"
+				Header="{DynamicResource RKO}"
+				HorizontalAlignment="Left">
+				<dxlc:LayoutItem
+					LabelPosition="Top"
+					Label="{DynamicResource PaymentTypes}">
+					<ListBox
+						MinHeight="100"
+						DisplayMemberPath="name"
+						ItemsSource="{Binding PaymentTypes}"
+						SelectedItem="{Binding SelectedPaymentType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+						<dxmvvm:Interaction.Behaviors>
+							<dxmvvm:EventToCommand
+								EventTriggerBase_x0060_1.EventName="MouseDoubleClick"
+								Command="{Binding ShowEditPaymentTypeCommand}" />
+						</dxmvvm:Interaction.Behaviors>
+					</ListBox>
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem>
+					<TextBlock
+						Foreground="#FF0000FF"
+						Text="{DynamicResource EditHelp}"
+						TextWrapping="Wrap" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					HorizontalContentAlignment="Right">
+					<StackPanel
+						Orientation="Horizontal">
+						<dx:SimpleButton
+							Content="{DynamicResource Refresh}"
+							Command="{Binding RefreshPaymentTypesCommand}"
+							Glyph="{DXImageGrayscale Image=Refresh_16x16.png}" />
+						<dx:SimpleButton
+							Content="{DynamicResource Create}"
+							Margin="5,0,0,0"
+							Command="{Binding ShowCreatePaymentTypeCommand}"
+							Glyph="{DXImageGrayscale Image=Add_16x16.png}" />
+					</StackPanel>
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+		</dxlc:LayoutControl>
+	</Grid>
+</UserControl>

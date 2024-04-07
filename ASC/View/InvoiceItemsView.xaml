@@ -1,0 +1,130 @@
+<UserControl
+	x:Class="ASC.View.InvoiceItemsView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:ASC.View" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:asc="clr-namespace:ASC" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:objects="clr-namespace:ASC.Objects">
+	<dxg:GridControl
+		AllowLiveDataShaping="True"
+		SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+		ItemsSource="{Binding Document.Items}">
+		<FrameworkElement.Resources>
+			<ResourceDictionary>
+				<Style
+					TargetType="{x:Type dxg:GridColumn}"
+					x:Key="{x:Type dxg:GridColumn}">
+					<Setter
+						Property="dxg:BaseColumn.HorizontalHeaderContentAlignment"
+						Value="Center" />
+				</Style>
+			</ResourceDictionary>
+		</FrameworkElement.Resources>
+		<dxg:GridControl.Columns>
+			<dxg:GridColumn
+				MinWidth="250"
+				Header="{DynamicResource ItemName}"
+				Binding="{Binding Name}" />
+			<dxg:GridColumn
+				Header="{DynamicResource Count}"
+				Binding="{Binding Count}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:SpinEditSettings
+						HorizontalContentAlignment="Center"
+						MinValue="1" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				Header="{DynamicResource Price}"
+				Binding="{Binding Price}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:TextEditSettings
+						Style="{StaticResource GridClassicOrNot}" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				TotalSummaryContentStyle="{StaticResource TotalSummaryStyle}"
+				FieldName="Tax"
+				Header="{DynamicResource Tax}"
+				Binding="{Binding Tax}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:TextEditSettings
+						DisplayFormat=" {0} %"
+						NullText="-"
+						HorizontalContentAlignment="Center" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				TotalSummaryContentStyle="{StaticResource TotalSummaryStyle}"
+				FieldName="TaxSumm"
+				Visible="False"
+				Binding="{Binding TaxSumm}" />
+			<dxg:GridColumn
+				TotalSummaryContentStyle="{StaticResource TotalSummaryStyle}"
+				FieldName="Total"
+				ReadOnly="True"
+				Header="{DynamicResource Summ}"
+				Binding="{Binding Total}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:TextEditSettings
+						Style="{StaticResource GridClassicOrNot}" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				Header="#">
+				<dxg:ColumnBase.CellTemplate>
+					<DataTemplate>
+						<StackPanel
+							HorizontalAlignment="Center"
+							Orientation="Horizontal">
+							<Button
+								Content="{DynamicResource RepairCard}"
+								Command="{Binding DataContext.NavigateRepairCardCommand, RelativeSource={RelativeSource AncestorType=dxg:GridControl}}"
+								Visibility="{Binding RowData.Row.RepairId, Converter={StaticResource NumericToVisibility}, FallbackValue=Collapsed}" />
+							<Button
+								Content="{DynamicResource Rn}"
+								Command="{Binding DataContext.NavigateRnCommand, RelativeSource={RelativeSource AncestorType=dxg:GridControl}}"
+								Visibility="{Binding RowData.Row.DocumentId, Converter={StaticResource NumericToVisibility}, FallbackValue=Collapsed}" />
+						</StackPanel>
+					</DataTemplate>
+				</dxg:ColumnBase.CellTemplate>
+			</dxg:GridColumn>
+		</dxg:GridControl.Columns>
+		<dxg:GridControl.TotalSummary>
+			<dxg:GridSummaryItem
+				DisplayFormat=" {0:N2}"
+				SummaryType="Sum"
+				FieldName="Total" />
+			<dxg:GridSummaryItem
+				DisplayFormat=" {0:N2}"
+				SummaryType="Sum"
+				FieldName="TaxSumm"
+				ShowInColumn="Tax" />
+		</dxg:GridControl.TotalSummary>
+		<dxg:GridControl.View>
+			<dxg:TableView
+				IsSynchronizedWithCurrentItem="True"
+				ShowTotalSummary="True"
+				AllowScrollAnimation="True"
+				NavigationStyle="Row"
+				ColumnFilterPopupMode="Excel"
+				AllowEditing="False"
+				AllowGrouping="False"
+				AllowColumnMoving="True"
+				ShowGroupPanel="False"
+				ShowColumnHeaders="True"
+				AllowMoveColumnToDropArea="False"
+				ShowSearchPanelMode="Never"
+				ShowBandsPanel="True"
+				ShowIndicator="False"
+				AllowBestFit="True"
+				AllowColumnFiltering="False"
+				ShowSelectionRectangle="False"
+				ShowFixedTotalSummary="False"
+				SummariesIgnoreNullValues="True"
+				RowMinHeight="{Binding Employee.UiSettings.RowHeight, Source={x:Static objects:OfflineData.Instance}}"
+				FontSize="{Binding Employee.UiSettings.FontSize, Source={x:Static objects:OfflineData.Instance}}">
+				<dxmvvm:Interaction.Behaviors>
+					<dxmvvm:EventToCommand
+						EventTriggerBase_x0060_1.EventName="RowDoubleClick"
+						Command="{Binding ItemDoubleClickCommand}" />
+				</dxmvvm:Interaction.Behaviors>
+			</dxg:TableView>
+		</dxg:GridControl.View>
+	</dxg:GridControl>
+</UserControl>

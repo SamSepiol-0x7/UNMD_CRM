@@ -1,0 +1,144 @@
+<UserControl
+	x:Class="ASC.View.KktView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:ASC.View" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:system="clr-namespace:System;assembly=mscorlib" xmlns:objects="clr-namespace:ASC.Objects"
+	Loaded="{DXEvent OnLoaded()}">
+	<DockPanel
+		MaxWidth="600">
+		<StackPanel
+			Margin="10"
+			Orientation="Horizontal"
+			VerticalAlignment="Bottom"
+			DockPanel.Dock="Bottom"
+			HorizontalAlignment="Right">
+			<dx:SimpleButton
+				Margin="5,0,0,0"
+				Style="{StaticResource CancelButton}"
+				Command="{Binding CloseDocumentCommand}" />
+		</StackPanel>
+		<dxlc:LayoutControl
+			MinWidth="450"
+			Orientation="Vertical">
+			<dxlc:LayoutGroup
+				View="GroupBox"
+				Orientation="Vertical"
+				Header="{Binding KktHeader, FallbackValue=ККТ}">
+				<dxlc:LayoutItem
+					Label=" ">
+					<TextBlock
+						FontWeight="Bold"
+						Text="{Binding ShiftState}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutGroup
+					Orientation="Horizontal">
+					<dxlc:LayoutItem
+						LabelPosition="Top"
+						Label="{DynamicResource ItemName}">
+						<dxe:TextEdit
+							EditValue="{Binding ItemName, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						LabelPosition="Top"
+						Label="{DynamicResource Count}"
+						HorizontalAlignment="Right">
+						<dxe:SpinEdit
+							MinValue="1"
+							MinWidth="60"
+							AllowSpinOnMouseWheel="False"
+							IsFloatValue="False"
+							EditValueType="{x:Type system:Int32}"
+							EditValue="{Binding ItemCount, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						LabelPosition="Top"
+						Label="{DynamicResource Price}"
+						HorizontalAlignment="Right">
+						<dxe:SpinEdit
+							AllowDefaultButton="False"
+							MinWidth="60"
+							AllowSpinOnMouseWheel="False"
+							IsFloatValue="False"
+							Mask="N2"
+							MaskType="Numeric"
+							MaskUseAsDisplayFormat="True"
+							EditValue="{Binding ItemPrice, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						LabelPosition="Top"
+						Label="{DynamicResource Sale}"
+						HorizontalAlignment="Right">
+						<dx:SimpleButton
+							Content="OK"
+							Command="{Binding KktSaleCommand}" />
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+				<dxlc:LayoutItem
+					Label="{DynamicResource PaymentItemSign}">
+					<dxe:ComboBoxEdit
+						DisplayMember="Value"
+						ValueMember="Key"
+						EditValue="{Binding PaymentSign, Mode=TwoWay}"
+						ItemsSource="{Binding PaymentItemSigns}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource CardPayment}">
+					<dxe:CheckEdit
+						EditValue="{Binding Card, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutGroup
+					Orientation="Horizontal">
+					<dxlc:LayoutItem
+						Visibility="{Binding ElementName=KktSettingsButton, Path=IsEnabled, Converter={dx:BooleanToVisibilityConverter}}">
+						<dx:SimpleButton
+							Name="KktSettingsButton"
+							Content="{DynamicResource KKTSettings}"
+							Command="{Binding KktSettingsCommand}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem>
+						<dx:SimpleButton
+							Content="{DynamicResource KkmzOrder}"
+							Command="{Binding KktZOrderCommand}"
+							Glyph="{DXImageGrayscale Image=Alignment_Center-Center_16x16.png}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem>
+						<dx:SimpleButton
+							Content="{DynamicResource KkmxOrder}"
+							Command="{Binding KktXOrderCommand}"
+							Glyph="{DXImageGrayscale Image=Alignment_Center-Center_16x16.png}" />
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+			</dxlc:LayoutGroup>
+			<dxlc:LayoutGroup
+				Orientation="Vertical"
+				View="GroupBox"
+				Header="{DynamicResource Pinpad}">
+				<dxlc:LayoutGroup
+					Orientation="Horizontal">
+					<dxlc:LayoutItem
+						Label="{DynamicResource Summ}">
+						<dxe:SpinEdit
+							MinValue="0"
+							AllowSpinOnMouseWheel="False"
+							IsFloatValue="False"
+							AllowDefaultButton="False"
+							EditValue="{Binding PinpadSumm, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem>
+						<dx:SimpleButton
+							Content="{DynamicResource Refund}"
+							Command="{Binding PinpadRefundCommand}"
+							Glyph="{DXImageGrayscale Image=Reset_16x16.png}" />
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+				<dxlc:LayoutItem>
+					<dx:SimpleButton
+						Content="{DynamicResource KkmzOrder}"
+						Command="{Binding PinpadZOrderCommand}"
+						Glyph="{DXImageGrayscale Image=Alignment_Center-Center_16x16.png}" />
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+			<dxlc:LayoutItem>
+				<TextBlock
+					Text="Операции не логируются!" />
+			</dxlc:LayoutItem>
+		</dxlc:LayoutControl>
+	</DockPanel>
+</UserControl>

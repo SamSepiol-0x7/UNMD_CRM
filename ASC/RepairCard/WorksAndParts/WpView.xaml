@@ -1,0 +1,375 @@
+<UserControl
+	x:Class="ASC.RepairCard.WorksAndParts.WpView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:ASC.RepairCard.WorksAndParts" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:asc="clr-namespace:ASC" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:objects="clr-namespace:ASC.Objects" xmlns:extensions="clr-namespace:ASC.Extensions"
+	Name="WorksParts"
+	DataContext="{dxmvvm:ViewModelSource Type={x:Type local:WpViewModel}}"
+	Loaded="{DXEvent OnLoad()}">
+	<FrameworkElement.Resources>
+		<ResourceDictionary>
+			<dxmvvm:BooleanToVisibilityConverter
+				Inverse="True"
+				x:Key="BooleanToVisibilityConverterInv" />
+			<dxmvvm:BooleanNegationConverter
+				x:Key="BooleanNegationConverter" />
+		</ResourceDictionary>
+	</FrameworkElement.Resources>
+	<Grid>
+		<dxlc:LayoutControl
+			Padding="0"
+			Orientation="Vertical"
+			HorizontalAlignment="Stretch"
+			VerticalAlignment="Stretch">
+			<dxlc:LayoutGroup
+				Orientation="Horizontal"
+				Visibility="{Binding ExpressMode, Converter={StaticResource BooleanToVisibilityConverterInv}}">
+				<dxlc:LayoutItem
+					MaxWidth="200">
+					<dx:SimpleButton
+						Content="{DynamicResource Work}"
+						Style="{StaticResource DefaultButton}"
+						Command="{Binding AddWorkCommand}"
+						CommandParameter="{Binding ElementName=WpGrid}"
+						Glyph="{DXImageGrayscale Image=Add_16x16.png}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					MaxWidth="200">
+					<dx:SimpleButton
+						Content="{DynamicResource WorkFromPrice}"
+						Style="{StaticResource DefaultButton}"
+						Command="{Binding AddPriceWorkCommand}"
+						Glyph="{DXImageGrayscale Image=ListBullets_16x16.png}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					MaxWidth="200">
+					<Button
+						Content="{DynamicResource RequestItem}"
+						VerticalContentAlignment="Center"
+						Height="25"
+						Command="{Binding RequestItemCommand}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					MaxWidth="200">
+					<dxe:ButtonEdit
+						NullText="UID"
+						AllowDefaultButton="False"
+						Margin="5,0,0,0"
+						Height="25"
+						MinWidth="150"
+						EditValue="{Binding UidItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+						<dxmvvm:Interaction.Behaviors>
+							<dxmvvm:EventToCommand
+								EventTriggerBase_x0060_1.EventName="GotFocus"
+								Command="{Binding UidGotFocusCommand}" />
+							<dxmvvm:EventToCommand
+								EventTriggerBase_x0060_1.EventName="LostFocus"
+								Command="{Binding UidLostFocusCommand}" />
+							<dxmvvm:EventToCommand
+								EventTriggerBase_x0060_1.EventName="KeyUp"
+								PassEventArgsToCommand="True"
+								Command="{Binding UidKeyUpCommand}" />
+						</dxmvvm:Interaction.Behaviors>
+						<dxe:ButtonInfo
+							GlyphKind="Apply"
+							Command="{Binding AddItemByUidCommand}" />
+					</dxe:ButtonEdit>
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					VerticalAlignment="Center"
+					Visibility="{Binding PartsIncludedVisibility, Converter={StaticResource BooleanToVisibilityConverter}}">
+					<TextBlock
+						Foreground="#FF006400"
+						FontSize="11"
+						Text="{DynamicResource PartsIncluded}" />
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+			<dxlc:LayoutGroup
+				Orientation="Horizontal"
+				VerticalAlignment="Stretch">
+				<dxlc:LayoutItem
+					VerticalAlignment="Stretch">
+					<dxg:TreeListControl
+						Name="WpGrid"
+						Tag="WorksGrid"
+						ItemsSource="{Binding Items}"
+						SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+						<FrameworkElement.ContextMenu>
+							<ContextMenu>
+								<MenuItem
+									Header="{DynamicResource Copy}"
+									Command="{Binding CopyItemNameCommand}">
+									<MenuItem.Icon>
+										<Image
+											Width="16"
+											Height="16"
+											Source="{dx:DXImageGrayscale Image=Copy_16x16.png}" />
+									</MenuItem.Icon>
+								</MenuItem>
+							</ContextMenu>
+						</FrameworkElement.ContextMenu>
+						<dxmvvm:Interaction.Behaviors>
+							<dxmvvm:EventToCommand
+								EventTriggerBase_x0060_1.EventName="Loaded"
+								Command="{Binding GridInitCommand}"
+								CommandParameter="{Binding ElementName=WpGrid}" />
+							<dxmvvm:EventToCommand
+								EventTriggerBase_x0060_1.EventName="Unloaded"
+								Command="{Binding GridUnloadedCommand}"
+								CommandParameter="{Binding ElementName=WpGrid}" />
+						</dxmvvm:Interaction.Behaviors>
+						<dxg:TreeListControl.View>
+							<dxg:TreeListView
+								HorizontalScrollbarVisibility="Hidden"
+								AlternationCount="2"
+								AlternateRowBackground="#FFF0F8FF"
+								AutoExpandAllNodes="True"
+								AllowColumnMoving="True"
+								ShowColumnHeaders="True"
+								AllowMoveColumnToDropArea="False"
+								ShowSearchPanelMode="Never"
+								ShowBandsPanel="True"
+								ShowIndicator="False"
+								AllowBestFit="True"
+								AllowColumnFiltering="False"
+								ShowSelectionRectangle="False"
+								ShowFixedTotalSummary="False"
+								KeyFieldName="Id"
+								ParentFieldName="WorkId"
+								RowMinHeight="{Binding Employee.UiSettings.RowHeight, Source={x:Static objects:OfflineData.Instance}}"
+								FontSize="{Binding Employee.UiSettings.FontSize, Source={x:Static objects:OfflineData.Instance}}"
+								AllowEditing="{Binding AllowEdit}">
+								<dxmvvm:Interaction.Behaviors>
+									<dxmvvm:EventToCommand
+										EventTriggerBase_x0060_1.EventName="NodeChanged"
+										PassEventArgsToCommand="True"
+										Command="{Binding ExpandAllNodesCommand}" />
+									<dxmvvm:EventToCommand
+										EventTriggerBase_x0060_1.EventName="ShowingEditor"
+										PassEventArgsToCommand="True"
+										Command="{Binding ShowingEditorCommand}" />
+									<dxmvvm:EventToCommand
+										EventTriggerBase_x0060_1.EventName="RowDoubleClick"
+										PassEventArgsToCommand="True"
+										Command="{Binding ItemDoubleClickCommand}" />
+								</dxmvvm:Interaction.Behaviors>
+							</dxg:TreeListView>
+						</dxg:TreeListControl.View>
+						<dxg:TreeListColumn
+							Width="65"
+							AllowResizing="False"
+							Header="*"
+							HorizontalHeaderContentAlignment="Center">
+							<dxg:ColumnBase.CellTemplate>
+								<DataTemplate>
+									<StackPanel
+										HorizontalAlignment="Center"
+										Orientation="Horizontal">
+										<Image
+											Cursor="Hand"
+											ToolTip="{DynamicResource Delete}"
+											VerticalAlignment="Center"
+											HorizontalAlignment="Center"
+											Source="{dx:DXImageGrayscale Image=Delete_16x16.png}">
+											<dxmvvm:Interaction.Behaviors>
+												<dxmvvm:EventToCommand
+													EventTriggerBase_x0060_1.EventName="MouseLeftButtonUp"
+													Command="{Binding DataContext.RemoveItemCommand, ElementName=WorksParts}" />
+											</dxmvvm:Interaction.Behaviors>
+										</Image>
+										<Image
+											Width="16"
+											Height="16"
+											Margin="5,0,0,0"
+											Source="{Binding RowData.Row.Type, Converter={StaticResource WpTypeToPictureConverter}}" />
+										<Image
+											Cursor="Hand"
+											ToolTip="{DynamicResource AddPart}"
+											Source="pack://application:,,,/ASC;component/Resources/Cube_16x16.png"
+											Width="16"
+											Height="16"
+											Margin="5,0,0,0"
+											Visibility="{Binding RowData.Row.CanAddPart, Converter={StaticResource BooleanToVisibilityConverter}}">
+											<dxmvvm:Interaction.Behaviors>
+												<dxmvvm:EventToCommand
+													EventTriggerBase_x0060_1.EventName="MouseLeftButtonUp"
+													Command="{Binding DataContext.AddPartCommand, ElementName=WorksParts}" />
+											</dxmvvm:Interaction.Behaviors>
+										</Image>
+									</StackPanel>
+								</DataTemplate>
+							</dxg:ColumnBase.CellTemplate>
+						</dxg:TreeListColumn>
+						<dxg:TreeListColumn
+							Name="Name"
+							Header="{DynamicResource ItemName}"
+							HorizontalHeaderContentAlignment="Center"
+							Width="100*"
+							Binding="{Binding Name, Mode=TwoWay}">
+							<dxg:ColumnBase.EditSettings>
+								<dxe:TextEditSettings
+									MaxLength="254" />
+							</dxg:ColumnBase.EditSettings>
+						</dxg:TreeListColumn>
+						<dxg:TreeListColumn
+							Name="Count"
+							Header="{DynamicResource Count}"
+							HorizontalHeaderContentAlignment="Center"
+							Binding="{Binding Count, Mode=TwoWay}">
+							<dxg:ColumnBase.EditSettings>
+								<dxe:SpinEditSettings
+									MinValue="1"
+									IsFloatValue="False"
+									HorizontalContentAlignment="Center" />
+							</dxg:ColumnBase.EditSettings>
+						</dxg:TreeListColumn>
+						<dxg:TreeListColumn
+							Name="Price"
+							Header="{DynamicResource Price}"
+							HorizontalHeaderContentAlignment="Center"
+							Binding="{Binding Price, Mode=TwoWay}">
+							<dxg:ColumnBase.CellTemplate>
+								<DataTemplate>
+									<dxe:TextEdit
+										Name="PART_Editor"
+										Style="{StaticResource NumericTextBox}"
+										EditValue="{Binding RowData.Row.Price, Mode=TwoWay}">
+										<dxmvvm:Interaction.Behaviors>
+											<extensions:SelectAllOnMouseUpBehavior />
+										</dxmvvm:Interaction.Behaviors>
+									</dxe:TextEdit>
+								</DataTemplate>
+							</dxg:ColumnBase.CellTemplate>
+						</dxg:TreeListColumn>
+						<dxg:TreeListColumn
+							Name="Summ"
+							Header="{DynamicResource Summ}"
+							HorizontalHeaderContentAlignment="Center"
+							ReadOnly="True"
+							Binding="{Binding Summ}">
+							<dxg:ColumnBase.EditSettings>
+								<dxe:TextEditSettings
+									Style="{StaticResource GridClassicOrNot}" />
+							</dxg:ColumnBase.EditSettings>
+						</dxg:TreeListColumn>
+						<dxg:TreeListColumn
+							Name="Warranty"
+							HorizontalHeaderContentAlignment="Center"
+							Width="15*"
+							Header="{DynamicResource Warranty}"
+							FieldName="WarrantyCol"
+							Binding="{Binding Warranty, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+							<dxg:ColumnBase.EditSettings>
+								<dxe:ComboBoxEditSettings
+									ValueMember="Days"
+									DisplayMember="Name"
+									ItemsSource="{Binding DataContext.WarrantyOptionses, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" />
+							</dxg:ColumnBase.EditSettings>
+						</dxg:TreeListColumn>
+						<dxg:TreeListColumn
+							Name="WorksOfEmployee"
+							HorizontalHeaderContentAlignment="Center"
+							Width="20*"
+							Header="{DynamicResource CoWorker}"
+							FieldName="WorksOfEmployee"
+							ReadOnly="{Binding DataContext.CanMasterChange, Converter={StaticResource BooleanNegationConverter}, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+							Binding="{Binding EmployeeId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+							<dxg:ColumnBase.EditSettings>
+								<dxe:ComboBoxEditSettings
+									ValueMember="Id"
+									DisplayMember="Fio"
+									AllowDefaultButton="{Binding DataContext.CanMasterChange, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+									ItemsSource="{Binding ActiveUsers, Source={x:Static objects:OfflineData.Instance}}" />
+							</dxg:ColumnBase.EditSettings>
+						</dxg:TreeListColumn>
+					</dxg:TreeListControl>
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+			<dxlc:LayoutGroup
+				Orientation="Horizontal"
+				HorizontalAlignment="Stretch">
+				<dxlc:LayoutItem
+					HorizontalAlignment="Left"
+					Visibility="{Binding ExpressMode, Converter={StaticResource BooleanToVisibilityConverter}}">
+					<dx:SimpleButton
+						Content="{DynamicResource Work}"
+						Style="{StaticResource DefaultButton}"
+						Command="{Binding AddWorkCommand}"
+						CommandParameter="{Binding ElementName=WpGrid}"
+						Glyph="{DXImageGrayscale Image=Add_16x16.png}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					HorizontalAlignment="Left"
+					Visibility="{Binding ExpressMode, Converter={StaticResource BooleanToVisibilityConverter}}">
+					<dx:SimpleButton
+						Content="{DynamicResource WorkFromPrice}"
+						Style="{StaticResource DefaultButton}"
+						Command="{Binding AddPriceWorkCommand}"
+						Glyph="{DXImageGrayscale Image=ListBullets_16x16.png}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					VerticalAlignment="Center"
+					Visibility="{Binding PartsIncludedVisibility, Converter={StaticResource BooleanToVisibilityConverter}}">
+					<TextBlock
+						Foreground="#FF006400"
+						FontSize="11"
+						Text="{DynamicResource PartsIncluded}"
+						Visibility="{Binding ExpressMode, Converter={StaticResource BooleanToVisibilityConverter}}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					HorizontalAlignment="Right">
+					<StackPanel
+						Orientation="Horizontal"
+						HorizontalAlignment="Right">
+						<Label
+							Content="{DynamicResource WorkAmount}"
+							ContentStringFormat="{}{0}:"
+							VerticalAlignment="Center" />
+						<dxe:TextEdit
+							Margin="5,0,0,0"
+							Style="{StaticResource NumericTextBox}"
+							FontWeight="Bold"
+							IsReadOnly="True"
+							Width="75"
+							EditValue="{Binding TotalWorks, Mode=OneWay}" />
+					</StackPanel>
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					HorizontalAlignment="Right">
+					<StackPanel
+						Orientation="Horizontal"
+						Margin="5,0,0,0">
+						<Label
+							Content="{DynamicResource ItemsAmount}"
+							ContentStringFormat="{}{0}:"
+							HorizontalAlignment="Left"
+							VerticalAlignment="Center" />
+						<dxe:TextEdit
+							Style="{StaticResource NumericTextBox}"
+							Margin="5,0,0,0"
+							FontWeight="Bold"
+							Width="75"
+							EditValue="{Binding TotalParts, Mode=OneWay}" />
+					</StackPanel>
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					HorizontalAlignment="Right">
+					<StackPanel
+						Orientation="Horizontal"
+						HorizontalAlignment="Right"
+						Margin="5,0,0,0">
+						<Label
+							Content="{DynamicResource RepairCost}"
+							ContentStringFormat="{}{0}:"
+							VerticalAlignment="Center" />
+						<dxe:TextEdit
+							Style="{StaticResource NumericTextBox}"
+							FontWeight="Bold"
+							IsReadOnly="True"
+							Height="23"
+							Margin="5,0,0,0"
+							Width="75"
+							EditValue="{Binding TotalRepairCost, Mode=OneWay}" />
+					</StackPanel>
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+		</dxlc:LayoutControl>
+	</Grid>
+</UserControl>

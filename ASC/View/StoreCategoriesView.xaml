@@ -1,0 +1,122 @@
+<UserControl
+	x:Class="ASC.View.StoreCategoriesView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:ASC.View" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" xmlns:objects="clr-namespace:ASC.Objects" xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm">
+	<dxlc:LayoutGroup
+		Orientation="Vertical">
+		<dxlc:LayoutItem
+			VerticalAlignment="Top"
+			Visibility="{Binding StoresEnable, Converter={StaticResource BooleanToVisibilityConverter}}">
+			<dxe:ComboBoxEdit
+				VerticalAlignment="Top"
+				HorizontalAlignment="Stretch"
+				Height="20"
+				NullText="{DynamicResource SelectStore2}"
+				ValueMember="id"
+				DisplayMember="name"
+				PopupMaxHeight="250"
+				ClosePopupOnLostFocus="False"
+				IsTextEditable="False"
+				EditValue="{Binding SelectedStore, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+				ItemsSource="{Binding Stores}" />
+		</dxlc:LayoutItem>
+		<dxlc:LayoutItem
+			VerticalAlignment="Stretch">
+			<dxg:TreeListControl
+				Name="CategoriesListControl"
+				DockPanel.Dock="Left"
+				SelectionMode="Row"
+				AllowInitiallyFocusedRow="False"
+				ItemsSource="{Binding Items}"
+				SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+				<dxg:TreeListControl.View>
+					<dxg:TreeListView
+						ExpandStateFieldName="IsExpand"
+						ShowNodeImages="True"
+						ImageFieldName="Image"
+						ShowIndicator="False"
+						ShowHorizontalLines="False"
+						ShowVerticalLines="False"
+						NavigationStyle="Row"
+						AllowEditing="False"
+						KeyFieldName="Id"
+						ParentFieldName="Parent"
+						UseLegacyColumnVisibleIndexes="True"
+						UseIndicatorForSelection="False"
+						AllowScrollToFocusedRow="False"
+						AutoMoveRowFocus="False"
+						AllowMoveColumnToDropArea="False"
+						AllowColumnMoving="False"
+						AllowDragDrop="True"
+						AllowResizing="False"
+						ShowColumnHeaders="False"
+						ShowBandsPanel="False"
+						FadeSelectionOnLostFocus="False"
+						RowMinHeight="{Binding Employee.UiSettings.RowHeight, Source={x:Static objects:OfflineData.Instance}}"
+						FontSize="{Binding Employee.UiSettings.FontSize, Source={x:Static objects:OfflineData.Instance}}">
+						<dxg:TreeListView.RowStyle>
+							<Style
+								TargetType="{x:Type dxg:RowControl}">
+								<Style.Triggers>
+									<DataTrigger
+										Value="Focused"
+										Binding="{Binding Path=SelectionState}">
+										<Setter
+											Property="Background"
+											Value="{DynamicResource UiSelectedRowColor}" />
+									</DataTrigger>
+								</Style.Triggers>
+							</Style>
+						</dxg:TreeListView.RowStyle>
+						<dxg:DataViewBase.RowCellMenuCustomizations>
+							<dxb:BarButtonItem
+								Content="{DynamicResource CategoryCreate}"
+								Glyph="{dx:DXImageGrayscale Image=New_16x16.png}"
+								Command="{Binding Path=(dxg:GridPopupMenu.GridMenuInfo).View.DataContext.ShowAddCategoryCommand, RelativeSource={RelativeSource Self}}" />
+							<dxb:BarButtonItem
+								Content="{DynamicResource CategoryEdit}"
+								Glyph="{dx:DXImageGrayscale Image=Edit_16x16.png}"
+								Command="{Binding Path=(dxg:GridPopupMenu.GridMenuInfo).View.DataContext.ShowEditCategoryCommand, RelativeSource={RelativeSource Self}}" />
+							<dxb:BarButtonItem
+								Content="{DynamicResource Save}"
+								Glyph="{dx:DXImageGrayscale Image=Save_16x16.png}"
+								Command="{Binding Path=(dxg:GridPopupMenu.GridMenuInfo).View.DataContext.SavePositionCommand, RelativeSource={RelativeSource Self}}"
+								CommandParameter="{Binding ElementName=CategoriesListControl}" />
+							<dxb:BarButtonItem
+								Content="{DynamicResource ShowArhive}"
+								Glyph="{dx:DXImageGrayscale Image=Clear_16x16.png}"
+								Command="{Binding Path=(dxg:GridPopupMenu.GridMenuInfo).View.DataContext.ShowArchiveCommand, RelativeSource={RelativeSource Self}}" />
+						</dxg:DataViewBase.RowCellMenuCustomizations>
+					</dxg:TreeListView>
+				</dxg:TreeListControl.View>
+				<dxmvvm:Interaction.Behaviors>
+					<dxg:TreeListDragDropManager
+						AllowAutoExpand="True"
+						AutoExpandDelay="500"
+						AllowDrag="True"
+						AllowDrop="True">
+						<dxmvvm:Interaction.Behaviors>
+							<dxmvvm:EventToCommand
+								EventTriggerBase_x0060_1.EventName="DragOver"
+								PassEventArgsToCommand="True"
+								Command="{Binding CategoryDragCommand, UpdateSourceTrigger=PropertyChanged}" />
+						</dxmvvm:Interaction.Behaviors>
+					</dxg:TreeListDragDropManager>
+				</dxmvvm:Interaction.Behaviors>
+				<dxg:TreeListControl.Columns>
+					<dxg:TreeListColumn
+						Width="*"
+						AllowResizing="False"
+						AllowMoving="False"
+						FieldName="Name"
+						MinWidth="120"
+						AllowAutoFilter="False"
+						AllowColumnFiltering="False"
+						AllowSorting="False" />
+					<dxg:TreeListColumn
+						FieldName="Image"
+						Visible="False"
+						ShowInColumnChooser="False" />
+				</dxg:TreeListControl.Columns>
+			</dxg:TreeListControl>
+		</dxlc:LayoutItem>
+	</dxlc:LayoutGroup>
+</UserControl>

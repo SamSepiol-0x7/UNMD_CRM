@@ -1,0 +1,177 @@
+<UserControl
+	x:Class="ASC.View.AdditionalFieldEditView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:ASC.View" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:converters="clr-namespace:ASC.Converters" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
+	KeyUp="{DXEvent OnKeyUp(@args)}">
+	<FrameworkElement.Resources>
+		<converters:ListInt2ValueConverter
+			x:Key="Int2ValueConverter" />
+		<ControlTemplate
+			x:Key="StoreCategoriesDTO">
+			<dxg:GridControl
+				Name="PART_GridControl"
+				AutoExpandAllGroups="True"
+				AutoGenerateColumns="None">
+				<dxg:GridControl.Columns>
+					<dxg:GridColumn
+						FieldName="Name"
+						Header="NAME" />
+				</dxg:GridControl.Columns>
+				<dxg:GridControl.View>
+					<dxg:TreeListView
+						AutoWidth="True"
+						ShowColumnHeaders="False"
+						ShowVerticalLines="False"
+						ShowHorizontalLines="False"
+						ShowIndicator="False"
+						KeyFieldName="Id"
+						ParentFieldName="Parent"
+						ExpandStateFieldName="IsExpand"
+						TreeDerivationMode="Selfreference">
+						<dxg:TreeListView.RowStyle>
+							<Style
+								TargetType="{x:Type dxg:RowControl}">
+								<Style.Triggers>
+									<DataTrigger
+										Value="False"
+										Binding="{Binding Path=Row.Parent, Converter={dxmvvm:NumericToBooleanConverter}}">
+										<Setter
+											Property="IsEnabled"
+											Value="False" />
+										<Setter
+											Property="FontWeight"
+											Value="Bold" />
+									</DataTrigger>
+								</Style.Triggers>
+							</Style>
+						</dxg:TreeListView.RowStyle>
+					</dxg:TreeListView>
+				</dxg:GridControl.View>
+			</dxg:GridControl>
+		</ControlTemplate>
+	</FrameworkElement.Resources>
+	<DockPanel
+		MaxWidth="600">
+		<StackPanel
+			Margin="10"
+			DockPanel.Dock="Bottom"
+			Orientation="Horizontal"
+			VerticalAlignment="Bottom"
+			HorizontalAlignment="Right">
+			<dx:SimpleButton
+				Margin="10,0,0,0"
+				Style="{StaticResource SaveButton}"
+				Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={BooleanToVisibilityConverter}}"
+				Command="{Binding SaveCommand}" />
+			<dx:SimpleButton
+				Margin="10,0,0,0"
+				Content="{DynamicResource Create}"
+				Style="{StaticResource SaveButton}"
+				Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={BooleanToVisibilityConverter}}"
+				Command="{Binding CreateCommand}" />
+			<dx:SimpleButton
+				ToolTip="[Esc]"
+				Style="{StaticResource CancelButton}"
+				Margin="10,0,0,0"
+				Command="{Binding CloseCommand}" />
+		</StackPanel>
+		<dxlc:LayoutControl
+			MinWidth="450"
+			ItemStyle="{StaticResource LeftMenuLayout}"
+			Orientation="Vertical"
+			ItemSpace="5"
+			Padding="10">
+			<dxlc:LayoutItem
+				Label="{DynamicResource Device}"
+				Visibility="{Binding Item.C_f, Converter={dx:BooleanToVisibilityConverter Invert=True}}">
+				<dxe:ComboBoxEdit
+					DisplayMember="Name"
+					ValueMember="Id"
+					NullValueButtonPlacement="EditBox"
+					EditValue="{Binding SelectedDevices, Mode=TwoWay, Converter={StaticResource Int2ValueConverter}, UpdateSourceTrigger=PropertyChanged}"
+					ItemsSource="{Binding Devices}">
+					<dxe:BaseEdit.StyleSettings>
+						<dxe:CheckedComboBoxStyleSettings />
+					</dxe:BaseEdit.StyleSettings>
+				</dxe:ComboBoxEdit>
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource Category}"
+				Visibility="{Binding Item.C_f, Converter={dx:BooleanToVisibilityConverter}}">
+				<dxg:LookUpEdit
+					dxe:NullValueButtonPlacement="EditBox"
+					dxe:PopupContentTemplate="{StaticResource StoreCategoriesDTO}"
+					AutoPopulateColumns="False"
+					dxe:DisplayMember="Name"
+					dxe:ValueMember="Id"
+					dxe:EditValue="{Binding SelectedCategories, Mode=TwoWay, Converter={StaticResource Int2ValueConverter}, UpdateSourceTrigger=PropertyChanged}"
+					dxe:ItemsSource="{Binding Categories}">
+					<dxmvvm:Interaction.Behaviors>
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="EditValueChanging"
+							PassEventArgsToCommand="True"
+							Command="{Binding SelectedCategoriesEditValueChangingCommand}" />
+					</dxmvvm:Interaction.Behaviors>
+					<dxg:LookUpEdit.StyleSettings>
+						<dxg:MultiSelectLookUpEditStyleSettings
+							SelectionMode="Multiple" />
+					</dxg:LookUpEdit.StyleSettings>
+				</dxg:LookUpEdit>
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource Name}">
+				<dxe:TextEdit
+					EditValue="{Binding Item.name, Mode=TwoWay}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource Type}">
+				<dxe:ComboBoxEdit
+					DisplayMember="Value"
+					ValueMember="Key"
+					EditValue="{Binding Item.type, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+					ItemsSource="{Binding FieldTypes}">
+					<dxmvvm:Interaction.Behaviors>
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="EditValueChanged"
+							Command="{Binding ItemTypeChangedCommand}" />
+					</dxmvvm:Interaction.Behaviors>
+				</dxe:ComboBoxEdit>
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource DefaultValue}">
+				<dxe:TextEdit
+					MaxHeight="150"
+					VerticalContentAlignment="Top"
+					TextWrapping="Wrap"
+					IsEnabled="{Binding HasDefaultValue}"
+					Text="{Binding Item.def_values, Mode=TwoWay}"
+					AcceptsReturn="{Binding MultilineDefaultValue}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource Mandatory}">
+				<CheckBox
+					IsChecked="{Binding Item.required, Mode=TwoWay}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource Print}">
+				<CheckBox
+					IsChecked="{Binding Item.printable, Mode=TwoWay}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource Archive}"
+				Visibility="{Binding Item.id, Converter={dxmvvm:NumericToVisibilityConverter}}">
+				<CheckBox
+					IsChecked="{Binding Item.archive, Mode=TwoWay}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Visibility="{Binding MultilineDefaultValue, Converter={dx:BooleanToVisibilityConverter}}">
+				<TextBlock
+					Foreground="#FF0000FF"
+					HorizontalAlignment="Left"
+					VerticalAlignment="Bottom"
+					Text="Каждое значение с новой строки"
+					FontSize="11"
+					TextWrapping="Wrap"
+					Margin="0,0,0,27" />
+			</dxlc:LayoutItem>
+		</dxlc:LayoutControl>
+	</DockPanel>
+</UserControl>

@@ -1,0 +1,235 @@
+<UserControl
+	x:Class="ASC.Charts.VisitSource.VisitSourceView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:ASC.Charts.VisitSource" xmlns:dxc="http://schemas.devexpress.com/winfx/2008/xaml/charts" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:dxwui="http://schemas.devexpress.com/winfx/2008/xaml/windowsui" xmlns:objects="clr-namespace:ASC.Objects" xmlns:controls="clr-namespace:ASC.View.Controls" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" xmlns:properties="clr-namespace:ASC.Properties" xmlns:extensions="clr-namespace:ASC.Extensions"
+	DataContext="{dxmvvm:ViewModelSource Type=local:VisitSourceViewModel}">
+	<DockPanel>
+		<dxwui:AppBar
+			DockPanel.Dock="Bottom"
+			Background="#3f3f3f"
+			HorizontalAlignment="Stretch"
+			VerticalAlignment="Stretch"
+			ItemSpacing="0"
+			HideMode="AlwaysVisible"
+			Grid.Row="1">
+			<dxwui:AppBarButton
+				Label="{DynamicResource Refresh}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Command="{Binding RefreshCommand}"
+				Glyph="{dx:DXImageGrayscale Image=Refresh_32x32.png}" />
+		</dxwui:AppBar>
+		<DockPanel
+			Dock="Left">
+			<dxlc:LayoutControl
+				DockPanel.Dock="Left"
+				MaxWidth="400"
+				ItemStyle="{StaticResource LeftMenuLayout}"
+				Orientation="Vertical"
+				ItemSpace="5"
+				Padding="10"
+				Visibility="{Binding ElementName=ExpandButton, Path=IsChecked, Converter={dxmvvm:BooleanToVisibilityConverter}}">
+				<dxlc:LayoutItem
+					Label="{DynamicResource Office}">
+					<dxe:ComboBoxEdit
+						DisplayMember="name"
+						ValueMember="id"
+						EditValue="{Binding SelectedOffice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+						ItemsSource="{Binding OfficesWithAll, Source={x:Static objects:OfflineData.Instance}}">
+						<dxmvvm:Interaction.Behaviors>
+							<dxmvvm:EventToCommand
+								EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+								PassEventArgsToCommand="True"
+								Command="{Binding ComboBoxClickCommand}" />
+						</dxmvvm:Interaction.Behaviors>
+					</dxe:ComboBoxEdit>
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource Devices}">
+					<dxe:ComboBoxEdit
+						DisplayMember="Name"
+						ValueMember="Id"
+						EditValue="{Binding SelectedDeviceId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+						ItemsSource="{Binding Devices}">
+						<dxmvvm:Interaction.Behaviors>
+							<dxmvvm:EventToCommand
+								EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+								PassEventArgsToCommand="True"
+								Command="{Binding ComboBoxClickCommand}" />
+						</dxmvvm:Interaction.Behaviors>
+					</dxe:ComboBoxEdit>
+				</dxlc:LayoutItem>
+				<controls:PeriodView />
+			</dxlc:LayoutControl>
+			<Grid
+				DockPanel.Dock="Left">
+				<ToggleButton
+					Name="ExpandButton"
+					Padding="0"
+					Margin="0"
+					Style="{StaticResource HideButtonStyleLeft}"
+					VerticalAlignment="Center"
+					IsChecked="{Binding Path=KassaSidebarExpanded, Source={x:Static properties:Settings.Default}}" />
+			</Grid>
+		</DockPanel>
+		<Border
+			BorderThickness="1,1,0,0"
+			BorderBrush="#FFA9A9A9">
+			<DockPanel>
+				<dxg:GridControl
+					Name="TableView1"
+					Tag="VisitSourceGrid"
+					ShowBorder="False"
+					DockPanel.Dock="Top"
+					MinWidth="200"
+					Height="300"
+					AllowInitiallyFocusedRow="False"
+					SelectionMode="Row"
+					ItemsSource="{Binding ChartDetails}"
+					SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+					<dxmvvm:Interaction.Behaviors>
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="Loaded"
+							Command="{Binding GridInitCommand}"
+							CommandParameter="{Binding ElementName=TableView1}" />
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="Unloaded"
+							Command="{Binding GridUnloadedCommand}"
+							CommandParameter="{Binding ElementName=TableView1}" />
+						<extensions:GridLayoutHelper>
+							<dxmvvm:Interaction.Behaviors>
+								<dxmvvm:EventToCommand
+									EventTriggerBase_x0060_1.EventName="LayoutChanged"
+									Command="{Binding LayoutChangedCommand}"
+									CommandParameter="{Binding ElementName=TableView1}" />
+							</dxmvvm:Interaction.Behaviors>
+						</extensions:GridLayoutHelper>
+					</dxmvvm:Interaction.Behaviors>
+					<dxg:GridControl.Columns>
+						<dxg:GridColumn
+							HorizontalHeaderContentAlignment="Center"
+							FieldName="Id"
+							Header="ID"
+							Binding="{Binding Id}">
+							<dxg:ColumnBase.EditSettings>
+								<dxe:TextEditSettings
+									Mask="d6"
+									MaskType="Numeric"
+									MaskUseAsDisplayFormat="True"
+									HorizontalContentAlignment="Center" />
+							</dxg:ColumnBase.EditSettings>
+						</dxg:GridColumn>
+						<dxg:GridColumn
+							FieldName="FioOrUrName"
+							Header="{DynamicResource Client}"
+							Width="*" />
+						<dxg:GridColumn
+							FieldName="VisitSourceName"
+							Header="{DynamicResource VisitSource}"
+							Binding="{Binding VisitSourceName}" />
+						<dxg:GridColumn
+							FieldName="RepairsCount"
+							Header="{DynamicResource Repairs2}" />
+						<dxg:GridColumn
+							FieldName="PurchasesCount"
+							Header="{DynamicResource Label92}" />
+						<dxg:GridColumn
+							HorizontalHeaderContentAlignment="Center"
+							FieldName="Created"
+							Header="{DynamicResource DateCreate}">
+							<dxg:ColumnBase.EditSettings>
+								<dxe:TextEditSettings
+									Mask="dd.MM.yyyy HH:mm"
+									MaskType="DateTime"
+									MaskUseAsDisplayFormat="True"
+									HorizontalContentAlignment="Center" />
+							</dxg:ColumnBase.EditSettings>
+						</dxg:GridColumn>
+					</dxg:GridControl.Columns>
+					<dxg:GridControl.View>
+						<dxg:TableView
+							IsSynchronizedWithCurrentItem="True"
+							ShowTotalSummary="True"
+							AllowScrollAnimation="True"
+							NavigationStyle="Row"
+							ColumnFilterPopupMode="Excel"
+							AllowEditing="False"
+							AllowGrouping="False"
+							AllowColumnMoving="True"
+							ShowGroupPanel="False"
+							ShowColumnHeaders="True"
+							AllowMoveColumnToDropArea="False"
+							ShowSearchPanelMode="Never"
+							ShowBandsPanel="True"
+							ShowIndicator="False"
+							AllowBestFit="True"
+							AllowColumnFiltering="True"
+							ShowSelectionRectangle="False"
+							ShowFixedTotalSummary="False"
+							SummariesIgnoreNullValues="True"
+							RowMinHeight="{Binding Employee.UiSettings.RowHeight, Source={x:Static objects:OfflineData.Instance}}"
+							FontSize="{Binding Employee.UiSettings.FontSize, Source={x:Static objects:OfflineData.Instance}}">
+							<dxmvvm:Interaction.Behaviors>
+								<dxmvvm:EventToCommand
+									EventTriggerBase_x0060_1.EventName="RowDoubleClick"
+									Command="{Binding ItemDoubleClickCommand}" />
+							</dxmvvm:Interaction.Behaviors>
+						</dxg:TableView>
+					</dxg:GridControl.View>
+					<dxg:GridControl.TotalSummary>
+						<dxg:GridSummaryItem
+							DisplayFormat=" {0:N0}"
+							SummaryType="Count"
+							FieldName="Id" />
+					</dxg:GridControl.TotalSummary>
+				</dxg:GridControl>
+				<dxc:ChartControl
+					Name="chart"
+					SeriesSelectionMode="Point"
+					SelectionMode="Multiple"
+					BorderThickness="0"
+					HorizontalAlignment="Stretch"
+					VerticalAlignment="Stretch"
+					AnimationMode="OnDataChanged"
+					SelectedItems="{Binding SelectedVisitSources}"
+					DataSource="{Binding VisitChart}">
+					<dxc:ChartControl.Diagram>
+						<dxc:SimpleDiagram2D>
+							<dxc:PieSeries2D
+								AnimationAutoStartMode="SetStartState"
+								HoleRadiusPercent="0"
+								LabelsVisibility="True"
+								ArgumentDataMember="Name"
+								ValueDataMember="Count">
+								<dxc:PieSeries2D.Model>
+									<dxc:GlassPie2DModel />
+								</dxc:PieSeries2D.Model>
+								<dxc:PieSeries2D.PointAnimation>
+									<dxc:Pie2DFlyInAnimation
+										Duration="0:0:1"
+										PointOrder="Random" />
+								</dxc:PieSeries2D.PointAnimation>
+								<dxc:Series.Label>
+									<dxc:SeriesLabel
+										Foreground="#FFFFFFFF"
+										PieSeries.LabelPosition="TwoColumns"
+										Indent="0"
+										TextPattern="{}{A}: {V} ({VP:p2})"
+										Visibility="Visible"
+										RenderMode="Rectangle"
+										ResolveOverlappingMode="Default" />
+								</dxc:Series.Label>
+							</dxc:PieSeries2D>
+						</dxc:SimpleDiagram2D>
+					</dxc:ChartControl.Diagram>
+					<dxc:ChartControlBase.Titles>
+						<dxc:Title
+							Dock="Top"
+							HorizontalAlignment="Center"
+							FontSize="22"
+							Content="{DynamicResource VisitSources}" />
+					</dxc:ChartControlBase.Titles>
+				</dxc:ChartControl>
+			</DockPanel>
+		</Border>
+	</DockPanel>
+</UserControl>

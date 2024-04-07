@@ -1,0 +1,80 @@
+<UserControl
+	x:Class="ASC.View.EndpointEditView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:ASC.View" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:collections="clr-namespace:System.Collections;assembly=mscorlib" xmlns:system="clr-namespace:System;assembly=mscorlib">
+	<DockPanel>
+		<StackPanel
+			DockPanel.Dock="Top"
+			Margin="10"
+			Orientation="Horizontal">
+			<TextBlock
+				Text="{DynamicResource IntPhoneN}" />
+		</StackPanel>
+		<StackPanel
+			DockPanel.Dock="Bottom"
+			HorizontalAlignment="Right"
+			Orientation="Horizontal">
+			<dx:SimpleButton
+				Style="{DynamicResource SaveButton}"
+				Content="{DynamicResource Create}"
+				Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={BooleanToVisibilityConverter}}"
+				Command="{Binding CreateCommand}" />
+			<dx:SimpleButton
+				Style="{DynamicResource SaveButton}"
+				Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={BooleanToVisibilityConverter}}"
+				Command="{Binding SaveCommand}" />
+			<dx:SimpleButton
+				Style="{DynamicResource CancelButton}"
+				Margin="10,0,0,0"
+				Command="{Binding CloseCommand}" />
+		</StackPanel>
+		<dxlc:LayoutControl
+			Orientation="Vertical">
+			<dxlc:LayoutItem
+				Label="Номер">
+				<dxe:TextEdit
+					MaskType="Numeric"
+					Mask="d"
+					MaskUseAsDisplayFormat="True"
+					MinWidth="150"
+					EditValue="{Binding Tel, Mode=TwoWay}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource Password}"
+				Visibility="{Binding PasswordVisible, Converter={dx:BooleanToVisibilityConverter}}">
+				<dxe:ButtonEdit
+					AllowDefaultButton="False"
+					MinWidth="150"
+					EditValue="{Binding Password, Mode=TwoWay}">
+					<dxe:ButtonEdit.Buttons>
+						<dxe:ButtonInfo
+							Content="GEN"
+							Command="{Binding GenPasswordCommand}" />
+					</dxe:ButtonEdit.Buttons>
+				</dxe:ButtonEdit>
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource Context}">
+				<dxe:TextEdit
+					MinWidth="150"
+					EditValue="{Binding Context, Mode=TwoWay}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource Codec}">
+				<dxe:ComboBoxEdit
+					SeparatorString=","
+					MinWidth="150"
+					EditValue="{Binding AllowList, Mode=TwoWay}">
+					<dxe:LookUpEditBase.ItemsSource>
+						<collections:ArrayList>
+							<system:String>alaw</system:String>
+							<system:String>ulaw</system:String>
+							<system:String>g722</system:String>
+						</collections:ArrayList>
+					</dxe:LookUpEditBase.ItemsSource>
+					<dxe:BaseEdit.StyleSettings>
+						<dxe:CheckedComboBoxStyleSettings />
+					</dxe:BaseEdit.StyleSettings>
+				</dxe:ComboBoxEdit>
+			</dxlc:LayoutItem>
+		</dxlc:LayoutControl>
+	</DockPanel>
+</UserControl>

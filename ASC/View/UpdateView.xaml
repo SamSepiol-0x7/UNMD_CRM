@@ -1,0 +1,71 @@
+<UserControl
+	x:Class="ASC.View.UpdateView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:ASC.View" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm">
+	<DockPanel
+		MaxWidth="800">
+		<StackPanel
+			Orientation="Horizontal"
+			DockPanel.Dock="Bottom"
+			HorizontalAlignment="Right"
+			Margin="10">
+			<dx:SimpleButton
+				Content="{DynamicResource Update}"
+				Visibility="{Binding IsEnabled, Converter={StaticResource BooleanToVisibilityConverter}, RelativeSource={RelativeSource Self}}"
+				Command="{Binding UpdateCommand}"
+				Glyph="{DXImageGrayscale Image=Up_16x16.png}" />
+			<dx:SimpleButton
+				Margin="10,0,0,0"
+				Content="{DynamicResource SkipUpdate}"
+				Visibility="{Binding IsEnabled, Converter={StaticResource BooleanToVisibilityConverter}, RelativeSource={RelativeSource Self}}"
+				Command="{Binding SkipCommand}" />
+			<dx:SimpleButton
+				Margin="10,0,0,0"
+				Style="{StaticResource CancelButton}"
+				Command="{Binding CloseCommand}" />
+		</StackPanel>
+		<dxlc:LayoutControl
+			MinWidth="500"
+			Orientation="Vertical">
+			<dxlc:LayoutItem>
+				<TextBlock
+					FontWeight="Bold"
+					Text="{Binding Message, Mode=OneWay}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutGroup
+				Orientation="Vertical"
+				Visibility="{Binding Version, Converter={dxmvvm:StringToVisibilityConverter}}">
+				<dxlc:LayoutItem
+					AddColonToLabel="True"
+					Label="{DynamicResource CurrentVersion}">
+					<TextBlock
+						Text="{Binding CurrentVersion, Mode=OneWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					AddColonToLabel="True"
+					Label="{DynamicResource NewVersion}">
+					<TextBlock
+						Text="{Binding Version, Mode=OneWay}" />
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+			<dxlc:LayoutItem
+				Label="{DynamicResource ReleaseNotes}"
+				LabelPosition="Top"
+				Visibility="{Binding UpdateAvailable, Converter={StaticResource BooleanToVisibilityConverter}}">
+				<dxe:TextEdit
+					VerticalContentAlignment="Top"
+					MinHeight="100"
+					VerticalScrollBarVisibility="Visible"
+					AcceptsReturn="True"
+					TextWrapping="Wrap"
+					IsReadOnly="True"
+					Text="{Binding ReleaseNotes, Mode=OneWay}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Visibility="{Binding DownloadProgressBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+				<dxe:ProgressBarEdit
+					Maximum="100"
+					Minimum="0"
+					EditValue="{Binding DownloadProgress}" />
+			</dxlc:LayoutItem>
+		</dxlc:LayoutControl>
+	</DockPanel>
+</UserControl>

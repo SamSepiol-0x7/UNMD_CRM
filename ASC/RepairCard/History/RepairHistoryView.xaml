@@ -1,0 +1,232 @@
+<UserControl
+	x:Class="ASC.RepairCard.History.RepairHistoryView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:dxwui="http://schemas.devexpress.com/winfx/2008/xaml/windowsui" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:header="clr-namespace:ASC.RepairCard.Header" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:view="clr-namespace:ASC.View" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:objects="clr-namespace:ASC.Objects"
+	Name="RepairHistory" xmlns:history="clr-namespace:ASC.RepairCard.History"
+	Loaded="{DXEvent OnLoad()}">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition
+				Height="571*" />
+			<RowDefinition
+				Height="90" />
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition
+				Width="400" />
+			<ColumnDefinition />
+		</Grid.ColumnDefinitions>
+		<header:HeaderView
+			Grid.ColumnSpan="2"
+			dxmvvm:ViewModelExtensions.Parameter="{Binding DataContext.Repair, ElementName=RepairHistory}"
+			dxmvvm:ViewModelExtensions.ParentViewModel="{Binding DataContext, ElementName=RepairHistory}" />
+		<view:HistoryView
+			Grid.Column="1"
+			Grid.RowSpan="2"
+			Margin="0,41,0,0"
+			dxmvvm:ViewModelExtensions.ParentViewModel="{Binding DataContext, ElementName=RepairHistory}" />
+		<dxwui:AppBar
+			Background="#3f3f3f"
+			HorizontalAlignment="Stretch"
+			VerticalAlignment="Stretch"
+			ItemSpacing="5"
+			HideMode="AlwaysVisible"
+			Grid.Row="1"
+			Grid.ColumnSpan="2">
+			<dxwui:AppBarButton
+				Label="{DynamicResource Common}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Command="{Binding OpenRepairCommonCommand}"
+				Glyph="{dx:DXImage Image=Suggestion_32x32.png}" />
+			<dxwui:AppBarButton
+				Label="{DynamicResource Client}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Command="{Binding OpenClientCardCommand}"
+				Visibility="{Binding ConverterParameter=CAN_VIEW_CLIENTS, Converter={StaticResource AclVis}}"
+				Glyph="{dx:DXImage Image=BOCustomer_32x32.png}" />
+			<dxwui:AppBarButton
+				Label="{DynamicResource Media}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Command="{Binding OpenMediaCommand}"
+				Glyph="{dx:DXImage Image=VideoContent_32x32.png}" />
+			<dxwui:AppBarButton
+				Label="{DynamicResource Control}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Glyph="pack://application:,,,/DevExpress.Images.v17.2;component/DevAV/Actions/ViewSetting_32x32.png"
+				Margin="0,0,-51,0"
+				Width="151"
+				Visibility="{Binding ConverterParameter=CAN_REPAIR_ADMIN, Converter={StaticResource AclVis}}"
+				Command="{Binding OpenRepairAdminCommand}" />
+		</dxwui:AppBar>
+		<dxlc:LayoutControl
+			ItemStyle="{StaticResource LeftMenuLayout}"
+			Orientation="Vertical"
+			ItemSpace="5"
+			Padding="10"
+			Margin="0,41,5,0">
+			<dxlc:LayoutItem
+				Label="{DynamicResource RepairCreator}">
+				<TextBox
+					VerticalContentAlignment="Center"
+					IsReadOnly="True"
+					Text="{Binding Repair.users2.Fio, Mode=OneWay}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource InRepairDate}">
+				<TextBox
+					VerticalContentAlignment="Center"
+					IsReadOnly="True"
+					Text="{Binding Repair.in_date, Converter={StaticResource UtcToLocalDateTimeConverter}, StringFormat=dd.MM.yyyy HH:mm}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource LastSave}">
+				<TextBox
+					VerticalContentAlignment="Center"
+					IsReadOnly="True"
+					Text="{Binding Repair.last_save, Converter={StaticResource UtcToLocalDateTimeConverter}, StringFormat=dd.MM.yyyy HH:mm}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource LastStatusChange}">
+				<TextBox
+					VerticalContentAlignment="Center"
+					IsReadOnly="True"
+					Text="{Binding Repair.last_status_changed, Converter={StaticResource UtcToLocalDateTimeConverter}, StringFormat=dd.MM.yyyy HH:mm}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource OutDate}">
+				<TextBox
+					VerticalContentAlignment="Center"
+					IsReadOnly="True"
+					Text="{Binding Repair.out_date, Converter={StaticResource UtcToLocalDateTimeConverter}, StringFormat=dd.MM.yyyy HH:mm}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource WarrantyUpTo}">
+				<TextBox
+					VerticalContentAlignment="Center"
+					IsReadOnly="True"
+					Text="{Binding Repair.WarrantyUpTo, Mode=OneWay}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource WarrantyDays}">
+				<TextBox
+					VerticalContentAlignment="Center"
+					IsReadOnly="True"
+					Text="{Binding Repair.warranty_days}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource InputOffice}">
+				<dxe:ComboBoxEdit
+					AllowDefaultButton="False"
+					ShowError="False"
+					DisplayMember="name"
+					ValueMember="id"
+					IsReadOnly="True"
+					EditValue="{Binding Repair.start_office}"
+					ItemsSource="{Binding Offices, Source={x:Static objects:OfflineData.Instance}}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource CurrentOffice}">
+				<dxe:ComboBoxEdit
+					AllowDefaultButton="False"
+					ShowError="False"
+					DisplayMember="name"
+					ValueMember="id"
+					IsReadOnly="True"
+					EditValue="{Binding Repair.office}"
+					ItemsSource="{Binding Offices, Source={x:Static objects:OfflineData.Instance}}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource RepairsCompany}">
+				<dxe:ComboBoxEdit
+					AllowDefaultButton="False"
+					ShowError="False"
+					DisplayMember="Name"
+					ValueMember="Id"
+					IsReadOnly="True"
+					EditValue="{Binding Repair.company}"
+					ItemsSource="{Binding Companies, Source={x:Static objects:OfflineData.Instance}}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				LabelPosition="Top"
+				Label="{DynamicResource Finances}">
+				<dxg:GridControl
+					Height="110"
+					MaxHeight="200"
+					SelectedItem="{Binding SelectedCashOrder, Mode=TwoWay}"
+					ItemsSource="{Binding RepairOrders}">
+					<dxg:GridControl.View>
+						<dxg:TableView
+							ShowTotalSummary="False"
+							AllowScrollAnimation="True"
+							NavigationStyle="Row"
+							ColumnFilterPopupMode="Excel"
+							AllowEditing="False"
+							AllowGrouping="False"
+							AllowColumnMoving="True"
+							ShowGroupPanel="False"
+							ShowColumnHeaders="True"
+							AllowMoveColumnToDropArea="False"
+							ShowSearchPanelMode="Never"
+							ShowBandsPanel="True"
+							ShowIndicator="False"
+							AllowBestFit="True"
+							AllowColumnFiltering="False"
+							ShowSelectionRectangle="False"
+							ShowFixedTotalSummary="False"
+							SummariesIgnoreNullValues="True"
+							RowMinHeight="{Binding Employee.UiSettings.RowHeight, Source={x:Static objects:OfflineData.Instance}}"
+							FontSize="{Binding Employee.UiSettings.FontSize, Source={x:Static objects:OfflineData.Instance}}">
+							<dxmvvm:Interaction.Behaviors>
+								<dxmvvm:EventToCommand
+									EventTriggerBase_x0060_1.EventName="RowDoubleClick"
+									Command="{Binding CashOrderDoubleClickCommand}" />
+							</dxmvvm:Interaction.Behaviors>
+						</dxg:TableView>
+					</dxg:GridControl.View>
+					<dxg:GridColumn
+						Header="{DynamicResource DocumentN}"
+						HorizontalHeaderContentAlignment="Center"
+						Binding="{Binding id}">
+						<dxg:ColumnBase.EditSettings>
+							<dxe:TextEditSettings
+								HorizontalContentAlignment="Center"
+								MaskType="Numeric"
+								Mask="d6"
+								MaskUseAsDisplayFormat="True" />
+						</dxg:ColumnBase.EditSettings>
+					</dxg:GridColumn>
+					<dxg:GridColumn
+						Header="{DynamicResource Date}"
+						HorizontalHeaderContentAlignment="Center"
+						Binding="{Binding created, Converter={StaticResource UtcToLocalDateTimeConverter}}">
+						<dxg:ColumnBase.EditSettings>
+							<dxe:TextEditSettings
+								HorizontalContentAlignment="Center"
+								MaskType="DateTime"
+								Mask="dd.MM.yyyy  HH:mm"
+								MaskUseAsDisplayFormat="True" />
+						</dxg:ColumnBase.EditSettings>
+					</dxg:GridColumn>
+					<dxg:GridColumn
+						Header="{DynamicResource Summ}"
+						HorizontalHeaderContentAlignment="Center"
+						Binding="{Binding summa}">
+						<dxg:ColumnBase.EditSettings>
+							<dxe:TextEditSettings
+								HorizontalContentAlignment="Center"
+								MaskType="Numeric"
+								Mask="N2"
+								MaskUseAsDisplayFormat="True" />
+						</dxg:ColumnBase.EditSettings>
+					</dxg:GridColumn>
+				</dxg:GridControl>
+			</dxlc:LayoutItem>
+		</dxlc:LayoutControl>
+	</Grid>
+</UserControl>

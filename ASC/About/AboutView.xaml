@@ -1,0 +1,107 @@
+<UserControl
+	x:Class="ASC.About.AboutView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:ASC.About" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:asc="clr-namespace:ASC"
+	Height="240"
+	BorderBrush="#CFCECE"
+	BorderThickness="1"
+	Width="600"
+	Loaded="{DXEvent Loaded()}">
+	<Grid>
+		<Panel.Background>
+			<ImageBrush
+				ImageSource="/ASC;component/Resources/ascBg.png" />
+		</Panel.Background>
+		<dxlc:LayoutControl
+			Orientation="Vertical"
+			HorizontalAlignment="Left"
+			VerticalAlignment="Top"
+			MinWidth="500">
+			<dxlc:LayoutGroup
+				Orientation="Vertical"
+				Header="{DynamicResource LicenseData}"
+				Visibility="{Binding ShowLicenseInfo, Converter={StaticResource BooleanToVisibilityConverter}}">
+				<dxlc:LayoutItem
+					Label="{DynamicResource LicenseExpiration}">
+					<TextBlock
+						FontWeight="Bold"
+						Foreground="{Binding ExpirationColor}"
+						Text="{Binding Expiration, StringFormat=dd.MM.yyyy}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource LicenseOwner}">
+					<TextBlock
+						FontWeight="Bold"
+						Text="{Binding Owner}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource NumberOfEmployees}">
+					<TextBlock
+						FontWeight="Bold"
+						Text="{Binding Source={x:Static asc:Auth.DisplayMaxUsers}, Mode=OneWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource Email}">
+					<TextBlock
+						FontWeight="Bold"
+						Text="{Binding Email}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					HorizontalContentAlignment="Left">
+					<dx:SimpleButton
+						ToolTip="{DynamicResource ChangeLicense}"
+						Command="{Binding ShowChangeLicenseCommand}"
+						Glyph="{DXImageGrayscale Image=Edit_16x16.png}" />
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+			<dxlc:LayoutGroup
+				Orientation="Vertical"
+				Header="{DynamicResource LicenseInput}"
+				View="GroupBox"
+				Visibility="{Binding ShowInputDialog, Converter={StaticResource BooleanToVisibilityConverter}}">
+				<dxlc:LayoutItem
+					MinHeight="50"
+					MaxHeight="80"
+					LabelPosition="Top"
+					Label="{DynamicResource PastLicenseHere}">
+					<TextBox
+						AcceptsReturn="True"
+						TextWrapping="Wrap"
+						Text="{Binding License}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem>
+					<StackPanel
+						Orientation="Horizontal"
+						HorizontalAlignment="Right"
+						VerticalAlignment="Bottom">
+						<dx:SimpleButton
+							Content="{DynamicResource Cancel}"
+							Command="{Binding BackCommand}"
+							Glyph="{DXImageGrayscale Image=Backward_16x16.png}" />
+						<dx:SimpleButton
+							Content="{DynamicResource Save}"
+							Margin="5,0,0,0"
+							Command="{Binding CheckLicenseCommand}"
+							Glyph="{DXImageGrayscale Image=Save_16x16.png}" />
+					</StackPanel>
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+		</dxlc:LayoutControl>
+		<Button
+			BorderThickness="0"
+			Background="#00FFFFFF"
+			Cursor="Hand"
+			Margin="0,5,5,0"
+			HorizontalAlignment="Right"
+			VerticalAlignment="Top"
+			Command="{Binding CloseCommand}">
+			<Image
+				Source="../Resources/Remove.png"
+				Style="{StaticResource 16X16Image}" />
+		</Button>
+		<TextBlock
+			HorizontalAlignment="Left"
+			Margin="10,0,0,10"
+			TextWrapping="Wrap"
+			VerticalAlignment="Bottom"
+			Text="{Binding AboutText}" />
+	</Grid>
+</UserControl>

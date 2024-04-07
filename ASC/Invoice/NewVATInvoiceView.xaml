@@ -1,0 +1,431 @@
+<UserControl
+	x:Class="ASC.Invoice.NewVATInvoiceView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:dxwui="http://schemas.devexpress.com/winfx/2008/xaml/windowsui" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:themes="http://schemas.devexpress.com/winfx/2008/xaml/editors/themekeys" xmlns:asc="clr-namespace:ASC" xmlns:view="clr-namespace:ASC.View" xmlns:controls="clr-namespace:ASC.View.Controls"
+	Name="NewInvoiceUc" xmlns:invoice="clr-namespace:ASC.Invoice"
+	Loaded="{DXEvent OnLoad()}">
+	<FrameworkElement.Resources>
+		<ResourceDictionary>
+			<dxmvvm:NumericToVisibilityConverter
+				Inverse="True"
+				x:Key="NumericToVisibilityInv" />
+			<dxmvvm:NumericToBooleanConverter
+				x:Key="NumericToBoolean" />
+			<dxmvvm:StringToVisibilityConverter
+				x:Key="StringToVisibilityConverter" />
+			<Style
+				TargetType="{x:Type dxe:ComboBoxEdit}"
+				x:Key="{x:Type dxe:ComboBoxEdit}">
+				<Setter
+					Property="MinHeight"
+					Value="{StaticResource editorHeight}" />
+				<Setter
+					Property="FontSize"
+					Value="{StaticResource editorFontSize}" />
+				<Setter
+					Property="Foreground"
+					Value="{StaticResource editorFontBrush}" />
+			</Style>
+			<Style
+				TargetType="{x:Type dxe:ButtonEdit}"
+				x:Key="{x:Type dxe:ButtonEdit}">
+				<Setter
+					Property="MinHeight"
+					Value="{StaticResource editorHeight}" />
+				<Setter
+					Property="FontSize"
+					Value="{StaticResource editorFontSize}" />
+				<Setter
+					Property="Foreground"
+					Value="{StaticResource editorFontBrush}" />
+			</Style>
+			<Style
+				TargetType="{x:Type dxe:SpinEdit}"
+				x:Key="{x:Type dxe:SpinEdit}">
+				<Setter
+					Property="MinHeight"
+					Value="{StaticResource editorHeight}" />
+				<Setter
+					Property="FontSize"
+					Value="{StaticResource editorFontSize}" />
+				<Setter
+					Property="Foreground"
+					Value="{StaticResource editorFontBrush}" />
+			</Style>
+			<Style
+				TargetType="{x:Type dxe:TextEdit}"
+				x:Key="{x:Type dxe:TextEdit}">
+				<Setter
+					Property="MinHeight"
+					Value="{StaticResource editorHeight}" />
+				<Setter
+					Property="FontSize"
+					Value="{StaticResource editorFontSize}" />
+				<Setter
+					Property="Foreground"
+					Value="{StaticResource editorFontBrush}" />
+			</Style>
+			<Style
+				TargetType="{x:Type dxe:DateEdit}"
+				x:Key="{x:Type dxe:DateEdit}">
+				<Setter
+					Property="MinHeight"
+					Value="{StaticResource editorHeight}" />
+				<Setter
+					Property="FontSize"
+					Value="{StaticResource editorFontSize}" />
+				<Setter
+					Property="Foreground"
+					Value="{StaticResource editorFontBrush}" />
+			</Style>
+		</ResourceDictionary>
+	</FrameworkElement.Resources>
+	<DockPanel>
+		<dxwui:AppBar
+			DockPanel.Dock="Bottom"
+			Background="#3f3f3f"
+			HorizontalAlignment="Stretch"
+			VerticalAlignment="Stretch"
+			ItemSpacing="5"
+			HideMode="AlwaysVisible">
+			<dxwui:AppBarButton
+				Label="{DynamicResource Create}"
+				AllowGlyphTheming="True"
+				Visibility="{Binding Document.Id, Converter={StaticResource NumericToVisibilityInv}, FallbackValue=Collapsed}"
+				Command="{Binding CreateDocumentCommand}"
+				Glyph="{dx:DXImageGrayscale Image=New_32x32.png}" />
+			<dxwui:AppBarButton
+				Label="{DynamicResource Add}"
+				AllowGlyphTheming="True"
+				Visibility="{Binding Document.Id, Converter={StaticResource NumericToVisibilityInv}, FallbackValue=Collapsed}"
+				Command="{Binding AddItemCommand}"
+				Glyph="{dx:DXImageGrayscale Image=Add_32x32.png}" />
+			<dxwui:AppBarButton
+				Label="{DynamicResource Email}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Visibility="{Binding IsEnabled, Converter={StaticResource BooleanToVisibilityConverter}, RelativeSource={RelativeSource Self}}"
+				Command="{Binding SendEmailCommand}"
+				Glyph="{dx:DXImageGrayscale Image=SendFile_32x32.png}" />
+			<dxwui:AppBarButton
+				Label="{DynamicResource Print}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Command="{Binding PrintCommand}"
+				Glyph="{dx:DXImageGrayscale Image=Print_32x32.png}" />
+		</dxwui:AppBar>
+		<StackPanel
+			Margin="10,10,10,0"
+			Orientation="Horizontal"
+			DockPanel.Dock="Top">
+			<TextBlock
+				Text="{Binding Source={StaticResource VatInvoice}, Converter={StaticResource ToUpperValueConverter}}" />
+		</StackPanel>
+		<dxlc:LayoutControl
+			Orientation="Vertical">
+			<dxlc:LayoutItem
+				Label="{DynamicResource State}"
+				Visibility="{Binding Document.Id, Converter={StaticResource NumericToVisibility}, FallbackValue=Collapsed}">
+				<StackPanel
+					Orientation="Horizontal">
+					<TextBlock
+						HorizontalAlignment="Left"
+						FontWeight="Bold"
+						Text="{DynamicResource DateCreate}" />
+					<TextBlock
+						Margin="5,0,0,0"
+						HorizontalAlignment="Left"
+						FontWeight="Bold"
+						Text="{Binding Document.Date, StringFormat=dd.MM.yyyy}" />
+				</StackPanel>
+			</dxlc:LayoutItem>
+			<dxlc:LayoutGroup>
+				<dxlc:LayoutItem
+					Label="{DynamicResource Seller}"
+					ToolTipService.BetweenShowDelay="0"
+					ToolTipService.ShowOnDisabled="True"
+					ToolTipService.Placement="Bottom"
+					ToolTipService.InitialShowDelay="0">
+					<FrameworkElement.ToolTip>
+						<ToolTip
+							Visibility="{Binding Document.Seller.Id, Converter={StaticResource NumericToVisibility}, FallbackValue=Collapsed}">
+							<dxlc:DataLayoutControl
+								MinWidth="300"
+								Orientation="Vertical">
+								<dxlc:LayoutItem
+									LabelVerticalAlignment="Top"
+									Label="{DynamicResource Company}">
+									<TextBlock
+										TextWrapping="Wrap"
+										Text="{Binding Document.Seller.Name}" />
+								</dxlc:LayoutItem>
+								<dxlc:LayoutItem
+									LabelVerticalAlignment="Top"
+									Label="{DynamicResource Address}">
+									<TextBlock
+										TextWrapping="Wrap"
+										Text="{Binding Document.Seller.Address}" />
+								</dxlc:LayoutItem>
+								<dxlc:LayoutItem
+									LabelVerticalAlignment="Top"
+									Label="{DynamicResource Inn}">
+									<TextBlock
+										TextWrapping="Wrap"
+										Text="{Binding Document.Seller.Inn}" />
+								</dxlc:LayoutItem>
+								<dxlc:LayoutItem
+									LabelVerticalAlignment="Top"
+									Label="{DynamicResource Kpp}"
+									Visibility="{Binding Document.Seller.Kpp, Converter={StaticResource StringToVisibilityConverter}, FallbackValue=Collapsed}">
+									<TextBlock
+										TextWrapping="Wrap"
+										Text="{Binding Document.Seller.Kpp}" />
+								</dxlc:LayoutItem>
+								<dxlc:LayoutItem
+									LabelVerticalAlignment="Top"
+									Label="{DynamicResource Ogrn}"
+									Visibility="{Binding Document.Seller.Ogrn, Converter={StaticResource StringToVisibilityConverter}, FallbackValue=Collapsed}">
+									<TextBlock
+										TextWrapping="Wrap"
+										Text="{Binding Document.Seller.Ogrn}" />
+								</dxlc:LayoutItem>
+								<dxlc:LayoutItem
+									LabelVerticalAlignment="Top"
+									Label="{DynamicResource CorrespondentAccount}">
+									<TextBlock
+										TextWrapping="Wrap"
+										Text="{Binding Document.Seller.CorrespondentAccount}" />
+								</dxlc:LayoutItem>
+								<dxlc:LayoutItem
+									LabelVerticalAlignment="Top"
+									Label="{DynamicResource CheckingAccount}">
+									<TextBlock
+										TextWrapping="Wrap"
+										Text="{Binding Document.Seller.CheckingAccount}" />
+								</dxlc:LayoutItem>
+								<dxlc:LayoutItem
+									LabelVerticalAlignment="Top"
+									Label="{DynamicResource Bank}">
+									<TextBlock
+										TextWrapping="Wrap"
+										Text="{Binding Document.Seller.Bank}" />
+								</dxlc:LayoutItem>
+								<dxlc:LayoutItem
+									LabelVerticalAlignment="Top"
+									Label="{DynamicResource Bic}">
+									<TextBlock
+										TextWrapping="Wrap"
+										Text="{Binding Document.Seller.Bic}" />
+								</dxlc:LayoutItem>
+								<dxlc:LayoutItem
+									LabelVerticalAlignment="Top"
+									Label="{DynamicResource Director}">
+									<TextBlock
+										TextWrapping="Wrap"
+										Text="{Binding Document.Seller.Chief}" />
+								</dxlc:LayoutItem>
+								<dxlc:LayoutItem
+									LabelVerticalAlignment="Top"
+									Label="{DynamicResource Accountant}">
+									<TextBlock
+										TextWrapping="Wrap"
+										Text="{Binding Document.Seller.Accountant}" />
+								</dxlc:LayoutItem>
+							</dxlc:DataLayoutControl>
+						</ToolTip>
+					</FrameworkElement.ToolTip>
+					<dxe:ComboBoxEdit
+						ValueMember="Id"
+						DisplayMember="Name"
+						IsReadOnly="{Binding Document.Id, Converter={StaticResource NumericToBoolean}}"
+						ItemsSource="{Binding CompanyPaymentDetails}"
+						SelectedItem="{Binding Document.Seller, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+						<dxmvvm:Interaction.Behaviors>
+							<dxmvvm:EventToCommand
+								EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+								PassEventArgsToCommand="True"
+								Command="{Binding ComboBoxClickCommand}" />
+							<dxmvvm:EventToCommand
+								EventTriggerBase_x0060_1.EventName="SelectedIndexChanged"
+								Command="{Binding SellerChangedCommand}" />
+						</dxmvvm:Interaction.Behaviors>
+					</dxe:ComboBoxEdit>
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource Client}"
+					ToolTipService.BetweenShowDelay="0"
+					ToolTipService.ShowOnDisabled="True"
+					ToolTipService.Placement="Bottom"
+					ToolTipService.InitialShowDelay="0">
+					<FrameworkElement.ToolTip>
+						<ToolTip
+							Visibility="{Binding Document.Customer.Id, Converter={StaticResource NumericToVisibility}, FallbackValue=Collapsed}">
+							<dxlc:DataLayoutControl
+								MinWidth="300"
+								Orientation="Vertical">
+								<dxlc:LayoutItem
+									LabelVerticalAlignment="Top"
+									Label="{DynamicResource Company}">
+									<TextBlock
+										TextWrapping="Wrap"
+										Text="{Binding Document.Customer.Name}" />
+								</dxlc:LayoutItem>
+								<dxlc:LayoutItem
+									LabelVerticalAlignment="Top"
+									Label="{DynamicResource Address}">
+									<TextBlock
+										TextWrapping="Wrap"
+										Text="{Binding Document.Customer.Address}" />
+								</dxlc:LayoutItem>
+								<dxlc:LayoutItem
+									LabelVerticalAlignment="Top"
+									Label="{DynamicResource Email}"
+									Visibility="{Binding Document.Customer.Email, Converter={StaticResource StringToVisibilityConverter}, FallbackValue=Collapsed}">
+									<TextBlock
+										TextWrapping="Wrap"
+										Text="{Binding Document.Customer.Email}" />
+								</dxlc:LayoutItem>
+								<dxlc:LayoutItem
+									LabelVerticalAlignment="Top"
+									Label="{DynamicResource Inn}">
+									<TextBlock
+										TextWrapping="Wrap"
+										Text="{Binding Document.Customer.Inn}" />
+								</dxlc:LayoutItem>
+								<dxlc:LayoutItem
+									LabelVerticalAlignment="Top"
+									Label="{DynamicResource Kpp}"
+									Visibility="{Binding Document.Customer.Kpp, Converter={StaticResource StringToVisibilityConverter}, FallbackValue=Collapsed}">
+									<TextBlock
+										TextWrapping="Wrap"
+										Text="{Binding Document.Customer.Kpp}" />
+								</dxlc:LayoutItem>
+								<dxlc:LayoutItem
+									LabelVerticalAlignment="Top"
+									Label="{DynamicResource Ogrn}"
+									Visibility="{Binding Document.Customer.Ogrn, Converter={StaticResource StringToVisibilityConverter}, FallbackValue=Collapsed}">
+									<TextBlock
+										TextWrapping="Wrap"
+										Text="{Binding Document.Customer.Ogrn}" />
+								</dxlc:LayoutItem>
+								<dxlc:LayoutItem
+									LabelVerticalAlignment="Top"
+									Label="{DynamicResource CorrespondentAccount}">
+									<TextBlock
+										TextWrapping="Wrap"
+										Text="{Binding Document.Customer.CorrespondentAccount}" />
+								</dxlc:LayoutItem>
+								<dxlc:LayoutItem
+									LabelVerticalAlignment="Top"
+									Label="{DynamicResource CheckingAccount}">
+									<TextBlock
+										TextWrapping="Wrap"
+										Text="{Binding Document.Customer.CheckingAccount}" />
+								</dxlc:LayoutItem>
+								<dxlc:LayoutItem
+									LabelVerticalAlignment="Top"
+									Label="{DynamicResource Bank}">
+									<TextBlock
+										TextWrapping="Wrap"
+										Text="{Binding Document.Customer.Bank}" />
+								</dxlc:LayoutItem>
+								<dxlc:LayoutItem
+									LabelVerticalAlignment="Top"
+									Label="{DynamicResource Bic}">
+									<TextBlock
+										TextWrapping="Wrap"
+										Text="{Binding Document.Customer.Bic}" />
+								</dxlc:LayoutItem>
+								<dxlc:LayoutItem
+									LabelVerticalAlignment="Top"
+									Label="{DynamicResource Director}">
+									<TextBlock
+										TextWrapping="Wrap"
+										Text="{Binding Document.Customer.Chief}" />
+								</dxlc:LayoutItem>
+								<dxlc:LayoutItem
+									LabelVerticalAlignment="Top"
+									Label="{DynamicResource Accountant}">
+									<TextBlock
+										TextWrapping="Wrap"
+										Text="{Binding Document.Customer.Accountant}" />
+								</dxlc:LayoutItem>
+							</dxlc:DataLayoutControl>
+						</ToolTip>
+					</FrameworkElement.ToolTip>
+					<controls:InvoiceCustomerSelectView />
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+			<dxlc:LayoutGroup
+				HorizontalAlignment="Stretch">
+				<dxlc:LayoutItem
+					HorizontalAlignment="Left"
+					Label="{DynamicResource VATInvoiceN}"
+					MinWidth="250">
+					<dxe:ButtonEdit
+						AllowDefaultButton="False"
+						HorizontalContentAlignment="Left"
+						AllowSpinOnMouseWheel="False"
+						EditValue="{Binding Document.Num, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+						<dxe:ButtonEdit.Buttons>
+							<dxe:ButtonInfo
+								Content="+1"
+								Command="{Binding IncrementInvoiceIdCommand}" />
+						</dxe:ButtonEdit.Buttons>
+					</dxe:ButtonEdit>
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					HorizontalAlignment="Left"
+					Label="{DynamicResource From}"
+					MinWidth="150">
+					<dxe:DateEdit
+						DateTime="{Binding Document.Date}"
+						IsReadOnly="{Binding Document.Id, Converter={StaticResource NumericToBoolean}}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource Notes}"
+					HorizontalAlignment="Stretch"
+					MinWidth="300">
+					<dxe:TextEdit
+						MaxLength="254"
+						EditValue="{Binding Document.Notes, Mode=TwoWay}"
+						IsReadOnly="{Binding Document.Id, Converter={StaticResource NumericToBoolean}}" />
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+			<dxlc:LayoutGroup
+				HorizontalAlignment="Left">
+				<dxlc:LayoutItem
+					Label="{DynamicResource PaymentOrder}"
+					MinWidth="250">
+					<dxe:ButtonEdit
+						MaxLength="10"
+						AllowDefaultButton="False"
+						HorizontalContentAlignment="Left"
+						AllowSpinOnMouseWheel="False"
+						IsReadOnly="{Binding Document.Id, Converter={StaticResource NumericToBoolean}}"
+						EditValue="{Binding Document.PaymentOrder, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource From}"
+					MinWidth="150">
+					<dxe:DateEdit
+						EditValue="{Binding Document.PaymentOrderDate, Mode=TwoWay}"
+						IsReadOnly="{Binding Document.Id, Converter={StaticResource NumericToBoolean}}" />
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+			<dxlc:LayoutItem
+				HorizontalAlignment="Left"
+				Width="250"
+				Label="{DynamicResource StateContract}">
+				<dxe:TextEdit
+					MaxLength="254"
+					IsReadOnly="{Binding Document.Id, Converter={StaticResource NumericToBoolean}}"
+					EditValue="{Binding Document.StateContract, Mode=TwoWay}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				VerticalAlignment="Stretch">
+				<view:InvoiceItemsView />
+			</dxlc:LayoutItem>
+		</dxlc:LayoutControl>
+	</DockPanel>
+</UserControl>

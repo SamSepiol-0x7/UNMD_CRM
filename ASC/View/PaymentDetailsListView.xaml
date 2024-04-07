@@ -1,0 +1,52 @@
+<UserControl
+	x:Class="ASC.View.PaymentDetailsListView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:ASC.View" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" xmlns:asc="clr-namespace:ASC" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:objects="clr-namespace:ASC.Objects">
+	<dxg:GridControl
+		ItemsSource="{Binding PaymentDetails}"
+		SelectedItem="{Binding SelectedPaymentDetails, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+		<dxg:GridControl.Columns>
+			<dxg:GridColumn
+				Header="{DynamicResource UrName}"
+				Width="10*"
+				Binding="{Binding Name, Mode=OneWay}" />
+			<dxg:GridColumn
+				Header="{DynamicResource CheckingAccount}"
+				Width="6*"
+				Binding="{Binding CheckingAccount, Mode=OneWay}" />
+			<dxg:GridColumn
+				Header="{DynamicResource Bank}"
+				Width="5*"
+				Binding="{Binding Bank, Mode=OneWay}" />
+			<dxg:GridColumn
+				Header="{DynamicResource CorrAccount}"
+				Width="6*"
+				Binding="{Binding CorrespondentAccount, Mode=OneWay}" />
+			<dxg:GridColumn
+				Header="{DynamicResource Bic}"
+				Width="4*"
+				Binding="{Binding Bic, Mode=OneWay}" />
+		</dxg:GridControl.Columns>
+		<dxg:GridControl.View>
+			<dxg:TableView
+				BestFitMode="VisibleRows"
+				BestFitArea="All"
+				AllowFilterEditor="False"
+				AllowPerPixelScrolling="True"
+				AllowEditing="False"
+				ShowIndicator="False"
+				AllowBestFit="True"
+				AllowGrouping="False"
+				AllowColumnMoving="True"
+				ShowGroupPanel="False"
+				NavigationStyle="Cell"
+				Margin="0,0,-2,0"
+				RowMinHeight="{Binding Employee.UiSettings.RowHeight, Source={x:Static objects:OfflineData.Instance}}"
+				FontSize="{Binding Employee.UiSettings.FontSize, Source={x:Static objects:OfflineData.Instance}}">
+				<dxmvvm:Interaction.Behaviors>
+					<dxmvvm:EventToCommand
+						EventTriggerBase_x0060_1.EventName="RowDoubleClick"
+						Command="{Binding PaymentDetailDoubleClickCommand}" />
+				</dxmvvm:Interaction.Behaviors>
+			</dxg:TableView>
+		</dxg:GridControl.View>
+	</dxg:GridControl>
+</UserControl>

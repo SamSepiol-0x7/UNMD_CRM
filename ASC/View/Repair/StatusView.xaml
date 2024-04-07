@@ -1,0 +1,32 @@
+<UserControl
+	x:Class="ASC.View.Repair.StatusView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:ASC.View.Repair" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm">
+	<dxe:ComboBoxEdit
+		ShowError="False"
+		DisplayMember="Name"
+		ValueMember="Id"
+		ItemsSource="{Binding StatesList}"
+		SelectedItem="{Binding SelectedOption, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+		<dxe:ButtonEdit.Buttons>
+			<dxe:ButtonInfo
+				Margin="0"
+				GlyphKind="Custom"
+				ToolTipService.ToolTip="{DynamicResource Save}"
+				Visibility="{Binding CanSaveStatus, Converter={dx:BooleanToVisibilityConverter}}"
+				Command="{Binding ChangeStateCommand}">
+				<dxe:ButtonInfo.Content>
+					<Image
+						Source="{dx:DXImageGrayscale Image=Save_16x16.png}" />
+				</dxe:ButtonInfo.Content>
+			</dxe:ButtonInfo>
+		</dxe:ButtonEdit.Buttons>
+		<dxmvvm:Interaction.Behaviors>
+			<dxmvvm:EventToCommand
+				EventTriggerBase_x0060_1.EventName="PopupClosed"
+				Command="{Binding ChangeStatePopupClosedCommand}" />
+			<dxmvvm:EventToCommand
+				EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+				PassEventArgsToCommand="True"
+				Command="{Binding ComboBoxClickCommand}" />
+		</dxmvvm:Interaction.Behaviors>
+	</dxe:ComboBoxEdit>
+</UserControl>

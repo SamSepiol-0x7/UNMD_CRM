@@ -1,0 +1,181 @@
+<UserControl
+	x:Class="ASC.Kassa.KassaSaldoView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:ASC.Kassa" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:gl="clr-namespace:System.Globalization;assembly=mscorlib" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+	VerticalAlignment="Top"
+	DataContext="{Binding Path=KassaSaldoViewModel, Source={StaticResource ViewModelLocator}}"
+	Loaded="{DXEvent OnLoad()}"
+	Unloaded="{DXEvent OnUnload()}">
+	<Grid>
+		<FrameworkElement.Resources>
+			<ResourceDictionary>
+				<ControlTemplate
+					TargetType="{x:Type dx:WaitIndicatorContainer}"
+					x:Key="{dx:WaitIndicatorThemeKey ThemeKeyExtensionInternalBase_x0060_1.ResourceKey=WaitIndicatorContainerTemplate, ThemeKeyExtensionBase_x0060_1.IsThemeIndependent=True}">
+					<Border
+						Background="#00FFFFFF"
+						BorderBrush="#FFB9B9B9"
+						BorderThickness="0">
+						<ContentPresenter />
+					</Border>
+				</ControlTemplate>
+			</ResourceDictionary>
+		</FrameworkElement.Resources>
+		<dxlc:LayoutGroup
+			Orientation="Vertical"
+			View="GroupBox"
+			Header="{DynamicResource CurrentMonthKassaState}">
+			<FrameworkElement.Resources>
+				<ResourceDictionary>
+					<Style
+						TargetType="{x:Type dxlc:LayoutItem}"
+						x:Key="{x:Type dxlc:LayoutItem}">
+						<Setter
+							Property="HorizontalContentAlignment"
+							Value="Right" />
+					</Style>
+					<Style
+						TargetType="{x:Type TextBlock}"
+						x:Key="{x:Type TextBlock}">
+						<Setter
+							Property="FontWeight"
+							Value="Bold" />
+					</Style>
+				</ResourceDictionary>
+			</FrameworkElement.Resources>
+			<dxlc:LayoutGroup
+				Orientation="Horizontal">
+				<dxlc:LayoutItem
+					HorizontalContentAlignment="Left">
+					<TextBlock
+						Text="{DynamicResource Cash}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					HorizontalContentAlignment="Right">
+					<TextBlock
+						Foreground="#FF006400"
+						Text="{Binding Data.ThisMonthInCash, FallbackValue=0, StringFormat=+{0:N2}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					HorizontalContentAlignment="Right">
+					<TextBlock
+						Foreground="#FF8B0000"
+						Text="{Binding Data.ThisMonthOutCash, FallbackValue=0, StringFormat={}{0:N2}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					HorizontalContentAlignment="Right">
+					<TextBlock
+						Text="{Binding Data.ThisMonthTotalCash, FallbackValue=0, StringFormat=={0:N2}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+			<dxlc:LayoutGroup
+				Orientation="Horizontal">
+				<dxlc:LayoutItem
+					HorizontalContentAlignment="Left">
+					<TextBlock
+						Text="{DynamicResource CashLess}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					HorizontalContentAlignment="Right">
+					<TextBlock
+						Foreground="#FF006400"
+						Text="{Binding Data.ThisMonthInCashless, FallbackValue=0, StringFormat=+{0:N2}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					HorizontalContentAlignment="Right">
+					<TextBlock
+						Foreground="#FF8B0000"
+						Text="{Binding Data.ThisMonthOutCashless, FallbackValue=0, StringFormat={}{0:N2}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					HorizontalContentAlignment="Right">
+					<TextBlock
+						Text="{Binding Data.ThisMonthTotalCashless, FallbackValue=0, StringFormat=={0:N2}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+			<dxlc:LayoutGroup
+				Orientation="Horizontal">
+				<dxlc:LayoutItem
+					HorizontalContentAlignment="Left">
+					<TextBlock
+						Text="{DynamicResource Card}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					HorizontalContentAlignment="Right">
+					<TextBlock
+						Foreground="#FF006400"
+						Text="{Binding Data.ThisMonthInCard, FallbackValue=0, StringFormat=+{0:N2}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					HorizontalContentAlignment="Right">
+					<TextBlock
+						Foreground="#FF8B0000"
+						Text="{Binding Data.ThisMonthOutCard, FallbackValue=0, StringFormat={}{0:N2}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					HorizontalContentAlignment="Right">
+					<TextBlock
+						Text="{Binding Data.ThisMonthTotalCard, FallbackValue=0, StringFormat=={0:N2}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+			<dxlc:LayoutGroup
+				Orientation="Horizontal">
+				<dxlc:LayoutItem
+					HorizontalContentAlignment="Left">
+					<TextBlock
+						Text="{DynamicResource OtherV2}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					HorizontalContentAlignment="Right">
+					<TextBlock
+						Foreground="#FF006400"
+						Text="{Binding Data.ThisMonthInOther, FallbackValue=0, StringFormat=+{0:N2}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					HorizontalContentAlignment="Right">
+					<TextBlock
+						Foreground="#FF8B0000"
+						Text="{Binding Data.ThisMonthOutOther, FallbackValue=0, StringFormat={}{0:N2}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					HorizontalContentAlignment="Right">
+					<TextBlock
+						Text="{Binding Data.ThisMonthTotalOther, FallbackValue=0, StringFormat=={0:N2}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+			<dxlc:LayoutGroup
+				Orientation="Horizontal">
+				<dxlc:LayoutItem
+					HorizontalContentAlignment="Left">
+					<TextBlock
+						Text="{DynamicResource Total}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					HorizontalContentAlignment="Right">
+					<TextBlock
+						Foreground="#FF006400"
+						Text="{Binding Data.GrandTotalIn, FallbackValue=0, StringFormat=+{0:N2}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					HorizontalContentAlignment="Right">
+					<TextBlock
+						Foreground="#FF8B0000"
+						Text="{Binding Data.GrandTotalOut, FallbackValue=0, StringFormat={}{0:N2}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					HorizontalContentAlignment="Right">
+					<TextBlock
+						Text="{Binding Data.GrandTotal, FallbackValue=0, StringFormat=={0:N2}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+		</dxlc:LayoutGroup>
+		<Border
+			Name="cover"
+			Background="#FF000000"
+			Opacity="0.45"
+			Visibility="{Binding DeferedVisibility, ElementName=waitIndicator, Converter={dx:BooleanToVisibilityConverter}}" />
+		<dx:WaitIndicator
+			Name="waitIndicator"
+			Content=""
+			BorderThickness="0"
+			DeferedVisibility="{Binding IsBuzy, Mode=OneWay}" />
+	</Grid>
+</UserControl>

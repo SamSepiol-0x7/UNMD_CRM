@@ -1,0 +1,271 @@
+<UserControl
+	x:Class="ASC.View.ACP.NotifyView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:converters="clr-namespace:ASC.Converters" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:dxre="http://schemas.devexpress.com/winfx/2008/xaml/richedit" xmlns:acp="clr-namespace:ASC.ViewModels.ACP" xmlns:acp1="clr-namespace:ASC.View.ACP">
+	<FrameworkElement.DataContext>
+		<acp:NotifyViewModel />
+	</FrameworkElement.DataContext>
+	<FrameworkElement.Resources>
+		<ResourceDictionary>
+			<converters:BoolVisiblityInverterConverter
+				x:Key="BoolVisiblityInverterConverter" />
+			<converters:Content2HtmlConverter
+				x:Key="contentToHtmlConverter" />
+		</ResourceDictionary>
+	</FrameworkElement.Resources>
+	<Grid>
+		<dxlc:LayoutControl
+			Orientation="Vertical"
+			ItemSpace="5"
+			Padding="10">
+			<dxlc:LayoutGroup
+				View="GroupBox"
+				Header="{DynamicResource SmsSettings}">
+				<dxlc:LayoutGroup
+					HorizontalAlignment="Left"
+					MinWidth="300"
+					View="GroupBox"
+					Orientation="Vertical"
+					Header="{DynamicResource ConnectionSettings}">
+					<dxlc:LayoutItem
+						Label="{DynamicResource Provider}">
+						<dxe:ComboBoxEdit
+							ValueMember="Key"
+							DisplayMember="Value"
+							ItemsSource="{Binding Providers}"
+							EditValue="{Binding SmsClientConfig.Provider, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+							<dxmvvm:Interaction.Behaviors>
+								<dxmvvm:EventToCommand
+									EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+									PassEventArgsToCommand="True"
+									Command="{Binding ComboBoxClickCommand}" />
+								<dxmvvm:EventToCommand
+									EventTriggerBase_x0060_1.EventName="EditValueChanged"
+									Command="{Binding SmsProvidecChangedCommand}" />
+							</dxmvvm:Interaction.Behaviors>
+						</dxe:ComboBoxEdit>
+					</dxlc:LayoutItem>
+					<dxlc:LayoutGroup
+						Orientation="Vertical"
+						Visibility="{Binding EpochtaFieldsVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+						<dxlc:LayoutItem
+							Label="{DynamicResource Username}">
+							<dxe:TextEdit
+								EditValue="{Binding SmsClientConfig.Login, Mode=TwoWay}" />
+						</dxlc:LayoutItem>
+						<dxlc:LayoutItem
+							Label="{DynamicResource Password}">
+							<dxe:PasswordBoxEdit
+								PasswordChar="#"
+								Password="{Binding SmsClientConfig.Password, Mode=TwoWay}" />
+						</dxlc:LayoutItem>
+					</dxlc:LayoutGroup>
+					<dxlc:LayoutItem
+						Label="API ID"
+						Visibility="{Binding SmsRuFieldsVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+						<dxe:TextEdit
+							EditValue="{Binding SmsClientConfig.ApiId, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource Sender}">
+						<dxe:TextEdit
+							EditValue="{Binding SmsClientConfig.Sender, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem>
+						<StackPanel
+							Orientation="Horizontal"
+							HorizontalAlignment="Right">
+							<dx:SimpleButton
+								Content="{DynamicResource Test}"
+								Command="{Binding SmsTestCommand}" />
+							<dx:SimpleButton
+								Margin="10,0,0,0"
+								Content="{DynamicResource Balance}"
+								Glyph="{DXImageGrayscale Image=Currency_16x16.png}"
+								Command="{Binding BalanceSmsRuCommand}" />
+							<dx:SimpleButton
+								Content="{DynamicResource Save}"
+								Margin="10,0,0,0"
+								Glyph="{DXImageGrayscale Image=Save_16x16.png}"
+								Command="{Binding SaveSmsRuSettingsCommand}" />
+						</StackPanel>
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+				<dxlc:LayoutGroup
+					View="GroupBox"
+					Orientation="Vertical"
+					Header="{DynamicResource SmsTemplates}">
+					<dxlc:LayoutItem
+						MaxHeight="400">
+						<dxg:GridControl
+							ItemsSource="{Binding SmsTemplateses}">
+							<dxg:GridColumn
+								FieldName="Del"
+								Width="35">
+								<dxg:ColumnBase.CellTemplate>
+									<DataTemplate>
+										<Button
+											Height="24"
+											Width="24"
+											Padding="0"
+											Command="{Binding View.DataContext.DelTemplateCommand}"
+											CommandParameter="{Binding RowData.Row}">
+											<Image
+												Source="../../Resources/trash.png"
+												Style="{StaticResource 16X16Image}" />
+										</Button>
+									</DataTemplate>
+								</dxg:ColumnBase.CellTemplate>
+							</dxg:GridColumn>
+							<dxg:GridColumn
+								AllowEditing="True"
+								FieldName="{DynamicResource Name}"
+								HorizontalHeaderContentAlignment="Center"
+								MinWidth="150"
+								Binding="{Binding name, Mode=TwoWay}">
+								<dxg:ColumnBase.EditSettings>
+									<dxe:TextEditSettings />
+								</dxg:ColumnBase.EditSettings>
+							</dxg:GridColumn>
+							<dxg:GridColumn
+								AllowEditing="True"
+								FieldName="{DynamicResource Message}"
+								HorizontalHeaderContentAlignment="Center"
+								Width="*"
+								Binding="{Binding message, Mode=TwoWay}">
+								<dxg:ColumnBase.EditSettings>
+									<dxe:TextEditSettings
+										VerticalContentAlignment="Top"
+										AcceptsReturn="True" />
+								</dxg:ColumnBase.EditSettings>
+							</dxg:GridColumn>
+							<dxg:GridControl.View>
+								<dxg:TableView
+									NewItemRowPosition="Bottom"
+									RowMinHeight="50"
+									AllowScrollAnimation="True"
+									NavigationStyle="Cell"
+									ColumnFilterPopupMode="Excel"
+									AllowEditing="True"
+									AllowGrouping="False"
+									AllowColumnMoving="False"
+									ShowGroupPanel="False"
+									ShowColumnHeaders="True"
+									AllowMoveColumnToDropArea="False"
+									ShowBandsPanel="True"
+									ShowIndicator="False"
+									AllowBestFit="True"
+									AllowColumnFiltering="False"
+									ShowSelectionRectangle="False"
+									ShowFixedTotalSummary="False" />
+							</dxg:GridControl.View>
+						</dxg:GridControl>
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem>
+						<dx:SimpleButton
+							HorizontalAlignment="Left"
+							Content="{DynamicResource Save}"
+							Command="{Binding SaveSmsTemplatesCommand}"
+							Glyph="{DXImageGrayscale Image=Save_16x16.png}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem>
+						<TextBlock
+							Text="{DynamicResource SmsHelp}"
+							TextAlignment="Justify"
+							TextWrapping="Wrap"
+							FontSize="10" />
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+			</dxlc:LayoutGroup>
+			<dxlc:LayoutGroup
+				View="GroupBox"
+				Header="{DynamicResource EmailSettings}">
+				<dxlc:LayoutGroup
+					Orientation="Vertical"
+					View="GroupBox"
+					HorizontalAlignment="Left"
+					MinWidth="300"
+					Header="{DynamicResource ConnectionSettings}">
+					<dxlc:LayoutItem
+						Label="{DynamicResource Server}">
+						<TextBox
+							Text="{Binding Email.Host, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource Port}">
+						<TextBox
+							Text="{Binding Email.Port, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource Address}">
+						<TextBox
+							Text="{Binding Email.Login, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource Password}">
+						<dxe:PasswordBoxEdit
+							PasswordChar="#"
+							Password="{Binding Email.Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource Timeout}">
+						<TextBox
+							Text="{Binding Email.Timeout, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="SSL">
+						<CheckBox
+							IsChecked="{Binding Email.EnableSsl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="Implicit SSL">
+						<CheckBox
+							IsChecked="{Binding Email.EnableImplicitSsl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem>
+						<dx:SimpleButton
+							Content="{DynamicResource Save}"
+							Command="{Binding SaveEmailCommand}"
+							CommandParameter="{Binding ElementName=RichEditControlEmail}"
+							Glyph="{DXImageGrayscale Image=Save_16x16.png}" />
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+				<dxlc:LayoutGroup
+					Orientation="Vertical"
+					View="GroupBox"
+					Header="{DynamicResource Template}">
+					<dxlc:LayoutItem
+						VerticalAlignment="Stretch"
+						MinHeight="400"
+						Visibility="{Binding EmailRawTemplateVisible, Converter={dx:BooleanToVisibilityConverter Invert=True}}">
+						<dxre:RichEditControl
+							Name="RichEditControlEmail"
+							CommandBarStyle="Ribbon"
+							VerticalAlignment="Stretch"
+							Content="{Binding Email.Template, Mode=TwoWay, Converter={StaticResource contentToHtmlConverter}, UpdateSourceTrigger=PropertyChanged}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem>
+						<TextBlock
+							TextWrapping="Wrap"
+							Text="{DynamicResource EmailTemplateNotes}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						HorizontalAlignment="Left">
+						<dx:SimpleButton
+							Content="RAW"
+							ButtonKind="Toggle"
+							IsChecked="{Binding EmailRawTemplateVisible, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Name="EmailRawTemplate"
+						Visibility="{Binding EmailRawTemplateVisible, Converter={dx:BooleanToVisibilityConverter}}">
+						<dxe:TextEdit
+							AcceptsReturn="True"
+							MaxHeight="300"
+							VerticalScrollBarVisibility="Auto"
+							TextWrapping="Wrap"
+							EditValue="{Binding Email.RawTemplate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+			</dxlc:LayoutGroup>
+		</dxlc:LayoutControl>
+	</Grid>
+</UserControl>

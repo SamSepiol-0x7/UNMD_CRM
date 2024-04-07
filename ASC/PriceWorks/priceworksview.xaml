@@ -1,0 +1,291 @@
+<UserControl
+	x:Class="ASC.PriceWorksView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:converters="clr-namespace:ASC.Converters" xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" xmlns:extensions="clr-namespace:ASC.Extensions" xmlns:dxwui="http://schemas.devexpress.com/winfx/2008/xaml/windowsui" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:objects="clr-namespace:ASC.Objects" xmlns:asc="clr-namespace:ASC"
+	Loaded="{DXEvent OnLoaded()}">
+	<FrameworkElement.Resources>
+		<ResourceDictionary>
+			<converters:IntToWarrantyOptionsName
+				x:Key="IntToWarrantyOptionsName" />
+		</ResourceDictionary>
+	</FrameworkElement.Resources>
+	<DockPanel>
+		<dxwui:AppBar
+			DockPanel.Dock="Bottom"
+			Background="#3f3f3f"
+			HorizontalAlignment="Stretch"
+			VerticalAlignment="Stretch"
+			ItemSpacing="0"
+			HideMode="AlwaysVisible"
+			Grid.Row="1">
+			<dxwui:AppBarButton
+				Label="{DynamicResource Create}"
+				Command="{Binding AddItemCommand}"
+				Visibility="{Binding IsEnabled, Converter={StaticResource BooleanToVisibilityConverter}, RelativeSource={RelativeSource Self}}"
+				Glyph="{dx:DXImageGrayscale Image=New_32x32.png}" />
+			<dxwui:AppBarButton
+				Label="{DynamicResource Refresh}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Command="{Binding RefreshCommand}"
+				Glyph="{dx:DXImageGrayscale Image=Refresh_32x32.png}" />
+			<dxwui:AppBarButton
+				Label="{DynamicResource Print}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Command="{Binding View.Commands.ShowPrintPreview, ElementName=PriceGrid}"
+				Glyph="{dx:DXImageGrayscale Image=Print_32x32.png}" />
+			<dxg:GridSearchControl
+				Name="CollectionSearchControl"
+				dxe:SearchTextPostDelay="300"
+				dxe:PostMode="Delayed"
+				dxe:ShowMRUButton="False"
+				ActualShowButtonClose="False"
+				HorizontalAlignment="Right"
+				Margin="23"
+				dxe:ShowClearButton="True"
+				Width="200"
+				View="{Binding ElementName=CollectionTableView}">
+				<dxmvvm:Interaction.Behaviors>
+					<dxmvvm:FocusBehavior />
+				</dxmvvm:Interaction.Behaviors>
+			</dxg:GridSearchControl>
+		</dxwui:AppBar>
+		<DockPanel
+			Dock="Left"
+			DataContext="{Binding PriceWorksCategoryViewModel}">
+			<dxe:ComboBoxEdit
+				DockPanel.Dock="Top"
+				DisplayMember="Value"
+				ValueMember="Key"
+				Visibility="{Binding Prices.Count, Converter={dxmvvm:NumericToVisibilityConverter}}"
+				EditValue="{Binding SelectedPrice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+				ItemsSource="{Binding Prices}">
+				<dxmvvm:Interaction.Behaviors>
+					<dxmvvm:EventToCommand
+						EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+						PassEventArgsToCommand="True"
+						Command="{Binding ComboBoxClickCommand}" />
+				</dxmvvm:Interaction.Behaviors>
+			</dxe:ComboBoxEdit>
+			<dxg:TreeListControl
+				Name="CategoriesListControl"
+				MinWidth="200"
+				MaxWidth="300"
+				SelectionMode="Row"
+				AllowInitiallyFocusedRow="False"
+				ItemsSource="{Binding Items}"
+				SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+				<dxg:TreeListControl.View>
+					<dxg:TreeListView
+						ExpandStateFieldName="IsExpand"
+						ShowNodeImages="True"
+						ImageFieldName="Image"
+						ShowIndicator="False"
+						ShowHorizontalLines="False"
+						ShowVerticalLines="False"
+						NavigationStyle="Row"
+						AllowEditing="False"
+						KeyFieldName="Id"
+						ParentFieldName="Parent"
+						UseLegacyColumnVisibleIndexes="True"
+						UseIndicatorForSelection="False"
+						AllowScrollToFocusedRow="False"
+						AutoMoveRowFocus="False"
+						AllowMoveColumnToDropArea="False"
+						AllowColumnMoving="False"
+						AllowDragDrop="True"
+						AllowResizing="False"
+						ShowColumnHeaders="False"
+						ShowBandsPanel="False"
+						FadeSelectionOnLostFocus="True"
+						RowMinHeight="{Binding Employee.UiSettings.RowHeight, Source={x:Static objects:OfflineData.Instance}}"
+						FontSize="{Binding Employee.UiSettings.FontSize, Source={x:Static objects:OfflineData.Instance}}">
+						<dxg:TreeListView.RowStyle>
+							<Style
+								TargetType="{x:Type dxg:RowControl}">
+								<Style.Triggers>
+									<DataTrigger
+										Value="Focused"
+										Binding="{Binding Path=SelectionState}">
+										<Setter
+											Property="Background"
+											Value="{DynamicResource UiSelectedRowColor}" />
+									</DataTrigger>
+								</Style.Triggers>
+							</Style>
+						</dxg:TreeListView.RowStyle>
+						<dxg:DataViewBase.RowCellMenuCustomizations>
+							<dxb:BarButtonItem
+								Content="{DynamicResource CategoryCreate}"
+								Glyph="{dx:DXImageGrayscale Image=New_16x16.png}"
+								Command="{Binding Path=(dxg:GridPopupMenu.GridMenuInfo).View.DataContext.ShowAddCategoryCommand, RelativeSource={RelativeSource Self}}" />
+							<dxb:BarButtonItem
+								Content="{DynamicResource CategoryEdit}"
+								Glyph="{dx:DXImageGrayscale Image=Edit_16x16.png}"
+								Command="{Binding Path=(dxg:GridPopupMenu.GridMenuInfo).View.DataContext.ShowEditCategoryCommand, RelativeSource={RelativeSource Self}}" />
+							<dxb:BarButtonItem
+								Content="{DynamicResource Save}"
+								Glyph="{dx:DXImageGrayscale Image=Save_16x16.png}"
+								Command="{Binding Path=(dxg:GridPopupMenu.GridMenuInfo).View.DataContext.SavePositionCommand, RelativeSource={RelativeSource Self}}"
+								CommandParameter="{Binding ElementName=CategoriesListControl}" />
+							<dxb:BarButtonItem
+								Content="{DynamicResource ShowArhive}"
+								Glyph="{dx:DXImageGrayscale Image=Clear_16x16.png}"
+								Command="{Binding Path=(dxg:GridPopupMenu.GridMenuInfo).View.DataContext.ShowArchiveCommand, RelativeSource={RelativeSource Self}}" />
+						</dxg:DataViewBase.RowCellMenuCustomizations>
+					</dxg:TreeListView>
+				</dxg:TreeListControl.View>
+				<dxmvvm:Interaction.Behaviors>
+					<dxmvvm:EventToCommand
+						EventTriggerBase_x0060_1.EventName="Unloaded"
+						Command="{Binding OnTreeListUnloadedCommand}" />
+					<dxg:TreeListDragDropManager
+						AllowAutoExpand="True"
+						AutoExpandDelay="500"
+						AllowDrag="True"
+						AllowDrop="True">
+						<dxmvvm:Interaction.Behaviors>
+							<dxmvvm:EventToCommand
+								EventTriggerBase_x0060_1.EventName="DragOver"
+								PassEventArgsToCommand="True"
+								Command="{Binding CategoryDragCommand, UpdateSourceTrigger=PropertyChanged}" />
+						</dxmvvm:Interaction.Behaviors>
+					</dxg:TreeListDragDropManager>
+				</dxmvvm:Interaction.Behaviors>
+				<dxg:TreeListControl.Columns>
+					<dxg:TreeListColumn
+						Width="1*"
+						AllowResizing="False"
+						AllowMoving="False"
+						FieldName="Name"
+						MinWidth="120"
+						AllowAutoFilter="False"
+						AllowColumnFiltering="False"
+						AllowSorting="False" />
+					<dxg:TreeListColumn
+						FieldName="Image"
+						Visible="False"
+						ShowInColumnChooser="False" />
+				</dxg:TreeListControl.Columns>
+			</dxg:TreeListControl>
+		</DockPanel>
+		<dxg:GridControl
+			Name="PriceGrid"
+			Tag="PriceGrid"
+			HorizontalAlignment="Stretch"
+			SelectionMode="Row"
+			VerticalAlignment="Stretch"
+			SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+			ItemsSource="{Binding Items}">
+			<dxmvvm:Interaction.Behaviors>
+				<dxmvvm:EventToCommand
+					EventTriggerBase_x0060_1.EventName="Loaded"
+					Command="{Binding GridInitCommand}"
+					CommandParameter="{Binding ElementName=PriceGrid}" />
+				<dxmvvm:EventToCommand
+					EventTriggerBase_x0060_1.EventName="Unloaded"
+					Command="{Binding GridUnloadedCommand}"
+					CommandParameter="{Binding ElementName=PriceGrid}" />
+				<extensions:GridLayoutHelper>
+					<dxmvvm:Interaction.Behaviors>
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="LayoutChanged"
+							Command="{Binding LayoutChangedCommand}"
+							CommandParameter="{Binding ElementName=PriceGrid}" />
+					</dxmvvm:Interaction.Behaviors>
+				</extensions:GridLayoutHelper>
+			</dxmvvm:Interaction.Behaviors>
+			<dxg:GridColumn
+				Width="90"
+				HorizontalHeaderContentAlignment="Center"
+				FieldName="{DynamicResource Code}"
+				Binding="{Binding id, Mode=OneWay}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:TextEditSettings
+						HorizontalContentAlignment="Center"
+						Mask="d6"
+						MaskType="Numeric"
+						MaskUseAsDisplayFormat="True" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				Width="290*"
+				HorizontalHeaderContentAlignment="Center"
+				FieldName="{DynamicResource ItemName}"
+				Binding="{Binding name, Mode=OneWay}" />
+			<dxg:GridColumn
+				Width="90"
+				HorizontalHeaderContentAlignment="Center"
+				FieldName="{DynamicResource Price}"
+				Binding="{Binding price1, Mode=OneWay}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:TextEditSettings
+						HorizontalContentAlignment="Center"
+						Mask="N0"
+						MaskType="Numeric"
+						MaskUseAsDisplayFormat="True" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				Width="90"
+				HorizontalHeaderContentAlignment="Center"
+				FieldName="{DynamicResource MasterPart}"
+				Binding="{Binding master_part, Mode=OneWay}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:TextEditSettings
+						HorizontalContentAlignment="Center"
+						Mask="N0"
+						MaskType="Numeric"
+						MaskUseAsDisplayFormat="True" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				Width="110"
+				HorizontalHeaderContentAlignment="Center"
+				FieldName="{DynamicResource Warranty}"
+				Binding="{Binding warranty, Converter={StaticResource IntToWarrantyOptionsName}}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:TextEditSettings
+						HorizontalContentAlignment="Center" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				Width="110"
+				HorizontalHeaderContentAlignment="Center"
+				FieldName="{DynamicResource Notes}"
+				Binding="{Binding notes}" />
+			<dxg:GridControl.View>
+				<dxg:TableView
+					Name="CollectionTableView"
+					ShowTotalSummary="False"
+					BestFitMode="AllRows"
+					AllowScrollAnimation="True"
+					NavigationStyle="Row"
+					ColumnFilterPopupMode="Excel"
+					AllowEditing="False"
+					AllowGrouping="False"
+					AllowColumnMoving="True"
+					ShowGroupPanel="False"
+					ShowColumnHeaders="True"
+					AllowMoveColumnToDropArea="False"
+					ShowBandsPanel="True"
+					ShowIndicator="False"
+					AllowBestFit="True"
+					AllowColumnFiltering="False"
+					ShowSelectionRectangle="False"
+					ShowSearchPanelMode="Never"
+					ShowFixedTotalSummary="False"
+					SummariesIgnoreNullValues="True"
+					RowMinHeight="{Binding Employee.UiSettings.RowHeight, Source={x:Static objects:OfflineData.Instance}}"
+					FontSize="{Binding Employee.UiSettings.FontSize, Source={x:Static objects:OfflineData.Instance}}">
+					<dxmvvm:Interaction.Behaviors>
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="RowDoubleClick"
+							Command="{Binding ItemDoubleClickCommand}" />
+					</dxmvvm:Interaction.Behaviors>
+				</dxg:TableView>
+			</dxg:GridControl.View>
+		</dxg:GridControl>
+	</DockPanel>
+</UserControl>

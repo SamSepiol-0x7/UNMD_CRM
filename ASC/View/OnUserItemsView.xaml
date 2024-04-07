@@ -1,0 +1,186 @@
+<UserControl
+	x:Class="ASC.View.OnUserItemsView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:asc="clr-namespace:ASC" xmlns:converters="clr-namespace:ASC.Converters" xmlns:viewModels="clr-namespace:ASC.ViewModels" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:objects="clr-namespace:ASC.Objects" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:view="clr-namespace:ASC.View">
+	<FrameworkElement.Resources>
+		<ResourceDictionary>
+			<converters:IntReserveState2StringConverter
+				x:Key="State2StringConverter" />
+		</ResourceDictionary>
+	</FrameworkElement.Resources>
+	<Grid>
+		<dxg:GridControl
+			ItemsSource="{Binding Items}"
+			SelectedItem="{Binding SelectedItem, UpdateSourceTrigger=PropertyChanged}">
+			<FrameworkElement.Resources>
+				<ResourceDictionary>
+					<Style
+						TargetType="{x:Type dxg:GridColumn}"
+						x:Key="{x:Type dxg:GridColumn}">
+						<Setter
+							Property="dxg:BaseColumn.HorizontalHeaderContentAlignment"
+							Value="Center" />
+					</Style>
+				</ResourceDictionary>
+			</FrameworkElement.Resources>
+			<dxg:GridControl.Columns>
+				<dxg:GridColumn
+					Header="{DynamicResource Request}"
+					FieldName="id">
+					<dxg:ColumnBase.EditSettings>
+						<dxe:TextEditSettings
+							HorizontalContentAlignment="Center"
+							MaskType="Numeric"
+							Mask="d6"
+							MaskUseAsDisplayFormat="True" />
+					</dxg:ColumnBase.EditSettings>
+				</dxg:GridColumn>
+				<dxg:GridColumn
+					Header="{DynamicResource ArticulNoDots}"
+					FieldName="store_items.articul">
+					<dxg:ColumnBase.EditSettings>
+						<dxe:TextEditSettings
+							HorizontalContentAlignment="Center"
+							MaskType="Numeric"
+							Mask="d6"
+							MaskUseAsDisplayFormat="True" />
+					</dxg:ColumnBase.EditSettings>
+				</dxg:GridColumn>
+				<dxg:GridColumn
+					Header="{DynamicResource ItemName}"
+					FieldName="store_items.name"
+					Width="*">
+					<dxg:ColumnBase.EditSettings>
+						<dxe:TextEditSettings />
+					</dxg:ColumnBase.EditSettings>
+				</dxg:GridColumn>
+				<dxg:GridColumn
+					Header="{DynamicResource Count}"
+					FieldName="count">
+					<dxg:ColumnBase.EditSettings>
+						<dxe:TextEditSettings
+							HorizontalContentAlignment="Center" />
+					</dxg:ColumnBase.EditSettings>
+				</dxg:GridColumn>
+				<dxg:GridColumn
+					Header="{DynamicResource Price}"
+					FieldName="price">
+					<dxg:ColumnBase.EditSettings>
+						<dxe:TextEditSettings
+							HorizontalContentAlignment="Right"
+							Mask="N2"
+							MaskType="Numeric"
+							MaskUseAsDisplayFormat="True" />
+					</dxg:ColumnBase.EditSettings>
+				</dxg:GridColumn>
+				<dxg:GridColumn
+					Header="{DynamicResource Summ}"
+					FieldName="Summ">
+					<dxg:ColumnBase.EditSettings>
+						<dxe:TextEditSettings
+							HorizontalContentAlignment="Right"
+							Mask="N2"
+							MaskType="Numeric"
+							MaskUseAsDisplayFormat="True" />
+					</dxg:ColumnBase.EditSettings>
+				</dxg:GridColumn>
+				<dxg:GridColumn
+					Header="{DynamicResource Status}"
+					FieldName="Status"
+					Binding="{Binding state, Converter={StaticResource State2StringConverter}}">
+					<dxg:ColumnBase.EditSettings>
+						<dxe:TextEditSettings />
+					</dxg:ColumnBase.EditSettings>
+				</dxg:GridColumn>
+				<dxg:GridColumn
+					Header="{DynamicResource Repair}"
+					FieldName="repair_id">
+					<dxg:ColumnBase.EditSettings>
+						<dxe:TextEditSettings
+							NullText="---"
+							HorizontalContentAlignment="Center"
+							MaskType="Numeric"
+							Mask="d6"
+							MaskUseAsDisplayFormat="True" />
+					</dxg:ColumnBase.EditSettings>
+				</dxg:GridColumn>
+			</dxg:GridControl.Columns>
+			<dxg:GridControl.View>
+				<dxg:TableView
+					IsSynchronizedWithCurrentItem="True"
+					ShowTotalSummary="True"
+					AllowScrollAnimation="True"
+					NavigationStyle="Row"
+					ColumnFilterPopupMode="Excel"
+					AllowEditing="False"
+					AllowGrouping="False"
+					AllowColumnMoving="True"
+					ShowGroupPanel="False"
+					ShowColumnHeaders="True"
+					AllowMoveColumnToDropArea="False"
+					ShowSearchPanelMode="Never"
+					ShowBandsPanel="True"
+					ShowIndicator="False"
+					AllowBestFit="True"
+					AllowColumnFiltering="False"
+					ShowSelectionRectangle="False"
+					ShowFixedTotalSummary="False"
+					SummariesIgnoreNullValues="True"
+					RowMinHeight="{Binding Employee.UiSettings.RowHeight, Source={x:Static objects:OfflineData.Instance}}"
+					FontSize="{Binding Employee.UiSettings.FontSize, Source={x:Static objects:OfflineData.Instance}}">
+					<dxmvvm:Interaction.Behaviors>
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="RowDoubleClick"
+							Command="{Binding MyItemClickCommand}" />
+					</dxmvvm:Interaction.Behaviors>
+					<dxg:TableView.RowStyle>
+						<Style
+							BasedOn="{StaticResource RowStyle}"
+							TargetType="{x:Type dxg:RowControl}">
+							<Style.Triggers>
+								<DataTrigger
+									Value="2"
+									Binding="{Binding Row.state}">
+									<Setter
+										Property="Background"
+										Value="#FF90EE90" />
+									<Setter
+										Property="FrameworkElement.ToolTip"
+										Value="{StaticResource ReserveItems}" />
+								</DataTrigger>
+								<DataTrigger
+									Value="3"
+									Binding="{Binding Row.state}">
+									<Setter
+										Property="Background"
+										Value="#FFD3D3D3" />
+									<Setter
+										Property="FrameworkElement.ToolTip"
+										Value="{StaticResource CancelledReserve}" />
+								</DataTrigger>
+								<DataTrigger
+									Value="4"
+									Binding="{Binding Row.state}">
+									<Setter
+										Property="Background"
+										Value="#FFD3D3D3" />
+									<Setter
+										Property="FrameworkElement.ToolTip"
+										Value="{StaticResource CancelledReserve}" />
+								</DataTrigger>
+							</Style.Triggers>
+						</Style>
+					</dxg:TableView.RowStyle>
+				</dxg:TableView>
+			</dxg:GridControl.View>
+			<dxg:GridControl.TotalSummary>
+				<dxg:GridSummaryItem
+					DisplayFormat=" {0:N0}"
+					SummaryType="Sum"
+					FieldName="count" />
+				<dxg:GridSummaryItem
+					DisplayFormat=" {0:N0}"
+					SummaryType="Sum"
+					FieldName="Summ" />
+			</dxg:GridControl.TotalSummary>
+		</dxg:GridControl>
+	</Grid>
+</UserControl>

@@ -1,0 +1,507 @@
+<dxwui:NavigationPage
+	x:Class="ASC.View.CustomizeView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:ASC" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:converters="clr-namespace:ASC.Converters" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:properties="clr-namespace:ASC.Properties" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:sys="clr-namespace:System;assembly=mscorlib" xmlns:Serialization="clr-namespace:DevExpress.Xpf.LayoutControl.Serialization;assembly=DevExpress.Xpf.LayoutControl.v17.2" xmlns:viewModels="clr-namespace:ASC.ViewModels" xmlns:objects="clr-namespace:ASC.Objects" xmlns:dxwui="http://schemas.devexpress.com/winfx/2008/xaml/windowsui"
+	VerticalAlignment="Stretch" xmlns:view="clr-namespace:ASC.View"
+	Loaded="{DXEvent OnLoad()}">
+	<FrameworkElement.DataContext>
+		<viewModels:CustomizeViewModel />
+	</FrameworkElement.DataContext>
+	<FrameworkElement.Resources>
+		<ResourceDictionary>
+			<converters:RadioBoolToIntConverter
+				x:Key="RadioBoolToIntConverter" />
+		</ResourceDictionary>
+	</FrameworkElement.Resources>
+	<DockPanel>
+		<dxlc:LayoutControl
+			HorizontalAlignment="Stretch"
+			Orientation="Horizontal"
+			ItemStyle="{StaticResource ResourceKey=LeftMenuLayout}">
+			<FrameworkElement.Resources>
+				<ResourceDictionary>
+					<Style
+						TargetType="{x:Type dxe:CheckEdit}"
+						x:Key="{x:Type dxe:CheckEdit}">
+						<Setter
+							Property="HorizontalAlignment"
+							Value="Right" />
+					</Style>
+				</ResourceDictionary>
+			</FrameworkElement.Resources>
+			<dxlc:LayoutGroup
+				MaxWidth="450"
+				Orientation="Vertical">
+				<dxlc:LayoutGroup
+					MinWidth="400"
+					View="GroupBox"
+					Header="{DynamicResource Facade}"
+					Orientation="Vertical">
+					<dxlc:LayoutItem
+						Label="{DynamicResource SelectedRowColor}">
+						<dxe:PopupColorEdit
+							DisplayMode="Color"
+							Color="{Binding UiSettings.RowColor, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource FontSize}">
+						<dxe:SpinEdit
+							ShowError="False"
+							MinValue="10"
+							MaxValue="18"
+							EditValueType="{x:Type sys:Int32}"
+							EditValue="{Binding UiSettings.FontSize, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource RowHeight}">
+						<dxe:SpinEdit
+							ShowError="False"
+							MinValue="20"
+							MaxValue="40"
+							EditValueType="{x:Type sys:Int32}"
+							EditValue="{Binding UiSettings.RowHeight, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource Font}">
+						<dxe:FontEdit
+							ShowError="False"
+							EditValue="{Binding FontFamily, Source={x:Static properties:Settings.Default}}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource GeHighlightColor}">
+						<dxe:PopupColorEdit
+							DisplayMode="Color"
+							Color="{Binding UiSettings.GeHighlightColor, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+				<dxlc:LayoutGroup
+					View="GroupBox"
+					Header="{DynamicResource PrintSettings}"
+					Orientation="Vertical">
+					<dxlc:LayoutItem
+						Label="{DynamicResource DefaultPrinter}">
+						<dxe:ComboBoxEdit
+							ItemsSource="{Binding Printers}"
+							EditValue="{Binding DocsPrinter, Mode=TwoWay, Source={x:Static properties:Settings.Default}}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource DefaultStickersPrinter}">
+						<dxe:ComboBoxEdit
+							ItemsSource="{Binding Printers}"
+							EditValue="{Binding StickersPrinter, Mode=TwoWay, Source={x:Static properties:Settings.Default}}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource PreviewBeforePrint}">
+						<dxe:CheckEdit
+							IsChecked="{Binding User.preview_before_print, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+				<dxlc:LayoutItem>
+					<dx:SimpleButton
+						Content="{DynamicResource Restore2}"
+						ToolTip="{DynamicResource Restore}"
+						HorizontalAlignment="Left"
+						Command="{Binding RestoreDefaultsCommand}"
+						Glyph="{DXImageGrayscale Image=NewWizard_32x32-4.png}" />
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+			<dxlc:LayoutGroup
+				HorizontalAlignment="Left"
+				Orientation="Vertical">
+				<dxlc:LayoutGroup
+					ItemLabelsAlignment="Local"
+					View="GroupBox"
+					Header="{DynamicResource Repairs}"
+					Orientation="Vertical">
+					<dxlc:LayoutItem
+						Label="{DynamicResource DisplayOut}">
+						<dxe:CheckEdit
+							IsChecked="{Binding User.display_out}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource DisplayComplete}">
+						<dxe:CheckEdit
+							IsChecked="{Binding User.display_complete}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource NewOnTop}">
+						<dxe:CheckEdit
+							IsChecked="{Binding User.new_on_top}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource SaveStateOnClose}">
+						<dxe:CheckEdit
+							IsChecked="{Binding User.save_state_on_close}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource AutoRefresh}">
+						<dxe:CheckEdit
+							IsChecked="{Binding User.auto_refresh_workspace}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource RefreshTime}">
+						<dxe:SpinEdit
+							MinValue="0"
+							MaxValue="200"
+							IsFloatValue="False"
+							MinWidth="60"
+							EditValue="{Binding User.refresh_time, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource IssuedInSearchResultsColor}">
+						<dxe:PopupColorEdit
+							ShowNoColorButton="True"
+							NoColorButtonContent="{DynamicResource NoColor}"
+							DisplayMode="Color"
+							Color="{Binding UiSettings.IssuedRowColor, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource DefaultOffice}">
+						<dxe:ComboBoxEdit
+							MinWidth="100"
+							DisplayMember="name"
+							ValueMember="id"
+							IsEnabled="{Binding CanOfficeSelect}"
+							EditValue="{Binding User.def_office, Mode=TwoWay}"
+							ItemsSource="{Binding OfficesWithAll, Source={x:Static objects:OfflineData.Instance}}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource DefaultEmployee}">
+						<dxe:ComboBoxEdit
+							MinWidth="100"
+							DisplayMember="Fio"
+							ValueMember="Uid"
+							IsEnabled="{Binding CanUserSelect, Mode=OneWay}"
+							EditValue="{Binding User.def_employee, Mode=TwoWay}"
+							ItemsSource="{Binding Users}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource DefaultStatus}">
+						<dxe:ComboBoxEdit
+							MinWidth="100"
+							DisplayMember="Name"
+							ValueMember="Id"
+							EditValue="{Binding User.def_status, Mode=TwoWay}"
+							ItemsSource="{Binding WorkshopOptions}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource Mode}"
+						Visibility="{Binding cartridge_enable, Source={x:Static local:Auth.Config}, Converter={StaticResource BooleanToVisibilityConverter}}">
+						<dxe:ComboBoxEdit
+							MinWidth="100"
+							DisplayMember="Name"
+							ValueMember="Id"
+							EditValue="{Binding User.def_ws_filter, Mode=TwoWay}"
+							ItemsSource="{Binding WorkshopDevices}" />
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+				<dxlc:LayoutGroup
+					View="GroupBox"
+					Header="{DynamicResource Clients}"
+					Orientation="Vertical">
+					<dxlc:LayoutItem
+						Label="{DynamicResource PreferRegular}">
+						<dxe:CheckEdit
+							IsChecked="{Binding User.prefer_regular}" />
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+				<dxlc:LayoutGroup
+					ItemLabelsAlignment="Local"
+					View="GroupBox"
+					Header="{DynamicResource Items}"
+					Orientation="Vertical">
+					<dxlc:LayoutItem
+						Label="{DynamicResource GroupStoreItems}">
+						<dxe:CheckEdit
+							IsChecked="{Binding User.group_store_items, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource DefaultStore}">
+						<dxe:ComboBoxEdit
+							MinWidth="100"
+							DisplayMember="name"
+							ValueMember="id"
+							EditValue="{Binding User.def_store, Mode=TwoWay}"
+							ItemsSource="{Binding Stores}" />
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+			</dxlc:LayoutGroup>
+			<dxlc:LayoutGroup
+				dx:ScrollViewerTouchBehavior.IsEnabled="True"
+				Orientation="Vertical"
+				Serialization:SerializableItem.TypeName="LayoutGroup">
+				<dxlc:LayoutGroup
+					MinWidth="200"
+					IsCollapsible="True"
+					IsCollapsed="True"
+					HorizontalAlignment="Left"
+					View="GroupBox"
+					Header="{DynamicResource ExcelImportSettings}">
+					<FrameworkElement.Resources>
+						<ResourceDictionary>
+							<Style
+								TargetType="{x:Type dxe:ComboBoxEdit}"
+								x:Key="{x:Type dxe:ComboBoxEdit}">
+								<Setter
+									Property="Width"
+									Value="100" />
+							</Style>
+						</ResourceDictionary>
+					</FrameworkElement.Resources>
+					<dxlc:LayoutGroup
+						Orientation="Vertical">
+						<dxlc:LayoutItem
+							Label="{DynamicResource ItemName}">
+							<dxe:ComboBoxEdit
+								DisplayMember="Name"
+								ValueMember="Id"
+								EditValue="{Binding User.xls_c1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+								ItemsSource="{Binding AllImportOptionses}">
+								<dxmvvm:Interaction.Behaviors>
+									<dxmvvm:EventToCommand
+										EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+										PassEventArgsToCommand="True"
+										Command="{Binding ComboBoxClickCommand}" />
+								</dxmvvm:Interaction.Behaviors>
+							</dxe:ComboBoxEdit>
+						</dxlc:LayoutItem>
+						<dxlc:LayoutItem
+							Label="{DynamicResource Count}">
+							<dxe:ComboBoxEdit
+								DisplayMember="Name"
+								ValueMember="Id"
+								EditValue="{Binding User.xls_c2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+								ItemsSource="{Binding AllImportOptionses}">
+								<dxmvvm:Interaction.Behaviors>
+									<dxmvvm:EventToCommand
+										EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+										PassEventArgsToCommand="True"
+										Command="{Binding ComboBoxClickCommand}" />
+								</dxmvvm:Interaction.Behaviors>
+							</dxe:ComboBoxEdit>
+						</dxlc:LayoutItem>
+						<dxlc:LayoutItem
+							Label="{DynamicResource Description}">
+							<dxe:ComboBoxEdit
+								DisplayMember="Name"
+								ValueMember="Id"
+								EditValue="{Binding User.xls_c3, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+								ItemsSource="{Binding AllImportOptionses}">
+								<dxmvvm:Interaction.Behaviors>
+									<dxmvvm:EventToCommand
+										EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+										PassEventArgsToCommand="True"
+										Command="{Binding ComboBoxClickCommand}" />
+								</dxmvvm:Interaction.Behaviors>
+							</dxe:ComboBoxEdit>
+						</dxlc:LayoutItem>
+						<dxlc:LayoutItem
+							Label="{DynamicResource IShopDescription}">
+							<dxe:ComboBoxEdit
+								DisplayMember="Name"
+								ValueMember="Id"
+								IsEnabled="{Binding online_store, Source={x:Static local:Auth.Config}, Converter={dxmvvm:NumericToBooleanConverter}}"
+								EditValue="{Binding User.xls_c4, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+								ItemsSource="{Binding AllImportOptionses}">
+								<dxmvvm:Interaction.Behaviors>
+									<dxmvvm:EventToCommand
+										EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+										PassEventArgsToCommand="True"
+										Command="{Binding ComboBoxClickCommand}" />
+								</dxmvvm:Interaction.Behaviors>
+							</dxe:ComboBoxEdit>
+						</dxlc:LayoutItem>
+						<dxlc:LayoutItem
+							Label="{DynamicResource TitleIShop}">
+							<dxe:ComboBoxEdit
+								DisplayMember="Name"
+								ValueMember="Id"
+								IsEnabled="{Binding online_store, Source={x:Static local:Auth.Config}, Converter={dxmvvm:NumericToBooleanConverter}}"
+								EditValue="{Binding User.xls_c14, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+								ItemsSource="{Binding AllImportOptionses}">
+								<dxmvvm:Interaction.Behaviors>
+									<dxmvvm:EventToCommand
+										EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+										PassEventArgsToCommand="True"
+										Command="{Binding ComboBoxClickCommand}" />
+								</dxmvvm:Interaction.Behaviors>
+							</dxe:ComboBoxEdit>
+						</dxlc:LayoutItem>
+						<dxlc:LayoutItem
+							Label="{DynamicResource Sn}">
+							<dxe:ComboBoxEdit
+								DisplayMember="Name"
+								ValueMember="Id"
+								EditValue="{Binding User.xls_c6, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+								ItemsSource="{Binding AllImportOptionses}">
+								<dxmvvm:Interaction.Behaviors>
+									<dxmvvm:EventToCommand
+										EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+										PassEventArgsToCommand="True"
+										Command="{Binding ComboBoxClickCommand}" />
+								</dxmvvm:Interaction.Behaviors>
+							</dxe:ComboBoxEdit>
+						</dxlc:LayoutItem>
+						<dxlc:LayoutItem
+							Label="{DynamicResource PN}">
+							<dxe:ComboBoxEdit
+								DisplayMember="Name"
+								ValueMember="Id"
+								EditValue="{Binding User.xls_c5, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+								ItemsSource="{Binding AllImportOptionses}">
+								<dxmvvm:Interaction.Behaviors>
+									<dxmvvm:EventToCommand
+										EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+										PassEventArgsToCommand="True"
+										Command="{Binding ComboBoxClickCommand}" />
+								</dxmvvm:Interaction.Behaviors>
+							</dxe:ComboBoxEdit>
+						</dxlc:LayoutItem>
+					</dxlc:LayoutGroup>
+					<dxlc:LayoutGroup
+						Orientation="Vertical">
+						<dxlc:LayoutItem
+							Label="{DynamicResource Cost}">
+							<dxe:ComboBoxEdit
+								DisplayMember="Name"
+								ValueMember="Id"
+								EditValue="{Binding User.xls_c7, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+								ItemsSource="{Binding AllImportOptionses}">
+								<dxmvvm:Interaction.Behaviors>
+									<dxmvvm:EventToCommand
+										EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+										PassEventArgsToCommand="True"
+										Command="{Binding ComboBoxClickCommand}" />
+								</dxmvvm:Interaction.Behaviors>
+							</dxe:ComboBoxEdit>
+						</dxlc:LayoutItem>
+						<dxlc:LayoutItem
+							Label="{DynamicResource Retail}">
+							<dxe:ComboBoxEdit
+								DisplayMember="Name"
+								ValueMember="Id"
+								EditValue="{Binding User.xls_c8, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+								ItemsSource="{Binding AllImportOptionses}">
+								<dxmvvm:Interaction.Behaviors>
+									<dxmvvm:EventToCommand
+										EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+										PassEventArgsToCommand="True"
+										Command="{Binding ComboBoxClickCommand}" />
+								</dxmvvm:Interaction.Behaviors>
+							</dxe:ComboBoxEdit>
+						</dxlc:LayoutItem>
+						<dxlc:LayoutItem
+							Label="{DynamicResource Opt}">
+							<dxe:ComboBoxEdit
+								DisplayMember="Name"
+								ValueMember="Id"
+								EditValue="{Binding User.xls_c9, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+								ItemsSource="{Binding AllImportOptionses}">
+								<dxmvvm:Interaction.Behaviors>
+									<dxmvvm:EventToCommand
+										EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+										PassEventArgsToCommand="True"
+										Command="{Binding ComboBoxClickCommand}" />
+								</dxmvvm:Interaction.Behaviors>
+							</dxe:ComboBoxEdit>
+						</dxlc:LayoutItem>
+						<dxlc:LayoutItem
+							Label="{DynamicResource PriceOpt2}">
+							<dxe:ComboBoxEdit
+								DisplayMember="Name"
+								ValueMember="Id"
+								EditValue="{Binding User.xls_c10, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+								ItemsSource="{Binding AllImportOptionses}">
+								<dxmvvm:Interaction.Behaviors>
+									<dxmvvm:EventToCommand
+										EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+										PassEventArgsToCommand="True"
+										Command="{Binding ComboBoxClickCommand}" />
+								</dxmvvm:Interaction.Behaviors>
+							</dxe:ComboBoxEdit>
+						</dxlc:LayoutItem>
+						<dxlc:LayoutItem
+							Label="{DynamicResource PriceOpt3}">
+							<dxe:ComboBoxEdit
+								DisplayMember="Name"
+								ValueMember="Id"
+								EditValue="{Binding User.xls_c11, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+								ItemsSource="{Binding AllImportOptionses}">
+								<dxmvvm:Interaction.Behaviors>
+									<dxmvvm:EventToCommand
+										EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+										PassEventArgsToCommand="True"
+										Command="{Binding ComboBoxClickCommand}" />
+								</dxmvvm:Interaction.Behaviors>
+							</dxe:ComboBoxEdit>
+						</dxlc:LayoutItem>
+						<dxlc:LayoutItem
+							Label="{DynamicResource PriceForSc}">
+							<dxe:ComboBoxEdit
+								DisplayMember="Name"
+								ValueMember="Id"
+								EditValue="{Binding User.xls_c12, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+								ItemsSource="{Binding AllImportOptionses}">
+								<dxmvvm:Interaction.Behaviors>
+									<dxmvvm:EventToCommand
+										EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+										PassEventArgsToCommand="True"
+										Command="{Binding ComboBoxClickCommand}" />
+								</dxmvvm:Interaction.Behaviors>
+							</dxe:ComboBoxEdit>
+						</dxlc:LayoutItem>
+						<dxlc:LayoutItem
+							Label="{DynamicResource Notes}">
+							<dxe:ComboBoxEdit
+								DisplayMember="Name"
+								ValueMember="Id"
+								EditValue="{Binding User.xls_c15, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+								ItemsSource="{Binding AllImportOptionses}">
+								<dxmvvm:Interaction.Behaviors>
+									<dxmvvm:EventToCommand
+										EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+										PassEventArgsToCommand="True"
+										Command="{Binding ComboBoxClickCommand}" />
+								</dxmvvm:Interaction.Behaviors>
+							</dxe:ComboBoxEdit>
+						</dxlc:LayoutItem>
+						<dxlc:LayoutItem
+							Label="{DynamicResource Box}">
+							<dxe:ComboBoxEdit
+								DisplayMember="Name"
+								ValueMember="Id"
+								EditValue="{Binding User.xls_c13, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+								ItemsSource="{Binding AllImportOptionses}">
+								<dxmvvm:Interaction.Behaviors>
+									<dxmvvm:EventToCommand
+										EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+										PassEventArgsToCommand="True"
+										Command="{Binding ComboBoxClickCommand}" />
+								</dxmvvm:Interaction.Behaviors>
+							</dxe:ComboBoxEdit>
+						</dxlc:LayoutItem>
+					</dxlc:LayoutGroup>
+				</dxlc:LayoutGroup>
+				<dxlc:LayoutGroup
+					MinWidth="200"
+					IsCollapsible="True"
+					IsCollapsed="True"
+					HorizontalAlignment="Left"
+					View="GroupBox"
+					Header="{DynamicResource WorkspaceMode}"
+					Orientation="Horizontal">
+					<dxlc:LayoutItem>
+						<RadioButton
+							GroupName="wsMode"
+							Content="{DynamicResource Items}"
+							IsChecked="{Binding User.workspace_mode, ConverterParameter=1, Converter={StaticResource RadioBoolToIntConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem>
+						<RadioButton
+							GroupName="wsMode"
+							Content="{DynamicResource Repairs}"
+							IsChecked="{Binding User.workspace_mode, ConverterParameter=0, Converter={StaticResource RadioBoolToIntConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+			</dxlc:LayoutGroup>
+		</dxlc:LayoutControl>
+	</DockPanel>
+</dxwui:NavigationPage>

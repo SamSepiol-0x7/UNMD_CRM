@@ -1,0 +1,240 @@
+<UserControl
+	x:Class="ASC.Charts.CallConversions.CallConversionsView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:ASC.Charts.CallConversions" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" xmlns:dxwui="http://schemas.devexpress.com/winfx/2008/xaml/windowsui" xmlns:asc="clr-namespace:ASC" xmlns:dxc="http://schemas.devexpress.com/winfx/2008/xaml/charts" xmlns:objects="clr-namespace:ASC.Objects"
+	Name="CallConversions">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition
+				Height="300*" />
+			<RowDefinition
+				Height="257*" />
+			<RowDefinition
+				Height="90" />
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition
+				Width="Auto"
+				MaxWidth="400" />
+			<ColumnDefinition
+				Width="80*" />
+		</Grid.ColumnDefinitions>
+		<dxwui:AppBar
+			Background="#3f3f3f"
+			HorizontalAlignment="Stretch"
+			VerticalAlignment="Stretch"
+			ItemSpacing="5"
+			HideMode="AlwaysVisible"
+			Grid.Row="2"
+			Grid.ColumnSpan="2">
+			<dxwui:AppBarButton
+				IsEnabled="False"
+				Label="{DynamicResource Print}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Command="{Binding View.Commands.ShowPrintPreview, ElementName=tableView1}"
+				Glyph="{dx:DXImageGrayscale Image=Print_32x32.png}" />
+			<dxwui:AppBarButton
+				Label="{DynamicResource Refresh}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Command="{Binding Period.RefreshCommand}"
+				Glyph="{dx:DXImageGrayscale Image=Refresh_32x32.png}" />
+		</dxwui:AppBar>
+		<dxlc:LayoutControl
+			ItemStyle="{StaticResource LeftMenuLayout}"
+			Orientation="Vertical"
+			ItemSpace="5"
+			Padding="10"
+			Grid.RowSpan="3">
+			<dxlc:LayoutGroup
+				Orientation="Horizontal"
+				View="GroupBox"
+				Header="{DynamicResource PeriodNoDots}">
+				<dxlc:LayoutItem>
+					<dxe:DateEdit
+						AllowNullInput="False"
+						PopupMaxHeight="250"
+						EditValue="{Binding Period.From, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="-"
+					VerticalAlignment="Center"
+					LabelVerticalAlignment="Center"
+					Width="5"
+					LabelHorizontalAlignment="Center" />
+				<dxlc:LayoutItem>
+					<dxe:DateEdit
+						AllowNullInput="False"
+						PopupMaxHeight="250"
+						EditValue="{Binding Period.To, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					VerticalAlignment="Center"
+					LabelVerticalAlignment="Center"
+					Width="20"
+					LabelHorizontalAlignment="Center">
+					<Button
+						Content="3"
+						Padding="0"
+						ContentTemplate="{StaticResource LeftRight}"
+						Command="{Binding Period.MinusDayCommand}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					VerticalAlignment="Center"
+					LabelVerticalAlignment="Center"
+					Width="20"
+					LabelHorizontalAlignment="Center">
+					<Button
+						Content="4"
+						Padding="0"
+						ContentTemplate="{StaticResource LeftRight}"
+						Command="{Binding Period.PlusDayCommand}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					VerticalAlignment="Center"
+					LabelVerticalAlignment="Center"
+					Width="20"
+					LabelHorizontalAlignment="Center">
+					<Button
+						Content="h"
+						Padding="0"
+						ContentTemplate="{StaticResource LeftRight}"
+						Command="{Binding Period.ThisMonthCommand}" />
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+		</dxlc:LayoutControl>
+		<dxg:GridControl
+			Name="tableView1"
+			Grid.Column="1"
+			SelectionMode="Row"
+			SelectedItem="{Binding SelectedCall, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+			ItemsSource="{Binding Calls}">
+			<dxg:GridControl.View>
+				<dxg:TableView
+					ShowIndicator="False"
+					AllowEditing="False"
+					AllowGrouping="False"
+					AllowColumnMoving="False"
+					AllowMoveColumnToDropArea="False"
+					AllowRowFixing="None"
+					UseIndicatorForSelection="False"
+					RowMinHeight="{Binding Employee.UiSettings.RowHeight, Source={x:Static objects:OfflineData.Instance}}"
+					FontSize="{Binding Employee.UiSettings.FontSize, Source={x:Static objects:OfflineData.Instance}}">
+					<dxmvvm:Interaction.Behaviors>
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="RowDoubleClick"
+							Command="{Binding OpenClientCardCommand}" />
+					</dxmvvm:Interaction.Behaviors>
+				</dxg:TableView>
+			</dxg:GridControl.View>
+			<dxg:GridColumn
+				FieldName="{DynamicResource Date}"
+				HorizontalHeaderContentAlignment="Center"
+				Binding="{Binding calldate}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:TextEditSettings
+						HorizontalContentAlignment="Center"
+						MaskType="DateTime"
+						Mask="dd.MM.yyyy  HH:mm"
+						MaskUseAsDisplayFormat="True" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				Width="170*"
+				FieldName="{DynamicResource Caller}"
+				HorizontalHeaderContentAlignment="Center"
+				Binding="{Binding Source}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:TextEditSettings
+						HorizontalContentAlignment="Left" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				Width="170"
+				FieldName="{DynamicResource ToPhone}"
+				HorizontalHeaderContentAlignment="Center"
+				Binding="{Binding Distantion}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:TextEditSettings
+						HorizontalContentAlignment="Center" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				Width="140"
+				FieldName="{DynamicResource Duration}"
+				HorizontalHeaderContentAlignment="Center"
+				Binding="{Binding Duration}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:TextEditSettings
+						HorizontalContentAlignment="Center" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				Width="100"
+				FieldName="{DynamicResource Play}"
+				HorizontalHeaderContentAlignment="Center">
+				<dxg:ColumnBase.CellTemplate>
+					<DataTemplate>
+						<StackPanel
+							HorizontalAlignment="Center"
+							Margin="2">
+							<Button
+								Content="4"
+								FontFamily="Marlett"
+								Padding="2"
+								Command="{Binding DataContext.PlayCommand, ElementName=CallConversions}"
+								CommandParameter="{Binding RowData.Row.uniqueid}" />
+						</StackPanel>
+					</DataTemplate>
+				</dxg:ColumnBase.CellTemplate>
+			</dxg:GridColumn>
+		</dxg:GridControl>
+		<dxc:ChartControl
+			Grid.Column="1"
+			Grid.Row="1"
+			AnimationMode="OnDataChanged"
+			DataSource="{Binding ChartData}">
+			<dxc:XYDiagram2D
+				AllowSeriesBitmapCaching="False">
+				<dxc:XYDiagram2D.AxisX>
+					<dxc:AxisX2D>
+						<dxc:AxisX2D.DateTimeScaleOptions>
+							<dxc:ManualDateTimeScaleOptions
+								MeasureUnit="Day"
+								AggregateFunction="Sum" />
+						</dxc:AxisX2D.DateTimeScaleOptions>
+					</dxc:AxisX2D>
+				</dxc:XYDiagram2D.AxisX>
+				<dxc:XYDiagram2D.AxisY>
+					<dxc:AxisY2D>
+						<dxc:Axis.Title>
+							<dxc:AxisTitle
+								Content="{DynamicResource CallConversions}" />
+						</dxc:Axis.Title>
+					</dxc:AxisY2D>
+				</dxc:XYDiagram2D.AxisY>
+				<dxc:AreaSeries2D
+					DisplayName="{DynamicResource CallConversions}"
+					LabelsVisibility="True"
+					Transparency="0.5"
+					ArgumentDataMember="Date"
+					ValueDataMember="Count"
+					ValueScaleType="Numerical"
+					ArgumentScaleType="DateTime" />
+				<dxc:AreaSeries2D
+					DisplayName="{DynamicResource TotalCalls}"
+					Transparency="0.8"
+					ArgumentDataMember="Date"
+					ValueDataMember="TotalCalls"
+					ValueScaleType="Numerical"
+					ArgumentScaleType="DateTime" />
+			</dxc:XYDiagram2D>
+			<dxc:ChartControl.Legend>
+				<dxc:Legend
+					HorizontalPosition="Right"
+					VerticalPosition="Top" />
+			</dxc:ChartControl.Legend>
+		</dxc:ChartControl>
+	</Grid>
+</UserControl>

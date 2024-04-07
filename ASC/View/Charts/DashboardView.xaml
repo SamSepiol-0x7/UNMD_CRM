@@ -1,0 +1,109 @@
+<UserControl
+	x:Class="ASC.View.Charts.DashboardView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:ASC.View.Charts" xmlns:dxwui="http://schemas.devexpress.com/winfx/2008/xaml/windowsui" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:objects="clr-namespace:ASC.Objects" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol">
+	<FrameworkElement.Resources>
+		<ResourceDictionary>
+			<DataTemplate
+				x:Key="LayoutGroupHeaderTemplate">
+				<DockPanel
+					Margin="0,5">
+					<TextBlock
+						FontSize="16"
+						Margin="10,0,0,0"
+						FontWeight="Bold"
+						DockPanel.Dock="Right"
+						Foreground="{Binding DataContext.TotalColor, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type dxlc:LayoutItem}}}"
+						Text="{Binding DataContext.Total, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type dxlc:LayoutItem}}}" />
+					<TextBlock
+						VerticalAlignment="Center"
+						Text="{Binding}" />
+				</DockPanel>
+			</DataTemplate>
+			<DataTemplate
+				x:Key="FlowLayoutControlItemTemplate">
+				<DockPanel>
+					<TextBlock
+						DockPanel.Dock="Right"
+						FontWeight="Bold"
+						Margin="10,0,0,0"
+						Text="{Binding Value}" />
+					<TextBlock
+						Text="{Binding Name}" />
+				</DockPanel>
+			</DataTemplate>
+		</ResourceDictionary>
+	</FrameworkElement.Resources>
+	<DockPanel>
+		<dxwui:AppBar
+			DockPanel.Dock="Bottom"
+			Background="#3f3f3f"
+			HorizontalAlignment="Stretch"
+			VerticalAlignment="Bottom"
+			ItemSpacing="5"
+			HideMode="AlwaysVisible">
+			<dxwui:AppBarButton
+				Label="{DynamicResource Refresh}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Command="{Binding RefreshCommand}"
+				Glyph="{dx:DXImageGrayscale Image=Refresh_32x32.png}" />
+		</dxwui:AppBar>
+		<dxlc:LayoutControl
+			Orientation="Vertical"
+			HorizontalAlignment="Left"
+			DataContext="{Binding Report}">
+			<dxlc:LayoutItem
+				MinWidth="150"
+				DataContext="{Binding InCashReport}">
+				<dxlc:LayoutGroup
+					HeaderTemplate="{StaticResource LayoutGroupHeaderTemplate}"
+					IsCollapsible="True"
+					VerticalAlignment="Top"
+					View="GroupBox"
+					Orientation="Vertical"
+					Header="{Binding ReportName}">
+					<dxlc:FlowLayoutControl
+						ItemTemplate="{StaticResource FlowLayoutControlItemTemplate}"
+						Padding="0"
+						StretchContent="True"
+						Orientation="Vertical"
+						ItemsSource="{Binding Details}" />
+				</dxlc:LayoutGroup>
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				DataContext="{Binding OutCashReport}">
+				<dxlc:LayoutGroup
+					HeaderTemplate="{StaticResource LayoutGroupHeaderTemplate}"
+					IsCollapsible="True"
+					VerticalAlignment="Top"
+					View="GroupBox"
+					Orientation="Vertical"
+					Header="{Binding ReportName}">
+					<dxlc:FlowLayoutControl
+						ItemTemplate="{StaticResource FlowLayoutControlItemTemplate}"
+						Padding="0"
+						StretchContent="True"
+						Orientation="Vertical"
+						ItemsSource="{Binding Details}" />
+				</dxlc:LayoutGroup>
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				DataContext="{Binding InPaymentSystems}">
+				<dxlc:LayoutGroup
+					HeaderTemplate="{StaticResource LayoutGroupHeaderTemplate}"
+					IsCollapsible="True"
+					VerticalAlignment="Top"
+					View="GroupBox"
+					Orientation="Vertical"
+					Header="{Binding ReportName}">
+					<dxlc:FlowLayoutControl
+						ItemTemplate="{StaticResource FlowLayoutControlItemTemplate}"
+						Padding="0"
+						StretchContent="True"
+						Orientation="Vertical"
+						ItemsSource="{Binding Details}" />
+				</dxlc:LayoutGroup>
+			</dxlc:LayoutItem>
+		</dxlc:LayoutControl>
+	</DockPanel>
+</UserControl>

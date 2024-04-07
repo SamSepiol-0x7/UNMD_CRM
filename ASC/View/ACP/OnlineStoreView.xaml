@@ -1,0 +1,40 @@
+<UserControl
+	x:Class="ASC.View.ACP.OnlineStoreView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:ASC.View.ACP" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+	VerticalContentAlignment="Top"
+	VerticalAlignment="Top">
+	<dxlc:LayoutGroup
+		ItemLabelsAlignment="Local"
+		MinWidth="300"
+		VerticalAlignment="Top"
+		View="GroupBox"
+		Header="{StaticResource AllItemsToiStore}"
+		Orientation="Vertical">
+		<dxlc:LayoutItem
+			Label="API URL">
+			<dxe:TextEdit
+				MaxLength="254"
+				EditValue="{Binding Config.online_store_api, Mode=TwoWay}" />
+		</dxlc:LayoutItem>
+		<dxlc:LayoutItem
+			Label="API KEY">
+			<DockPanel>
+				<dx:SimpleButton
+					Name="SecretButton"
+					DockPanel.Dock="Right"
+					HorizontalAlignment="Right"
+					Padding="5,0"
+					ButtonKind="Toggle"
+					Glyph="{DXImageGrayscale Image=Show_16x16.png}" />
+				<dxe:TextEdit
+					Width="{Binding ActualWidth, ElementName=SecretPasswordBox}"
+					EditValue="{Binding ElementName=SecretPasswordBox, Path=Password}"
+					Visibility="{Binding ElementName=SecretButton, Path=IsChecked, Converter={dx:BooleanToVisibilityConverter}}" />
+				<dxe:PasswordBoxEdit
+					Name="SecretPasswordBox"
+					PasswordChar="#"
+					Password="{Binding Config.online_store_key, Mode=TwoWay}"
+					Visibility="{Binding ElementName=SecretButton, Path=IsChecked, Converter={dx:BooleanToVisibilityConverter Invert=True}}" />
+			</DockPanel>
+		</dxlc:LayoutItem>
+	</dxlc:LayoutGroup>
+</UserControl>

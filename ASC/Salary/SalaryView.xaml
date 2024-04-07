@@ -1,0 +1,1566 @@
+<UserControl
+	x:Class="ASC.Salary.SalaryView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:ASC" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:salary="clr-namespace:ASC.Salary" xmlns:converters="clr-namespace:ASC.Converters" xmlns:extensions="clr-namespace:ASC.Extensions" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:dxwui="http://schemas.devexpress.com/winfx/2008/xaml/windowsui" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:objects="clr-namespace:ASC.Objects" xmlns:controls="clr-namespace:ASC.View.Controls"
+	DataContext="{dxmvvm:ViewModelSource Type={x:Type salary:SalaryViewModel}}">
+	<FrameworkElement.Resources>
+		<ResourceDictionary>
+			<converters:IntReserveState2StringConverter
+				x:Key="State2StringConverter" />
+			<converters:BoolInverterConverter
+				x:Key="BoolInverterConverter" />
+			<converters:AclBooleanConverter
+				x:Key="AclBooleanConverter" />
+			<ContextMenu
+				DataContext="{Binding DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
+				x:Key="RowMenu">
+				<MenuItem
+					Header="{DynamicResource Back2Store}"
+					Command="{Binding Back2StoreCommand}"
+					Visibility="{Binding ConverterParameter=CAN_QUICK_SALE, Converter={StaticResource AclVis}}">
+					<MenuItem.Icon>
+						<Image
+							Source="../Resources/ContextMMenu/Context1.png"
+							Style="{StaticResource 16X16Image}" />
+					</MenuItem.Icon>
+				</MenuItem>
+			</ContextMenu>
+		</ResourceDictionary>
+	</FrameworkElement.Resources>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition
+				Height="174*" />
+			<RowDefinition
+				Height="90" />
+		</Grid.RowDefinitions>
+		<dxwui:AppBar
+			Background="#3f3f3f"
+			HorizontalAlignment="Stretch"
+			VerticalAlignment="Stretch"
+			ItemSpacing="5"
+			HideMode="AlwaysVisible"
+			Grid.Row="1"
+			Grid.ColumnSpan="2">
+			<dxwui:AppBarButton
+				Label="{DynamicResource Print}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				Visibility="{Binding PrintVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+				Command="{Binding View.Commands.ShowPrintPreview, ElementName=TableView1}"
+				Glyph="{dx:DXImageGrayscale Image=Print_32x32.png}" />
+			<dxwui:AppBarButton
+				Label="{DynamicResource Load}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Command="{Binding LoadReportCommand}"
+				Glyph="{dx:DXImageGrayscale Image=Alignment_Center-Center_32x32.png}" />
+			<dxwui:AppBarButton
+				Label="{DynamicResource Add}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Visibility="{Binding Path=IsEnabled, Converter={StaticResource BooleanToVisibilityConverter}, RelativeSource={RelativeSource Self}}"
+				Command="{Binding NewAdditionalPaymentCommand}"
+				Glyph="{dx:DXImageGrayscale Image=Add_32x32.png}" />
+			<dxwui:AppBarButton
+				Label="{DynamicResource Save}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Visibility="{Binding Path=IsEnabled, Converter={StaticResource BooleanToVisibilityConverter}, RelativeSource={RelativeSource Self}}"
+				Command="{Binding SaveAdditionalPaymentCommand}"
+				Glyph="{dx:DXImageGrayscale Image=Save_32x32.png}" />
+		</dxwui:AppBar>
+		<TabControl
+			Padding="0"
+			HorizontalAlignment="Stretch"
+			Margin="0,42,0,0"
+			VerticalAlignment="Stretch"
+			IsEnabled="{Binding ReportLoaded}"
+			SelectedIndex="{Binding SelectedTabIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+			<TabItem
+				Header="{DynamicResource Overview}">
+				<Grid>
+					<dxlc:LayoutControl
+						ItemStyle="{StaticResource LeftMenuLayout}"
+						HorizontalAlignment="Right"
+						VerticalAlignment="Top"
+						Orientation="Vertical"
+						ItemSpace="5"
+						Padding="10">
+						<dxlc:LayoutGroup
+							MinWidth="250"
+							View="GroupBox"
+							Orientation="Vertical"
+							Header="{DynamicResource UserSalary}">
+							<dxlc:LayoutItem
+								Label="{DynamicResource Summ}">
+								<dxe:TextEdit
+									Style="{StaticResource NumericTextBox}"
+									EditValue="{Binding UserSalaryReport.FinalPaySumm, Mode=TwoWay}">
+									<dxmvvm:Interaction.Behaviors>
+										<extensions:SelectAllOnMouseUpBehavior />
+									</dxmvvm:Interaction.Behaviors>
+								</dxe:TextEdit>
+							</dxlc:LayoutItem>
+							<dxlc:LayoutItem
+								Label="{DynamicResource Payment}">
+								<ComboBox
+									DisplayMemberPath="Name"
+									SelectedValuePath="Id"
+									ItemsSource="{Binding PaymentOptionses}"
+									SelectedValue="{Binding SelectedSalaryPaymentOption, Mode=TwoWay}" />
+							</dxlc:LayoutItem>
+							<dxlc:LayoutItem
+								Label="{DynamicResource Date}">
+								<dxe:DateEdit
+									AllowNullInput="False"
+									ShowClearButton="False"
+									EditValue="{Binding SalaryDate, Mode=TwoWay}"
+									IsEnabled="{Binding Employee, Converter={StaticResource AclBooleanConverter}, ConverterParameter=CAN_BACKDATE_DOC, Source={x:Static objects:OfflineData.Instance}}" />
+							</dxlc:LayoutItem>
+							<dxlc:LayoutItem
+								Label="{DynamicResource IsCorrectInput}">
+								<CheckBox
+									Style="{StaticResource DefCheckBox}"
+									IsChecked="{Binding SalaryCorrect, Mode=TwoWay}" />
+							</dxlc:LayoutItem>
+							<dxlc:LayoutItem>
+								<Button
+									Content="{DynamicResource Pay}"
+									Command="{Binding PaySalaryCommand}" />
+							</dxlc:LayoutItem>
+						</dxlc:LayoutGroup>
+						<dxlc:LayoutGroup
+							MinWidth="250"
+							Orientation="Vertical"
+							View="GroupBox"
+							Header="{DynamicResource Advance}"
+							Visibility="{Binding AdvanceVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+							<dxlc:LayoutItem
+								Label="{DynamicResource Summ}">
+								<dxe:TextEdit
+									Style="{StaticResource NumericTextBox}"
+									EditValue="{Binding AdvanceSumm, Mode=TwoWay}">
+									<dxmvvm:Interaction.Behaviors>
+										<extensions:SelectAllOnMouseUpBehavior />
+									</dxmvvm:Interaction.Behaviors>
+								</dxe:TextEdit>
+							</dxlc:LayoutItem>
+							<dxlc:LayoutItem
+								Label="{DynamicResource Payment}">
+								<ComboBox
+									DisplayMemberPath="Name"
+									SelectedValuePath="Id"
+									ItemsSource="{Binding PaymentOptionses}"
+									SelectedValue="{Binding SelectedAdvancePaymentOption, Mode=TwoWay}" />
+							</dxlc:LayoutItem>
+							<dxlc:LayoutItem
+								Label="{DynamicResource Date}">
+								<dxe:DateEdit
+									AllowNullInput="False"
+									ShowClearButton="False"
+									EditValue="{Binding AdvanceDate, Mode=TwoWay}"
+									IsEnabled="{Binding Employee, Converter={StaticResource AclBooleanConverter}, ConverterParameter=CAN_BACKDATE_DOC, Source={x:Static objects:OfflineData.Instance}}" />
+							</dxlc:LayoutItem>
+							<dxlc:LayoutItem
+								Label="{DynamicResource IsCorrectInput}">
+								<CheckBox
+									Style="{StaticResource DefCheckBox}"
+									IsChecked="{Binding AdvanceCorrect, Mode=TwoWay}" />
+							</dxlc:LayoutItem>
+							<dxlc:LayoutItem
+								Label="{DynamicResource Notes}"
+								LabelVerticalAlignment="Top">
+								<dxe:TextEdit
+									VerticalContentAlignment="Top"
+									MaxLength="254"
+									Height="50"
+									AcceptsReturn="True"
+									TextWrapping="Wrap"
+									EditValue="{Binding AdvanceNotes, Mode=TwoWay}" />
+							</dxlc:LayoutItem>
+							<dxlc:LayoutItem>
+								<Button
+									Content="{DynamicResource Pay}"
+									Command="{Binding PayAdvanceCommand}" />
+							</dxlc:LayoutItem>
+						</dxlc:LayoutGroup>
+					</dxlc:LayoutControl>
+					<dxlc:LayoutControl
+						ItemStyle="{StaticResource LeftMenuLayout}"
+						HorizontalAlignment="Left"
+						VerticalAlignment="Top"
+						Width="360"
+						Orientation="Vertical"
+						ItemSpace="5"
+						Padding="10">
+						<dxlc:LayoutGroup
+							View="GroupBox"
+							Header="{DynamicResource Overview}"
+							Orientation="Vertical">
+							<dxlc:LayoutItem
+								Label="{DynamicResource SalaryRate}">
+								<dxe:TextEdit
+									Style="{StaticResource NumericTextBox}"
+									IsReadOnly="True"
+									EditValue="{Binding UserSalaryReport.MonthSalary, Mode=OneWay}" />
+							</dxlc:LayoutItem>
+							<dxlc:LayoutItem
+								Label="{DynamicResource SalaryRatePay}">
+								<dxe:ButtonEdit
+									AllowDefaultButton="False"
+									VerticalContentAlignment="Center"
+									EditValue="{Binding NewSalaryRate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+									<dxe:ButtonInfo
+										ToolTip="{DynamicResource Apply}"
+										ButtonKind="Simple"
+										GlyphKind="Apply"
+										Command="{Binding SalaryRateChangeCommand}" />
+								</dxe:ButtonEdit>
+							</dxlc:LayoutItem>
+							<dxlc:LayoutItem
+								Label="{DynamicResource SalaryWorksPay}">
+								<dxe:TextEdit
+									Style="{StaticResource NumericTextBox}"
+									IsReadOnly="True"
+									EditValue="{Binding UserSalaryReport.SummPayWorksUser, Mode=OneWay}" />
+							</dxlc:LayoutItem>
+							<dxlc:LayoutItem
+								Label="{DynamicResource SalarySalePay}">
+								<dxe:TextEdit
+									Style="{StaticResource NumericTextBox}"
+									IsReadOnly="True"
+									EditValue="{Binding UserSalaryReport.TotalPaySale, Mode=OneWay}" />
+							</dxlc:LayoutItem>
+							<dxlc:LayoutItem
+								Label="{DynamicResource IoDevices}">
+								<dxe:TextEdit
+									Style="{StaticResource NumericTextBox}"
+									IsReadOnly="True"
+									EditValue="{Binding UserSalaryReport.SummIoDevices, Mode=OneWay}" />
+							</dxlc:LayoutItem>
+							<dxlc:LayoutItem
+								Label="{DynamicResource PartsOnMaster}">
+								<dxe:TextEdit
+									Style="{StaticResource NumericTextBox}"
+									IsReadOnly="True"
+									EditValue="{Binding UserSalaryReport.NotInstalledUserPartsSumm, Mode=OneWay}" />
+							</dxlc:LayoutItem>
+							<dxlc:LayoutItem
+								Label="{DynamicResource AdditionalPayments}">
+								<TextBox
+									Foreground="#FF000000"
+									HorizontalContentAlignment="Right"
+									IsReadOnly="True"
+									VerticalContentAlignment="Center"
+									Text="{Binding UserSalaryReport.AddtionalPlus, StringFormat=N2, Mode=OneWay}">
+									<FrameworkElement.Style>
+										<Style
+											TargetType="{x:Type TextBox}">
+											<Setter
+												Property="Background"
+												Value="#FF90EE90" />
+											<Style.Triggers>
+												<DataTrigger
+													Value="0"
+													Binding="{Binding UserSalaryReport.AddtionalPlus}">
+													<Setter
+														Property="Background"
+														Value="#00FFFFFF" />
+												</DataTrigger>
+											</Style.Triggers>
+										</Style>
+									</FrameworkElement.Style>
+								</TextBox>
+							</dxlc:LayoutItem>
+							<dxlc:LayoutItem
+								Label="{DynamicResource AdditionalSubstract}">
+								<TextBox
+									Foreground="#FF000000"
+									HorizontalContentAlignment="Right"
+									IsReadOnly="True"
+									VerticalContentAlignment="Center"
+									Text="{Binding UserSalaryReport.AddtionalMinus, StringFormat=N2, Mode=OneWay}">
+									<FrameworkElement.Style>
+										<Style
+											TargetType="{x:Type TextBox}">
+											<Setter
+												Property="Background"
+												Value="{StaticResource ClientNotAnswerColor}" />
+											<Style.Triggers>
+												<DataTrigger
+													Value="0"
+													Binding="{Binding UserSalaryReport.AddtionalMinus}">
+													<Setter
+														Property="Background"
+														Value="#00FFFFFF" />
+												</DataTrigger>
+											</Style.Triggers>
+										</Style>
+									</FrameworkElement.Style>
+								</TextBox>
+							</dxlc:LayoutItem>
+							<dxlc:LayoutItem
+								Label="{DynamicResource Income}">
+								<dxe:TextEdit
+									Style="{StaticResource NumericTextBox}"
+									Foreground="#FF0000FF"
+									IsReadOnly="True"
+									EditValue="{Binding UserSalaryReport.TotalPlus, Mode=OneWay}" />
+							</dxlc:LayoutItem>
+							<dxlc:LayoutItem
+								Label="{DynamicResource Advance}">
+								<dxe:TextEdit
+									Style="{StaticResource NumericTextBox}"
+									Foreground="#FFFF0000"
+									IsReadOnly="True"
+									EditValue="{Binding UserSalaryReport.Advance, Mode=OneWay}" />
+							</dxlc:LayoutItem>
+							<dxlc:LayoutItem
+								Label="{DynamicResource AlreadyPay}">
+								<dxe:TextEdit
+									Style="{StaticResource NumericTextBox}"
+									Foreground="#FFFF0000"
+									IsReadOnly="True"
+									EditValue="{Binding UserSalaryReport.AlreadyPayed, Mode=OneWay}" />
+							</dxlc:LayoutItem>
+							<dxlc:LayoutItem
+								Label="{DynamicResource Balance}">
+								<dxe:TextEdit
+									Style="{StaticResource NumericTextBox}"
+									Foreground="#FF008000"
+									IsReadOnly="True"
+									EditValue="{Binding UserSalaryReport.LastSalary.balance, StringFormat=N0, Mode=OneWay}" />
+							</dxlc:LayoutItem>
+							<dxlc:LayoutItem
+								Label="{DynamicResource TotalPay}">
+								<dxe:TextEdit
+									Style="{StaticResource NumericTextBox}"
+									Foreground="#FF008000"
+									IsReadOnly="True"
+									EditValue="{Binding UserSalaryReport.PaySumm, Mode=OneWay}" />
+							</dxlc:LayoutItem>
+						</dxlc:LayoutGroup>
+					</dxlc:LayoutControl>
+				</Grid>
+			</TabItem>
+			<TabItem
+				Header="{DynamicResource Repairs}">
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition
+							Height="249*" />
+						<RowDefinition
+							Height="254*" />
+					</Grid.RowDefinitions>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition
+							Width="300" />
+						<ColumnDefinition
+							Width="50*" />
+						<ColumnDefinition
+							Width="50*" />
+					</Grid.ColumnDefinitions>
+					<Border
+						BorderThickness="1,0,0,0"
+						BorderBrush="#FFD3D3D3"
+						Grid.ColumnSpan="2"
+						Grid.Column="1">
+						<dxg:GridControl
+							Name="TableView1"
+							Margin="0,0,0,0"
+							SelectedItem="{Binding SelectedRepair, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+							<FrameworkElement.Style>
+								<Style
+									BasedOn="{StaticResource DeDefTable}"
+									TargetType="{x:Type dxg:GridControl}">
+									<Setter
+										Property="dxg:DataControlBase.ItemsSource"
+										Value="{Binding UserSalaryReport.Repairs}" />
+									<Style.Triggers>
+										<DataTrigger
+											Value="True"
+											Binding="{Binding Path=IsChecked, ElementName=RepairsSourceSwitch}">
+											<Setter
+												Property="dxg:DataControlBase.ItemsSource"
+												Value="{Binding UserSalaryReport.NonOutRepairs}" />
+										</DataTrigger>
+									</Style.Triggers>
+								</Style>
+							</FrameworkElement.Style>
+							<FrameworkElement.Resources>
+								<ResourceDictionary>
+									<Style
+										TargetType="{x:Type dxg:GridColumn}"
+										x:Key="{x:Type dxg:GridColumn}">
+										<Setter
+											Property="dxg:BaseColumn.HorizontalHeaderContentAlignment"
+											Value="Center" />
+									</Style>
+								</ResourceDictionary>
+							</FrameworkElement.Resources>
+							<dxmvvm:Interaction.Behaviors>
+								<dxmvvm:EventToCommand
+									EventTriggerBase_x0060_1.EventName="CustomUnboundColumnData"
+									PassEventArgsToCommand="True"
+									Command="{Binding RepairsCustomUnboundColumnDataCommand}" />
+							</dxmvvm:Interaction.Behaviors>
+							<dxg:GridColumn
+								FieldName="{DynamicResource OrderNumber}"
+								Width="100"
+								VisibleIndex="0"
+								Binding="{Binding id}">
+								<dxg:ColumnBase.EditSettings>
+									<dxe:TextEditSettings
+										HorizontalContentAlignment="Center"
+										MaskType="Numeric"
+										Mask="d6"
+										MaskUseAsDisplayFormat="True" />
+								</dxg:ColumnBase.EditSettings>
+							</dxg:GridColumn>
+							<dxg:GridColumn
+								Width="20*"
+								FieldName="{DynamicResource Hardware}"
+								Binding="{Binding DeviceOverview}" />
+							<dxg:GridColumn
+								FieldName="{DynamicResource RepairCost}"
+								Binding="{Binding TotalRepairCost, Mode=OneWay}"
+								Visible="{Binding Employee, Converter={StaticResource AclBooleanConverter}, ConverterParameter=VIEW_ALL_EMPLOYEES_WORK, Source={x:Static objects:OfflineData.Instance}}"
+								ShowInColumnChooser="{Binding Employee, Converter={StaticResource AclBooleanConverter}, ConverterParameter=VIEW_ALL_EMPLOYEES_WORK, Source={x:Static objects:OfflineData.Instance}}">
+								<dxg:ColumnBase.EditSettings>
+									<dxe:TextEditSettings
+										Style="{StaticResource GridClassicOrNot}" />
+								</dxg:ColumnBase.EditSettings>
+							</dxg:GridColumn>
+							<dxg:GridColumn
+								FieldName="{DynamicResource Work}"
+								Binding="{Binding TotalUserWorksCost, Mode=OneWay}">
+								<dxg:ColumnBase.EditSettings>
+									<dxe:TextEditSettings
+										Style="{StaticResource GridClassicOrNot}" />
+								</dxg:ColumnBase.EditSettings>
+							</dxg:GridColumn>
+							<dxg:GridColumn
+								FieldName="{DynamicResource AllParts}"
+								Binding="{Binding TotalUserPartsCost, Mode=OneWay}"
+								Visible="{Binding Employee, Converter={StaticResource AclBooleanConverter}, ConverterParameter=VIEW_ALL_EMPLOYEES_WORK, Source={x:Static objects:OfflineData.Instance}}"
+								ShowInColumnChooser="{Binding Employee, Converter={StaticResource AclBooleanConverter}, ConverterParameter=VIEW_ALL_EMPLOYEES_WORK, Source={x:Static objects:OfflineData.Instance}}">
+								<dxg:ColumnBase.EditSettings>
+									<dxe:TextEditSettings
+										Style="{StaticResource GridClassicOrNot}" />
+								</dxg:ColumnBase.EditSettings>
+							</dxg:GridColumn>
+							<dxg:GridColumn
+								FieldName="{DynamicResource Parts}"
+								Binding="{Binding EmployeePartsCost, Mode=OneWay}">
+								<dxg:ColumnBase.EditSettings>
+									<dxe:TextEditSettings
+										Style="{StaticResource GridClassicOrNot}" />
+								</dxg:ColumnBase.EditSettings>
+							</dxg:GridColumn>
+							<dxg:GridColumn
+								FieldName="Percent"
+								Header="{DynamicResource Percent}"
+								UnboundType="Integer" />
+							<dxg:GridColumn
+								FieldName="IsQuick"
+								Visible="False"
+								ShowInColumnChooser="False"
+								AllowPrinting="False"
+								Binding="{Binding quick_repair}" />
+							<dxg:GridColumn
+								FieldName="{DynamicResource Income}"
+								Binding="{Binding MasterPart, Mode=OneWay}">
+								<dxg:ColumnBase.EditSettings>
+									<dxe:TextEditSettings
+										Style="{StaticResource GridClassicOrNot}" />
+								</dxg:ColumnBase.EditSettings>
+							</dxg:GridColumn>
+							<dxg:GridColumn
+								FieldName="{DynamicResource OutDate}"
+								Visible="{Binding Path=IsChecked, ElementName=RepairsSourceSwitch, Converter={StaticResource BoolInverterConverter}}"
+								Binding="{Binding OutDateTime, Mode=OneWay}">
+								<dxg:ColumnBase.EditSettings>
+									<dxe:TextEditSettings
+										HorizontalContentAlignment="Center"
+										MaskType="DateTime"
+										Mask="dd.MM.yyyy  HH:mm"
+										MaskUseAsDisplayFormat="True" />
+								</dxg:ColumnBase.EditSettings>
+							</dxg:GridColumn>
+							<dxg:GridControl.TotalSummary>
+								<dxg:GridSummaryItem
+									DisplayFormat=" {0:N2}"
+									SummaryType="Sum"
+									FieldName="{DynamicResource RepairCost}" />
+								<dxg:GridSummaryItem
+									DisplayFormat=" {0:N2}"
+									SummaryType="Sum"
+									FieldName="{DynamicResource Work}" />
+								<dxg:GridSummaryItem
+									DisplayFormat=" {0:N2}"
+									SummaryType="Sum"
+									FieldName="{DynamicResource AllParts}" />
+								<dxg:GridSummaryItem
+									DisplayFormat=" {0:N2}"
+									SummaryType="Sum"
+									FieldName="{DynamicResource Parts}" />
+								<dxg:GridSummaryItem
+									DisplayFormat=" {0:N2}"
+									SummaryType="Sum"
+									FieldName="{DynamicResource Income}" />
+							</dxg:GridControl.TotalSummary>
+							<dxg:GridControl.View>
+								<dxg:TableView
+									IsSynchronizedWithCurrentItem="True"
+									ShowTotalSummary="True"
+									AllowScrollAnimation="True"
+									NavigationStyle="Row"
+									ColumnFilterPopupMode="Excel"
+									AllowEditing="False"
+									AllowGrouping="False"
+									AllowColumnMoving="True"
+									ShowGroupPanel="False"
+									ShowColumnHeaders="True"
+									AllowMoveColumnToDropArea="False"
+									ShowSearchPanelMode="Never"
+									ShowBandsPanel="True"
+									ShowIndicator="False"
+									AllowBestFit="True"
+									AllowColumnFiltering="False"
+									ShowSelectionRectangle="False"
+									ShowFixedTotalSummary="False"
+									SummariesIgnoreNullValues="True"
+									RowMinHeight="{Binding Employee.UiSettings.RowHeight, Source={x:Static objects:OfflineData.Instance}}"
+									FontSize="{Binding Employee.UiSettings.FontSize, Source={x:Static objects:OfflineData.Instance}}">
+									<dxmvvm:Interaction.Behaviors>
+										<dxmvvm:EventToCommand
+											EventTriggerBase_x0060_1.EventName="RowDoubleClick"
+											Command="{Binding RepairClickCommand}" />
+									</dxmvvm:Interaction.Behaviors>
+								</dxg:TableView>
+							</dxg:GridControl.View>
+						</dxg:GridControl>
+					</Border>
+					<dxlc:LayoutControl
+						ItemStyle="{StaticResource LeftMenuLayout}"
+						Orientation="Vertical"
+						ItemSpace="5"
+						Padding="10">
+						<dxlc:LayoutGroup
+							View="GroupBox"
+							Orientation="Vertical"
+							Header="{DynamicResource Info}">
+							<FrameworkElement.Resources>
+								<ResourceDictionary>
+									<Style
+										TargetType="{x:Type TextBox}"
+										x:Key="{x:Type TextBox}">
+										<Setter
+											Property="TextBoxBase.IsReadOnly"
+											Value="True" />
+									</Style>
+								</ResourceDictionary>
+							</FrameworkElement.Resources>
+							<dxlc:LayoutItem
+								Label="{DynamicResource PayRepair}">
+								<TextBox
+									Text="{Binding SelectedUser.pay_repair, Mode=OneWay}" />
+							</dxlc:LayoutItem>
+							<dxlc:LayoutItem
+								Label="{DynamicResource PayRepairQuick}">
+								<TextBox
+									Text="{Binding SelectedUser.pay_repair_quick, Mode=OneWay}" />
+							</dxlc:LayoutItem>
+							<dxlc:LayoutItem
+								Label="{DynamicResource PayCartridgeRefill}"
+								Visibility="{Binding cartridge_enable, Source={x:Static local:Auth.Config}, Converter={StaticResource BooleanToVisibilityConverter}}">
+								<TextBox
+									Text="{Binding SelectedUser.pay_cartridge_refill, Mode=OneWay}" />
+							</dxlc:LayoutItem>
+							<dxlc:LayoutItem
+								Label="{DynamicResource ToPayoff}">
+								<TextBox
+									Text="{Binding UserSalaryReport.SummPayWorksUser, StringFormat=N0, Mode=OneWay}" />
+							</dxlc:LayoutItem>
+							<dxlc:LayoutItem
+								Label="{DynamicResource ReadyAndInService}">
+								<TextBox
+									Text="{Binding UserSalaryReport.SummNonOutWorks, StringFormat=N0, Mode=OneWay}" />
+							</dxlc:LayoutItem>
+							<dxlc:LayoutItem
+								Label="{DynamicResource ReadyAndInService}">
+								<dxe:CheckEdit
+									Name="RepairsSourceSwitch" />
+							</dxlc:LayoutItem>
+						</dxlc:LayoutGroup>
+					</dxlc:LayoutControl>
+					<DataGrid
+						Style="{StaticResource defaultTable}"
+						HorizontalAlignment="Stretch"
+						VerticalAlignment="Stretch"
+						Grid.Row="1"
+						Grid.Column="1"
+						ItemsSource="{Binding ItemWorks}">
+						<DataGrid.Columns>
+							<DataGridTextColumn
+								Header="ID"
+								ElementStyle="{StaticResource Center}"
+								Binding="{Binding id, StringFormat={}{0:D6}}" />
+							<DataGridTextColumn
+								Header="{DynamicResource ItemName}"
+								Binding="{Binding name}" />
+							<DataGridTextColumn
+								Header="{DynamicResource Price}"
+								Width="90"
+								Binding="{Binding price, StringFormat={}{0:N2}}" />
+							<DataGridTemplateColumn
+								Header="{DynamicResource Warranty}"
+								Width="90">
+								<DataGridTemplateColumn.CellTemplate>
+									<DataTemplate>
+										<ComboBox
+											IsEnabled="False"
+											DisplayMemberPath="Name"
+											SelectedValuePath="Days"
+											SelectedValue="{Binding warranty, Mode=OneWay}"
+											ItemsSource="{Binding DataContext.WarrantyOptionses, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" />
+									</DataTemplate>
+								</DataGridTemplateColumn.CellTemplate>
+							</DataGridTemplateColumn>
+						</DataGrid.Columns>
+					</DataGrid>
+					<DataGrid
+						Style="{StaticResource defaultTable}"
+						HorizontalAlignment="Stretch"
+						VerticalAlignment="Stretch"
+						Grid.Row="1"
+						Grid.ColumnSpan="2"
+						Grid.Column="2"
+						SelectedItem="{Binding SelectedPartOutRepair, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+						ItemsSource="{Binding ItemParts}">
+						<UIElement.InputBindings>
+							<MouseBinding
+								Gesture="LeftDoubleClick"
+								Command="{Binding PartDoubleClickCommand}" />
+						</UIElement.InputBindings>
+						<DataGrid.Columns>
+							<DataGridTextColumn
+								Header="{DynamicResource ArticulNoDots}"
+								ElementStyle="{StaticResource Center}"
+								Width="90"
+								Binding="{Binding store_items.articul, StringFormat={}{0:D6}}" />
+							<DataGridTextColumn
+								Header="{DynamicResource ItemName}"
+								Width="250"
+								Binding="{Binding store_items.name}" />
+							<DataGridTextColumn
+								Header="{DynamicResource Price}"
+								Width="90"
+								Binding="{Binding price, StringFormat={}{0:N2}}" />
+							<DataGridTextColumn
+								Header="{DynamicResource Sn}"
+								Width="110" />
+						</DataGrid.Columns>
+					</DataGrid>
+				</Grid>
+			</TabItem>
+			<TabItem
+				Header="{DynamicResource Additional}">
+				<Grid>
+					<dxg:GridControl
+						Name="AdditionalPaymentsGrid"
+						Tag="AdditionalPaymentsGrid"
+						AllowInitiallyFocusedRow="False"
+						SelectionMode="Cell"
+						dx:DXSerializer.AllowProperty="{DXEvent OnAllowPropertyAdditionalPayments(@args)}"
+						ItemsSource="{Binding UserSalaryReport.AdditionalPayments}">
+						<dxmvvm:Interaction.Behaviors>
+							<dxmvvm:EventToCommand
+								EventTriggerBase_x0060_1.EventName="Loaded"
+								Command="{Binding GridInitCommand}"
+								CommandParameter="{Binding ElementName=AdditionalPaymentsGrid}" />
+							<dxmvvm:EventToCommand
+								EventTriggerBase_x0060_1.EventName="Unloaded"
+								Command="{Binding GridUnloadedCommand}"
+								CommandParameter="{Binding ElementName=AdditionalPaymentsGrid}" />
+							<extensions:GridLayoutHelper>
+								<dxmvvm:Interaction.Behaviors>
+									<dxmvvm:EventToCommand
+										EventTriggerBase_x0060_1.EventName="LayoutChanged"
+										Command="{Binding LayoutChangedCommand}"
+										CommandParameter="{Binding ElementName=AdditionalPaymentsGrid}" />
+								</dxmvvm:Interaction.Behaviors>
+							</extensions:GridLayoutHelper>
+						</dxmvvm:Interaction.Behaviors>
+						<dxg:GridControl.Columns>
+							<dxg:GridColumn
+								FieldName="id"
+								ReadOnly="True"
+								Header="ID"
+								Width="100"
+								Binding="{Binding id, Mode=OneWay}">
+								<dxg:ColumnBase.EditSettings>
+									<dxe:TextEditSettings
+										Mask="d6"
+										MaskType="Numeric"
+										MaskUseAsDisplayFormat="True" />
+								</dxg:ColumnBase.EditSettings>
+							</dxg:GridColumn>
+							<dxg:GridColumn
+								FieldName="name"
+								Header="{DynamicResource Reason}"
+								Width="*"
+								Binding="{Binding name, Mode=TwoWay}">
+								<dxg:ColumnBase.EditSettings>
+									<dxe:TextEditSettings
+										MaxLength="254"
+										AcceptsReturn="True"
+										TextWrapping="Wrap" />
+								</dxg:ColumnBase.EditSettings>
+							</dxg:GridColumn>
+							<dxg:GridColumn
+								FieldName="price"
+								Header="{DynamicResource Summ}"
+								Binding="{Binding price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+								<dxg:ColumnBase.EditSettings>
+									<dxe:TextEditSettings
+										Style="{StaticResource GridClassicOrNot}" />
+								</dxg:ColumnBase.EditSettings>
+							</dxg:GridColumn>
+							<dxg:GridColumn
+								FieldName="payment_date"
+								ReadOnly="True"
+								Header="{DynamicResource Date}"
+								Binding="{Binding payment_date, Mode=OneWay, Converter={StaticResource UtcToLocalDateTimeConverter}}">
+								<dxg:ColumnBase.EditSettings>
+									<dxe:TextEditSettings
+										MaskType="DateTime"
+										Mask="dd.MM.yyyy HH:mm"
+										MaskUseAsDisplayFormat="True"
+										NullValue="--.--.----" />
+								</dxg:ColumnBase.EditSettings>
+							</dxg:GridColumn>
+							<dxg:GridColumn
+								FieldName="UserFio"
+								Header="{DynamicResource User}"
+								Binding="{Binding UserFio, Mode=OneWay}">
+								<dxg:ColumnBase.EditSettings>
+									<dxe:TextEditSettings />
+								</dxg:ColumnBase.EditSettings>
+							</dxg:GridColumn>
+						</dxg:GridControl.Columns>
+						<dxg:GridControl.View>
+							<dxg:TableView
+								IsSynchronizedWithCurrentItem="True"
+								ShowTotalSummary="True"
+								AllowScrollAnimation="True"
+								NavigationStyle="Cell"
+								ColumnFilterPopupMode="Excel"
+								AllowEditing="True"
+								AllowGrouping="False"
+								AllowColumnMoving="True"
+								ShowGroupPanel="False"
+								ShowColumnHeaders="True"
+								AllowMoveColumnToDropArea="False"
+								ShowSearchPanelMode="Never"
+								ShowBandsPanel="True"
+								ShowIndicator="False"
+								AllowBestFit="True"
+								AllowColumnFiltering="False"
+								ShowSelectionRectangle="False"
+								ShowFixedTotalSummary="False"
+								SummariesIgnoreNullValues="True"
+								RowMinHeight="{Binding Employee.UiSettings.RowHeight, Source={x:Static objects:OfflineData.Instance}}"
+								FontSize="{Binding Employee.UiSettings.FontSize, Source={x:Static objects:OfflineData.Instance}}" />
+						</dxg:GridControl.View>
+						<dxg:GridControl.TotalSummary>
+							<dxg:GridSummaryItem
+								DisplayFormat=" {0:N2}"
+								SummaryType="Sum"
+								FieldName="price" />
+						</dxg:GridControl.TotalSummary>
+					</dxg:GridControl>
+				</Grid>
+			</TabItem>
+			<TabItem
+				Header="{DynamicResource Sales}">
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition
+							Height="130*" />
+						<RowDefinition
+							Height="131*" />
+					</Grid.RowDefinitions>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition
+							Width="300" />
+						<ColumnDefinition
+							Width="257*" />
+					</Grid.ColumnDefinitions>
+					<Border
+						BorderThickness="0,0,1,0"
+						BorderBrush="#FFD3D3D3"
+						Grid.RowSpan="2">
+						<dxlc:LayoutControl
+							ItemStyle="{StaticResource LeftMenuLayout}"
+							Orientation="Vertical"
+							ItemSpace="5"
+							Padding="10,10,5,0">
+							<dxlc:LayoutGroup
+								View="GroupBox"
+								Orientation="Vertical"
+								Header="{DynamicResource Info}">
+								<dxlc:LayoutItem
+									Label="{DynamicResource PaySale}">
+									<TextBox
+										IsReadOnly="True"
+										Text="{Binding SelectedUser.pay_sale}" />
+								</dxlc:LayoutItem>
+								<dxlc:LayoutItem
+									Label="{DynamicResource Sales}">
+									<TextBox
+										IsReadOnly="True"
+										Text="{Binding UserSalaryReport.SummPaySaleUser, StringFormat=N0, Mode=OneWay}" />
+								</dxlc:LayoutItem>
+								<dxlc:LayoutItem
+									Label="{DynamicResource SalesInRepair}">
+									<TextBox
+										IsReadOnly="True"
+										Text="{Binding UserSalaryReport.SummPaySaleInRepairUser, StringFormat=N0, Mode=OneWay}" />
+								</dxlc:LayoutItem>
+								<dxlc:LayoutItem
+									Label="{DynamicResource Summ}">
+									<TextBox
+										IsReadOnly="True"
+										Text="{Binding UserSalaryReport.TotalPaySale, StringFormat=N0, Mode=OneWay}" />
+								</dxlc:LayoutItem>
+							</dxlc:LayoutGroup>
+						</dxlc:LayoutControl>
+					</Border>
+					<Label
+						Content="{DynamicResource Sales}"
+						HorizontalAlignment="Left"
+						VerticalAlignment="Top"
+						Grid.Column="1"
+						Margin="5,10,0,0" />
+					<dxg:GridControl
+						Style="{StaticResource DeDefTable}"
+						Grid.Column="1"
+						Margin="0,32,0,0"
+						ItemsSource="{Binding UserSalaryReport.Sales}"
+						SelectedItem="{Binding SelectedSale, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+						<dxg:GridColumn
+							FieldName="{DynamicResource Date}"
+							HorizontalHeaderContentAlignment="Center"
+							Binding="{Binding created, Mode=OneWay, Converter={StaticResource UtcToLocalDateTimeConverter}}">
+							<dxg:ColumnBase.EditSettings>
+								<dxe:TextEditSettings
+									HorizontalContentAlignment="Center"
+									MaskType="DateTime"
+									Mask="dd.MM.yyyy  HH:mm"
+									MaskUseAsDisplayFormat="True" />
+							</dxg:ColumnBase.EditSettings>
+						</dxg:GridColumn>
+						<dxg:GridColumn
+							FieldName="{DynamicResource DocumentN}"
+							HorizontalHeaderContentAlignment="Center"
+							Width="100"
+							VisibleIndex="0"
+							Binding="{Binding id}">
+							<dxg:ColumnBase.EditSettings>
+								<dxe:TextEditSettings
+									HorizontalContentAlignment="Center"
+									MaskType="Numeric"
+									Mask="d6"
+									MaskUseAsDisplayFormat="True" />
+							</dxg:ColumnBase.EditSettings>
+						</dxg:GridColumn>
+						<dxg:GridColumn
+							Width="20*"
+							FieldName="{DynamicResource Summ}"
+							HorizontalHeaderContentAlignment="Center"
+							Binding="{Binding total}">
+							<dxg:ColumnBase.EditSettings>
+								<dxe:TextEditSettings
+									Style="{StaticResource GridClassicOrNot}" />
+							</dxg:ColumnBase.EditSettings>
+						</dxg:GridColumn>
+						<dxg:GridColumn
+							Width="20*"
+							FieldName="{DynamicResource ProfitFromSales}"
+							HorizontalHeaderContentAlignment="Center"
+							Binding="{Binding Profit}">
+							<dxg:ColumnBase.EditSettings>
+								<dxe:TextEditSettings
+									Style="{StaticResource GridClassicOrNot}" />
+							</dxg:ColumnBase.EditSettings>
+						</dxg:GridColumn>
+						<dxg:GridColumn
+							Width="20*"
+							FieldName="{DynamicResource Income}"
+							HorizontalHeaderContentAlignment="Center"
+							Binding="{Binding ManagerPart}">
+							<dxg:ColumnBase.EditSettings>
+								<dxe:TextEditSettings
+									Style="{StaticResource GridClassicOrNot}" />
+							</dxg:ColumnBase.EditSettings>
+						</dxg:GridColumn>
+						<dxg:GridControl.TotalSummary>
+							<dxg:GridSummaryItem
+								DisplayFormat=" {0:N2}"
+								SummaryType="Sum"
+								FieldName="{DynamicResource Summ}" />
+							<dxg:GridSummaryItem
+								DisplayFormat=" {0:N2}"
+								SummaryType="Sum"
+								FieldName="{DynamicResource ProfitFromSales}" />
+							<dxg:GridSummaryItem
+								DisplayFormat=" {0:N2}"
+								SummaryType="Sum"
+								FieldName="{DynamicResource Income}" />
+						</dxg:GridControl.TotalSummary>
+						<dxg:GridControl.View>
+							<dxg:TableView
+								IsSynchronizedWithCurrentItem="True"
+								ShowTotalSummary="True"
+								AllowScrollAnimation="True"
+								NavigationStyle="Row"
+								ColumnFilterPopupMode="Excel"
+								AllowEditing="False"
+								AllowGrouping="False"
+								AllowColumnMoving="True"
+								ShowGroupPanel="False"
+								ShowColumnHeaders="True"
+								AllowMoveColumnToDropArea="False"
+								ShowSearchPanelMode="Never"
+								ShowBandsPanel="True"
+								ShowIndicator="False"
+								AllowBestFit="True"
+								AllowColumnFiltering="False"
+								ShowSelectionRectangle="False"
+								ShowFixedTotalSummary="False"
+								SummariesIgnoreNullValues="True"
+								RowMinHeight="{Binding Employee.UiSettings.RowHeight, Source={x:Static objects:OfflineData.Instance}}"
+								FontSize="{Binding Employee.UiSettings.FontSize, Source={x:Static objects:OfflineData.Instance}}">
+								<dxmvvm:Interaction.Behaviors>
+									<dxmvvm:EventToCommand
+										EventTriggerBase_x0060_1.EventName="RowDoubleClick"
+										Command="{Binding SaleClickCommand}" />
+								</dxmvvm:Interaction.Behaviors>
+							</dxg:TableView>
+						</dxg:GridControl.View>
+					</dxg:GridControl>
+					<Label
+						Content="{DynamicResource SalesInRepair}"
+						HorizontalAlignment="Left"
+						VerticalAlignment="Top"
+						Grid.Column="1"
+						Margin="10,10,0,0"
+						Grid.Row="1" />
+					<dxg:GridControl
+						Style="{StaticResource DeDefTable}"
+						Margin="0,32,0,0"
+						Grid.Row="1"
+						Grid.Column="1"
+						ItemsSource="{Binding UserSalaryReport.InRepairSales}"
+						SelectedItem="{Binding SelectedInRepairSale, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+						<dxg:GridColumn
+							FieldName="{DynamicResource OrderNumber}"
+							HorizontalHeaderContentAlignment="Center"
+							Width="100"
+							VisibleIndex="0"
+							Binding="{Binding workshop.id}">
+							<dxg:ColumnBase.EditSettings>
+								<dxe:TextEditSettings
+									HorizontalContentAlignment="Center"
+									MaskType="Numeric"
+									Mask="d6"
+									MaskUseAsDisplayFormat="True" />
+							</dxg:ColumnBase.EditSettings>
+						</dxg:GridColumn>
+						<dxg:GridColumn
+							FieldName="{DynamicResource OutDate}"
+							HorizontalHeaderContentAlignment="Center"
+							Binding="{Binding workshop.OutDateTime, Mode=OneWay, Converter={StaticResource UtcToLocalDateTimeConverter}}">
+							<dxg:ColumnBase.EditSettings>
+								<dxe:TextEditSettings
+									HorizontalContentAlignment="Center"
+									MaskType="DateTime"
+									Mask="dd.MM.yyyy  HH:mm"
+									MaskUseAsDisplayFormat="True" />
+							</dxg:ColumnBase.EditSettings>
+						</dxg:GridColumn>
+						<dxg:GridColumn
+							Width="20*"
+							FieldName="{DynamicResource Hardware}"
+							HorizontalHeaderContentAlignment="Center"
+							Binding="{Binding workshop.DeviceOverview}" />
+						<dxg:GridColumn
+							Width="20*"
+							FieldName="{DynamicResource ItemName}"
+							HorizontalHeaderContentAlignment="Center"
+							Binding="{Binding store_items.name}" />
+						<dxg:GridColumn
+							Width="20*"
+							FieldName="{DynamicResource Count}"
+							HorizontalHeaderContentAlignment="Center"
+							Binding="{Binding count}" />
+						<dxg:GridColumn
+							Width="20*"
+							FieldName="{DynamicResource Price}"
+							HorizontalHeaderContentAlignment="Center"
+							Binding="{Binding PriceFormatted}" />
+						<dxg:GridColumn
+							Width="20*"
+							FieldName="{DynamicResource Summ}"
+							HorizontalHeaderContentAlignment="Center"
+							Binding="{Binding Summ}" />
+						<dxg:GridColumn
+							Width="20*"
+							FieldName="{DynamicResource Income}"
+							HorizontalHeaderContentAlignment="Center"
+							Binding="{Binding ManagerPart}" />
+						<dxg:GridControl.TotalSummary>
+							<dxg:GridSummaryItem
+								DisplayFormat=" {0:N2}"
+								SummaryType="Sum"
+								FieldName="{DynamicResource Count}" />
+							<dxg:GridSummaryItem
+								DisplayFormat=" {0:N2}"
+								SummaryType="Sum"
+								FieldName="{DynamicResource Summ}" />
+							<dxg:GridSummaryItem
+								DisplayFormat=" {0:N2}"
+								SummaryType="Sum"
+								FieldName="{DynamicResource Income}" />
+						</dxg:GridControl.TotalSummary>
+						<dxg:GridControl.View>
+							<dxg:TableView
+								IsSynchronizedWithCurrentItem="True"
+								ShowTotalSummary="True"
+								AllowScrollAnimation="True"
+								NavigationStyle="Row"
+								ColumnFilterPopupMode="Excel"
+								AllowEditing="False"
+								AllowGrouping="False"
+								AllowColumnMoving="True"
+								ShowGroupPanel="False"
+								ShowColumnHeaders="True"
+								AllowMoveColumnToDropArea="False"
+								ShowSearchPanelMode="Never"
+								ShowBandsPanel="True"
+								ShowIndicator="False"
+								AllowBestFit="True"
+								AllowColumnFiltering="False"
+								ShowSelectionRectangle="False"
+								ShowFixedTotalSummary="False"
+								SummariesIgnoreNullValues="True"
+								RowMinHeight="{Binding Employee.UiSettings.RowHeight, Source={x:Static objects:OfflineData.Instance}}"
+								FontSize="{Binding Employee.UiSettings.FontSize, Source={x:Static objects:OfflineData.Instance}}">
+								<dxmvvm:Interaction.Behaviors>
+									<dxmvvm:EventToCommand
+										EventTriggerBase_x0060_1.EventName="RowDoubleClick"
+										Command="{Binding InRepairSaleClickCommand}" />
+								</dxmvvm:Interaction.Behaviors>
+							</dxg:TableView>
+						</dxg:GridControl.View>
+					</dxg:GridControl>
+				</Grid>
+			</TabItem>
+			<TabItem
+				Header="{DynamicResource PartsOnMaster}">
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition
+							Width="250" />
+						<ColumnDefinition
+							Width="623*" />
+					</Grid.ColumnDefinitions>
+					<DataGrid
+						HorizontalAlignment="Stretch"
+						VerticalAlignment="Stretch"
+						Style="{StaticResource defaultTable}"
+						Grid.Column="1"
+						SelectedItem="{Binding MasterSelectedItem, UpdateSourceTrigger=PropertyChanged}"
+						ItemsSource="{Binding PartsOnMaster}">
+						<UIElement.InputBindings>
+							<MouseBinding
+								Gesture="LeftDoubleClick"
+								Command="{Binding MasterItemClickCommand}" />
+						</UIElement.InputBindings>
+						<DataGrid.RowStyle>
+							<Style
+								BasedOn="{StaticResource DefaultTableRow}"
+								TargetType="{x:Type DataGridRow}">
+								<Setter
+									Property="FrameworkElement.ContextMenu"
+									Value="{StaticResource RowMenu}" />
+								<Style.Triggers>
+									<DataTrigger
+										Value="2"
+										Binding="{Binding state}">
+										<Setter
+											Property="Background"
+											Value="#FF90EE90" />
+										<Setter
+											Property="FrameworkElement.ToolTip"
+											Value="{StaticResource ReserveItems}" />
+									</DataTrigger>
+									<DataTrigger
+										Value="3"
+										Binding="{Binding state}">
+										<Setter
+											Property="Background"
+											Value="#FFD3D3D3" />
+										<Setter
+											Property="FrameworkElement.ToolTip"
+											Value="{StaticResource CancelledReserve}" />
+									</DataTrigger>
+									<DataTrigger
+										Value="4"
+										Binding="{Binding state}">
+										<Setter
+											Property="Background"
+											Value="#FFD3D3D3" />
+										<Setter
+											Property="FrameworkElement.ToolTip"
+											Value="{StaticResource CancelledReserve}" />
+									</DataTrigger>
+								</Style.Triggers>
+							</Style>
+						</DataGrid.RowStyle>
+						<DataGrid.Columns>
+							<DataGridTextColumn
+								Header="{DynamicResource ArticulNoDots}"
+								ElementStyle="{StaticResource Center}"
+								Binding="{Binding store_items.articul, StringFormat={}{0:D6}}" />
+							<DataGridTextColumn
+								Header="{DynamicResource ItemName}"
+								Width="90*"
+								Binding="{Binding store_items.name}" />
+							<DataGridTextColumn
+								Header="{DynamicResource OutDate}"
+								ElementStyle="{StaticResource Center}"
+								Binding="{Binding created, Converter={StaticResource UtcToLocalDateTimeConverter}, StringFormat=dd.MM.yyyy}" />
+							<DataGridTextColumn
+								Header="{DynamicResource Count}"
+								ElementStyle="{StaticResource Center}"
+								Binding="{Binding count}" />
+							<DataGridTextColumn
+								Header="{DynamicResource Price}"
+								Binding="{Binding price, StringFormat={}{0:N2}}" />
+							<DataGridTextColumn
+								Header="{DynamicResource Summ}"
+								Binding="{Binding Summ, StringFormat={}{0:N2}}" />
+							<DataGridTextColumn
+								Header="{DynamicResource Status}"
+								Binding="{Binding state, Converter={StaticResource State2StringConverter}}" />
+						</DataGrid.Columns>
+					</DataGrid>
+					<dxlc:LayoutControl
+						ItemStyle="{StaticResource LeftMenuLayout}"
+						Orientation="Vertical"
+						ItemSpace="5"
+						Padding="10">
+						<dxlc:LayoutGroup
+							Header="{DynamicResource TotalItems}"
+							View="GroupBox"
+							Orientation="Vertical">
+							<dxlc:LayoutItem>
+								<TextBox
+									IsReadOnly="True"
+									Text="{Binding UserSalaryReport.TotalPartsOnUser}" />
+							</dxlc:LayoutItem>
+							<dxlc:LayoutItem
+								Label="{DynamicResource OnSumm}">
+								<TextBox
+									IsReadOnly="True"
+									Text="{Binding UserSalaryReport.SummPartsOnUser, StringFormat=N0}" />
+							</dxlc:LayoutItem>
+						</dxlc:LayoutGroup>
+						<dxlc:LayoutGroup
+							Header="{DynamicResource Installed}"
+							View="GroupBox"
+							Orientation="Vertical">
+							<dxlc:LayoutItem>
+								<TextBox
+									IsReadOnly="True"
+									Text="{Binding UserSalaryReport.InstalledUserParts}" />
+							</dxlc:LayoutItem>
+							<dxlc:LayoutItem
+								Label="{DynamicResource OnSumm}">
+								<TextBox
+									IsReadOnly="True"
+									Text="{Binding UserSalaryReport.InstalledUserPartsSumm, StringFormat=N0}" />
+							</dxlc:LayoutItem>
+						</dxlc:LayoutGroup>
+						<dxlc:LayoutGroup
+							Header="{DynamicResource OnUser}"
+							View="GroupBox"
+							Orientation="Vertical">
+							<dxlc:LayoutItem>
+								<TextBox
+									IsReadOnly="True"
+									Text="{Binding UserSalaryReport.NotInstalledUserParts}" />
+							</dxlc:LayoutItem>
+							<dxlc:LayoutItem
+								Label="{DynamicResource OnSumm}">
+								<TextBox
+									IsReadOnly="True"
+									Text="{Binding UserSalaryReport.NotInstalledUserPartsSumm, StringFormat=N0}" />
+							</dxlc:LayoutItem>
+						</dxlc:LayoutGroup>
+					</dxlc:LayoutControl>
+				</Grid>
+			</TabItem>
+			<TabItem
+				Header="{DynamicResource Payments}">
+				<Grid>
+					<dxg:GridControl
+						Margin="0">
+						<FrameworkElement.Style>
+							<Style
+								BasedOn="{StaticResource DeDefTable}"
+								TargetType="{x:Type dxg:GridControl}">
+								<Setter
+									Property="dxg:DataControlBase.ItemsSource"
+									Value="{Binding UserSalaryReport.Payments}" />
+							</Style>
+						</FrameworkElement.Style>
+						<dxg:GridColumn
+							FieldName="{DynamicResource DocumentN}"
+							HorizontalHeaderContentAlignment="Center"
+							Width="100"
+							VisibleIndex="0"
+							Binding="{Binding id}">
+							<dxg:ColumnBase.EditSettings>
+								<dxe:TextEditSettings
+									HorizontalContentAlignment="Center"
+									MaskType="Numeric"
+									Mask="d6"
+									MaskUseAsDisplayFormat="True" />
+							</dxg:ColumnBase.EditSettings>
+						</dxg:GridColumn>
+						<dxg:GridColumn
+							Width="130"
+							FieldName="{DynamicResource Date}"
+							HorizontalHeaderContentAlignment="Center"
+							Binding="{Binding created, Converter={StaticResource UtcToLocalDateTimeConverter}}">
+							<dxg:ColumnBase.EditSettings>
+								<dxe:TextEditSettings
+									HorizontalContentAlignment="Center"
+									MaskType="DateTime"
+									Mask="dd.MM.yyyy HH:mm"
+									MaskUseAsDisplayFormat="True" />
+							</dxg:ColumnBase.EditSettings>
+						</dxg:GridColumn>
+						<dxg:GridColumn
+							FieldName="{DynamicResource Summ}"
+							HorizontalHeaderContentAlignment="Center"
+							Binding="{Binding summa, Mode=OneWay}">
+							<dxg:ColumnBase.EditSettings>
+								<dxe:TextEditSettings
+									HorizontalContentAlignment="Right"
+									MaskType="Numeric"
+									Mask="n0"
+									MaskUseAsDisplayFormat="True" />
+							</dxg:ColumnBase.EditSettings>
+						</dxg:GridColumn>
+						<dxg:GridColumn
+							MinWidth="150"
+							FieldName="{DynamicResource CoWorker}"
+							HorizontalHeaderContentAlignment="Center"
+							Binding="{Binding ToUserFio, Mode=OneWay}" />
+						<dxg:GridColumn
+							FieldName="{DynamicResource User}"
+							HorizontalHeaderContentAlignment="Center"
+							Binding="{Binding UserFio, Mode=OneWay}" />
+						<dxg:GridColumn
+							FieldName="{DynamicResource ReasonNoDots}"
+							MinWidth="100"
+							Width="100*"
+							HorizontalHeaderContentAlignment="Center"
+							Binding="{Binding notes, Mode=OneWay}" />
+						<dxg:GridControl.TotalSummary>
+							<dxg:GridSummaryItem
+								DisplayFormat=" {0:N0}"
+								SummaryType="Sum"
+								FieldName="{DynamicResource Summ}" />
+						</dxg:GridControl.TotalSummary>
+						<dxg:GridControl.View>
+							<dxg:TableView
+								IsSynchronizedWithCurrentItem="True"
+								ShowTotalSummary="True"
+								AllowScrollAnimation="True"
+								NavigationStyle="Row"
+								ColumnFilterPopupMode="Excel"
+								AllowEditing="False"
+								AllowGrouping="False"
+								AllowColumnMoving="True"
+								ShowGroupPanel="False"
+								ShowColumnHeaders="True"
+								AllowMoveColumnToDropArea="False"
+								ShowSearchPanelMode="Never"
+								ShowBandsPanel="True"
+								ShowIndicator="False"
+								AllowBestFit="True"
+								AllowColumnFiltering="False"
+								ShowSelectionRectangle="False"
+								ShowFixedTotalSummary="False"
+								SummariesIgnoreNullValues="True"
+								RowMinHeight="{Binding Employee.UiSettings.RowHeight, Source={x:Static objects:OfflineData.Instance}}"
+								FontSize="{Binding Employee.UiSettings.FontSize, Source={x:Static objects:OfflineData.Instance}}" />
+						</dxg:GridControl.View>
+					</dxg:GridControl>
+				</Grid>
+			</TabItem>
+			<TabItem
+				Header="{DynamicResource IoDevices}">
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition
+							Width="180" />
+						<ColumnDefinition
+							Width="50*" />
+						<ColumnDefinition
+							Width="50*" />
+					</Grid.ColumnDefinitions>
+					<Border
+						BorderThickness="0,0,1,0"
+						BorderBrush="#FFD3D3D3">
+						<dxlc:LayoutControl
+							ItemStyle="{StaticResource LeftMenuLayout}"
+							Orientation="Vertical"
+							ItemSpace="5"
+							Padding="10">
+							<dxlc:LayoutGroup
+								View="GroupBox"
+								Orientation="Vertical"
+								Header="{DynamicResource Overview}">
+								<FrameworkElement.Resources>
+									<ResourceDictionary>
+										<Style
+											TargetType="{x:Type dxlc:LayoutItem}"
+											x:Key="{x:Type dxlc:LayoutItem}">
+											<Setter
+												Property="HorizontalContentAlignment"
+												Value="Right" />
+										</Style>
+									</ResourceDictionary>
+								</FrameworkElement.Resources>
+								<dxlc:LayoutItem
+									Label="{DynamicResource Accepted}">
+									<Label
+										Content="{Binding UserSalaryReport.AcceptedDevicesCount}" />
+								</dxlc:LayoutItem>
+								<dxlc:LayoutItem
+									Label="{DynamicResource Issued}">
+									<Label
+										Content="{Binding UserSalaryReport.IssuedDevicesCount}" />
+								</dxlc:LayoutItem>
+								<dxlc:LayoutItem
+									Label="{DynamicResource Total}">
+									<Label
+										Content="{Binding UserSalaryReport.IoDevicesCount}" />
+								</dxlc:LayoutItem>
+								<dxlc:LayoutItem
+									Label="{DynamicResource Summ}">
+									<Label
+										Content="{Binding UserSalaryReport.SummIoDevices}" />
+								</dxlc:LayoutItem>
+							</dxlc:LayoutGroup>
+						</dxlc:LayoutControl>
+					</Border>
+					<Label
+						Content="{DynamicResource Accepted}"
+						Grid.Column="1"
+						HorizontalAlignment="Left"
+						VerticalAlignment="Top"
+						Margin="5,7,0,0" />
+					<dxg:GridControl
+						Style="{StaticResource DeDefTable}"
+						Margin="0,34,0,0"
+						Grid.Column="1"
+						ItemsSource="{Binding UserSalaryReport.AcceptedRepairs}"
+						SelectedItem="{Binding SelectedAcceptedRepair, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+						<dxg:GridColumn
+							FieldName="{DynamicResource OrderNumber}"
+							HorizontalHeaderContentAlignment="Center"
+							Width="100"
+							VisibleIndex="0"
+							Binding="{Binding id}">
+							<dxg:ColumnBase.EditSettings>
+								<dxe:TextEditSettings
+									HorizontalContentAlignment="Center"
+									MaskType="Numeric"
+									Mask="d6"
+									MaskUseAsDisplayFormat="True" />
+							</dxg:ColumnBase.EditSettings>
+						</dxg:GridColumn>
+						<dxg:GridColumn
+							Width="20*"
+							FieldName="{DynamicResource Hardware}"
+							HorizontalHeaderContentAlignment="Center"
+							Binding="{Binding DeviceOverview}" />
+						<dxg:GridColumn
+							FieldName="{DynamicResource RepairCost}"
+							HorizontalHeaderContentAlignment="Center"
+							Binding="{Binding TotalRepairCost, Mode=OneWay}">
+							<dxg:ColumnBase.EditSettings>
+								<dxe:TextEditSettings
+									Style="{StaticResource GridClassicOrNot}" />
+							</dxg:ColumnBase.EditSettings>
+						</dxg:GridColumn>
+						<dxg:GridControl.View>
+							<dxg:TableView
+								IsSynchronizedWithCurrentItem="True"
+								ShowTotalSummary="False"
+								AllowScrollAnimation="True"
+								NavigationStyle="Row"
+								ColumnFilterPopupMode="Excel"
+								AllowEditing="False"
+								AllowGrouping="False"
+								AllowColumnMoving="True"
+								ShowGroupPanel="False"
+								ShowColumnHeaders="True"
+								AllowMoveColumnToDropArea="False"
+								ShowSearchPanelMode="Never"
+								ShowBandsPanel="True"
+								ShowIndicator="False"
+								AllowBestFit="True"
+								AllowColumnFiltering="False"
+								ShowSelectionRectangle="False"
+								ShowFixedTotalSummary="False"
+								SummariesIgnoreNullValues="True"
+								RowMinHeight="{Binding Employee.UiSettings.RowHeight, Source={x:Static objects:OfflineData.Instance}}"
+								FontSize="{Binding Employee.UiSettings.FontSize, Source={x:Static objects:OfflineData.Instance}}">
+								<dxmvvm:Interaction.Behaviors>
+									<dxmvvm:EventToCommand
+										EventTriggerBase_x0060_1.EventName="RowDoubleClick"
+										Command="{Binding AcceptedRepairClickCommand}" />
+								</dxmvvm:Interaction.Behaviors>
+							</dxg:TableView>
+						</dxg:GridControl.View>
+					</dxg:GridControl>
+					<dxg:GridControl
+						Style="{StaticResource DeDefTable}"
+						Margin="0,34,0,0"
+						Grid.Column="2"
+						ItemsSource="{Binding UserSalaryReport.IssuedRepairs}"
+						SelectedItem="{Binding SelectedIssuedRepair, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+						<dxg:GridControl.View>
+							<dxg:TableView
+								IsSynchronizedWithCurrentItem="True"
+								ShowTotalSummary="False"
+								AllowScrollAnimation="True"
+								NavigationStyle="Row"
+								ColumnFilterPopupMode="Excel"
+								AllowEditing="False"
+								AllowGrouping="False"
+								AllowColumnMoving="True"
+								ShowGroupPanel="False"
+								ShowColumnHeaders="True"
+								AllowMoveColumnToDropArea="False"
+								ShowSearchPanelMode="Never"
+								ShowBandsPanel="True"
+								ShowIndicator="False"
+								AllowBestFit="True"
+								AllowColumnFiltering="False"
+								ShowSelectionRectangle="False"
+								ShowFixedTotalSummary="False"
+								SummariesIgnoreNullValues="True"
+								RowMinHeight="{Binding Employee.UiSettings.RowHeight, Source={x:Static objects:OfflineData.Instance}}"
+								FontSize="{Binding Employee.UiSettings.FontSize, Source={x:Static objects:OfflineData.Instance}}">
+								<dxmvvm:Interaction.Behaviors>
+									<dxmvvm:EventToCommand
+										EventTriggerBase_x0060_1.EventName="RowDoubleClick"
+										Command="{Binding IssuedRepairClickCommand}" />
+								</dxmvvm:Interaction.Behaviors>
+							</dxg:TableView>
+						</dxg:GridControl.View>
+						<dxg:GridColumn
+							FieldName="{DynamicResource OrderNumber}"
+							HorizontalHeaderContentAlignment="Center"
+							Width="100"
+							VisibleIndex="0"
+							Binding="{Binding id}">
+							<dxg:ColumnBase.EditSettings>
+								<dxe:TextEditSettings
+									HorizontalContentAlignment="Center"
+									MaskType="Numeric"
+									Mask="d6"
+									MaskUseAsDisplayFormat="True" />
+							</dxg:ColumnBase.EditSettings>
+						</dxg:GridColumn>
+						<dxg:GridColumn
+							Width="20*"
+							FieldName="{DynamicResource Hardware}"
+							HorizontalHeaderContentAlignment="Center"
+							Binding="{Binding DeviceOverview}" />
+						<dxg:GridColumn
+							FieldName="{DynamicResource RepairCost}"
+							HorizontalHeaderContentAlignment="Center"
+							Binding="{Binding TotalRepairCost, Mode=OneWay}">
+							<dxg:ColumnBase.EditSettings>
+								<dxe:TextEditSettings
+									Style="{StaticResource GridClassicOrNot}" />
+							</dxg:ColumnBase.EditSettings>
+						</dxg:GridColumn>
+						<dxg:GridColumn
+							FieldName="{DynamicResource OutDate}"
+							HorizontalHeaderContentAlignment="Center"
+							Binding="{Binding OutDateTime, Converter={StaticResource UtcToLocalDateTimeConverter}, Mode=OneWay}">
+							<dxg:ColumnBase.EditSettings>
+								<dxe:TextEditSettings
+									HorizontalContentAlignment="Center"
+									MaskType="DateTime"
+									Mask="dd.MM.yyyy  HH:mm"
+									MaskUseAsDisplayFormat="True" />
+							</dxg:ColumnBase.EditSettings>
+						</dxg:GridColumn>
+					</dxg:GridControl>
+					<Label
+						Content="{DynamicResource Issued}"
+						Grid.Column="2"
+						HorizontalAlignment="Left"
+						VerticalAlignment="Top"
+						Margin="5,7,0,0" />
+				</Grid>
+			</TabItem>
+		</TabControl>
+		<StackPanel
+			Orientation="Horizontal"
+			HorizontalAlignment="Stretch"
+			VerticalAlignment="Top"
+			Margin="0,10,0,0">
+			<Label
+				Content="{DynamicResource CoWorker}"
+				ContentStringFormat="{}{0}:"
+				HorizontalAlignment="Left"
+				Margin="10,0,0,0"
+				VerticalContentAlignment="Center"
+				VerticalAlignment="Top" />
+			<dxe:ComboBoxEdit
+				DisplayMember="FioShort"
+				HorizontalAlignment="Left"
+				Margin="10,0,0,0"
+				VerticalAlignment="Center"
+				Width="200"
+				ShowError="False"
+				IsEnabled="{Binding CanChangeEmployee}"
+				EditValue="{Binding SelectedUser, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+				ItemsSource="{Binding Users}">
+				<dxmvvm:Interaction.Behaviors>
+					<dxmvvm:EventToCommand
+						EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+						PassEventArgsToCommand="True"
+						Command="{Binding ComboBoxClickCommand}" />
+				</dxmvvm:Interaction.Behaviors>
+			</dxe:ComboBoxEdit>
+			<controls:MonthDatePickerView
+				Margin="10,0,0,0" />
+		</StackPanel>
+	</Grid>
+</UserControl>

@@ -1,0 +1,70 @@
+<dxwui:NavigationPage
+	x:Class="ASC.View.ItemCard.ItemCardView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:dxwui="http://schemas.devexpress.com/winfx/2008/xaml/windowsui" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:objects="clr-namespace:ASC.Objects" xmlns:viewModels="clr-namespace:ASC.ViewModels"
+	dxwui:NavigationCacheMode="Disabled" xmlns:itemcard="clr-namespace:ASC.View.ItemCard"
+	Loaded="{DXEvent Loaded()}">
+	<FrameworkElement.Resources>
+		<ResourceDictionary>
+			<DataTemplate
+				DataType="{x:Type viewModels:CustomerCardViewModel}"
+				x:Key="HamburgerMenuItemTemplate">
+				<dxwui:HamburgerMenuNavigationButton
+					Placement="{Binding Placement}"
+					Glyph="{Binding Glyph}"
+					Content="{Binding Caption}"
+					p14:HamburgerMenuNavigationButtonBase_x0060_1.NavigationTargetTypeName="{Binding PageName}"
+					p14:HamburgerMenuNavigationButtonBase_x0060_1.NavigationTargetParameter="{Binding NavigationParameter}" xmlns:p14="http://schemas.devexpress.com/winfx/2008/xaml/windowsui/internal" />
+			</DataTemplate>
+		</ResourceDictionary>
+	</FrameworkElement.Resources>
+	<FrameworkElement.DataContext>
+		<viewModels:ItemCardViewModel />
+	</FrameworkElement.DataContext>
+	<DockPanel>
+		<dxwui:AppBar
+			DockPanel.Dock="Bottom"
+			Background="#3f3f3f"
+			HorizontalAlignment="Stretch"
+			VerticalAlignment="Stretch"
+			ItemSpacing="5"
+			HideMode="AlwaysVisible"
+			Height="90">
+			<dxwui:AppBarButton
+				Label="{DynamicResource Save}"
+				Visibility="{Binding IsEnabled, Converter={StaticResource BooleanToVisibilityConverter}, RelativeSource={RelativeSource Self}}"
+				Command="{Binding SaveItemCommand}"
+				Glyph="{dx:DXImageGrayscale Image=Save_32x32.png}" />
+		</dxwui:AppBar>
+		<dxwui:HamburgerMenu
+			Name="HamburgerMenu"
+			IsWindowBackButtonVisible="False"
+			BottomBarBackground="#3e7038"
+			OpenPaneWidth="250"
+			PaneBackground="#3e7038"
+			Header="{DynamicResource ItemCard}"
+			ItemTemplate="{StaticResource HamburgerMenuItemTemplate}"
+			AllowBuiltInNavigation="True"
+			FontSize="{Binding Employee.UiSettings.FontSize, Source={x:Static objects:OfflineData.Instance}}"
+			ItemsSource="{Binding MenuItems}"
+			SelectedItem="{Binding SelectedMenuItem, Mode=TwoWay}">
+			<FrameworkElement.Resources>
+				<ResourceDictionary>
+					<Style
+						TargetType="{x:Type dxwui:NavigationFrame}"
+						x:Key="{x:Type dxwui:NavigationFrame}">
+						<Setter
+							Property="dxwui:NavigationFrame.AnimationType"
+							Value="None" />
+					</Style>
+				</ResourceDictionary>
+			</FrameworkElement.Resources>
+			<dxwui:HamburgerMenu.BottomBarItems>
+				<dxwui:HamburgerMenuBottomBarNavigationButton
+					ToolTip="{DynamicResource SendPhotoByEmail}"
+					Placement="Right"
+					Visibility="{Binding IsEnabled, Converter={StaticResource BooleanToVisibilityConverter}, RelativeSource={RelativeSource Self}}"
+					Command="{Binding ShowSendPhotosCommand}"
+					Glyph="{dx:DXImageGrayscale Image=SendFile_32x32.png}" />
+			</dxwui:HamburgerMenu.BottomBarItems>
+		</dxwui:HamburgerMenu>
+	</DockPanel>
+</dxwui:NavigationPage>

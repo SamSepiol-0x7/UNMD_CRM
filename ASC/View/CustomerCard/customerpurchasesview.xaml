@@ -1,0 +1,128 @@
+<UserControl
+	x:Class="ASC.ClientCard.CustomerPurchasesView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars" xmlns:converters="clr-namespace:ASC.Converters" xmlns:objects="clr-namespace:ASC.Objects" xmlns:extensions="clr-namespace:ASC.Extensions" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:clientcard="clr-namespace:ASC.ClientCard"
+	DataContext="{Binding Path=CustomerPurchasesViewModel, Source={StaticResource ViewModelLocator}}">
+	<FrameworkElement.Resources>
+		<ResourceDictionary>
+			<converters:ClassicOrNotAndZero2EmptyConverter
+				x:Key="ClassicOrNotAndZero2EmptyConverter" />
+		</ResourceDictionary>
+	</FrameworkElement.Resources>
+	<Grid>
+		<dxb:ToolBarControl
+			Style="{StaticResource DefaulToolBar}"
+			Height="30">
+			<dxb:BarButtonItem
+				Content="{DynamicResource Print}"
+				KeyGesture="Ctrl+P"
+				Description="{DynamicResource Print}"
+				Command="{Binding View.Commands.ShowPrintPreview, ElementName=ClientPurchaseTable}"
+				Glyph="{dx:DXImageGrayscale Image=Print_16x16.png}" />
+		</dxb:ToolBarControl>
+		<dxg:GridControl
+			Name="ClientPurchaseTable"
+			Tag="CustomerPurchasesGrid"
+			ShowBorder="False"
+			HorizontalAlignment="Stretch"
+			Margin="0,30,0,0"
+			VerticalAlignment="Stretch"
+			SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+			ItemsSource="{Binding Items}"
+			ShowLoadingPanel="{Binding IsLoadingData}">
+			<dxmvvm:Interaction.Behaviors>
+				<dxmvvm:EventToCommand
+					EventTriggerBase_x0060_1.EventName="Loaded"
+					Command="{Binding GridInitCommand}"
+					CommandParameter="{Binding ElementName=ClientPurchaseTable}" />
+				<dxmvvm:EventToCommand
+					EventTriggerBase_x0060_1.EventName="Unloaded"
+					Command="{Binding GridUnloadedCommand}"
+					CommandParameter="{Binding ElementName=ClientPurchaseTable}" />
+				<extensions:GridLayoutHelper>
+					<dxmvvm:Interaction.Behaviors>
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="LayoutChanged"
+							Command="{Binding LayoutChangedCommand}"
+							CommandParameter="{Binding ElementName=ClientPurchaseTable}" />
+					</dxmvvm:Interaction.Behaviors>
+				</extensions:GridLayoutHelper>
+			</dxmvvm:Interaction.Behaviors>
+			<dxg:GridColumn
+				Name="Id"
+				MinWidth="150"
+				HorizontalHeaderContentAlignment="Center"
+				FieldName="{DynamicResource Rn}"
+				Binding="{Binding document_id}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:TextEditSettings
+						HorizontalContentAlignment="Center"
+						MaskType="Numeric"
+						Mask="d6"
+						MaskUseAsDisplayFormat="True" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				Name="Date"
+				FieldName="{DynamicResource Date}"
+				HorizontalHeaderContentAlignment="Center"
+				Binding="{Binding docs.created, Converter={StaticResource UtcToLocalDateTimeConverter}}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:TextEditSettings
+						Mask="dd.MM.yyyy"
+						MaskType="DateTime"
+						MaskUseAsDisplayFormat="True"
+						HorizontalContentAlignment="Center" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				Name="Item"
+				Width="*"
+				FieldName="{DynamicResource ItemName}"
+				Binding="{Binding store_items.name}" />
+			<dxg:GridColumn
+				Name="Manager"
+				FieldName="{DynamicResource Manager}"
+				Binding="{Binding docs.ManagerFio}" />
+			<dxg:GridColumn
+				Name="Count"
+				FieldName="{DynamicResource Count}"
+				Binding="{Binding count}" />
+			<dxg:GridColumn
+				HorizontalHeaderContentAlignment="Center"
+				FieldName="{DynamicResource Price}"
+				Binding="{Binding price}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:TextEditSettings
+						DisplayTextConverter="{StaticResource ClassicOrNotAndZero2EmptyConverter}"
+						HorizontalContentAlignment="Center" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridControl.View>
+				<dxg:TableView
+					RowStyle="{StaticResource RowStyle}"
+					AllowPerPixelScrolling="True"
+					AllowEditing="False"
+					ShowIndicator="False"
+					AllowBestFit="True"
+					AllowGrouping="False"
+					ShowTotalSummary="True"
+					AllowColumnMoving="True"
+					ShowGroupPanel="False"
+					NavigationStyle="Cell"
+					RowMinHeight="{Binding Employee.UiSettings.RowHeight, Source={x:Static objects:OfflineData.Instance}}"
+					FontSize="{Binding Employee.UiSettings.FontSize, Source={x:Static objects:OfflineData.Instance}}">
+					<dxmvvm:Interaction.Behaviors>
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="RowDoubleClick"
+							Command="{Binding PurchaseDoubleClickCommand}" />
+					</dxmvvm:Interaction.Behaviors>
+				</dxg:TableView>
+			</dxg:GridControl.View>
+			<dxg:GridControl.TotalSummary>
+				<dxg:GridSummaryItem
+					DisplayFormat=" {0:N0}"
+					SummaryType="Sum"
+					FieldName="{DynamicResource Price}" />
+			</dxg:GridControl.TotalSummary>
+		</dxg:GridControl>
+	</Grid>
+</UserControl>

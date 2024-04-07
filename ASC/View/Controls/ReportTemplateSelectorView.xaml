@@ -1,0 +1,22 @@
+<UserControl
+	x:Class="ASC.View.Controls.ReportTemplateSelectorView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:ASC.View.Controls" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
+	VerticalAlignment="Top">
+	<dxlc:LayoutItem
+		Style="{StaticResource LeftMenuLayout}"
+		Label="{DynamicResource DocumentNoDots}"
+		Visibility="{Binding TemplateSelectorVisible, Converter={dx:BooleanToVisibilityConverter}}">
+		<dxe:ComboBoxEdit
+			MinWidth="100"
+			DisplayMember="Description"
+			ValueMember="Id"
+			SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+			ItemsSource="{Binding Items}">
+			<dxmvvm:Interaction.Behaviors>
+				<dxmvvm:EventToCommand
+					EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+					PassEventArgsToCommand="True"
+					Command="{Binding ComboBoxClickCommand}" />
+			</dxmvvm:Interaction.Behaviors>
+		</dxe:ComboBoxEdit>
+	</dxlc:LayoutItem>
+</UserControl>

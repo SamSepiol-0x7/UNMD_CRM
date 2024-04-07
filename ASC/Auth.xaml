@@ -1,0 +1,755 @@
+<Window
+	x:Class="ASC.Auth" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:converters="clr-namespace:ASC.Converters"
+	Title="Авторизация"
+	Height="330"
+	Width="550"
+	ResizeMode="NoResize"
+	WindowStartupLocation="CenterScreen"
+	WindowStyle="None" xmlns:asc="clr-namespace:ASC"
+	DataContext="{Binding AuthModel, RelativeSource={RelativeSource Self}}"
+	KeyDown="Window_KeyDown">
+	<FrameworkElement.Resources>
+		<ResourceDictionary>
+			<BooleanToVisibilityConverter
+				x:Key="BoolConverter" />
+			<converters:BoolVisiblityInverterConverter
+				x:Key="BoolVisiblityInverterConverter" />
+			<Style
+				TargetType="{x:Type Border}"
+				x:Key="MyControlBorder">
+				<Setter
+					Property="BorderBrush"
+					Value="#0A3C96" />
+				<Setter
+					Property="Background"
+					Value="#F9F9F9" />
+				<Setter
+					Property="BorderThickness"
+					Value="1" />
+				<Setter
+					Property="Border.CornerRadius"
+					Value="0" />
+			</Style>
+			<Style
+				TargetType="{x:Type TextBox}"
+				x:Key="MyTextBox">
+				<Setter
+					Property="Height"
+					Value="30" />
+				<Setter
+					Property="Template">
+					<Setter.Value>
+						<ControlTemplate
+							TargetType="{x:Type TextBoxBase}">
+							<Border
+								Name="TextBoxBorder"
+								Style="{StaticResource MyControlBorder}">
+								<ScrollViewer
+									Name="PART_ContentHost" />
+							</Border>
+							<ControlTemplate.Triggers>
+								<MultiTrigger>
+									<MultiTrigger.Conditions>
+										<Condition
+											Property="UIElement.IsFocused"
+											Value="True" />
+									</MultiTrigger.Conditions>
+									<TriggerBase.EnterActions>
+										<BeginStoryboard>
+											<Storyboard
+												TargetName="TextBoxBorder">
+												<ColorAnimation
+													Duration="0:0:0.35"
+													Storyboard.TargetProperty="Background.Color"
+													To="White" />
+												<ColorAnimation
+													Duration="0:0:0.35"
+													Storyboard.TargetProperty="BorderBrush.Color"
+													To="Black" />
+											</Storyboard>
+										</BeginStoryboard>
+									</TriggerBase.EnterActions>
+									<TriggerBase.ExitActions>
+										<BeginStoryboard>
+											<Storyboard
+												TargetName="TextBoxBorder">
+												<ColorAnimation
+													Duration="0:0:0.35"
+													Storyboard.TargetProperty="Background.Color"
+													To="#F9F9F9" />
+												<ColorAnimation
+													Duration="0:0:0.35"
+													Storyboard.TargetProperty="BorderBrush.Color"
+													To="#0A3C96" />
+											</Storyboard>
+										</BeginStoryboard>
+									</TriggerBase.ExitActions>
+								</MultiTrigger>
+								<Trigger
+									Property="UIElement.IsMouseOver"
+									Value="True">
+									<Setter
+										TargetName="TextBoxBorder"
+										Property="BorderBrush"
+										Value="#FF7EB4EA" />
+								</Trigger>
+							</ControlTemplate.Triggers>
+						</ControlTemplate>
+					</Setter.Value>
+				</Setter>
+			</Style>
+			<Style
+				TargetType="{x:Type PasswordBox}"
+				x:Key="MyPasswordBox">
+				<Setter
+					Property="Height"
+					Value="30" />
+				<Setter
+					Property="Template">
+					<Setter.Value>
+						<ControlTemplate
+							TargetType="{x:Type Control}">
+							<Border
+								Name="Border"
+								BorderBrush="#0A3C96"
+								Background="#F9F9F9"
+								BorderThickness="1"
+								CornerRadius="0">
+								<ScrollViewer
+									Name="PART_ContentHost" />
+							</Border>
+							<ControlTemplate.Triggers>
+								<MultiTrigger>
+									<MultiTrigger.Conditions>
+										<Condition
+											Property="UIElement.IsFocused"
+											Value="True" />
+									</MultiTrigger.Conditions>
+									<TriggerBase.EnterActions>
+										<BeginStoryboard>
+											<Storyboard
+												TargetName="Border">
+												<ColorAnimation
+													Duration="0:0:0.35"
+													Storyboard.TargetProperty="Background.Color"
+													To="White" />
+												<ColorAnimation
+													Duration="0:0:0.35"
+													Storyboard.TargetProperty="BorderBrush.Color"
+													To="Black" />
+											</Storyboard>
+										</BeginStoryboard>
+									</TriggerBase.EnterActions>
+									<TriggerBase.ExitActions>
+										<BeginStoryboard>
+											<Storyboard
+												TargetName="Border">
+												<ColorAnimation
+													Duration="0:0:0.35"
+													Storyboard.TargetProperty="Background.Color"
+													To="#F9F9F9" />
+												<ColorAnimation
+													Duration="0:0:0.35"
+													Storyboard.TargetProperty="BorderBrush.Color"
+													To="#0A3C96" />
+											</Storyboard>
+										</BeginStoryboard>
+									</TriggerBase.ExitActions>
+								</MultiTrigger>
+								<Trigger
+									Property="UIElement.IsMouseOver"
+									Value="True">
+									<Setter
+										TargetName="Border"
+										Property="BorderBrush"
+										Value="#FF7EB4EA" />
+								</Trigger>
+							</ControlTemplate.Triggers>
+						</ControlTemplate>
+					</Setter.Value>
+				</Setter>
+			</Style>
+			<Style
+				TargetType="{x:Type Button}"
+				x:Key="FlatButtonStyle">
+				<Setter
+					Property="Background"
+					Value="#FF0A3C96" />
+				<Setter
+					Property="Foreground"
+					Value="#FFC3CDD7" />
+				<Setter
+					Property="BorderBrush"
+					Value="#FF0A3C96" />
+				<Setter
+					Property="FontSize"
+					Value="16" />
+				<Setter
+					Property="FontFamily"
+					Value="Arial Rounded MT Bold" />
+				<Setter
+					Property="FontWeight"
+					Value="Bold" />
+				<Setter
+					Property="FrameworkElement.Cursor"
+					Value="Hand" />
+				<Setter
+					Property="Template">
+					<Setter.Value>
+						<ControlTemplate
+							TargetType="{x:Type Button}">
+							<Border
+								BorderThickness="0"
+								Background="{TemplateBinding Background}"
+								CornerRadius="0">
+								<ContentPresenter
+									HorizontalAlignment="Center"
+									VerticalAlignment="Center" />
+							</Border>
+						</ControlTemplate>
+					</Setter.Value>
+				</Setter>
+				<Style.Triggers>
+					<Trigger
+						Property="UIElement.IsMouseOver"
+						Value="True">
+						<Setter
+							Property="Template">
+							<Setter.Value>
+								<ControlTemplate
+									TargetType="{x:Type Button}">
+									<Border
+										BorderThickness="0"
+										Background="#FF062968"
+										CornerRadius="0">
+										<ContentPresenter
+											HorizontalAlignment="Center"
+											VerticalAlignment="Center" />
+									</Border>
+								</ControlTemplate>
+							</Setter.Value>
+						</Setter>
+					</Trigger>
+				</Style.Triggers>
+			</Style>
+		</ResourceDictionary>
+	</FrameworkElement.Resources>
+	<Grid>
+		<Panel.Background>
+			<ImageBrush
+				ImageSource="Resources/ascBg.png"
+				Stretch="Fill"
+				TileMode="Tile"
+				ViewportUnits="Absolute"
+				Viewport="0,0,550,330" />
+		</Panel.Background>
+		<ProgressBar
+			Name="progressBar"
+			Height="12"
+			Margin="80"
+			IsIndeterminate="True"
+			VerticalAlignment="Bottom"
+			Minimum="0"
+			Maximum="100"
+			Visibility="{Binding ProgressVisible, Converter={StaticResource BoolConverter}}"
+			Value="{Binding ProgressValue}" />
+		<Border
+			Height="63"
+			VerticalAlignment="Top"
+			HorizontalAlignment="Stretch">
+			<Grid>
+				<Button
+					Cursor="Hand"
+					Height="40"
+					Width="41"
+					Background="#00FFFFFF"
+					BorderThickness="0"
+					Margin="13,10,496,13"
+					Command="{Binding ToggleSettingsCommand}">
+					<FrameworkElement.Style>
+						<Style
+							TargetType="{x:Type Button}">
+							<Setter
+								Property="Background"
+								Value="#00FFFFFF" />
+							<Setter
+								Property="Template">
+								<Setter.Value>
+									<ControlTemplate
+										TargetType="{x:Type Button}">
+										<ContentPresenter
+											HorizontalAlignment="Center"
+											VerticalAlignment="Center" />
+									</ControlTemplate>
+								</Setter.Value>
+							</Setter>
+						</Style>
+					</FrameworkElement.Style>
+					<Image
+						ToolTip="{DynamicResource Settings}">
+						<FrameworkElement.Style>
+							<Style
+								TargetType="{x:Type Image}">
+								<Setter
+									Property="Source"
+									Value="Resources/auth_settings.png" />
+								<Style.Triggers>
+									<Trigger
+										Property="UIElement.IsMouseOver"
+										Value="True">
+										<Setter
+											Property="Source"
+											Value="Resources/auth_settings_hover.png" />
+									</Trigger>
+								</Style.Triggers>
+							</Style>
+						</FrameworkElement.Style>
+					</Image>
+				</Button>
+				<Image
+					ToolTip="{DynamicResource Close}"
+					HorizontalAlignment="Right"
+					Height="22"
+					Margin="0,19,19,0"
+					VerticalAlignment="Top"
+					Width="23"
+					Cursor="Hand"
+					MouseLeftButtonDown="imageClose_MouseLeftButtonDown">
+					<FrameworkElement.Style>
+						<Style
+							TargetType="{x:Type Image}">
+							<Setter
+								Property="Source"
+								Value="Resources/auth_close.png" />
+							<Style.Triggers>
+								<Trigger
+									Property="UIElement.IsMouseOver"
+									Value="True">
+									<Setter
+										Property="Source"
+										Value="Resources/auth_close_hover.png" />
+								</Trigger>
+							</Style.Triggers>
+						</Style>
+					</FrameworkElement.Style>
+				</Image>
+			</Grid>
+		</Border>
+		<Border
+			BorderBrush="#00286E"
+			BorderThickness="0  3  0 0"
+			Height="20"
+			VerticalAlignment="Bottom"
+			HorizontalAlignment="Stretch">
+			<Grid
+				Background="#FF0A3C96">
+				<StackPanel
+					Orientation="Horizontal"
+					Margin="10,0,0,0">
+					<TextBlock
+						Foreground="#C3CDD7"
+						HorizontalAlignment="Left"
+						FontSize="10"
+						VerticalAlignment="Top"
+						Text="{Binding AssemblyVersion}" />
+					<TextBlock
+						Foreground="#C3CDD7"
+						Margin="10,0,0,0"
+						FontSize="10"
+						VerticalAlignment="Top"
+						Text="{Binding LoadMsg}" />
+				</StackPanel>
+			</Grid>
+		</Border>
+		<Grid
+			HorizontalAlignment="Stretch"
+			Height="247"
+			Margin="0,63,0,0"
+			VerticalAlignment="Top"
+			Visibility="{Binding DefaultVisibility, Converter={StaticResource BoolConverter}, FallbackValue=Collapsed}">
+			<FrameworkElement.Style>
+				<Style
+					TargetType="{x:Type Grid}">
+					<Style.Triggers>
+						<DataTrigger
+							Value="True"
+							Binding="{Binding DefaultVisibility}">
+							<Setter
+								Property="FocusManager.FocusedElement"
+								Value="{Binding ElementName=textBoxPassword}" />
+						</DataTrigger>
+					</Style.Triggers>
+				</Style>
+			</FrameworkElement.Style>
+			<Grid
+				Width="550">
+				<TextBox
+					Name="textBoxUsername"
+					HorizontalAlignment="Stretch"
+					Height="37"
+					Style="{StaticResource MyTextBox}"
+					Margin="137,39,137,0"
+					TextWrapping="Wrap"
+					VerticalAlignment="Top"
+					BorderBrush="#0A3C96"
+					HorizontalContentAlignment="Center"
+					Padding="0,10,0,0"
+					Text="{Binding Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+					GotFocus="En_GotFocus" />
+				<TextBlock
+					IsHitTestVisible="False"
+					Text="Имя пользователя"
+					VerticalAlignment="Center"
+					HorizontalAlignment="Left"
+					Margin="149,49,0,182"
+					Foreground="#FFA9A9A9"
+					Height="16"
+					Width="101">
+					<FrameworkElement.Style>
+						<Style
+							TargetType="{x:Type TextBlock}">
+							<Setter
+								Property="Visibility"
+								Value="Collapsed" />
+							<Style.Triggers>
+								<DataTrigger
+									Value=""
+									Binding="{Binding Text, ElementName=textBoxUsername}">
+									<Setter
+										Property="Visibility"
+										Value="Visible" />
+								</DataTrigger>
+							</Style.Triggers>
+						</Style>
+					</FrameworkElement.Style>
+				</TextBlock>
+				<PasswordBox
+					Name="textBoxPassword"
+					PasswordChar="*"
+					Style="{StaticResource MyPasswordBox}"
+					HorizontalAlignment="Stretch"
+					Height="37"
+					Margin="137,101,137,0"
+					VerticalAlignment="Top"
+					BorderBrush="#0A3C96"
+					HorizontalContentAlignment="Center"
+					Padding="0,10,0,0"
+					ToolTip="{DynamicResource Password}"
+					GotFocus="En_GotFocus"
+					KeyDown="textBoxPassword_KeyDown" />
+				<Button
+					Name="LoginButton"
+					Content="{DynamicResource Login}"
+					HorizontalAlignment="Stretch"
+					Margin="186,161,186,0"
+					VerticalAlignment="Top"
+					Height="37"
+					Style="{StaticResource FlatButtonStyle}"
+					Visibility="{Binding IsEnabled, Converter={StaticResource BoolConverter}, RelativeSource={RelativeSource Self}}"
+					Command="{Binding LoginBtnClickCommand}"
+					CommandParameter="{Binding ElementName=textBoxPassword}" />
+				<Label
+					Content="CAPS"
+					FontWeight="Bold"
+					Foreground="#FFFF0000"
+					HorizontalAlignment="Left"
+					Margin="383,12,0,0"
+					VerticalAlignment="Top"
+					Height="22"
+					Visibility="{Binding CapslockActive, Converter={StaticResource BoolConverter}}" />
+			</Grid>
+		</Grid>
+		<Grid
+			HorizontalAlignment="Stretch"
+			Height="247"
+			Margin="0,63,0,0"
+			VerticalAlignment="Top"
+			Visibility="{Binding OfficesSelectVis, Converter={StaticResource BoolConverter}, FallbackValue=Collapsed}">
+			<FrameworkElement.Style>
+				<Style
+					TargetType="{x:Type Grid}">
+					<Style.Triggers>
+						<DataTrigger
+							Value="True"
+							Binding="{Binding OfficesSelectVis}">
+							<Setter
+								Property="FocusManager.FocusedElement"
+								Value="{Binding ElementName=ContinueLoginBtn}" />
+						</DataTrigger>
+					</Style.Triggers>
+				</Style>
+			</FrameworkElement.Style>
+			<StackPanel
+				Orientation="Vertical"
+				HorizontalAlignment="Center"
+				VerticalAlignment="Center">
+				<Label
+					Content="{DynamicResource SelectOffice}"
+					HorizontalAlignment="Center" />
+				<ComboBox
+					HorizontalContentAlignment="Stretch"
+					DisplayMemberPath="Name"
+					SelectedValuePath="Id"
+					Width="175"
+					HorizontalAlignment="Center"
+					VerticalAlignment="Center"
+					SelectedValue="{Binding User.office, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+					ItemsSource="{Binding Offices}">
+					<ItemsControl.ItemContainerStyle>
+						<Style
+							TargetType="{x:Type ComboBoxItem}">
+							<Setter
+								Property="HorizontalContentAlignment"
+								Value="Left" />
+							<Setter
+								Property="VerticalContentAlignment"
+								Value="Center" />
+						</Style>
+					</ItemsControl.ItemContainerStyle>
+				</ComboBox>
+			</StackPanel>
+			<Button
+				Name="ContinueLoginBtn"
+				Content="OK"
+				HorizontalAlignment="Stretch"
+				Margin="186,161,186,0"
+				VerticalAlignment="Top"
+				Height="37"
+				Style="{StaticResource FlatButtonStyle}"
+				Command="{Binding ContinueLoginCommand}"
+				Visibility="{Binding ProgressVisible, Converter={StaticResource BoolVisiblityInverterConverter}}" />
+		</Grid>
+		<Grid
+			HorizontalAlignment="Stretch"
+			Height="247"
+			Margin="0,63,0,0"
+			VerticalAlignment="Top"
+			Visibility="{Binding SettingsVisibility, Converter={StaticResource BoolConverter}, FallbackValue=Collapsed}">
+			<TextBox
+				Name="textBoxDBHost"
+				HorizontalAlignment="Stretch"
+				Height="37"
+				Style="{StaticResource MyTextBox}"
+				Margin="71,33,184,0"
+				TextWrapping="Wrap"
+				VerticalAlignment="Top"
+				BorderBrush="#0A3C96"
+				HorizontalContentAlignment="Center"
+				Padding="0,10,0,0"
+				ToolTip="{DynamicResource Server}"
+				Text="{Binding Host, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+			<TextBlock
+				IsHitTestVisible="False"
+				Text="{DynamicResource Server}"
+				VerticalAlignment="Center"
+				HorizontalAlignment="Left"
+				Margin="82,43,0,188"
+				Foreground="#FFA9A9A9">
+				<FrameworkElement.Style>
+					<Style
+						TargetType="{x:Type TextBlock}">
+						<Setter
+							Property="Visibility"
+							Value="Collapsed" />
+						<Style.Triggers>
+							<DataTrigger
+								Value=""
+								Binding="{Binding Text, ElementName=textBoxDBHost}">
+								<Setter
+									Property="Visibility"
+									Value="Visible" />
+							</DataTrigger>
+						</Style.Triggers>
+					</Style>
+				</FrameworkElement.Style>
+			</TextBlock>
+			<TextBox
+				Name="textBoxDBPort"
+				HorizontalAlignment="Stretch"
+				Height="37"
+				Style="{StaticResource MyTextBox}"
+				Margin="371,33,72,0"
+				TextWrapping="Wrap"
+				VerticalAlignment="Top"
+				BorderBrush="#0A3C96"
+				HorizontalContentAlignment="Center"
+				Padding="0,10,0,0"
+				ToolTip="{DynamicResource Port}"
+				Text="{Binding Port, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+			<TextBlock
+				IsHitTestVisible="False"
+				Text="{DynamicResource Port}"
+				VerticalAlignment="Center"
+				HorizontalAlignment="Left"
+				Margin="381,43,0,188"
+				Foreground="#FFA9A9A9">
+				<FrameworkElement.Style>
+					<Style
+						TargetType="{x:Type TextBlock}">
+						<Setter
+							Property="Visibility"
+							Value="Collapsed" />
+						<Style.Triggers>
+							<DataTrigger
+								Value=""
+								Binding="{Binding Text, ElementName=textBoxDBPort}">
+								<Setter
+									Property="Visibility"
+									Value="Visible" />
+							</DataTrigger>
+						</Style.Triggers>
+					</Style>
+				</FrameworkElement.Style>
+			</TextBlock>
+			<TextBox
+				Name="textBoxDBName"
+				HorizontalAlignment="Stretch"
+				Height="37"
+				Style="{StaticResource MyTextBox}"
+				Margin="71,84,278,0"
+				TextWrapping="Wrap"
+				VerticalAlignment="Top"
+				BorderBrush="#0A3C96"
+				HorizontalContentAlignment="Center"
+				Padding="0,10,0,0"
+				ToolTip="{DynamicResource DbName}"
+				Text="{Binding DbName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+				GotFocus="En_GotFocus" />
+			<TextBlock
+				IsHitTestVisible="False"
+				Text="{DynamicResource DbName}"
+				VerticalAlignment="Center"
+				HorizontalAlignment="Left"
+				Margin="81,94,0,137"
+				Foreground="#FFA9A9A9">
+				<FrameworkElement.Style>
+					<Style
+						TargetType="{x:Type TextBlock}">
+						<Setter
+							Property="Visibility"
+							Value="Collapsed" />
+						<Style.Triggers>
+							<DataTrigger
+								Value=""
+								Binding="{Binding Text, ElementName=textBoxDBName}">
+								<Setter
+									Property="Visibility"
+									Value="Visible" />
+							</DataTrigger>
+						</Style.Triggers>
+					</Style>
+				</FrameworkElement.Style>
+			</TextBlock>
+			<TextBox
+				Name="textBoxDBUsername"
+				HorizontalAlignment="Stretch"
+				Height="37"
+				Style="{StaticResource MyTextBox}"
+				Margin="277,84,72,0"
+				TextWrapping="Wrap"
+				VerticalAlignment="Top"
+				BorderBrush="#0A3C96"
+				HorizontalContentAlignment="Center"
+				Padding="0,10,0,0"
+				ToolTip="{DynamicResource Username}"
+				Text="{Binding Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+				GotFocus="En_GotFocus" />
+			<TextBlock
+				IsHitTestVisible="False"
+				Text="{DynamicResource Username}"
+				VerticalAlignment="Center"
+				HorizontalAlignment="Left"
+				Margin="287,94,0,137"
+				Foreground="#FFA9A9A9">
+				<FrameworkElement.Style>
+					<Style
+						TargetType="{x:Type TextBlock}">
+						<Setter
+							Property="Visibility"
+							Value="Collapsed" />
+						<Style.Triggers>
+							<DataTrigger
+								Value=""
+								Binding="{Binding Text, ElementName=textBoxDBUsername}">
+								<Setter
+									Property="Visibility"
+									Value="Visible" />
+							</DataTrigger>
+						</Style.Triggers>
+					</Style>
+				</FrameworkElement.Style>
+			</TextBlock>
+			<PasswordBox
+				Name="textBoxDBPassword"
+				HorizontalAlignment="Stretch"
+				Height="37"
+				Style="{StaticResource MyPasswordBox}"
+				Margin="71,137,278,0"
+				VerticalAlignment="Top"
+				BorderBrush="#0A3C96"
+				HorizontalContentAlignment="Center"
+				Padding="0,10,0,0"
+				ToolTip="{DynamicResource Password}"
+				GotFocus="En_GotFocus" />
+			<Button
+				Content="{DynamicResource TestAndSave}"
+				HorizontalAlignment="Stretch"
+				Margin="277,137,72,0"
+				VerticalAlignment="Top"
+				Height="37"
+				Style="{StaticResource FlatButtonStyle}"
+				Visibility="{Binding IsEnabled, Converter={StaticResource BoolConverter}, RelativeSource={RelativeSource Self}}"
+				Command="{Binding TestConnectionCommand}"
+				CommandParameter="{Binding ElementName=textBoxDBPassword}" />
+			<Button
+				Content="{DynamicResource DeployDatabase}"
+				HorizontalAlignment="Stretch"
+				Margin="277,137,72,0"
+				VerticalAlignment="Top"
+				Height="37"
+				Style="{StaticResource FlatButtonStyle}"
+				Visibility="{Binding IsEnabled, Converter={StaticResource BoolConverter}, RelativeSource={RelativeSource Self}}"
+				Command="{Binding DeployDatabaseCommand}"
+				CommandParameter="{Binding ElementName=textBoxDBPassword}" />
+			<Label
+				Content="{DynamicResource Lang}"
+				Margin="71,189,359,32" />
+			<ComboBox
+				SelectedValuePath="Tag"
+				HorizontalAlignment="Left"
+				Margin="71,215,0,0"
+				VerticalAlignment="Top"
+				Width="120"
+				SelectedValue="{Binding Language, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+				<ComboBoxItem
+					Tag="ru-RU">Russian</ComboBoxItem>
+				<ComboBoxItem
+					Tag="uk-UA">Ukrainian</ComboBoxItem>
+				<ComboBoxItem
+					Tag="he-IL">Hebrew</ComboBoxItem>
+				<ComboBoxItem
+					Tag="bg-BG">Bulgarian</ComboBoxItem>
+				<ComboBoxItem
+					Tag="en-EN"
+					IsEnabled="False">English</ComboBoxItem>
+				<ComboBoxItem
+					Tag="pl-PL">Polski</ComboBoxItem>
+				<ComboBoxItem
+					Tag="kk-KZ">Kazakh</ComboBoxItem>
+			</ComboBox>
+			<CheckBox
+				Content="{DynamicResource FirstRun}"
+				HorizontalAlignment="Left"
+				Margin="71,10,0,0"
+				VerticalAlignment="Top"
+				IsChecked="{Binding FirstRun, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+			<Button
+				Content="{DynamicResource Defaults}"
+				HorizontalAlignment="Left"
+				Margin="196,215,0,0"
+				VerticalAlignment="Top"
+				Height="22"
+				Command="{Binding SetDefaultsCommand}" />
+		</Grid>
+	</Grid>
+</Window>

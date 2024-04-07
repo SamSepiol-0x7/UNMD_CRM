@@ -1,0 +1,941 @@
+<dx:ThemedWindow
+	x:Class="ASC.WorkspaceV2.WorkspaceV2View" xmlns:dxdo="http://schemas.devexpress.com/winfx/2008/xaml/docking" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:dxnav="http://schemas.devexpress.com/winfx/2008/xaml/navigation" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:converters="clr-namespace:ASC.Converters" xmlns:dxwui="http://schemas.devexpress.com/winfx/2008/xaml/windowsui" xmlns:workspaceV2="clr-namespace:ASC.WorkspaceV2" xmlns:properties="clr-namespace:ASC.Properties" xmlns:dxdove="http://schemas.devexpress.com/winfx/2008/xaml/docking/visualelements" xmlns:asc="clr-namespace:ASC" xmlns:themes="http://schemas.devexpress.com/winfx/2008/xaml/core/themekeys" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:objects="clr-namespace:ASC.Objects"
+	Name="WorkspaceWindow"
+	UseLayoutRounding="True"
+	Style="{StaticResource DeDefaulWindow}"
+	MinWidth="950"
+	WindowStyle="SingleBorderWindow"
+	MinHeight="680"
+	dx:TitleAlignment="Left"
+	ShowActivated="True"
+	Top="{Binding WorkspaceTop, Mode=TwoWay, Source={x:Static properties:Settings.Default}}"
+	Left="{Binding WorkspaceLeft, Mode=TwoWay, Source={x:Static properties:Settings.Default}}"
+	Height="{Binding WorkspaceHeight, Mode=TwoWay, Source={x:Static properties:Settings.Default}}"
+	Width="{Binding WorkspaceWidth, Mode=TwoWay, Source={x:Static properties:Settings.Default}}"
+	WindowState="{Binding WorkspaceState, Mode=TwoWay, Source={x:Static properties:Settings.Default}}"
+	Title="{Binding Title}"
+	Closing="{DXEvent OnClosing(@args)}"
+	Loaded="{DXEvent Loaded()}"
+	KeyUp="{DXEvent OnKeyUp(@args)}"
+	PreviewTextInput="{DXEvent OnPreviewTextInput(@args)}"
+	DataContext="{Binding Path=WorkspaceV2ViewModel, Source={StaticResource ViewModelLocator}}">
+	<dx:ThemedWindow.HeaderItems>
+		<Grid
+			Name="Reminder"
+			ToolTip="{DynamicResource Notify}"
+			Width="32"
+			Height="32"
+			Margin="5,0"
+			Opacity="{Binding NotificationsPanelViewModel.BellOpacity}">
+			<dxmvvm:Interaction.Behaviors>
+				<dxmvvm:EventToCommand
+					EventTriggerBase_x0060_1.EventName="MouseDown"
+					Command="{Binding NotificationsPanelViewModel.BellClickCommand}" />
+			</dxmvvm:Interaction.Behaviors>
+			<Image
+				VerticalAlignment="Center"
+				Width="32"
+				Height="32"
+				Source="{dx:DXImage Image=Reminder_32x32.png}" />
+			<Ellipse
+				HorizontalAlignment="Right"
+				VerticalAlignment="Top"
+				Fill="#9C3931"
+				Height="19"
+				Width="19"
+				StrokeThickness="1"
+				Stroke="#FFD3D3D3"
+				Visibility="{Binding NotificationsPanelViewModel.Count, Converter={StaticResource NumericToVisibility}}" />
+			<TextBlock
+				Foreground="#FFFFFFFF"
+				Margin="6,3"
+				HorizontalAlignment="Right"
+				VerticalAlignment="Top"
+				Visibility="{Binding NotificationsPanelViewModel.Count, Converter={StaticResource NumericToVisibility}}"
+				Text="{Binding NotificationsPanelViewModel.CountText}" />
+		</Grid>
+	</dx:ThemedWindow.HeaderItems>
+	<FrameworkElement.Resources>
+		<ResourceDictionary>
+			<SolidColorBrush
+				Color="{StaticResource AppBarBackgroundColor}"
+				x:Key="{themes:ThemedWindowThemeKey ThemeKeyExtensionInternalBase_x0060_1.ResourceKey=WindowActiveBorderBrush, ThemeKeyExtensionBase_x0060_1.IsThemeIndependent=True}" />
+			<SolidColorBrush
+				Color="{StaticResource AppBarBackgroundColor}"
+				x:Key="{themes:ThemedWindowThemeKey ThemeKeyExtensionInternalBase_x0060_1.ResourceKey=WindowInactiveBorderBrush, ThemeKeyExtensionBase_x0060_1.IsThemeIndependent=True}" />
+			<Thickness
+				x:Key="{themes:ThemedWindowThemeKey ThemeKeyExtensionInternalBase_x0060_1.ResourceKey=WindowContentBorderThickness, ThemeKeyExtensionBase_x0060_1.IsThemeIndependent=True}">0</Thickness>
+			<converters:VisiblityPermissions
+				x:Key="VisiblityPermissions" />
+			<converters:StringToLengthConverter
+				x:Key="StringToLengthConverter" />
+			<dxmvvm:NumericToBooleanConverter
+				x:Key="NumericToBooleanConverter" />
+			<asc:BindingProxy
+				Data="{Binding}"
+				x:Key="BindingProxy" />
+			<Style
+				TargetType="{x:Type dxnav:TileBarItem}"
+				x:Key="TileBarSubItem">
+				<Setter
+					Property="Height"
+					Value="40" />
+				<Setter
+					Property="HorizontalContentAlignment"
+					Value="Center" />
+				<Setter
+					Property="Width"
+					Value="{Binding Content, Converter={StaticResource StringToLengthConverter}, RelativeSource={RelativeSource Self}}" />
+				<Setter
+					Property="MinWidth"
+					Value="100" />
+				<Setter
+					Property="Background"
+					Value="#FFF5F5F5" />
+				<Setter
+					Property="Foreground"
+					Value="#FF000000" />
+			</Style>
+			<Style
+				TargetType="{x:Type dxnav:TileBarItem}"
+				x:Key="TileBarItem">
+				<Setter
+					Property="dxnav:TileSelectorItem.AllowGlyphTheming"
+					Value="True" />
+				<Setter
+					Property="dxnav:TileSelectorItem.ColorMode"
+					Value="Standard" />
+				<Setter
+					Property="Width"
+					Value="135" />
+			</Style>
+			<Style
+				TargetType="{x:Type dxdo:FloatGroup}"
+				x:Key="{x:Type dxdo:FloatGroup}">
+				<Setter
+					Property="dxdo:BaseLayoutItem.Margin"
+					Value="0" />
+			</Style>
+			<Style
+				TargetType="{x:Type dxdove:DockPane}"
+				x:Key="{x:Type dxdove:DockPane}">
+				<Setter
+					Property="dxdove:DockPane.BorderMargin"
+					Value="0" />
+				<Setter
+					Property="Margin"
+					Value="0" />
+			</Style>
+			<DataTemplate
+				x:Key="waitIndicator">
+				<dx:WaitIndicator
+					DeferedVisibility="True" />
+			</DataTemplate>
+			<Style
+				TargetType="{x:Type dxnav:TileBar}"
+				x:Key="{x:Type dxnav:TileBar}">
+				<Setter
+					Property="FrameworkElement.Cursor"
+					Value="Hand" />
+			</Style>
+			<DataTemplate
+				x:Key="ToastNotificationTemplate">
+				<Border
+					CornerRadius="5"
+					BorderThickness="1"
+					Background="{Binding Background}"
+					BorderBrush="{Binding BorderBrush}">
+					<DockPanel>
+						<Border
+							DockPanel.Dock="Top"
+							BorderThickness="0,0,0,1"
+							Padding="10,5,5,5"
+							Background="{Binding CaptionBackground}"
+							BorderBrush="{Binding BorderBrush}">
+							<TextBlock
+								HorizontalAlignment="Left"
+								FontSize="14"
+								FontWeight="Bold"
+								Text="{Binding Caption}"
+								Foreground="{Binding Foreground}" />
+						</Border>
+						<DockPanel>
+							<TextBlock
+								TextWrapping="Wrap"
+								HorizontalAlignment="Left"
+								VerticalAlignment="Top"
+								FontSize="13"
+								Padding="10,5,5,5"
+								Text="{Binding Content}"
+								Foreground="{Binding Foreground}" />
+						</DockPanel>
+					</DockPanel>
+				</Border>
+			</DataTemplate>
+		</ResourceDictionary>
+	</FrameworkElement.Resources>
+	<dxmvvm:Interaction.Behaviors>
+		<dxmvvm:EventToCommand
+			PassEventArgsToCommand="True"
+			EventTriggerBase_x0060_1.EventName="KeyUp"
+			Command="{Binding KeyDownCommand}" />
+		<dxwui:WinUIMessageBoxService
+			WinUIMessageBoxService.Name="MessageService"
+			x:Name="MessageService" />
+		<dx:WindowedDocumentUIService
+			WindowedDocumentUIService.Name="DocumentManagerService"
+			DocumentShowMode="Dialog"
+			dxmvvm:ServiceBaseGeneric_x0060_1.YieldToParent="True"
+			WindowType="{x:Type dxwui:WinUIDialogWindow}"
+			x:Name="DocumentManagerService">
+			<dx:WindowedDocumentUIService.WindowStyle>
+				<Style
+					TargetType="{x:Type dxwui:WinUIDialogWindow}">
+					<Setter
+						Property="dx:DXWindow.ShowTitle"
+						Value="False" />
+					<Setter
+						Property="Background"
+						Value="#FFFFFFFF" />
+				</Style>
+			</dx:WindowedDocumentUIService.WindowStyle>
+		</dx:WindowedDocumentUIService>
+		<dxmvvm:NotificationService
+			NotificationService.Name="notificationService"
+			CustomNotificationTemplate="{StaticResource ToastNotificationTemplate}"
+			Sound="NoSound"
+			CustomNotificationScreen="ApplicationWindow"
+			CustomNotificationPosition="BottomRight"
+			UseWin8NotificationsIfAvailable="False"
+			CustomNotificationDuration="{Binding ToasterNotificationDuration}"
+			x:Name="notificationService" />
+	</dxmvvm:Interaction.Behaviors>
+	<DockPanel>
+		<dxe:FlyoutControl
+			Name="FlyoutControl"
+			AlwaysOnTop="False"
+			StaysOpen="True"
+			CloseOnInactiveWindowMouseLeave="False"
+			Padding="0"
+			VerticalOffset="0"
+			HorizontalOffset="0"
+			MaxHeight="{Binding NotificationsPanelViewModel.NotificationMaxHeight}"
+			p19:PlacementTarget="{Binding ElementName=Reminder}"
+			p19:IsOpen="{Binding NotificationsPanelViewModel.PanelVisible}" xmlns:p19="http://schemas.devexpress.com/winfx/2008/xaml/editors/internal">
+			<ContentControl.Content>
+				<StackPanel
+					Orientation="Vertical">
+					<dxe:ListBoxEdit
+						Padding="2"
+						Width="300"
+						ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+						HorizontalAlignment="Stretch"
+						HorizontalContentAlignment="Stretch"
+						ShowBorder="False"
+						MaxHeight="{Binding NotificationsPanelViewModel.NotificationMaxHeight}"
+						SelectedItem="{Binding NotificationsPanelViewModel.SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+						ScrollViewer.VerticalScrollBarVisibility="{Binding NotificationsPanelViewModel.VerticalScrollBarVisibility, Mode=OneWay}"
+						ItemsSource="{Binding NotificationsPanelViewModel.Items}">
+						<dxmvvm:Interaction.Behaviors>
+							<dxmvvm:EventToCommand
+								EventTriggerBase_x0060_1.EventName="MouseDoubleClick"
+								Command="{Binding Data.NotificationsPanelViewModel.ItemClickCommand, Source={StaticResource BindingProxy}}" />
+						</dxmvvm:Interaction.Behaviors>
+						<dxe:ListBoxEdit.ItemsPanel>
+							<ItemsPanelTemplate>
+								<StackPanel
+									Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ScrollContentPresenter}}}" />
+							</ItemsPanelTemplate>
+						</dxe:ListBoxEdit.ItemsPanel>
+						<dxe:ListBoxEdit.ItemTemplate>
+							<DataTemplate>
+								<Border
+									Margin="0,2,0,2"
+									Background="#FFFFFFFF"
+									BorderThickness="2"
+									BorderBrush="{Binding Color}">
+									<DockPanel
+										HorizontalAlignment="Stretch"
+										MinHeight="50"
+										MaxHeight="300">
+										<Border
+											DockPanel.Dock="Top"
+											BorderThickness="0,0,0,1"
+											BorderBrush="#FFD3D3D3">
+											<DockPanel
+												Background="{Binding Color}">
+												<Border
+													DockPanel.Dock="Right">
+													<FrameworkElement.Style>
+														<Style
+															TargetType="{x:Type Border}">
+															<Setter
+																Property="Background"
+																Value="{x:Null}" />
+															<Setter
+																Property="BorderThickness"
+																Value="0" />
+															<Style.Triggers>
+																<Trigger
+																	Property="UIElement.IsMouseOver"
+																	Value="True">
+																	<Setter
+																		Property="UIElement.Effect">
+																		<Setter.Value>
+																			<DropShadowEffect
+																				ShadowDepth="1"
+																				Color="White"
+																				Opacity="0.5" />
+																		</Setter.Value>
+																	</Setter>
+																</Trigger>
+															</Style.Triggers>
+														</Style>
+													</FrameworkElement.Style>
+													<Image
+														ToolTip="{DynamicResource Hide}"
+														Height="16"
+														Width="16"
+														Source="{dx:DXImageGrayscale Image=Close_16x16.png}">
+														<dxmvvm:Interaction.Behaviors>
+															<dxmvvm:EventToCommand
+																EventTriggerBase_x0060_1.EventName="MouseLeftButtonDown"
+																CommandParameter="{Binding}"
+																Command="{Binding Data.NotificationsPanelViewModel.HideNotificationCommand, Source={StaticResource BindingProxy}}" />
+														</dxmvvm:Interaction.Behaviors>
+													</Image>
+												</Border>
+												<TextBlock
+													Padding="2"
+													TextWrapping="Wrap"
+													FontWeight="Bold"
+													Text="{Binding SubjectWithDate, Mode=OneWay}" />
+											</DockPanel>
+										</Border>
+										<TextBlock
+											Padding="2"
+											TextWrapping="Wrap"
+											Text="{Binding Text}" />
+									</DockPanel>
+								</Border>
+							</DataTemplate>
+						</dxe:ListBoxEdit.ItemTemplate>
+					</dxe:ListBoxEdit>
+					<DockPanel
+						Dock="Bottom"
+						LastChildFill="True">
+						<dx:SimpleButton
+							Margin="5,0,5,5"
+							HorizontalContentAlignment="Center"
+							BorderThickness="0"
+							Content="{DynamicResource Expand}"
+							Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={BooleanToVisibilityConverter}}"
+							Command="{Binding NotificationsPanelViewModel.ExpandListCommand}" />
+						<dx:SimpleButton
+							Margin="5,0,5,5"
+							HorizontalContentAlignment="Center"
+							BorderThickness="0"
+							Content="{DynamicResource Collapse}"
+							Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={BooleanToVisibilityConverter}}"
+							Command="{Binding NotificationsPanelViewModel.CollapseListCommand}" />
+						<dx:SimpleButton
+							Margin="5,0,5,5"
+							HorizontalContentAlignment="Center"
+							BorderThickness="0"
+							Content="{DynamicResource Clear}"
+							Command="{Binding NotificationsPanelViewModel.ReadAllCommand}" />
+					</DockPanel>
+				</StackPanel>
+			</ContentControl.Content>
+			<p19:FlyoutBase.Settings>
+				<dxe:FlyoutSettings
+					IndicatorHorizontalAlignment="Center"
+					ShowIndicator="True" />
+			</p19:FlyoutBase.Settings>
+		</dxe:FlyoutControl>
+		<dxnav:TileBar
+			Name="TileBar"
+			DockPanel.Dock="Top"
+			ShowItemShadow="True"
+			HorizontalAlignment="Stretch"
+			VerticalAlignment="Top"
+			Padding="0,5,0,5"
+			Background="#FFE8E8E8"
+			AlternationCount="5"
+			ShowGroupHeaders="False"
+			Height="78">
+			<dxnav:TileBarItem
+				Background="#2F2F97"
+				Content="{DynamicResource Repairs}"
+				Command="{Binding NavigateCommand}"
+				FlyoutContent="{Binding .}"
+				TileGlyph="{dx:DXImageGrayscale Image=Customization_32x32.png}">
+				<FrameworkElement.Style>
+					<Style
+						BasedOn="{StaticResource TileBarItem}"
+						TargetType="{x:Type dxnav:TileBarItem}">
+						<Setter
+							Property="dxnav:TileSelectorItem.ShowFlyoutButton"
+							Value="True" />
+						<Setter
+							Property="dxnav:TileBarItem.FlyoutContentTemplate">
+							<Setter.Value>
+								<DataTemplate>
+									<dxnav:TileBar>
+										<!--Неизвестный ID соединения: 8-->
+										<dxnav:TileBarItem
+											Content="{DynamicResource NewRepair}"
+											Style="{StaticResource TileBarSubItem}"
+											Command="{Binding NavigateNewRepairCommand}"
+											Visibility="{Binding ConverterParameter=CAN_ACCEPT_NEW, Converter={StaticResource VisiblityPermissions}}" />
+										<!--Неизвестный ID соединения: 9-->
+										<dxnav:TileBarItem
+											Content="{DynamicResource Refill}"
+											Style="{StaticResource TileBarSubItem}"
+											Command="{Binding NavigateNewCartrigeCommand}" />
+										<!--Неизвестный ID соединения: 10-->
+										<dxnav:TileBarItem
+											Content="{DynamicResource PriceWorks}"
+											Style="{StaticResource TileBarSubItem}"
+											Command="{Binding OpenWorksPriceCommand}" />
+										<!--Неизвестный ID соединения: 11-->
+										<dxnav:TileBarItem
+											Content="{DynamicResource OrdersMassEditor}"
+											Style="{StaticResource TileBarSubItem}"
+											Command="{Binding NavigateRepairMassEditCommand}" />
+										<!--Неизвестный ID соединения: 12-->
+										<dxnav:TileBarItem
+											Content="{DynamicResource CartridgeCards}"
+											Style="{StaticResource TileBarSubItem}"
+											Visibility="Collapsed"
+											Command="{Binding NavigateCartrigeCardsCommand}" />
+									</dxnav:TileBar>
+								</DataTemplate>
+							</Setter.Value>
+						</Setter>
+					</Style>
+				</FrameworkElement.Style>
+			</dxnav:TileBarItem>
+			<dxnav:TileBarItem
+				Background="#3e7038"
+				Content="{DynamicResource Items}"
+				Command="{Binding NavigateStoreViewCommand}"
+				FlyoutContent="{Binding .}"
+				TileGlyph="{dx:DXImageGrayscale Image=FullShoppingCart_32x32.png}">
+				<FrameworkElement.Style>
+					<Style
+						BasedOn="{StaticResource TileBarItem}"
+						TargetType="{x:Type dxnav:TileBarItem}">
+						<Setter
+							Property="dxnav:TileSelectorItem.ShowFlyoutButton"
+							Value="True" />
+						<Setter
+							Property="dxnav:TileBarItem.FlyoutContentTemplate">
+							<Setter.Value>
+								<DataTemplate>
+									<dxnav:TileBar>
+										<!--Неизвестный ID соединения: 13-->
+										<dxnav:TileBarItem
+											Content="{DynamicResource ItemsArrival}"
+											Style="{StaticResource TileBarSubItem}"
+											Command="{Binding OpenItemsArrivalCommand}"
+											Visibility="{Binding ConverterParameter=CAN_ITEMS_ARRIVAL, Converter={StaticResource VisiblityPermissions}}" />
+										<!--Неизвестный ID соединения: 14-->
+										<dxnav:TileBarItem
+											Content="{DynamicResource QuickSale}"
+											Style="{StaticResource TileBarSubItem}"
+											Command="{Binding NavigateItemsSaleCommand}"
+											Visibility="{Binding ConverterParameter=CAN_QUICK_SALE, Converter={StaticResource VisiblityPermissions}}" />
+										<!--Неизвестный ID соединения: 15-->
+										<dxnav:TileBarItem
+											Content="{DynamicResource Documents}"
+											Style="{StaticResource TileBarSubItem}"
+											Command="{Binding NavigateDocumentsCommand}"
+											Visibility="{Binding ConverterParameter=CAN_VIEW_DOCUMENTS, Converter={StaticResource VisiblityPermissions}}" />
+										<!--Неизвестный ID соединения: 16-->
+										<dxnav:TileBarItem
+											Content="{DynamicResource RequestManager}"
+											Style="{StaticResource TileBarSubItem}"
+											Command="{Binding NavigateRequestsManagerCommand}"
+											Visibility="{Binding ConverterParameter=CAN_USE_REQUEST_MANAGER, Converter={StaticResource VisiblityPermissions}}" />
+										<!--Неизвестный ID соединения: 17-->
+										<dxnav:TileBarItem
+											Content="{DynamicResource StoreManagement}"
+											Style="{StaticResource TileBarSubItem}"
+											Command="{Binding NavigateStoreManagementCommand}"
+											Visibility="{Binding ConverterParameter=CAN_STORE_MANAGEMENT, Converter={StaticResource VisiblityPermissions}}" />
+										<!--Неизвестный ID соединения: 18-->
+										<dxnav:TileBarItem
+											Content="{DynamicResource GroupItemsEditor}"
+											Style="{StaticResource TileBarSubItem}"
+											Command="{Binding PriceEditorCommand}"
+											Visibility="{Binding ConverterParameter=CAN_STORE_MANAGEMENT, Converter={StaticResource VisiblityPermissions}}" />
+										<!--Неизвестный ID соединения: 19-->
+										<dxnav:TileBarItem
+											Content="{DynamicResource ItemsExport}"
+											Style="{StaticResource TileBarSubItem}"
+											Command="{Binding NavigateExportItemsCommand}"
+											Visibility="{Binding ConverterParameter=CAN_EXPORT_ITEMS, Converter={StaticResource VisiblityPermissions}}" />
+										<!--Неизвестный ID соединения: 20-->
+										<dxnav:TileBarItem
+											Content="{DynamicResource RedemptionOfEquipment}"
+											Style="{StaticResource TileBarSubItem}"
+											Command="{Binding ItemsBuyoutCommand}"
+											Visibility="{Binding ConverterParameter=CAN_ACCEPT_NEW, Converter={StaticResource VisiblityPermissions}}" />
+										<!--Неизвестный ID соединения: 21-->
+										<dxnav:TileBarItem
+											Content="{DynamicResource Stocktaking}"
+											Style="{StaticResource TileBarSubItem}"
+											Command="{Binding NavigateStocktakingViewCommand}"
+											Visibility="{Binding ConverterParameter=CAN_STORE_MANAGEMENT, Converter={StaticResource VisiblityPermissions}}" />
+									</dxnav:TileBar>
+								</DataTemplate>
+							</Setter.Value>
+						</Setter>
+					</Style>
+				</FrameworkElement.Style>
+			</dxnav:TileBarItem>
+			<dxnav:TileBarItem
+				Content="{DynamicResource Clients}"
+				Background="#0073c4"
+				Command="{Binding NavigateClientsCommand}"
+				FlyoutContent="{Binding .}"
+				TileGlyph="{dx:DXImageOffice2013 Image=Employee_32x32.png}">
+				<FrameworkElement.Style>
+					<Style
+						BasedOn="{StaticResource TileBarItem}"
+						TargetType="{x:Type dxnav:TileBarItem}">
+						<Setter
+							Property="dxnav:TileSelectorItem.ShowFlyoutButton"
+							Value="True" />
+						<Setter
+							Property="dxnav:TileBarItem.FlyoutContentTemplate">
+							<Setter.Value>
+								<DataTemplate>
+									<dxnav:TileBar>
+										<!--Неизвестный ID соединения: 22-->
+										<dxnav:TileBarItem
+											Style="{StaticResource TileBarSubItem}"
+											Content="{DynamicResource NewClient}"
+											Command="{Binding CreateCustomerCommand}" />
+										<!--Неизвестный ID соединения: 23-->
+										<dxnav:TileBarItem
+											Style="{StaticResource TileBarSubItem}"
+											Content="{DynamicResource Calls}"
+											Command="{Binding OpenCallsCommand}"
+											Visibility="{Binding ConverterParameter=CAN_USE_VOIP, Converter={StaticResource VisiblityPermissions}}" />
+										<!--Неизвестный ID соединения: 24-->
+										<dxnav:TileBarItem
+											Style="{StaticResource TileBarSubItem}"
+											Content="{DynamicResource Sms}"
+											Command="{Binding OpenSmsesCommand}"
+											Visibility="{Binding ConverterParameter=CAN_READ_SMS, Converter={StaticResource VisiblityPermissions}}" />
+									</dxnav:TileBar>
+								</DataTemplate>
+							</Setter.Value>
+						</Setter>
+					</Style>
+				</FrameworkElement.Style>
+			</dxnav:TileBarItem>
+			<dxnav:TileBarItem
+				Content="{DynamicResource Finances}"
+				Background="#cc6d00"
+				Command="{Binding NavigateKassaViewCommand}"
+				FlyoutContent="{Binding .}"
+				TileGlyph="{dx:DXImageGrayscale Image=Currency_32x32.png}">
+				<FrameworkElement.Style>
+					<Style
+						BasedOn="{StaticResource TileBarItem}"
+						TargetType="{x:Type dxnav:TileBarItem}">
+						<Setter
+							Property="dxnav:TileSelectorItem.ShowFlyoutButton"
+							Value="True" />
+						<Setter
+							Property="dxnav:TileBarItem.FlyoutContentTemplate">
+							<Setter.Value>
+								<DataTemplate>
+									<dxnav:TileBar>
+										<!--Неизвестный ID соединения: 25-->
+										<dxnav:TileBarItem
+											Content="{DynamicResource PKO}"
+											Style="{StaticResource TileBarSubItem}"
+											Command="{Binding OpenPkoCommand}"
+											Visibility="{Binding ConverterParameter=CAN_VIEW_FINANCE_IN_WORKSPACE, Converter={StaticResource VisiblityPermissions}}" />
+										<!--Неизвестный ID соединения: 26-->
+										<dxnav:TileBarItem
+											Content="{DynamicResource RKO}"
+											Style="{StaticResource TileBarSubItem}"
+											Command="{Binding OpenRkoCommand}"
+											Visibility="{Binding ConverterParameter=CAN_VIEW_FINANCE_IN_WORKSPACE, Converter={StaticResource VisiblityPermissions}}" />
+										<!--Неизвестный ID соединения: 27-->
+										<dxnav:TileBarItem
+											Content="{DynamicResource Documents}"
+											FlyoutContent="{Binding .}"
+											Command="{Binding OpenInvoiceCommand}"
+											Visibility="{Binding ConverterParameter=CAN_VIEW_FINANCE_IN_WORKSPACE, Converter={StaticResource VisiblityPermissions}}">
+											<FrameworkElement.Style>
+												<Style
+													BasedOn="{StaticResource TileBarSubItem}"
+													TargetType="{x:Type dxnav:TileBarItem}">
+													<Setter
+														Property="dxnav:TileSelectorItem.ShowFlyoutButton"
+														Value="True" />
+													<Setter
+														Property="dxnav:TileBarItem.FlyoutContentTemplate">
+														<Setter.Value>
+															<DataTemplate>
+																<dxnav:TileBar
+																	Background="#FFE7C36B">
+																	<!--Неизвестный ID соединения: 28-->
+																	<dxnav:TileBarItem
+																		Content="{DynamicResource Invoice}"
+																		Style="{StaticResource TileBarSubItem}"
+																		TileGlyph="{dx:DXImageGrayscale Image=AddItem_16x16.png}"
+																		Command="{Binding NavigateNewInvoiceCommand}"
+																		Visibility="{Binding ConverterParameter=CAN_VIEW_FINANCE_IN_WORKSPACE, Converter={StaticResource VisiblityPermissions}}" />
+																	<!--Неизвестный ID соединения: 29-->
+																	<dxnav:TileBarItem
+																		Content="{DynamicResource VatInvoice}"
+																		Style="{StaticResource TileBarSubItem}"
+																		TileGlyph="{dx:DXImageGrayscale Image=AddItem_16x16.png}"
+																		Command="{Binding NavigateNewVATInvoiceCommand}"
+																		Visibility="{Binding ConverterParameter=CAN_VIEW_FINANCE_IN_WORKSPACE, Converter={StaticResource VisiblityPermissions}}" />
+																	<!--Неизвестный ID соединения: 30-->
+																	<dxnav:TileBarItem
+																		Content="{DynamicResource PackingList}"
+																		Style="{StaticResource TileBarSubItem}"
+																		TileGlyph="{dx:DXImageGrayscale Image=AddItem_16x16.png}"
+																		Command="{Binding NavigateNewPackingListCommand}"
+																		Visibility="{Binding ConverterParameter=CAN_VIEW_FINANCE_IN_WORKSPACE, Converter={StaticResource VisiblityPermissions}}" />
+																	<!--Неизвестный ID соединения: 31-->
+																	<dxnav:TileBarItem
+																		Content="{DynamicResource PrintWorks}"
+																		Style="{StaticResource TileBarSubItem}"
+																		TileGlyph="{dx:DXImageGrayscale Image=AddItem_16x16.png}"
+																		Command="{Binding NavigateNewWorksListCommand}"
+																		Visibility="{Binding ConverterParameter=CAN_VIEW_FINANCE_IN_WORKSPACE, Converter={StaticResource VisiblityPermissions}}" />
+																</dxnav:TileBar>
+															</DataTemplate>
+														</Setter.Value>
+													</Setter>
+												</Style>
+											</FrameworkElement.Style>
+										</dxnav:TileBarItem>
+										<!--Неизвестный ID соединения: 32-->
+										<dxnav:TileBarItem
+											Content="{DynamicResource SalaryCount}"
+											Style="{StaticResource TileBarSubItem}"
+											Command="{Binding SalaryCommand}" />
+									</dxnav:TileBar>
+								</DataTemplate>
+							</Setter.Value>
+						</Setter>
+					</Style>
+				</FrameworkElement.Style>
+			</dxnav:TileBarItem>
+			<dxnav:TileBarItem
+				Content="{DynamicResource Reports}"
+				Background="#00879c"
+				Command="{Binding NavigateRepairStatusesViewCommand}"
+				FlyoutContent="{Binding .}"
+				Visibility="{Binding ConverterParameter=CAN_CREATE_REPORTS, Converter={StaticResource VisiblityPermissions}}"
+				TileGlyph="{dx:DXImage Image=Chart2_32x32.png}">
+				<FrameworkElement.Style>
+					<Style
+						BasedOn="{StaticResource TileBarItem}"
+						TargetType="{x:Type dxnav:TileBarItem}">
+						<Setter
+							Property="dxnav:TileSelectorItem.ShowFlyoutButton"
+							Value="True" />
+						<Setter
+							Property="dxnav:TileBarItem.FlyoutContentTemplate">
+							<Setter.Value>
+								<DataTemplate>
+									<dxnav:TileBar>
+										<dxnav:TileBarItem
+											Content="{DynamicResource Repairs}"
+											FlyoutContent="{Binding .}">
+											<FrameworkElement.Style>
+												<Style
+													BasedOn="{StaticResource TileBarSubItem}"
+													TargetType="{x:Type dxnav:TileBarItem}">
+													<Setter
+														Property="dxnav:TileSelectorItem.ShowFlyoutButton"
+														Value="True" />
+													<Setter
+														Property="dxnav:TileBarItem.FlyoutContentTemplate">
+														<Setter.Value>
+															<DataTemplate>
+																<dxnav:TileBar
+																	Background="#0909A8">
+																	<!--Неизвестный ID соединения: 33-->
+																	<dxnav:TileBarItem
+																		Content="{DynamicResource Repairs}"
+																		Style="{StaticResource TileBarSubItem}"
+																		Command="{Binding NavigateRepairsCharCommand}" />
+																	<!--Неизвестный ID соединения: 34-->
+																	<dxnav:TileBarItem
+																		Content="{DynamicResource MastersChart}"
+																		Style="{StaticResource TileBarSubItem}"
+																		Command="{Binding NavigateMastersChartCommand}" />
+																	<!--Неизвестный ID соединения: 35-->
+																	<dxnav:TileBarItem
+																		Content="{DynamicResource WorkshopStatusByUser}"
+																		Style="{StaticResource TileBarSubItem}"
+																		Command="{Binding NavigateWorkshopStatusByUserCommand}" />
+																</dxnav:TileBar>
+															</DataTemplate>
+														</Setter.Value>
+													</Setter>
+												</Style>
+											</FrameworkElement.Style>
+										</dxnav:TileBarItem>
+										<dxnav:TileBarItem
+											Content="{DynamicResource Items}"
+											FlyoutContent="{Binding .}">
+											<FrameworkElement.Style>
+												<Style
+													BasedOn="{StaticResource TileBarSubItem}"
+													TargetType="{x:Type dxnav:TileBarItem}">
+													<Setter
+														Property="dxnav:TileSelectorItem.ShowFlyoutButton"
+														Value="True" />
+													<Setter
+														Property="dxnav:TileBarItem.FlyoutContentTemplate">
+														<Setter.Value>
+															<DataTemplate>
+																<dxnav:TileBar
+																	Background="#3e7038">
+																	<!--Неизвестный ID соединения: 36-->
+																	<dxnav:TileBarItem
+																		Content="{DynamicResource Sales}"
+																		Style="{StaticResource TileBarSubItem}"
+																		Command="{Binding NavigateSalesChartCommand}" />
+																	<!--Неизвестный ID соединения: 37-->
+																	<dxnav:TileBarItem
+																		Content="{DynamicResource CategoriesSaleReport}"
+																		Style="{StaticResource TileBarSubItem}"
+																		Command="{Binding NavigateSalesCategoriesChartCommand}" />
+																	<!--Неизвестный ID соединения: 38-->
+																	<dxnav:TileBarItem
+																		Content="{DynamicResource PartsChart}"
+																		Style="{StaticResource TileBarSubItem}"
+																		Command="{Binding NavigatePartsChartViewCommand}" />
+																</dxnav:TileBar>
+															</DataTemplate>
+														</Setter.Value>
+													</Setter>
+												</Style>
+											</FrameworkElement.Style>
+										</dxnav:TileBarItem>
+										<dxnav:TileBarItem
+											Content="{DynamicResource Clients}"
+											FlyoutContent="{Binding .}">
+											<FrameworkElement.Style>
+												<Style
+													BasedOn="{StaticResource TileBarSubItem}"
+													TargetType="{x:Type dxnav:TileBarItem}">
+													<Setter
+														Property="dxnav:TileSelectorItem.ShowFlyoutButton"
+														Value="True" />
+													<Setter
+														Property="dxnav:TileBarItem.FlyoutContentTemplate">
+														<Setter.Value>
+															<DataTemplate>
+																<dxnav:TileBar
+																	Background="#0073c4">
+																	<!--Неизвестный ID соединения: 39-->
+																	<dxnav:TileBarItem
+																		Content="{DynamicResource Calls}"
+																		Style="{StaticResource TileBarSubItem}"
+																		Command="{Binding NavigateCallsChartCommand}" />
+																	<!--Неизвестный ID соединения: 40-->
+																	<dxnav:TileBarItem
+																		Content="{DynamicResource CallConversions}"
+																		Style="{StaticResource TileBarSubItem}"
+																		Command="{Binding NavigateCallConversionsCommand}" />
+																	<!--Неизвестный ID соединения: 41-->
+																	<dxnav:TileBarItem
+																		Content="{DynamicResource VisitSources}"
+																		Style="{StaticResource TileBarSubItem}"
+																		Command="{Binding NavigateVisitSourceCommand}" />
+																</dxnav:TileBar>
+															</DataTemplate>
+														</Setter.Value>
+													</Setter>
+												</Style>
+											</FrameworkElement.Style>
+										</dxnav:TileBarItem>
+										<!--Неизвестный ID соединения: 42-->
+										<dxnav:TileBarItem
+											Content="{DynamicResource Finances}"
+											Style="{StaticResource TileBarSubItem}"
+											Command="{Binding NavigateFinancesChartCommand}" />
+										<!--Неизвестный ID соединения: 43-->
+										<dxnav:TileBarItem
+											Content="{DynamicResource WithdrawOrDepositFunds}"
+											Style="{StaticResource TileBarSubItem}"
+											Command="{Binding NavigateWithdrawFundsCommand}" />
+										<!--Неизвестный ID соединения: 44-->
+										<dxnav:TileBarItem
+											Content="{DynamicResource StoreBoxes}"
+											Style="{StaticResource TileBarSubItem}"
+											Command="{Binding NavigateBoxesReportCommand}" />
+										<!--Неизвестный ID соединения: 45-->
+										<dxnav:TileBarItem
+											Content="{DynamicResource StatusesWidget}"
+											Style="{StaticResource TileBarSubItem}"
+											Command="{Binding NavigateStatusChecksReportCommand}" />
+										<!--Неизвестный ID соединения: 46-->
+										<dxnav:TileBarItem
+											Content="{DynamicResource EmployeesActivity}"
+											Style="{StaticResource TileBarSubItem}"
+											Command="{Binding NavigateEmployeesActivityReportCommand}" />
+										<!--Неизвестный ID соединения: 47-->
+										<dxnav:TileBarItem
+											Content="{DynamicResource CashFlow}"
+											Style="{StaticResource TileBarSubItem}"
+											Command="{Binding NavigateFinancesFlowReportViewCommand}" />
+										<!--Неизвестный ID соединения: 48-->
+										<dxnav:TileBarItem
+											Content="ZnamenReport"
+											Style="{StaticResource TileBarSubItem}"
+											Visibility="{Binding NB1Only, Converter={dx:BooleanToVisibilityConverter}}"
+											Command="{Binding NavigateZnamenFinancesFlowReportViewCommand}" />
+										<!--Неизвестный ID соединения: 49-->
+										<dxnav:TileBarItem
+											Content="WiolinReport"
+											Style="{StaticResource TileBarSubItem}"
+											Visibility="{Binding NB1Only, Converter={dx:BooleanToVisibilityConverter}}"
+											Command="{Binding NavigateWiolinReportCommand}" />
+									</dxnav:TileBar>
+								</DataTemplate>
+							</Setter.Value>
+						</Setter>
+					</Style>
+				</FrameworkElement.Style>
+			</dxnav:TileBarItem>
+			<dxnav:TileBarItem
+				ShowFlyoutButton="False"
+				Style="{StaticResource TileBarItem}"
+				Content="{DynamicResource Tasks}"
+				Background="#404040"
+				Command="{Binding NavigateTaskManagerCommand}"
+				TileGlyph="{dx:DXImageOffice2013 Image=EditTask_32x32.png}">
+				<ContentControl.ContentTemplate>
+					<DataTemplate>
+						<StackPanel
+							Orientation="Horizontal"
+							VerticalAlignment="Bottom">
+							<ContentControl
+								VerticalAlignment="Bottom"
+								Content="{Binding}" />
+							<Viewbox
+								Margin="20,-30,0,0"
+								Width="40"
+								Height="40"
+								Visibility="{Binding DataContext.ActiveTasks, Converter={StaticResource NumericToVisibility}, ElementName=WorkspaceWindow}">
+								<dxmvvm:Interaction.Behaviors>
+									<dxmvvm:EventToCommand
+										EventTriggerBase_x0060_1.EventName="MouseLeftButtonDown"
+										PassEventArgsToCommand="True"
+										Command="{Binding DataContext.ClearAllNotificationsCommand, ElementName=WorkspaceWindow}" />
+								</dxmvvm:Interaction.Behaviors>
+								<Grid
+									Width="40"
+									Height="40">
+									<Ellipse
+										Fill="#9C3931"
+										StrokeThickness="1"
+										Stroke="#FFD3D3D3" />
+									<TextBlock
+										HorizontalAlignment="Center"
+										TextAlignment="Center"
+										VerticalAlignment="Center"
+										Text="{Binding DataContext.ActiveTasks, FallbackValue=0, ElementName=WorkspaceWindow}" />
+								</Grid>
+							</Viewbox>
+						</StackPanel>
+					</DataTemplate>
+				</ContentControl.ContentTemplate>
+			</dxnav:TileBarItem>
+			<dxnav:TileBarItem
+				Content="{DynamicResource Settings}"
+				Background="#9C3931"
+				Command="{Binding OpenSettingsCommand}"
+				FlyoutContent="{Binding .}"
+				TileGlyph="{dx:DXImageOffice2013 Image=ChartYAxisSettings_32x32.png}">
+				<FrameworkElement.Style>
+					<Style
+						BasedOn="{StaticResource TileBarItem}"
+						TargetType="{x:Type dxnav:TileBarItem}">
+						<Setter
+							Property="dxnav:TileSelectorItem.ShowFlyoutButton"
+							Value="True" />
+						<Setter
+							Property="dxnav:TileBarItem.FlyoutContentTemplate">
+							<Setter.Value>
+								<DataTemplate>
+									<dxnav:TileBar>
+										<!--Неизвестный ID соединения: 50-->
+										<dxnav:TileBarItem
+											Style="{StaticResource TileBarSubItem}"
+											Content="{DynamicResource CheckForUpdates}"
+											Command="{Binding CheckForUpdatesCommand}" />
+										<!--Неизвестный ID соединения: 51-->
+										<dxnav:TileBarItem
+											Style="{StaticResource TileBarSubItem}"
+											Content="{DynamicResource About}"
+											Command="{Binding AboutOpenCommand}" />
+										<!--Неизвестный ID соединения: 52-->
+										<dxnav:TileBarItem
+											Style="{StaticResource TileBarSubItem}"
+											Content="{DynamicResource Logout}"
+											Command="{Binding LogoutCommand}" />
+										<!--Неизвестный ID соединения: 53-->
+										<dxnav:TileBarItem
+											Style="{StaticResource TileBarSubItem}"
+											Content="{DynamicResource Exit}"
+											Command="{Binding ExitCommand}" />
+									</dxnav:TileBar>
+								</DataTemplate>
+							</Setter.Value>
+						</Setter>
+					</Style>
+				</FrameworkElement.Style>
+			</dxnav:TileBarItem>
+		</dxnav:TileBar>
+		<dxdo:DockLayoutManager
+			FloatingMode="Window">
+			<dxmvvm:Interaction.Behaviors>
+				<!--Неизвестный ID соединения: 54-->
+				<dxdo:TabbedDocumentUIService
+					dxmvvm:ServiceBaseGeneric_x0060_1.Name="TabbedService"
+					dxmvvm:ServiceBaseGeneric_x0060_1.YieldToParent="False"
+					DocumentGroup="{Binding ElementName=tabbedContainer}">
+					<dxdo:TabbedDocumentUIService.DocumentPanelStyle>
+						<Style
+							TargetType="{x:Type dxdo:DocumentPanel}">
+							<Setter
+								Property="dxdo:BaseLayoutItem.AllowDock"
+								Value="False" />
+						</Style>
+					</dxdo:TabbedDocumentUIService.DocumentPanelStyle>
+				</dxdo:TabbedDocumentUIService>
+			</dxmvvm:Interaction.Behaviors>
+			<dxdo:LayoutGroup
+				Margin="0">
+				<!--Неизвестный ID соединения: 55-->
+				<dxdo:DocumentGroup
+					Name="tabbedContainer"
+					ClosePageButtonShowMode="InAllTabPageHeaders"
+					ClosingBehavior="ImmediatelyRemove"
+					TabContentCacheMode="None"
+					AllowClose="True"
+					ShowDropDownButton="False"
+					ShowTabForSinglePage="False"
+					FontSize="{Binding Employee.UiSettings.FontSize, Source={x:Static objects:OfflineData.Instance}}" />
+			</dxdo:LayoutGroup>
+		</dxdo:DockLayoutManager>
+	</DockPanel>
+</dx:ThemedWindow>

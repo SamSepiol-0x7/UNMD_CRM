@@ -1,0 +1,105 @@
+<UserControl
+	x:Class="ASC.View.EmployeeHistoryView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:ASC.View" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:objects="clr-namespace:ASC.Objects" xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
+	DataContext="{Binding Path=EmployeeHistoryViewModel, Source={StaticResource ViewModelLocator}}">
+	<DockPanel>
+		<dxb:ToolBarControl
+			DockPanel.Dock="Top"
+			Style="{StaticResource DefaulToolBar}"
+			Height="30">
+			<dxb:BarButtonItem
+				Content="Refresh"
+				Glyph="../../Resources/refresh.png"
+				Description="{DynamicResource Refresh}"
+				Command="{Binding Period.RefreshCommand}" />
+			<dxb:BarItemLinkSeparator />
+			<dxb:BarEditItem
+				Content="{DynamicResource Period}"
+				EditWidth="100"
+				ClosePopupOnChangingEditValue="True"
+				EditValue="{Binding Period.From, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+				<dxb:BarEditItem.EditSettings>
+					<dxe:DateEditSettings
+						AllowNullInput="False"
+						PopupFooterButtons="OkCancel"
+						PopupMaxHeight="250" />
+				</dxb:BarEditItem.EditSettings>
+			</dxb:BarEditItem>
+			<dxb:BarEditItem
+				Content="-"
+				EditWidth="100"
+				ClosePopupOnChangingEditValue="True"
+				EditValue="{Binding Period.To, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+				<dxb:BarEditItem.EditSettings>
+					<dxe:DateEditSettings
+						AllowNullInput="False"
+						PopupFooterButtons="OkCancel"
+						PopupMaxHeight="250" />
+				</dxb:BarEditItem.EditSettings>
+			</dxb:BarEditItem>
+			<dxb:BarButtonItem
+				Content="3"
+				ContentTemplate="{StaticResource LeftRight}"
+				Command="{Binding Period.MinusDayCommand}" />
+			<dxb:BarButtonItem
+				Content="4"
+				ContentTemplate="{StaticResource LeftRight}"
+				Command="{Binding Period.PlusDayCommand}" />
+		</dxb:ToolBarControl>
+		<dxg:GridControl
+			ShowBorder="False"
+			AllowInitiallyFocusedRow="False"
+			SelectionMode="Row"
+			ShowLoadingPanel="{Binding IsLoadingData}"
+			ItemsSource="{Binding Items}">
+			<dxg:GridControl.Columns>
+				<dxg:GridColumn
+					Width="100"
+					FieldName="id"
+					Header="ID">
+					<dxg:ColumnBase.EditSettings>
+						<dxe:TextEditSettings
+							Mask="d6"
+							MaskUseAsDisplayFormat="True" />
+					</dxg:ColumnBase.EditSettings>
+				</dxg:GridColumn>
+				<dxg:GridColumn
+					FieldName="created"
+					Header="{DynamicResource Date}">
+					<dxg:ColumnBase.EditSettings>
+						<dxe:TextEditSettings
+							HorizontalContentAlignment="Center"
+							MaskType="DateTime"
+							Mask="dd.MM.yyyy  HH:mm"
+							MaskUseAsDisplayFormat="True" />
+					</dxg:ColumnBase.EditSettings>
+				</dxg:GridColumn>
+				<dxg:GridColumn
+					Width="*"
+					FieldName="notes"
+					Header="{DynamicResource Action}" />
+			</dxg:GridControl.Columns>
+			<dxg:GridControl.View>
+				<dxg:TableView
+					ShowTotalSummary="False"
+					AllowScrollAnimation="True"
+					NavigationStyle="Row"
+					ColumnFilterPopupMode="Excel"
+					AllowEditing="False"
+					AllowGrouping="False"
+					AllowColumnMoving="True"
+					ShowGroupPanel="False"
+					ShowColumnHeaders="True"
+					AllowMoveColumnToDropArea="False"
+					ShowBandsPanel="True"
+					ShowIndicator="False"
+					AllowColumnFiltering="True"
+					ShowSelectionRectangle="False"
+					ShowFixedTotalSummary="False"
+					SummariesIgnoreNullValues="True"
+					AllowBestFit="True"
+					RowMinHeight="{Binding Employee.UiSettings.RowHeight, Source={x:Static objects:OfflineData.Instance}}"
+					FontSize="{Binding Employee.UiSettings.FontSize, Source={x:Static objects:OfflineData.Instance}}" />
+			</dxg:GridControl.View>
+		</dxg:GridControl>
+	</DockPanel>
+</UserControl>

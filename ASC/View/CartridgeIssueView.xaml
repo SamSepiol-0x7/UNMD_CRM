@@ -1,0 +1,128 @@
+<UserControl
+	x:Class="ASC.View.CartridgeIssueView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:ASC.View" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:objects="clr-namespace:ASC.Objects" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
+	Loaded="{DXEvent OnLoad()}">
+	<DockPanel>
+		<StackPanel
+			Margin="10"
+			Orientation="Horizontal"
+			DockPanel.Dock="Top">
+			<TextBlock
+				FontWeight="Bold"
+				Text="{Binding Title, Mode=OneWay}" />
+		</StackPanel>
+		<StackPanel
+			Margin="10"
+			HorizontalAlignment="Right"
+			DockPanel.Dock="Bottom"
+			Orientation="Horizontal">
+			<dx:SimpleButton
+				Style="{StaticResource SaveButton}"
+				Content="OK"
+				Command="{Binding MakeIssueCommand}"
+				Glyph="{DXImageGrayscale Image=Apply_16x16.png}" />
+			<dx:SimpleButton
+				Margin="10,0,0,0"
+				Style="{StaticResource CancelButton}"
+				Command="{Binding HideIssueCommand}" />
+		</StackPanel>
+		<dxlc:LayoutControl
+			Orientation="Vertical">
+			<dxlc:LayoutItem
+				HorizontalContentAlignment="Right"
+				Label="{DynamicResource AlreadyPayed}">
+				<dxe:TextEdit
+					Style="{StaticResource NumericTextBox}"
+					IsReadOnly="True"
+					MinWidth="100"
+					EditValue="{Binding PrePaid, Mode=OneWay}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				HorizontalContentAlignment="Right"
+				Label="{DynamicResource Cost}">
+				<dxe:TextEdit
+					Style="{StaticResource NumericTextBox}"
+					IsReadOnly="True"
+					MinWidth="100"
+					EditValue="{Binding Total, Mode=OneWay}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				HorizontalContentAlignment="Right"
+				Label="{DynamicResource TotalPay}">
+				<dxe:TextEdit
+					Style="{StaticResource NumericTextBox}"
+					IsReadOnly="True"
+					MinWidth="100"
+					EditValue="{Binding FinalAmount, Mode=OneWay}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				HorizontalContentAlignment="Right"
+				Label="{DynamicResource PaymentSystem}">
+				<dxe:ComboBoxEdit
+					MinWidth="100"
+					DisplayMember="Name"
+					ValueMember="Id"
+					EditValue="{Binding PaymentSystem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+					ItemsSource="{Binding PaymentOptions}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				HorizontalContentAlignment="Right"
+				Label="{DynamicResource Label10}"
+				Visibility="{Binding CustomerBalanceVisible, Converter={dx:BooleanToVisibilityConverter}}">
+				<dxe:TextEdit
+					Style="{StaticResource NumericTextBox}"
+					IsReadOnly="True"
+					MinWidth="100"
+					EditValue="{Binding Customer.Balance, Mode=OneWay}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				HorizontalContentAlignment="Right"
+				Label="{DynamicResource PrintCheck2}"
+				Visibility="{Binding CanPrintCheque, Converter={StaticResource BooleanToVisibilityConverter}}">
+				<dxe:CheckEdit
+					EditValue="{Binding PrintCheque, Mode=TwoWay}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Visibility="{Binding PrintCheque, Converter={StaticResource BooleanToVisibilityConverter}}">
+				<dxe:CheckEdit
+					Content="{DynamicResource SendChequeToEmail}"
+					EditValue="{Binding SendChequeToEmail, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+					<dxmvvm:Interaction.Behaviors>
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="EditValueChanged"
+							Command="{Binding SendChequeChangedCommand}" />
+					</dxmvvm:Interaction.Behaviors>
+				</dxe:CheckEdit>
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Visibility="{Binding SendChequeToEmail, Converter={StaticResource BooleanToVisibilityConverter}}">
+				<dxe:ComboBoxEdit
+					NullText="{DynamicResource Email}"
+					ItemsSource="{Binding Customer.PhoneOrEmail}"
+					EditValue="{Binding CustomerEmail, Mode=TwoWay}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				HorizontalContentAlignment="Right"
+				Label="{DynamicResource PrintWorksDocument}">
+				<dxe:CheckEdit
+					EditValue="{Binding PrintWorksDoc, Mode=TwoWay}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				HorizontalContentAlignment="Right"
+				Label="{DynamicResource PayCheck}">
+				<dxe:CheckEdit
+					EditValue="{Binding PayCheck, Mode=TwoWay}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Visibility="{Binding OutMessage, Converter={dxmvvm:StringToVisibilityConverter}}">
+				<TextBlock
+					Margin="0, 10"
+					MaxWidth="550"
+					VerticalAlignment="Top"
+					FontWeight="Bold"
+					Foreground="#9C3931"
+					TextWrapping="Wrap"
+					Text="{Binding OutMessage, Mode=OneWay}" />
+			</dxlc:LayoutItem>
+		</dxlc:LayoutControl>
+	</DockPanel>
+</UserControl>

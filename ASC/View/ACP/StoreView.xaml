@@ -1,0 +1,353 @@
+<UserControl
+	x:Class="ASC.View.ACP.StoreView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:acp="clr-namespace:ASC.ViewModels.ACP"
+	Background="#FFFFFFFF" xmlns:acp1="clr-namespace:ASC.View.ACP">
+	<FrameworkElement.DataContext>
+		<acp:StoreViewModel />
+	</FrameworkElement.DataContext>
+	<dxmvvm:Interaction.Behaviors>
+		<dxmvvm:EventToCommand
+			EventTriggerBase_x0060_1.EventName="Loaded"
+			Command="{Binding ControlLoadedCommand}" />
+	</dxmvvm:Interaction.Behaviors>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition />
+			<RowDefinition
+				Height="387" />
+		</Grid.RowDefinitions>
+		<DataGrid
+			Style="{StaticResource defaultTable}"
+			HorizontalAlignment="Stretch"
+			Margin="0,35,0,0"
+			VerticalAlignment="Stretch"
+			ItemsSource="{Binding Stores}"
+			SelectedItem="{Binding SelectedStore, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+			<FrameworkElement.Resources>
+				<ResourceDictionary>
+					<SolidColorBrush
+						Color="#FF008EA4"
+						x:Key="{x:Static SystemColors.HighlightBrushKey}" />
+				</ResourceDictionary>
+			</FrameworkElement.Resources>
+			<DataGrid.Columns>
+				<DataGridTextColumn
+					Visibility="Hidden"
+					Binding="{Binding id}"
+					ClipboardContentBinding="{x:Null}" />
+				<DataGridTextColumn
+					Header="{DynamicResource StoreNameNoDots}"
+					MinWidth="100"
+					Width="0.1*"
+					Binding="{Binding name}"
+					ClipboardContentBinding="{x:Null}" />
+				<DataGridTextColumn
+					Header="{DynamicResource StoreDescriptionNoDots}"
+					MinWidth="100"
+					Width="0.1*"
+					Binding="{Binding description}"
+					ClipboardContentBinding="{x:Null}" />
+				<DataGridTextColumn
+					Header="{DynamicResource StoreInOfficeNoDots}"
+					MinWidth="160"
+					Width="0.1*"
+					Binding="{Binding offices.name}"
+					ClipboardContentBinding="{x:Null}" />
+				<DataGridTextColumn
+					Header="{DynamicResource StoreSubTypeNoDots}"
+					MinWidth="160"
+					Width="0.1*"
+					Binding="{Binding store_sub_types.name}"
+					ClipboardContentBinding="{x:Null}" />
+				<DataGridTextColumn
+					Header="{DynamicResource StoreTypeNoDots}"
+					MinWidth="160"
+					Width="0.1*"
+					Binding="{Binding store_types.name}"
+					ClipboardContentBinding="{x:Null}" />
+			</DataGrid.Columns>
+		</DataGrid>
+		<dx:SimpleButton
+			Grid.Row="0"
+			Content="{DynamicResource NewStore}"
+			HorizontalAlignment="Left"
+			Margin="10,5,0,0"
+			VerticalAlignment="Top"
+			Height="25"
+			Command="{Binding ShowNewStoreCommand}"
+			Glyph="{DXImageGrayscale Image=New_16x16.png}" />
+		<Grid
+			HorizontalAlignment="Stretch"
+			VerticalAlignment="Stretch"
+			Row="1">
+			<FrameworkElement.Style>
+				<Style
+					TargetType="{x:Type Grid}">
+					<Setter
+						Property="IsEnabled"
+						Value="True" />
+					<Style.Triggers>
+						<DataTrigger
+							Binding="{Binding SelectedStore}"
+							Value="{x:Null}">
+							<Setter
+								Property="IsEnabled"
+								Value="False" />
+						</DataTrigger>
+					</Style.Triggers>
+				</Style>
+			</FrameworkElement.Style>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition
+					Width="257*" />
+				<ColumnDefinition
+					Width="193*" />
+			</Grid.ColumnDefinitions>
+			<dxlc:LayoutControl
+				ItemStyle="{StaticResource LeftMenuLayout}"
+				HorizontalAlignment="Stretch"
+				VerticalAlignment="Top"
+				Orientation="Horizontal"
+				Grid.ColumnSpan="3"
+				Margin="0,0,0,35">
+				<dxlc:LayoutGroup
+					Orientation="Vertical">
+					<dxlc:LayoutItem
+						Label="{DynamicResource StoreName}">
+						<TextBox
+							Text="{Binding SelectedStore.name, UpdateSourceTrigger=PropertyChanged}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource StoreDescription}">
+						<TextBox
+							Text="{Binding SelectedStore.description, UpdateSourceTrigger=PropertyChanged}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource StoreType}">
+						<ComboBox
+							Name="ComboBoxStoreType"
+							DisplayMemberPath="name"
+							SelectedValuePath="id"
+							SelectedValue="{Binding SelectedStore.type, UpdateSourceTrigger=PropertyChanged}"
+							ItemsSource="{Binding StoreTypes}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource StoreInOffice}">
+						<ComboBox
+							DisplayMemberPath="name"
+							SelectedValuePath="id"
+							ItemsSource="{Binding Offices}"
+							SelectedValue="{Binding SelectedStore.office, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+							<FrameworkElement.Style>
+								<Style
+									TargetType="{x:Type ComboBox}">
+									<Setter
+										Property="IsEnabled"
+										Value="True" />
+									<Style.Triggers>
+										<DataTrigger
+											Value="2"
+											Binding="{Binding Path=SelectedValue, ElementName=ComboBoxStoreType}">
+											<Setter
+												Property="IsEnabled"
+												Value="False" />
+										</DataTrigger>
+									</Style.Triggers>
+								</Style>
+							</FrameworkElement.Style>
+						</ComboBox>
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource StoreSubType}">
+						<ComboBox
+							IsEnabled="False"
+							DisplayMemberPath="name"
+							SelectedValuePath="id"
+							IsEditable="False"
+							ItemsSource="{Binding StoreSubTypes}"
+							SelectedValue="{Binding SelectedStore.sub_type, UpdateSourceTrigger=PropertyChanged}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource CopyStoreCats}"
+						Visibility="{Binding CanCopyCategories, Converter={StaticResource BooleanToVisibilityConverter}}">
+						<dxe:ComboBoxEdit
+							ShowError="False"
+							ValueMember="id"
+							DisplayMember="name"
+							NullText="{DynamicResource SelectStore2}"
+							ItemsSource="{Binding CopyFromStores}"
+							EditValue="{Binding CopyStoreId, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource IsArhive}">
+						<CheckBox
+							ContentStringFormat="{}{0}:"
+							IsChecked="{Binding SelectedStore.Archive, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutGroup
+						View="GroupBox"
+						Header="{DynamicResource ItemColumnns}">
+						<dxlc:LayoutGroup
+							Orientation="Vertical">
+							<dxlc:LayoutItem
+								Label="{DynamicResource PN}">
+								<CheckBox
+									IsChecked="{Binding SelectedStore.it_vis_pn, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+							</dxlc:LayoutItem>
+							<dxlc:LayoutItem
+								Label="{DynamicResource Sn}">
+								<CheckBox
+									IsChecked="{Binding SelectedStore.it_vis_sn, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+							</dxlc:LayoutItem>
+							<dxlc:LayoutItem
+								Label="{DynamicResource Description}">
+								<CheckBox
+									IsChecked="{Binding SelectedStore.it_vis_description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+							</dxlc:LayoutItem>
+							<dxlc:LayoutItem
+								Label="{DynamicResource Notes}">
+								<CheckBox
+									IsChecked="{Binding SelectedStore.it_vis_notes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+							</dxlc:LayoutItem>
+						</dxlc:LayoutGroup>
+						<dxlc:LayoutGroup
+							Orientation="Vertical">
+							<dxlc:LayoutItem
+								Label="{DynamicResource Warranty}">
+								<CheckBox
+									IsChecked="{Binding SelectedStore.it_vis_warranty, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+							</dxlc:LayoutItem>
+							<dxlc:LayoutItem
+								Label="{DynamicResource DealerWarranty}">
+								<CheckBox
+									IsChecked="{Binding SelectedStore.it_vis_warranty_dealer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+							</dxlc:LayoutItem>
+							<dxlc:LayoutItem
+								Label="{DynamicResource PhotoAdd}">
+								<CheckBox
+									IsChecked="{Binding SelectedStore.it_vis_photo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+							</dxlc:LayoutItem>
+							<dxlc:LayoutItem
+								Label="{DynamicResource BarCode}">
+								<CheckBox
+									IsChecked="{Binding SelectedStore.it_vis_barcode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+							</dxlc:LayoutItem>
+						</dxlc:LayoutGroup>
+					</dxlc:LayoutGroup>
+				</dxlc:LayoutGroup>
+				<dxlc:LayoutGroup
+					Margin="10,0,0,0"
+					VerticalAlignment="Stretch"
+					View="GroupBox"
+					Header="{DynamicResource StoreBoxes}"
+					Orientation="Vertical">
+					<dxlc:LayoutItem
+						VerticalAlignment="Stretch">
+						<DataGrid
+							Name="DataGridStoreBoxes"
+							Style="{StaticResource defaultTable}"
+							IsReadOnly="False"
+							HorizontalAlignment="Stretch"
+							VerticalAlignment="Stretch"
+							SelectedItem="{Binding SelectedBox, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+							ItemsSource="{Binding Boxes}">
+							<DataGrid.Columns>
+								<DataGridTemplateColumn
+									Header="Del"
+									Width="30"
+									IsReadOnly="True">
+									<DataGridTemplateColumn.CellTemplate>
+										<DataTemplate>
+											<Image
+												Name="imageBoxDel"
+												Width="16"
+												Height="16"
+												Source="/Resources/trash.png">
+												<dxmvvm:Interaction.Behaviors>
+													<dxmvvm:EventToCommand
+														EventTriggerBase_x0060_1.EventName="MouseLeftButtonDown"
+														Command="{Binding DataContext.RemoveBoxCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" />
+												</dxmvvm:Interaction.Behaviors>
+											</Image>
+										</DataTemplate>
+									</DataGridTemplateColumn.CellTemplate>
+								</DataGridTemplateColumn>
+								<DataGridTextColumn
+									Header="{DynamicResource Box}"
+									Width="100*"
+									Binding="{Binding name}" />
+								<DataGridTemplateColumn
+									Header="{DynamicResource Places}"
+									Width="100">
+									<DataGridTemplateColumn.CellTemplate>
+										<DataTemplate>
+											<TextBox
+												BorderThickness="0"
+												Background="#00FFFFFF"
+												TextAlignment="Center"
+												Text="{Binding places, UpdateSourceTrigger=PropertyChanged}" />
+										</DataTemplate>
+									</DataGridTemplateColumn.CellTemplate>
+								</DataGridTemplateColumn>
+								<DataGridTemplateColumn
+									Header="{DynamicResource NonItemBox}"
+									Width="100">
+									<DataGridTemplateColumn.CellTemplate>
+										<DataTemplate>
+											<CheckBox
+												IsChecked="{Binding non_items, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+										</DataTemplate>
+									</DataGridTemplateColumn.CellTemplate>
+								</DataGridTemplateColumn>
+							</DataGrid.Columns>
+						</DataGrid>
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+			</dxlc:LayoutControl>
+			<Button
+				Content="{DynamicResource Save}"
+				HorizontalAlignment="Right"
+				Margin="0,0,10,10"
+				VerticalAlignment="Bottom"
+				Height="25"
+				Width="103"
+				Grid.Column="1"
+				Command="{Binding SaveExistStoreCommand}" />
+			<Button
+				Grid.Column="0"
+				Content="{DynamicResource Cancel}"
+				HorizontalAlignment="Left"
+				Margin="10,0,0,10"
+				VerticalAlignment="Bottom"
+				Height="25"
+				Width="103"
+				Command="{Binding CancelCommand}" />
+			<Button
+				Content="{DynamicResource Create}"
+				HorizontalAlignment="Right"
+				Margin="0,0,10,10"
+				VerticalAlignment="Bottom"
+				Height="25"
+				Width="103"
+				Grid.Column="1"
+				Command="{Binding CreateNewStoreCommand}">
+				<FrameworkElement.Style>
+					<Style
+						TargetType="{x:Type Button}">
+						<Setter
+							Property="Visibility"
+							Value="Collapsed" />
+						<Style.Triggers>
+							<DataTrigger
+								Value="True"
+								Binding="{Binding CreateStore}">
+								<Setter
+									Property="Visibility"
+									Value="Visible" />
+							</DataTrigger>
+						</Style.Triggers>
+					</Style>
+				</FrameworkElement.Style>
+			</Button>
+		</Grid>
+	</Grid>
+</UserControl>

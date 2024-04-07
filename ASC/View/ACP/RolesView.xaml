@@ -1,0 +1,153 @@
+<UserControl
+	x:Class="ASC.View.ACP.RolesView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:converters="clr-namespace:ASC.Converters" xmlns:acp="clr-namespace:ASC.View.ACP">
+	<Grid
+		Name="gridAcpRoles">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition
+				Width="50*" />
+			<ColumnDefinition
+				Width="50*" />
+		</Grid.ColumnDefinitions>
+		<Border
+			Grid.Column="1"
+			Grid.RowSpan="4"
+			BorderBrush="#FFB6B4B4"
+			BorderThickness="1,0,0,0"
+			Background="{x:Null}">
+			<Grid>
+				<Button
+					Name="ButtonSaveRole"
+					IsEnabled="False"
+					Content="{DynamicResource Save}"
+					HorizontalAlignment="Right"
+					VerticalAlignment="Bottom"
+					Width="120"
+					Height="25"
+					Margin="0,0,10,10"
+					Click="buttonSaveRole_Click" />
+				<Button
+					Name="ButtonNewRole"
+					Content="{DynamicResource Create}"
+					HorizontalAlignment="Right"
+					Visibility="Hidden"
+					VerticalAlignment="Bottom"
+					Width="120"
+					Height="25"
+					Margin="0,0,10,10"
+					Click="buttonNewRole_Click" />
+			</Grid>
+		</Border>
+		<dxe:ListBoxEdit
+			Name="ListBoxPermissions"
+			VerticalAlignment="Stretch"
+			HorizontalAlignment="Stretch"
+			DisplayMember="name"
+			Margin="10,35,10,46"
+			Grid.Column="1"
+			ItemsSource="{Binding Permissions}"
+			EditValue="{Binding CheckedPermissions, Mode=TwoWay, Converter={converters:custConverter}}">
+			<dxe:ListBoxEdit.StyleSettings>
+				<dxe:CheckedListBoxEditStyleSettings />
+			</dxe:ListBoxEdit.StyleSettings>
+		</dxe:ListBoxEdit>
+		<DataGrid
+			Name="DataGridRoles"
+			Grid.Column="0"
+			Margin="10,35,10,145"
+			HorizontalAlignment="Stretch"
+			VerticalAlignment="Stretch"
+			Style="{StaticResource defaultTable}"
+			ItemsSource="{Binding Roles}"
+			MouseDoubleClick="dataGridRoles_MouseDoubleClick">
+			<FrameworkElement.Resources>
+				<ResourceDictionary>
+					<Style
+						TargetType="{x:Type DataGridRow}"
+						x:Key="{x:Type DataGridRow}" />
+					<SolidColorBrush
+						Color="#FF008EA4"
+						x:Key="{x:Static SystemColors.HighlightBrushKey}" />
+				</ResourceDictionary>
+			</FrameworkElement.Resources>
+			<DataGrid.Columns>
+				<DataGridTextColumn
+					Visibility="Hidden"
+					Binding="{Binding id}"
+					ClipboardContentBinding="{x:Null}" />
+				<DataGridTextColumn
+					Header="{DynamicResource Role}"
+					MinWidth="100"
+					Width="30*"
+					Binding="{Binding name}"
+					ClipboardContentBinding="{x:Null}" />
+				<DataGridTextColumn
+					Header="{DynamicResource Description}"
+					MinWidth="100"
+					Width="50*"
+					Binding="{Binding description}"
+					ClipboardContentBinding="{x:Null}" />
+			</DataGrid.Columns>
+		</DataGrid>
+		<Button
+			Grid.Column="0"
+			Content="{DynamicResource NewRole}"
+			HorizontalAlignment="Left"
+			Margin="10,5,0,0"
+			VerticalAlignment="Top"
+			Height="25"
+			Click="button_Click" />
+		<Grid
+			Column="0"
+			HorizontalAlignment="Stretch"
+			Height="240"
+			Margin="0,0,0,0"
+			VerticalAlignment="Bottom">
+			<Label
+				Content="{DynamicResource RoleName}"
+				HorizontalAlignment="Left"
+				Margin="10,109,0,0"
+				VerticalAlignment="Top" />
+			<TextBox
+				Name="TextBoxRoleName"
+				IsEnabled="False"
+				HorizontalAlignment="Stretch"
+				Height="23"
+				Margin="108,112,10,0"
+				VerticalAlignment="Top"
+				TextChanged="TextBoxRoleName_TextChanged" />
+			<Button
+				Name="ButtonCancelRoleEdit"
+				IsEnabled="False"
+				Content="{DynamicResource Cancel}"
+				HorizontalAlignment="Left"
+				Margin="10,0,0,10"
+				VerticalAlignment="Bottom"
+				Width="120"
+				Height="25"
+				Click="buttonCancelRoleEdit_Click" />
+			<TextBox
+				Name="TextBoxRoleDescription"
+				HorizontalAlignment="Stretch"
+				Height="23"
+				IsEnabled="False"
+				VerticalAlignment="Top"
+				Margin="108,140,10,0" />
+			<Label
+				Content="{DynamicResource RoleDescription}"
+				HorizontalAlignment="Left"
+				Margin="10,137,0,0"
+				VerticalAlignment="Top" />
+		</Grid>
+		<Button
+			Name="ButtonRemoveRole"
+			Content="{DynamicResource RemoveRole}"
+			IsEnabled="False"
+			HorizontalAlignment="Right"
+			Margin="0,5,10,0"
+			VerticalAlignment="Top"
+			Width="103"
+			Height="25"
+			Grid.Column="1"
+			Click="button_Copy_Click" />
+	</Grid>
+</UserControl>

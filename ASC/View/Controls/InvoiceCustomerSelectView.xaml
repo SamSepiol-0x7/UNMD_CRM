@@ -1,0 +1,84 @@
+<UserControl
+	x:Class="ASC.View.Controls.InvoiceCustomerSelectView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:ASC.View.Controls" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:themes="http://schemas.devexpress.com/winfx/2008/xaml/editors/themekeys" xmlns:enum="clr-namespace:ASC.Common.Enum;assembly=ASC.Common">
+	<FrameworkElement.Resources>
+		<ResourceDictionary>
+			<dxmvvm:NumericToBooleanConverter
+				x:Key="NumericToBoolean" />
+		</ResourceDictionary>
+	</FrameworkElement.Resources>
+	<dxe:ComboBoxEdit
+		ValueMember="Id"
+		DisplayMember="Name"
+		ItemsSource="{Binding CustomerPaymentDetails}"
+		SelectedItem="{Binding Document.Customer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+		<FrameworkElement.Style>
+			<Style
+				TargetType="{x:Type dxe:ComboBoxEdit}">
+				<Setter
+					Property="MinHeight"
+					Value="{StaticResource editorHeight}" />
+				<Setter
+					Property="FontSize"
+					Value="{StaticResource editorFontSize}" />
+				<Setter
+					Property="Foreground"
+					Value="{StaticResource editorFontBrush}" />
+				<Style.Triggers>
+					<DataTrigger
+						Value="{x:Static enum:InvoiceState.Paid}"
+						Binding="{Binding Document.State}">
+						<Setter
+							Property="dxe:BaseEdit.IsReadOnly"
+							Value="True" />
+					</DataTrigger>
+					<DataTrigger
+						Value="{x:Static enum:InvoiceState.Archive}"
+						Binding="{Binding Document.State}">
+						<Setter
+							Property="dxe:BaseEdit.IsReadOnly"
+							Value="True" />
+					</DataTrigger>
+				</Style.Triggers>
+			</Style>
+		</FrameworkElement.Style>
+		<dxmvvm:Interaction.Behaviors>
+			<dxmvvm:EventToCommand
+				EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+				PassEventArgsToCommand="True"
+				Command="{Binding ComboBoxClickCommand}" />
+			<dxmvvm:EventToCommand
+				EventTriggerBase_x0060_1.EventName="PopupClosed"
+				PassEventArgsToCommand="True"
+				Command="{Binding CustomerPopupClosedCommand}" />
+		</dxmvvm:Interaction.Behaviors>
+		<dxe:ButtonEdit.Buttons>
+			<dxe:ButtonInfo
+				ToolTip="Edit customer payment details"
+				GlyphKind="Edit"
+				Visibility="{Binding Document.Customer.Id, Converter={StaticResource NumericToVisibility}, FallbackValue=Collapsed}"
+				Command="{Binding ShowEditPaymentDetailsCommand}" />
+			<dxe:ButtonInfo
+				ToolTip="Add customer payment details"
+				GlyphKind="Plus"
+				Visibility="{Binding CustomerId, Converter={StaticResource NumericToVisibility}}"
+				Command="{Binding ShowAddPaymentDetailsCommand}" />
+			<dxe:ButtonInfo
+				ToolTip="Select customer"
+				Command="{Binding SelectCustomerCommand}">
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition
+							Width="Auto" />
+						<ColumnDefinition
+							Width="Auto" />
+					</Grid.ColumnDefinitions>
+					<ContentPresenter
+						ContentTemplate="{DynamicResource {themes:ButtonsThemeKey ThemeKeyExtensionInternalBase_x0060_1.ResourceKey=SearchGlyph}}" />
+					<TextBlock
+						Text="{DynamicResource Client}"
+						Grid.Column="1" />
+				</Grid>
+			</dxe:ButtonInfo>
+		</dxe:ButtonEdit.Buttons>
+	</dxe:ComboBoxEdit>
+</UserControl>

@@ -1,0 +1,400 @@
+<UserControl
+	x:Class="ASC.View.CustomerEditCommonView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:ASC.View" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:objects="clr-namespace:ASC.Objects" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:asc="clr-namespace:ASC">
+	<FrameworkElement.Resources>
+		<ResourceDictionary>
+			<dxmvvm:StringToVisibilityConverter
+				x:Key="StringToVisibilityConverter" />
+			<dxmvvm:BooleanToVisibilityConverter
+				Inverse="True"
+				x:Key="BooleanToVisibilityConverterInv" />
+		</ResourceDictionary>
+	</FrameworkElement.Resources>
+	<dxlc:LayoutControl
+		ItemStyle="{StaticResource LeftMenuLayout}"
+		Orientation="Vertical"
+		ItemSpace="5"
+		Padding="10">
+		<dxlc:LayoutGroup
+			View="Group"
+			Orientation="Horizontal">
+			<dxlc:LayoutGroup
+				View="Group"
+				Orientation="Vertical"
+				HorizontalAlignment="Left">
+				<dxlc:LayoutGroup
+					Orientation="Vertical"
+					Header="{DynamicResource Phone}"
+					View="GroupBox">
+					<dxlc:LayoutItem>
+						<dxe:ListBoxEdit
+							MinHeight="50"
+							MaxHeight="300"
+							DisplayMember="Phone"
+							ValueMember="Id"
+							SelectedItem="{Binding SelectedTel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+							ItemsSource="{Binding Customer.Phones}">
+							<dxmvvm:Interaction.Behaviors>
+								<dxmvvm:EventToCommand
+									EventTriggerBase_x0060_1.EventName="MouseDoubleClick"
+									Command="{Binding TelDoubleCkickCommand}" />
+							</dxmvvm:Interaction.Behaviors>
+							<dxe:ListBoxEdit.ItemTemplate>
+								<DataTemplate>
+									<StackPanel
+										Orientation="Vertical"
+										HorizontalAlignment="Stretch">
+										<TextBlock
+											FontWeight="Bold"
+											Padding="5"
+											Text="{Binding Phone}"
+											FontSize="{Binding Employee.UiSettings.FontSize, Source={x:Static objects:OfflineData.Instance}}" />
+										<TextBlock
+											Margin="5,0,0,0"
+											Padding="5"
+											FontSize="12"
+											Text="{Binding Path=Note, StringFormat=[{0}], FallbackValue=---}"
+											Visibility="{Binding Path=Note, Converter={StaticResource StringToVisibilityConverter}}" />
+									</StackPanel>
+								</DataTemplate>
+							</dxe:ListBoxEdit.ItemTemplate>
+						</dxe:ListBoxEdit>
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem>
+						<TextBlock
+							Foreground="#FF0000FF"
+							Text="{DynamicResource TelEditHelp}"
+							TextWrapping="Wrap" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						HorizontalAlignment="Right">
+						<dx:SimpleButton
+							Style="{StaticResource SaveButton}"
+							Content="{DynamicResource Create}"
+							Command="{Binding AddTelCommand}"
+							Glyph="{DXImageGrayscale Image=Add_16x16.png}" />
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+				<dxlc:LayoutGroup
+					Orientation="Vertical">
+					<FrameworkElement.Resources>
+						<ResourceDictionary>
+							<Style
+								TargetType="{x:Type dxlc:LayoutItem}"
+								x:Key="{x:Type dxlc:LayoutItem}">
+								<Setter
+									Property="HorizontalContentAlignment"
+									Value="Right" />
+							</Style>
+						</ResourceDictionary>
+					</FrameworkElement.Resources>
+					<dxlc:LayoutItem
+						Label="{DynamicResource Ur}">
+						<dxe:CheckEdit
+							EditValue="{Binding Customer.IsUr, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource IsRegular}">
+						<dxe:CheckEdit
+							EditValue="{Binding Customer.IsRegular, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource Agent}">
+						<dxe:CheckEdit
+							EditValue="{Binding Customer.IsAgent, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource IgnoreIncomingCalls}"
+						Visibility="{Binding Customer.Id, Converter={StaticResource NumericToVisibility}}">
+						<dxe:CheckEdit
+							EditValue="{Binding Customer.IgnoreCalls, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource Cashless}">
+						<dxe:CheckEdit
+							EditValue="{Binding Customer.PreferCashless, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource NotTakeInTime}"
+						Visibility="{Binding Customer.Id, Converter={StaticResource NumericToVisibility}}">
+						<dxe:CheckEdit
+							EditValue="{Binding Customer.TakeLong, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource IsDealer}">
+						<dxe:CheckEdit
+							EditValue="{Binding Customer.IsDealer, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource IsRealizator}"
+						Visibility="{Binding Source={x:Static asc:Auth.Config}, Path=realizator_enable, Converter={StaticResource BooleanToVisibilityConverter}}">
+						<dxe:CheckEdit
+							EditValue="{Binding Customer.IsRealizator, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource Balance}">
+						<dxe:CheckEdit
+							EditValue="{Binding Customer.BalanceEnabled, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource LabelIsBad}">
+						<dxe:CheckEdit
+							EditValue="{Binding Customer.IsBad, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource ArhiveClient}"
+						Visibility="{Binding Customer.Id, Converter={StaticResource NumericToVisibility}}">
+						<dxe:CheckEdit
+							EditValue="{Binding Customer.IsArchive, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+			</dxlc:LayoutGroup>
+			<dxlc:LayoutGroup
+				View="Group"
+				Orientation="Vertical">
+				<dxlc:LayoutGroup
+					Orientation="Horizontal"
+					Header="{DynamicResource FullName}"
+					View="GroupBox"
+					Visibility="{Binding Customer.IsUr, Converter={StaticResource BooleanToVisibilityConverterInv}, FallbackValue=Collapsed}">
+					<dxlc:LayoutItem
+						Label="{DynamicResource LastName}">
+						<dxe:TextEdit
+							MinWidth="120"
+							EditValue="{Binding Customer.LastName, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource Name}">
+						<dxe:TextEdit
+							MinWidth="120"
+							EditValue="{Binding Customer.FirstName, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource Patronymic}">
+						<dxe:TextEdit
+							MinWidth="120"
+							EditValue="{Binding Customer.Patronymic, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+				<dxlc:LayoutGroup
+					Orientation="Horizontal"
+					Header="{DynamicResource Company}"
+					View="GroupBox"
+					Visibility="{Binding Customer.IsUr, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
+					<dxlc:LayoutItem
+						Label="{DynamicResource UrName}">
+						<dxe:TextEdit
+							MinWidth="360"
+							EditValue="{Binding Customer.UrName, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+				<dxlc:LayoutItem
+					Label="{DynamicResource PriceCol}">
+					<dxe:ComboBoxEdit
+						DisplayMember="Value"
+						ValueMember="Key"
+						ItemsSource="{Binding PriceCols}"
+						EditValue="{Binding Customer.PriceCol, Mode=TwoWay}">
+						<dxmvvm:Interaction.Behaviors>
+							<dxmvvm:EventToCommand
+								EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+								PassEventArgsToCommand="True"
+								Command="{Binding ComboBoxClickCommand}" />
+						</dxmvvm:Interaction.Behaviors>
+					</dxe:ComboBoxEdit>
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource VisitSource}">
+					<dxe:ComboBoxEdit
+						DisplayMember="name"
+						ValueMember="id"
+						ItemsSource="{Binding VisitSources, Source={x:Static objects:OfflineData.Instance}}"
+						EditValue="{Binding Customer.VisitSource, Mode=TwoWay}">
+						<dxmvvm:Interaction.Behaviors>
+							<dxmvvm:EventToCommand
+								EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+								PassEventArgsToCommand="True"
+								Command="{Binding ComboBoxClickCommand}" />
+						</dxmvvm:Interaction.Behaviors>
+					</dxe:ComboBoxEdit>
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource WebPassword}">
+					<dxe:ButtonEdit
+						AllowDefaultButton="False"
+						EditValue="{Binding Customer.WebPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+						<dxe:ButtonEdit.Buttons>
+							<dxe:ButtonInfo
+								ButtonKind="Simple"
+								GlyphKind="Refresh"
+								Command="{Binding GenWebPasswordCommand}" />
+						</dxe:ButtonEdit.Buttons>
+					</dxe:ButtonEdit>
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource Note}"
+					LabelVerticalAlignment="Top">
+					<dxe:TextEdit
+						NullText="{DynamicResource NoteOnCustomerWork}"
+						Background="#FFFFFFFF"
+						AcceptsReturn="True"
+						TextWrapping="Wrap"
+						VerticalScrollBarVisibility="Auto"
+						VerticalContentAlignment="Top"
+						MinHeight="60"
+						EditValue="{Binding Customer.Notes, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutGroup
+					View="Group"
+					Orientation="Horizontal">
+					<dxlc:LayoutItem
+						Label="Email">
+						<dxe:TextEdit
+							EditValue="{Binding Customer.Email, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource Site}">
+						<dxe:TextEdit
+							EditValue="{Binding Customer.Site, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+				<dxlc:LayoutGroup
+					View="Group"
+					Orientation="Horizontal">
+					<dxlc:LayoutItem
+						Label="ICQ">
+						<dxe:TextEdit
+							EditValue="{Binding Customer.Icq, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="Viber">
+						<dxe:TextEdit
+							EditValue="{Binding Customer.Viber, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+				<dxlc:LayoutGroup
+					View="Group"
+					Orientation="Horizontal">
+					<dxlc:LayoutItem
+						Label="Telegram">
+						<dxe:TextEdit
+							EditValue="{Binding Customer.Telegram, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="Whatsapp">
+						<dxe:TextEdit
+							EditValue="{Binding Customer.Whatsapp, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+				<dxlc:LayoutItem
+					Label="Skype">
+					<dxe:TextEdit
+						EditValue="{Binding Customer.Skype, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutGroup
+					IsCollapsed="True"
+					IsCollapsible="True"
+					Orientation="Vertical"
+					View="GroupBox"
+					Header="{DynamicResource PassportData}"
+					Visibility="{Binding Customer.IsUr, Converter={StaticResource BooleanToVisibilityConverterInv}}">
+					<dxmvvm:Interaction.Behaviors>
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="MouseLeftButtonDown"
+							PassEventArgsToCommand="True"
+							Command="{Binding GroupBoxMouseClickCommand}" />
+					</dxmvvm:Interaction.Behaviors>
+					<dxlc:LayoutGroup
+						View="Group"
+						Orientation="Horizontal">
+						<dxlc:LayoutItem
+							Label="{DynamicResource PassportSerial}">
+							<dxe:TextEdit
+								EditValue="{Binding Customer.PassportNum, Mode=TwoWay}" />
+						</dxlc:LayoutItem>
+						<dxlc:LayoutItem
+							Label="{DynamicResource OutDate}">
+							<dxe:DateEdit
+								EditValue="{Binding Customer.PassportDate, Mode=TwoWay}" />
+						</dxlc:LayoutItem>
+						<dxlc:LayoutItem
+							Label="{DynamicResource Birthday}">
+							<dxe:DateEdit
+								EditValue="{Binding Customer.Birthday, Mode=TwoWay}" />
+						</dxlc:LayoutItem>
+					</dxlc:LayoutGroup>
+					<dxlc:LayoutItem
+						Label="{DynamicResource PassportOrgan}">
+						<dxe:TextEdit
+							EditValue="{Binding Customer.PassportOrgan, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+				<dxlc:LayoutGroup
+					IsCollapsed="True"
+					IsCollapsible="True"
+					Orientation="Horizontal"
+					View="GroupBox"
+					Header="{DynamicResource BankDetails}"
+					Visibility="{Binding Customer.Id, Converter={StaticResource NumericToVisibility}}">
+					<dxmvvm:Interaction.Behaviors>
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="MouseLeftButtonDown"
+							PassEventArgsToCommand="True"
+							Command="{Binding GroupBoxMouseClickCommand}" />
+					</dxmvvm:Interaction.Behaviors>
+					<dxlc:LayoutItem
+						MaxHeight="200">
+						<local:PaymentDetailsListView
+							MinHeight="60" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						HorizontalAlignment="Right"
+						VerticalAlignment="Top">
+						<dx:SimpleButton
+							HorizontalAlignment="Right"
+							VerticalAlignment="Top"
+							Command="{Binding AddPaymentDetailsCommand}"
+							Glyph="{DXImageGrayscale Image=Add_16x16.png}" />
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+				<dxlc:LayoutGroup
+					IsCollapsed="True"
+					IsCollapsible="True"
+					Orientation="Vertical"
+					View="GroupBox"
+					Header="{DynamicResource UserInfo}">
+					<dxmvvm:Interaction.Behaviors>
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="MouseLeftButtonDown"
+							PassEventArgsToCommand="True"
+							Command="{Binding GroupBoxMouseClickCommand}" />
+					</dxmvvm:Interaction.Behaviors>
+					<dxlc:LayoutItem
+						Label="{DynamicResource Address}">
+						<dxe:TextEdit
+							EditValue="{Binding Customer.Address, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource PostIndex}">
+						<dxe:TextEdit
+							EditValue="{Binding Customer.PostIndex, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="ИНН">
+						<dxe:TextEdit
+							EditValue="{Binding Customer.Inn, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="ОГРН">
+						<dxe:TextEdit
+							EditValue="{Binding Customer.Ogrn, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="КПП">
+						<dxe:TextEdit
+							EditValue="{Binding Customer.Kpp, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+			</dxlc:LayoutGroup>
+		</dxlc:LayoutGroup>
+	</dxlc:LayoutControl>
+</UserControl>

@@ -1,0 +1,266 @@
+<UserControl
+	x:Class="ASC.View.InvoicePreviewView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:ASC.View" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:system="clr-namespace:System;assembly=mscorlib" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm">
+	<FrameworkElement.Resources>
+		<ResourceDictionary>
+			<dxmvvm:NumericToBooleanConverter
+				Inverse="True"
+				x:Key="NumericToBoolean" />
+			<dxmvvm:StringToVisibilityConverter
+				x:Key="StringToVisibilityConverter" />
+		</ResourceDictionary>
+	</FrameworkElement.Resources>
+	<DockPanel
+		VerticalAlignment="Stretch"
+		HorizontalAlignment="Center">
+		<dxlc:LayoutControl
+			DockPanel.Dock="Top"
+			Orientation="Vertical">
+			<dxlc:LayoutGroup
+				Orientation="Horizontal">
+				<dxlc:LayoutItem
+					HorizontalAlignment="Left"
+					Label="{DynamicResource Invoice}">
+					<dxe:CheckEdit
+						IsReadOnly="True"
+						EditValue="{Binding PrintInvoice, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Width="100"
+					HorizontalAlignment="Left">
+					<dxe:ButtonEdit
+						AllowDefaultButton="False"
+						HorizontalContentAlignment="Left"
+						AllowSpinOnMouseWheel="False"
+						IsEnabled="{Binding Document.Id, Converter={StaticResource NumericToBoolean}}"
+						EditValue="{Binding Document.Num, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+						<dxe:ButtonEdit.Buttons>
+							<dxe:ButtonInfo
+								Content="+1"
+								Command="{Binding IncrementInvoiceIdCommand}" />
+						</dxe:ButtonEdit.Buttons>
+					</dxe:ButtonEdit>
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource ReportType}">
+					<dxe:ComboBoxEdit
+						MinWidth="200"
+						DisplayMember="Value"
+						ValueMember="Key"
+						ItemsSource="{Binding InvoicePrintTypes}"
+						EditValue="{Binding SelectedInvoicePrintType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+						<dxmvvm:Interaction.Behaviors>
+							<dxmvvm:EventToCommand
+								EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+								PassEventArgsToCommand="True"
+								Command="{Binding ComboBoxClickCommand}" />
+						</dxmvvm:Interaction.Behaviors>
+					</dxe:ComboBoxEdit>
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					HorizontalAlignment="Left"
+					Label="{DynamicResource Copies}">
+					<dxe:SpinEdit
+						AllowSpinOnMouseWheel="False"
+						MinValue="1"
+						IsFloatValue="False"
+						MinWidth="80"
+						EditValueType="{x:Type system:Int32}"
+						EditValue="{Binding InvoiceCopies, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+			<dxlc:LayoutGroup
+				Orientation="Horizontal">
+				<dxlc:LayoutItem
+					HorizontalAlignment="Left"
+					Label="{DynamicResource VatInvoice}">
+					<dxe:CheckEdit
+						EditValue="{Binding PrintVatInvoice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Width="100"
+					HorizontalAlignment="Left">
+					<dxe:ButtonEdit
+						AllowDefaultButton="False"
+						HorizontalContentAlignment="Left"
+						AllowSpinOnMouseWheel="False"
+						IsEnabled="{Binding VATInvoice.Id, Converter={StaticResource NumericToBoolean}}"
+						EditValue="{Binding VATInvoice.Num, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+						<dxe:ButtonEdit.Buttons>
+							<dxe:ButtonInfo
+								Content="+1"
+								Command="{Binding IncrementVATInvoiceNumCommand}" />
+						</dxe:ButtonEdit.Buttons>
+					</dxe:ButtonEdit>
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource ReportType}">
+					<dxe:ComboBoxEdit
+						MinWidth="200"
+						DisplayMember="Value"
+						ValueMember="Key"
+						ItemsSource="{Binding VatInvoicePrintTypes}"
+						EditValue="{Binding SelectedVatInvoicePrintType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+						<dxmvvm:Interaction.Behaviors>
+							<dxmvvm:EventToCommand
+								EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+								PassEventArgsToCommand="True"
+								Command="{Binding ComboBoxClickCommand}" />
+						</dxmvvm:Interaction.Behaviors>
+					</dxe:ComboBoxEdit>
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					HorizontalAlignment="Left"
+					Label="{DynamicResource Copies}">
+					<dxe:SpinEdit
+						AllowSpinOnMouseWheel="False"
+						MinValue="1"
+						IsFloatValue="False"
+						MinWidth="80"
+						EditValueType="{x:Type system:Int32}"
+						EditValue="{Binding VatInvoiceCopies, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+			<dxlc:LayoutGroup
+				Orientation="Horizontal">
+				<dxlc:LayoutItem
+					HorizontalAlignment="Left"
+					Label="{DynamicResource PackingList}">
+					<dxe:CheckEdit
+						EditValue="{Binding PrintPacking, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Width="100"
+					HorizontalAlignment="Left">
+					<dxe:ButtonEdit
+						AllowDefaultButton="False"
+						HorizontalContentAlignment="Left"
+						AllowSpinOnMouseWheel="False"
+						IsEnabled="{Binding PackingList.Id, Converter={StaticResource NumericToBoolean}}"
+						EditValue="{Binding PackingList.Num, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+						<dxe:ButtonEdit.Buttons>
+							<dxe:ButtonInfo
+								Content="+1"
+								Command="{Binding IncrementPackingListNumCommand}" />
+						</dxe:ButtonEdit.Buttons>
+					</dxe:ButtonEdit>
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource ReportType}">
+					<dxe:ComboBoxEdit
+						MinWidth="200"
+						DisplayMember="Value"
+						ValueMember="Key"
+						ItemsSource="{Binding PackingListPrintTypes}"
+						EditValue="{Binding SelectedPackingListPrintType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+						<dxmvvm:Interaction.Behaviors>
+							<dxmvvm:EventToCommand
+								EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+								PassEventArgsToCommand="True"
+								Command="{Binding ComboBoxClickCommand}" />
+						</dxmvvm:Interaction.Behaviors>
+					</dxe:ComboBoxEdit>
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					HorizontalAlignment="Left"
+					Label="{DynamicResource Copies}">
+					<dxe:SpinEdit
+						AllowSpinOnMouseWheel="False"
+						MinValue="1"
+						IsFloatValue="False"
+						MinWidth="80"
+						EditValueType="{x:Type system:Int32}"
+						EditValue="{Binding PackingListCopies, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+			<dxlc:LayoutGroup
+				Orientation="Horizontal">
+				<dxlc:LayoutItem
+					HorizontalAlignment="Left"
+					Label="{DynamicResource PrintWorks}">
+					<dxe:CheckEdit
+						EditValue="{Binding PrintWorks, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Width="100"
+					HorizontalAlignment="Left">
+					<dxe:ButtonEdit
+						AllowDefaultButton="False"
+						HorizontalContentAlignment="Left"
+						AllowSpinOnMouseWheel="False"
+						IsEnabled="{Binding WorksList.Id, Converter={StaticResource NumericToBoolean}}"
+						EditValue="{Binding WorksList.Num, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+						<dxe:ButtonEdit.Buttons>
+							<dxe:ButtonInfo
+								Content="+1"
+								Command="{Binding IncrementWorksListNumCommand}" />
+						</dxe:ButtonEdit.Buttons>
+					</dxe:ButtonEdit>
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource ReportType}">
+					<dxe:ComboBoxEdit
+						MinWidth="200"
+						DisplayMember="Value"
+						ValueMember="Key"
+						ItemsSource="{Binding WorksListPrintTypes}"
+						EditValue="{Binding SelectedWorksListPrintType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+						<dxmvvm:Interaction.Behaviors>
+							<dxmvvm:EventToCommand
+								EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+								PassEventArgsToCommand="True"
+								Command="{Binding ComboBoxClickCommand}" />
+						</dxmvvm:Interaction.Behaviors>
+					</dxe:ComboBoxEdit>
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					HorizontalAlignment="Left"
+					Label="{DynamicResource Copies}">
+					<dxe:SpinEdit
+						AllowSpinOnMouseWheel="False"
+						MinValue="1"
+						IsFloatValue="False"
+						MinWidth="80"
+						EditValueType="{x:Type system:Int32}"
+						EditValue="{Binding WorksListCopies, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+			<dxlc:LayoutGroup
+				View="GroupBox"
+				Header="{DynamicResource AdditionalFields}"
+				Visibility="{Binding PrintVatInvoice, Converter={StaticResource BooleanToVisibilityConverter}}">
+				<dxlc:LayoutItem
+					Label="{DynamicResource StateContract}">
+					<dxe:TextEdit
+						EditValue="{Binding VATInvoice.StateContract, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+		</dxlc:LayoutControl>
+		<StackPanel
+			HorizontalAlignment="Right"
+			Margin="10"
+			VerticalAlignment="Bottom"
+			Orientation="Horizontal"
+			DockPanel.Dock="Bottom">
+			<dx:SimpleButton
+				Content="{DynamicResource Create}"
+				Visibility="{Binding IsEnabled, Converter={StaticResource BooleanToVisibilityConverter}, RelativeSource={RelativeSource Self}}"
+				Command="{Binding CreateDocumentCommand}"
+				Glyph="{DXImageGrayscale Image=Apply_16x16.png}" />
+			<dx:SimpleButton
+				Margin="10,0,0,0"
+				Content="{DynamicResource Email}"
+				Visibility="{Binding Document.Customer.Email, Converter={StaticResource StringToVisibilityConverter}, FallbackValue=Collapsed}"
+				Command="{Binding SendEmailCommand}"
+				Glyph="{DXImageGrayscale Image=SendFile_16x16.png}" />
+			<dx:SimpleButton
+				Margin="10,0,0,0"
+				Content="{DynamicResource Preview}"
+				Command="{Binding PreviewCommand}"
+				Glyph="{DXImageGrayscale Image=Print_16x16.png}" />
+			<dx:SimpleButton
+				Margin="10,0,0,0"
+				Style="{StaticResource CancelButton}"
+				Command="{Binding CloseCommand}" />
+		</StackPanel>
+	</DockPanel>
+</UserControl>

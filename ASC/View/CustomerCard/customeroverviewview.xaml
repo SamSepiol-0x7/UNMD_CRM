@@ -1,0 +1,184 @@
+<dxwui:NavigationPage
+	x:Class="ASC.ClientCard.CustomerOverviewView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:ASC.ClientCard" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:asc="clr-namespace:ASC" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:objects="clr-namespace:ASC.Objects" xmlns:dxwui="http://schemas.devexpress.com/winfx/2008/xaml/windowsui" xmlns:clientCard="clr-namespace:ASC.View.ClientCard"
+	Name="CustomerOverviewUC">
+	<FrameworkElement.Resources>
+		<ResourceDictionary>
+			<Style
+				TargetType="{x:Type TextBlock}"
+				x:Key="{x:Type TextBlock}">
+				<Setter
+					Property="FontSize"
+					Value="{Binding Employee.UiSettings.FontSize, Source={x:Static objects:OfflineData.Instance}}" />
+			</Style>
+		</ResourceDictionary>
+	</FrameworkElement.Resources>
+	<DockPanel>
+		<StackPanel
+			DockPanel.Dock="Top"
+			Orientation="Horizontal"
+			Margin="10,10,0,0">
+			<TextBlock
+				FontWeight="Bold"
+				Text="{Binding Customer.FioOrUrName, Mode=OneWay, FallbackValue=Customer}" />
+		</StackPanel>
+		<dxlc:LayoutControl
+			VerticalAlignment="Top"
+			Orientation="Horizontal"
+			ItemStyle="{StaticResource LeftMenuLayout}">
+			<dxlc:LayoutGroup
+				Orientation="Vertical"
+				MaxWidth="250">
+				<dxlc:LayoutItem
+					VerticalAlignment="Stretch">
+					<dxe:ImageEdit
+						MinHeight="200"
+						NullValue="pack://application:,,,/ASC;component/Resources/noFoto.png"
+						IsReadOnly="True"
+						ShowMenu="False"
+						EditValue="{Binding Customer.Photo.Image, Mode=OneWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="ID">
+					<dxe:TextEdit
+						DisplayFormatString="d6"
+						HorizontalContentAlignment="Right"
+						IsReadOnly="True"
+						EditValue="{Binding Customer.Id, Mode=OneWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource DateCreate}">
+					<dxe:TextEdit
+						HorizontalContentAlignment="Right"
+						MaskType="DateTime"
+						Mask="dd.MM.yyyy"
+						MaskUseAsDisplayFormat="True"
+						IsReadOnly="True"
+						EditValue="{Binding Customer.Created, Mode=OneWay, Converter={StaticResource UtcToLocalDateTimeConverter}}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource Balance}"
+					Visibility="{Binding Customer.BalanceEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">
+					<dxe:TextEdit
+						Style="{StaticResource NumericTextBox}"
+						EditValue="{Binding Customer.Balance, Mode=OneWay}"
+						Foreground="{Binding Customer.BalanceColor, Mode=OneWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource PriceCol}">
+					<dxe:TextEdit
+						HorizontalContentAlignment="Right"
+						IsReadOnly="True"
+						EditValue="{Binding Customer.PriceColString, Mode=OneWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource Repairs}">
+					<dxe:TextEdit
+						MinWidth="80"
+						HorizontalContentAlignment="Right"
+						IsReadOnly="True"
+						EditValue="{Binding Customer.RepairsCount, Mode=OneWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource Purchases}">
+					<dxe:TextEdit
+						MinWidth="80"
+						HorizontalContentAlignment="Right"
+						IsReadOnly="True"
+						EditValue="{Binding Customer.PurchasesCount, Mode=OneWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutGroup
+					Header="{DynamicResource Info}"
+					View="GroupBox"
+					Visibility="{Binding Customer.Info.Count, Converter={StaticResource NumericToVisibility}}">
+					<dxlc:LayoutItem>
+						<dxe:ListBoxEdit
+							ShowBorder="False"
+							Focusable="False"
+							IsReadOnly="True"
+							ItemsSource="{Binding Customer.Info}" />
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+			</dxlc:LayoutGroup>
+			<dxlc:LayoutGroup
+				Orientation="Vertical"
+				MinWidth="350"
+				HorizontalAlignment="Left">
+				<dxlc:LayoutItem
+					Label="{DynamicResource VisitSource}">
+					<dxe:ComboBoxEdit
+						NullText="---"
+						IsReadOnly="True"
+						AllowDefaultButton="False"
+						DisplayMember="name"
+						ValueMember="id"
+						ItemsSource="{Binding VisitSources, Source={x:Static objects:OfflineData.Instance}}"
+						EditValue="{Binding Customer.VisitSource, Mode=OneWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource Address}"
+					Visibility="{Binding Customer.Address, Converter={dxmvvm:StringToVisibilityConverter}}">
+					<dxe:TextEdit
+						EditValue="{Binding Customer.Address, Mode=OneWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource MainPhone}">
+					<dxe:TextEdit
+						NullText="---"
+						IsReadOnly="True"
+						EditValue="{Binding Customer.Phone, Mode=OneWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource AdditionalPhones}"
+					Visibility="{Binding Customer.PhonesStr, Converter={dxmvvm:StringToVisibilityConverter}}">
+					<dxe:TextEdit
+						NullText="---"
+						AcceptsReturn="True"
+						TextWrapping="Wrap"
+						IsReadOnly="True"
+						MaxHeight="150"
+						VerticalScrollBarVisibility="Auto"
+						EditValue="{Binding Customer.PhonesStr, Mode=OneWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource Email}"
+					Visibility="{Binding Customer.Email, Converter={dxmvvm:StringToVisibilityConverter}}">
+					<dxe:ButtonEdit
+						AllowDefaultButton="False"
+						IsReadOnly="True"
+						EditValue="{Binding Customer.Email, Mode=OneWay}">
+						<dxe:ButtonInfo
+							GlyphKind="Custom"
+							Command="{Binding ShowEmailCommand}">
+							<dxe:ButtonInfo.Content>
+								<Image
+									Margin="3,0"
+									Width="16"
+									Height="16"
+									Source="{dx:DXImageGrayscale Image=SendFile_16x16.png}" />
+							</dxe:ButtonInfo.Content>
+						</dxe:ButtonInfo>
+					</dxe:ButtonEdit>
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource WebPassword}"
+					Visibility="{Binding Customer.WebPassword, Converter={dxmvvm:StringToVisibilityConverter}}">
+					<dxe:TextEdit
+						IsReadOnly="True"
+						EditValue="{Binding Customer.WebPassword, Mode=OneWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Visibility="{Binding Customer.Notes, Converter={dxmvvm:StringToVisibilityConverter}}">
+					<dxe:TextEdit
+						VerticalContentAlignment="Top"
+						NullText="{DynamicResource Notes}"
+						IsReadOnly="True"
+						EditValue="{Binding Customer.Notes}" />
+				</dxlc:LayoutItem>
+				<clientCard:CustomerPaymentDetailsView
+					dxmvvm:ViewModelExtensions.ParentViewModel="{Binding DataContext, ElementName=CustomerOverviewUC}"
+					dxmvvm:ViewModelExtensions.Parameter="{Binding DataContext.Customer.Id, ElementName=CustomerOverviewUC}"
+					DataContext="{Binding Path=CustomerPaymentDetailsViewModel, Source={StaticResource ViewModelLocator}}" />
+			</dxlc:LayoutGroup>
+		</dxlc:LayoutControl>
+	</DockPanel>
+</dxwui:NavigationPage>

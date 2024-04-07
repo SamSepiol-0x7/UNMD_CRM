@@ -1,0 +1,167 @@
+<UserControl
+	x:Class="ASC.Invoice.InvoiceView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:ASC.Invoice" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:dxwui="http://schemas.devexpress.com/winfx/2008/xaml/windowsui" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:view="clr-namespace:ASC.View" xmlns:system="clr-namespace:System;assembly=mscorlib" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" xmlns:objects="clr-namespace:ASC.Objects" xmlns:controls="clr-namespace:ASC.View.Controls"
+	MinHeight="400"
+	Loaded="{DXEvent OnLoad()}">
+	<FrameworkElement.DataContext>
+		<local:InvoiceViewModel />
+	</FrameworkElement.DataContext>
+	<FrameworkElement.Resources>
+		<ResourceDictionary>
+			<Style
+				TargetType="{x:Type dxg:RowControl}"
+				BasedOn="{StaticResource RowStyle}"
+				x:Key="{x:Type dxg:RowControl}">
+				<Setter
+					Property="FrameworkElement.ContextMenu">
+					<Setter.Value>
+						<ContextMenu>
+							<MenuItem
+								Header="{DynamicResource ClientCard}"
+								Command="{Binding View.DataContext.OpenCustomerCardCommand}">
+								<MenuItem.Icon>
+									<Image
+										Source="{dx:DXImageOffice2013 Image=Employee_16x16.png}" />
+								</MenuItem.Icon>
+							</MenuItem>
+						</ContextMenu>
+					</Setter.Value>
+				</Setter>
+			</Style>
+		</ResourceDictionary>
+	</FrameworkElement.Resources>
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition
+				Width="280" />
+			<ColumnDefinition
+				Width="39*" />
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition
+				Height="199*" />
+			<RowDefinition
+				Height="90" />
+		</Grid.RowDefinitions>
+		<dxlc:LayoutControl
+			HorizontalAlignment="Stretch"
+			ItemStyle="{StaticResource LeftMenuLayout}"
+			Orientation="Vertical"
+			MaxWidth="{StaticResource LeftSidebarMaxWidth}"
+			ItemSpace="5"
+			Padding="10">
+			<dxlc:LayoutItem
+				Label="{DynamicResource Office}">
+				<dxe:ComboBoxEdit
+					ValueMember="id"
+					DisplayMember="name"
+					PopupMaxHeight="250"
+					IsTextEditable="False"
+					ItemsSource="{Binding OfficesWithAll, Source={x:Static objects:OfflineData.Instance}}"
+					EditValue="{Binding SelectedOffice}">
+					<dxmvvm:Interaction.Behaviors>
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+							PassEventArgsToCommand="True"
+							Command="{Binding ComboBoxClickCommand}" />
+					</dxmvvm:Interaction.Behaviors>
+				</dxe:ComboBoxEdit>
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource Type}">
+				<dxe:ComboBoxEdit
+					ValueMember="Key"
+					DisplayMember="Value"
+					PopupMaxHeight="250"
+					IsTextEditable="False"
+					EditValueType="{x:Type system:Int32}"
+					IsReadOnly="{Binding ReturnOnSelect}"
+					EditValue="{Binding SelectedDocType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+					ItemsSource="{Binding DocTypes}">
+					<dxmvvm:Interaction.Behaviors>
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+							PassEventArgsToCommand="True"
+							Command="{Binding ComboBoxClickCommand}" />
+					</dxmvvm:Interaction.Behaviors>
+				</dxe:ComboBoxEdit>
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource State}"
+				Visibility="{Binding InvoiceStatesVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+				<dxe:ComboBoxEdit
+					ValueMember="Id"
+					DisplayMember="Name"
+					PopupMaxHeight="250"
+					IsTextEditable="False"
+					EditValue="{Binding SelectedInvoiceOption, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+					ItemsSource="{Binding InvoiceStates}">
+					<dxmvvm:Interaction.Behaviors>
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+							PassEventArgsToCommand="True"
+							Command="{Binding ComboBoxClickCommand}" />
+					</dxmvvm:Interaction.Behaviors>
+				</dxe:ComboBoxEdit>
+			</dxlc:LayoutItem>
+			<controls:PeriodView />
+			<dxlc:LayoutItem>
+				<dx:SimpleButton
+					Content="{DynamicResource Invoice}"
+					Command="{Binding CreateCommand}"
+					Glyph="{DXImageGrayscale Image=AddItem_16x16.png}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem>
+				<dx:SimpleButton
+					Content="{DynamicResource VatInvoice}"
+					Command="{Binding ShowNewVATInvoiceCommand}"
+					Glyph="{DXImageGrayscale Image=AddItem_16x16.png}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem>
+				<dx:SimpleButton
+					Content="{DynamicResource PackingList}"
+					Command="{Binding ShowNewPackingListCommand}"
+					Glyph="{DXImageGrayscale Image=AddItem_16x16.png}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem>
+				<dx:SimpleButton
+					Content="{DynamicResource PrintWorks}"
+					Command="{Binding ShowNewActCommand}"
+					Glyph="{DXImageGrayscale Image=AddItem_16x16.png}" />
+			</dxlc:LayoutItem>
+		</dxlc:LayoutControl>
+		<Border
+			BorderThickness="1,1,0,0"
+			BorderBrush="#FFA9A9A9"
+			Grid.Column="1">
+			<view:InvoicesGridView
+				Name="InvoicesGrid" />
+		</Border>
+		<dxwui:AppBar
+			Background="#3f3f3f"
+			HorizontalAlignment="Stretch"
+			VerticalAlignment="Stretch"
+			ItemSpacing="5"
+			HideMode="AlwaysVisible"
+			Grid.Row="1"
+			Grid.ColumnSpan="2">
+			<dxwui:AppBarButton
+				Label="{DynamicResource Refresh}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Command="{Binding RefreshCommand}"
+				Glyph="{dx:DXImageGrayscale Image=Refresh_32x32.png}" />
+			<dxg:GridSearchControl
+				Name="searchControl"
+				dxe:PostMode="Delayed"
+				dxe:SearchTextPostDelay="300"
+				dxe:ShowMRUButton="False"
+				ActualShowButtonClose="False"
+				HorizontalAlignment="Right"
+				Margin="23"
+				dxe:ShowClearButton="True"
+				Width="200"
+				dxe:SearchText="{Binding Filter, Mode=TwoWay}" />
+		</dxwui:AppBar>
+	</Grid>
+</UserControl>

@@ -1,0 +1,146 @@
+<UserControl
+	x:Class="ASC.View.Charts.FinancesChartView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:dxwui="http://schemas.devexpress.com/winfx/2008/xaml/windowsui" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:objects="clr-namespace:ASC.Objects" xmlns:dxc="http://schemas.devexpress.com/winfx/2008/xaml/charts" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:controls="clr-namespace:ASC.View.Controls" xmlns:charts="clr-namespace:ASC.View.Charts">
+	<DockPanel>
+		<dxwui:AppBar
+			DockPanel.Dock="Bottom"
+			Background="#3f3f3f"
+			HorizontalAlignment="Stretch"
+			VerticalAlignment="Bottom"
+			ItemSpacing="0"
+			HideMode="AlwaysVisible">
+			<dxwui:AppBarButton
+				Label="{DynamicResource Refresh}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Command="{Binding RefreshCommand}"
+				Glyph="{dx:DXImageGrayscale Image=Refresh_32x32.png}" />
+		</dxwui:AppBar>
+		<DockPanel
+			Dock="Left"
+			HorizontalAlignment="Left">
+			<dxlc:LayoutControl
+				Orientation="Vertical">
+				<dxlc:LayoutItem
+					Label="{DynamicResource Office}">
+					<dxe:ComboBoxEdit
+						AutoComplete="False"
+						DisplayMember="name"
+						ValueMember="id"
+						EditValue="{Binding SelectedOffice, Mode=TwoWay}"
+						ItemsSource="{Binding OfficesWithAll, Source={x:Static objects:OfflineData.Instance}}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource PaymentType}">
+					<dxe:ComboBoxEdit
+						ValueMember="Id"
+						DisplayMember="Name"
+						PopupMaxHeight="250"
+						IsTextEditable="False"
+						EditValue="{Binding SelectedPaymentSystem, UpdateSourceTrigger=PropertyChanged}"
+						ItemsSource="{Binding PaymentOptionsesWithAll, Source={x:Static objects:OfflineData.Instance}}">
+						<dxmvvm:Interaction.Behaviors>
+							<dxmvvm:EventToCommand
+								EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+								PassEventArgsToCommand="True"
+								Command="{Binding ComboBoxClickCommand}" />
+						</dxmvvm:Interaction.Behaviors>
+					</dxe:ComboBoxEdit>
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource Type}">
+					<dxe:ComboBoxEdit
+						ValueMember="Id"
+						DisplayMember="Name"
+						PopupMaxHeight="250"
+						IsTextEditable="False"
+						EditValue="{Binding SelectedType, UpdateSourceTrigger=PropertyChanged}"
+						ItemsSource="{Binding TypesList}">
+						<dxmvvm:Interaction.Behaviors>
+							<dxmvvm:EventToCommand
+								EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+								PassEventArgsToCommand="True"
+								Command="{Binding ComboBoxClickCommand}" />
+						</dxmvvm:Interaction.Behaviors>
+					</dxe:ComboBoxEdit>
+				</dxlc:LayoutItem>
+				<controls:PeriodView />
+			</dxlc:LayoutControl>
+		</DockPanel>
+		<dxc:ChartControl
+			AnimationMode="Disabled"
+			DataSource="{Binding Chart}">
+			<dxc:ChartControl.CrosshairOptions>
+				<dxc:CrosshairOptions
+					ShowArgumentLabels="True"
+					ShowValueLabels="True" />
+			</dxc:ChartControl.CrosshairOptions>
+			<dxc:ChartControl.Diagram>
+				<dxc:XYDiagram2D
+					SeriesDataMember="SeriesDataMember"
+					AllowSeriesBitmapCaching="False">
+					<dxc:XYDiagram2D.AxisX>
+						<dxc:AxisX2D>
+							<dxc:Axis.WholeRange>
+								<dxc:Range
+									AutoSideMargins="True" />
+							</dxc:Axis.WholeRange>
+							<dxc:AxisX2D.DateTimeScaleOptions>
+								<dxc:ManualDateTimeScaleOptions
+									AggregateFunction="Sum"
+									MeasureUnit="Day" />
+							</dxc:AxisX2D.DateTimeScaleOptions>
+						</dxc:AxisX2D>
+					</dxc:XYDiagram2D.AxisX>
+					<dxc:XYDiagram2D.AxisY>
+						<dxc:AxisY2D
+							GridLinesVisible="True">
+							<dxc:Axis.WholeRange>
+								<dxc:Range
+									AxisY2D.AlwaysShowZeroLevel="False" />
+							</dxc:Axis.WholeRange>
+							<dxc:Axis.Title>
+								<dxc:AxisTitle
+									Content="{DynamicResource Summ}" />
+							</dxc:Axis.Title>
+						</dxc:AxisY2D>
+					</dxc:XYDiagram2D.AxisY>
+					<dxc:XYDiagram2D.DefaultPane>
+						<dxc:Pane>
+							<dxc:BarStackedSeries2D.TotalLabel>
+								<dxc:StackedBarTotalLabel
+									TextPattern="Итого:&#xA;{TV:F1}"
+									ConnectorVisible="True" />
+							</dxc:BarStackedSeries2D.TotalLabel>
+						</dxc:Pane>
+					</dxc:XYDiagram2D.DefaultPane>
+					<dxc:Diagram.SeriesTemplate>
+						<dxc:BarStackedSeries2D
+							ShowInLegend="True"
+							AnimationAutoStartMode="SetStartState"
+							ArgumentScaleType="DateTime"
+							ValueScaleType="Numerical"
+							LabelsVisibility="True"
+							ArgumentDataMember="ArgumentDataMember"
+							ValueDataMember="ValueDataMember">
+							<dxc:BarSeries2D.Model>
+								<dxc:FlatGlassBar2DModel />
+							</dxc:BarSeries2D.Model>
+							<dxc:Series.Label>
+								<dxc:SeriesLabel
+									ConnectorThickness="1"
+									ResolveOverlappingMode="Default"
+									Visible="True"
+									Indent="10" />
+							</dxc:Series.Label>
+						</dxc:BarStackedSeries2D>
+					</dxc:Diagram.SeriesTemplate>
+				</dxc:XYDiagram2D>
+			</dxc:ChartControl.Diagram>
+			<dxc:ChartControl.Legend>
+				<dxc:Legend
+					MarkerMode="CheckBox" />
+			</dxc:ChartControl.Legend>
+		</dxc:ChartControl>
+	</DockPanel>
+</UserControl>

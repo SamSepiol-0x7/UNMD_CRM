@@ -1,0 +1,91 @@
+<dx:ThemedWindow
+	x:Class="ASC.DocumentLoss" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:ASC" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+	Name="DocLossWindow"
+	Title="{DynamicResource PrintDocumentLoss}"
+	Style="{StaticResource DefaulWindow}"
+	Height="228"
+	Width="415"
+	ResizeMode="NoResize"
+	WindowStartupLocation="CenterScreen"
+	DataContext="{Binding DocumentLossModel, RelativeSource={RelativeSource Self}}">
+	<Grid>
+		<Button
+			HorizontalAlignment="Right"
+			VerticalAlignment="Bottom"
+			Width="95"
+			Margin="0,0,10,10"
+			Click="Button_Click">
+			<StackPanel
+				Orientation="Horizontal">
+				<Image
+					Source="Resources/close.png"
+					Width="16"
+					Height="16" />
+				<Label
+					Content="{DynamicResource Close}"
+					Margin="10,0,0,0" />
+			</StackPanel>
+		</Button>
+		<Button
+			HorizontalAlignment="Left"
+			VerticalAlignment="Bottom"
+			Width="95"
+			Margin="10,0,0,10"
+			Command="{Binding PrintDocumentCommand}"
+			CommandParameter="{Binding ElementName=DocLossWindow}">
+			<StackPanel
+				Orientation="Horizontal">
+				<Image
+					Source="Resources/print.png"
+					Width="16"
+					Height="16" />
+				<Label
+					Content="{DynamicResource Print}"
+					Margin="10,0,0,0" />
+			</StackPanel>
+		</Button>
+		<StackPanel
+			Orientation="Vertical"
+			HorizontalAlignment="Right"
+			VerticalAlignment="Top"
+			Margin="0,10,10,0">
+			<StackPanel
+				Orientation="Horizontal"
+				HorizontalAlignment="Right">
+				<Label
+					Content="{DynamicResource FullName}"
+					ContentStringFormat="{}{0}:" />
+				<TextBox
+					Margin="5,0,0,0"
+					Width="250"
+					Text="{Binding Fio, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+			</StackPanel>
+			<StackPanel
+				Orientation="Horizontal"
+				HorizontalAlignment="Right"
+				Margin="0,5,0,0">
+				<Label
+					Content="{DynamicResource PresentedDocument}"
+					ContentStringFormat="{}{0}:" />
+				<dxe:ComboBoxEdit
+					Margin="5,0,0,0"
+					Width="250"
+					ItemsSource="{Binding Documents}"
+					SelectedItem="{Binding DocumentName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+					EditValue="{Binding DocumentName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+			</StackPanel>
+			<StackPanel
+				Orientation="Horizontal"
+				HorizontalAlignment="Right"
+				Margin="0,5,0,0">
+				<Label
+					Content="{DynamicResource PresentedDocumentNumber}"
+					ContentStringFormat="{}{0}:" />
+				<TextBox
+					Margin="5,0,0,0"
+					Width="250"
+					Text="{Binding DocumentNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+			</StackPanel>
+		</StackPanel>
+	</Grid>
+</dx:ThemedWindow>

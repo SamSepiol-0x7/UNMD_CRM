@@ -1,0 +1,28 @@
+<UserControl
+	x:Class="ASC.View.RepairBoxView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:ASC.View" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
+	DataContext="{Binding Path=RepairBoxViewModel, Source={StaticResource ViewModelLocator}}">
+	<dxe:ComboBoxEdit
+		ToolTip="{DynamicResource Box}"
+		AutoComplete="True"
+		NullText="{DynamicResource SelectBox}"
+		ValueMember="id"
+		DisplayMember="name"
+		EditValue="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+		ItemsSource="{Binding Boxes}">
+		<dxe:ButtonEdit.Buttons>
+			<dxe:ButtonInfo
+				ToolTip="{DynamicResource RemoveFromBox}"
+				GlyphKind="Cancel"
+				Command="{Binding RemoveFromBoxCommand}" />
+		</dxe:ButtonEdit.Buttons>
+		<dxmvvm:Interaction.Behaviors>
+			<dxmvvm:EventToCommand
+				EventTriggerBase_x0060_1.EventName="PopupClosed"
+				Command="{Binding UpdateBoxCommand}" />
+			<dxmvvm:EventToCommand
+				EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+				PassEventArgsToCommand="True"
+				Command="{Binding ComboBoxClickCommand}" />
+		</dxmvvm:Interaction.Behaviors>
+	</dxe:ComboBoxEdit>
+</UserControl>

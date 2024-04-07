@@ -1,0 +1,209 @@
+<UserControl
+	x:Class="ASC.ClientCard.CustomerFinancesView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:ASC.ClientCard" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:asc="clr-namespace:ASC" xmlns:objects="clr-namespace:ASC.Objects" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+	DataContext="{Binding Path=CustomerFinancesViewModel, Source={StaticResource ViewModelLocator}}">
+	<Grid>
+		<dxb:ToolBarControl
+			Style="{StaticResource DefaulToolBar}"
+			Height="30">
+			<dxb:BarButtonItem
+				Content="{DynamicResource Print}"
+				KeyGesture="Ctrl+P"
+				Description="{DynamicResource Print}"
+				Command="{Binding View.Commands.ShowPrintPreview, ElementName=TableCashOrderses}"
+				Glyph="{dx:DXImageGrayscale Image=Print_16x16.png}" />
+		</dxb:ToolBarControl>
+		<dxg:GridControl
+			Name="TableCashOrderses"
+			ShowBorder="False"
+			Margin="0,30,0,0"
+			SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+			ItemsSource="{Binding Items}"
+			ShowLoadingPanel="{Binding IsLoadingData}">
+			<dxg:GridColumn
+				Name="Id"
+				FieldName="{DynamicResource DocumentN}"
+				HorizontalHeaderContentAlignment="Center"
+				Width="100"
+				VisibleIndex="0"
+				Binding="{Binding id}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:TextEditSettings
+						HorizontalContentAlignment="Center"
+						MaskType="Numeric"
+						Mask="d6"
+						MaskUseAsDisplayFormat="True" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				Name="Date"
+				FieldName="{DynamicResource Date}"
+				HorizontalHeaderContentAlignment="Center"
+				Width="120"
+				Binding="{Binding created, Converter={StaticResource UtcToLocalDateTimeConverter}}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:TextEditSettings
+						HorizontalContentAlignment="Center"
+						MaskType="DateTime"
+						Mask="dd.MM.yyyy  HH:mm"
+						MaskUseAsDisplayFormat="True" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				Name="Office"
+				FieldName="{DynamicResource Office}"
+				HorizontalHeaderContentAlignment="Center"
+				Width="120"
+				Binding="{Binding OfficeName}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:TextEditSettings
+						HorizontalContentAlignment="Left" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				Name="Cash"
+				CellStyle="{StaticResource IntColorCell}"
+				FieldName="Cash"
+				Header="{DynamicResource Cash}"
+				HorizontalHeaderContentAlignment="Center"
+				Width="120"
+				Binding="{Binding Cash}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:TextEditSettings
+						Mask="N2"
+						MaskType="Numeric"
+						MaskUseAsDisplayFormat="True" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				Name="Cashless"
+				CellStyle="{StaticResource IntColorCell}"
+				FieldName="CashLess"
+				Header="{DynamicResource CashLess}"
+				HorizontalHeaderContentAlignment="Center"
+				Width="120"
+				Binding="{Binding CashLess}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:TextEditSettings
+						Mask="N2"
+						MaskType="Numeric"
+						MaskUseAsDisplayFormat="True" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				Name="Card"
+				CellStyle="{StaticResource IntColorCell}"
+				FieldName="Card"
+				Header="{DynamicResource Card}"
+				HorizontalHeaderContentAlignment="Center"
+				Width="120"
+				Binding="{Binding Card}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:TextEditSettings
+						Mask="N2"
+						MaskType="Numeric"
+						MaskUseAsDisplayFormat="True" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				Name="OtherPS"
+				FieldName="OtherPS"
+				Header="{DynamicResource OtherPaymentSystems}"
+				HorizontalHeaderContentAlignment="Center"
+				Width="120"
+				Binding="{Binding OtherPs}">
+				<dxg:ColumnBase.DisplayTemplate>
+					<ControlTemplate>
+						<StackPanel
+							Orientation="Horizontal"
+							VerticalAlignment="Center"
+							HorizontalAlignment="Center">
+							<TextBlock
+								Text="{Binding RowData.Row.OtherPs, StringFormat=N2}"
+								Foreground="{Binding RowData.Row.OtherPs, Converter={StaticResource Int2ColorConverter}}" />
+							<TextBlock
+								Margin="5,0,0,0"
+								Text="{Binding RowData.Row.PaymentSystemName}" />
+						</StackPanel>
+					</ControlTemplate>
+				</dxg:ColumnBase.DisplayTemplate>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				Name="Image"
+				HorizontalHeaderContentAlignment="Center"
+				Width="40"
+				FieldName="{DynamicResource Type}"
+				Binding="{Binding Image}"
+				CellToolTipBinding="{Binding ToolTipText}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:ImageEditSettings
+						Stretch="Uniform"
+						HorizontalContentAlignment="Center"
+						MaxWidth="16" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				Name="Client"
+				FieldName="{DynamicResource Counterparty}"
+				HorizontalHeaderContentAlignment="Center"
+				Binding="{Binding Client}" />
+			<dxg:GridColumn
+				Name="Employee"
+				FieldName="{DynamicResource User}"
+				HorizontalHeaderContentAlignment="Center"
+				Binding="{Binding User}" />
+			<dxg:GridColumn
+				Name="Notes"
+				Width="10*"
+				FieldName="{DynamicResource ReasonNoDots}"
+				HorizontalHeaderContentAlignment="Center"
+				Binding="{Binding notes}" />
+			<dxg:GridControl.View>
+				<dxg:TableView
+					RowStyle="{StaticResource RowStyle}"
+					ShowTotalSummary="True"
+					AllowScrollAnimation="True"
+					NavigationStyle="Row"
+					ColumnFilterPopupMode="Excel"
+					AllowEditing="False"
+					AllowGrouping="False"
+					AllowColumnMoving="True"
+					ShowGroupPanel="False"
+					ShowColumnHeaders="True"
+					AllowMoveColumnToDropArea="False"
+					ShowBandsPanel="True"
+					ShowIndicator="False"
+					AllowBestFit="True"
+					AllowColumnFiltering="True"
+					ShowSelectionRectangle="False"
+					ShowFixedTotalSummary="False"
+					SummariesIgnoreNullValues="True"
+					RowMinHeight="{Binding Employee.UiSettings.RowHeight, Source={x:Static objects:OfflineData.Instance}}"
+					FontSize="{Binding Employee.UiSettings.FontSize, Source={x:Static objects:OfflineData.Instance}}">
+					<dxmvvm:Interaction.Behaviors>
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="RowDoubleClick"
+							Command="{Binding ItemDoubleClickCommand}" />
+					</dxmvvm:Interaction.Behaviors>
+				</dxg:TableView>
+			</dxg:GridControl.View>
+			<dxg:GridControl.TotalSummary>
+				<dxg:GridSummaryItem
+					DisplayFormat=" {0:N0}"
+					SummaryType="Sum"
+					FieldName="Cash" />
+				<dxg:GridSummaryItem
+					DisplayFormat=" {0:N0}"
+					SummaryType="Sum"
+					FieldName="CashLess" />
+				<dxg:GridSummaryItem
+					DisplayFormat=" {0:N0}"
+					SummaryType="Sum"
+					FieldName="Card" />
+				<dxg:GridSummaryItem
+					DisplayFormat=" {0:N0}"
+					SummaryType="Sum"
+					FieldName="OtherPS" />
+			</dxg:GridControl.TotalSummary>
+		</dxg:GridControl>
+	</Grid>
+</UserControl>

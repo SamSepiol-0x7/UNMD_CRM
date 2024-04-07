@@ -1,0 +1,44 @@
+<UserControl
+	x:Class="ASC.View.VisitSourceEditView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:ASC.View" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm">
+	<FrameworkElement.Resources>
+		<ResourceDictionary>
+			<dxmvvm:BooleanNegationConverter
+				x:Key="BooleanNegationConverter" />
+		</ResourceDictionary>
+	</FrameworkElement.Resources>
+	<DockPanel
+		MaxWidth="500">
+		<StackPanel
+			Margin="10"
+			DockPanel.Dock="Bottom"
+			Orientation="Horizontal"
+			VerticalAlignment="Bottom"
+			HorizontalAlignment="Right">
+			<dx:SimpleButton
+				Style="{StaticResource SaveButton}"
+				Margin="10,0,0,0"
+				Command="{Binding SaveVSCommand}" />
+			<dx:SimpleButton
+				Margin="10,0,0,0"
+				Style="{StaticResource CancelButton}"
+				Command="{Binding CloseDocumentCommand}" />
+		</StackPanel>
+		<dxlc:LayoutControl
+			MinWidth="450"
+			ItemStyle="{StaticResource LeftMenuLayout}"
+			Orientation="Vertical"
+			ItemSpace="5"
+			Padding="10">
+			<dxlc:LayoutItem
+				Label="{DynamicResource Name}">
+				<dxe:TextEdit
+					EditValue="{Binding SelectedItem.name, Mode=TwoWay}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource Archive}">
+				<CheckBox
+					IsChecked="{Binding SelectedItem.enabled, Mode=TwoWay, Converter={StaticResource BooleanNegationConverter}}" />
+			</dxlc:LayoutItem>
+		</dxlc:LayoutControl>
+	</DockPanel>
+</UserControl>

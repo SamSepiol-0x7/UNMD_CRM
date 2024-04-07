@@ -1,0 +1,149 @@
+<UserControl
+	x:Class="ASC.View.KktEditView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:ASC.View" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:system="clr-namespace:System;assembly=mscorlib" xmlns:objects="clr-namespace:ASC.Objects" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm">
+	<DockPanel
+		MaxWidth="600">
+		<StackPanel
+			Margin="10"
+			Orientation="Horizontal"
+			VerticalAlignment="Bottom"
+			DockPanel.Dock="Bottom"
+			HorizontalAlignment="Right">
+			<dx:SimpleButton
+				Content="{DynamicResource Delete}"
+				Margin="5,0,0,0"
+				Visibility="{Binding SelectedKkt.id, Converter={StaticResource NumericToVisibility}, FallbackValue=Collapsed}"
+				Command="{Binding DeleteKktCommand}"
+				Glyph="{DXImageGrayscale Image=Remove_16x16.png}" />
+			<dx:SimpleButton
+				Margin="10,0,0,0"
+				Style="{StaticResource SaveButton}"
+				Command="{Binding SaveKktCommand}" />
+			<dx:SimpleButton
+				Margin="10,0,0,0"
+				Style="{StaticResource CancelButton}"
+				Command="{Binding CloseDocumentCommand}" />
+		</StackPanel>
+		<dxlc:LayoutControl
+			MinWidth="450"
+			Orientation="Vertical">
+			<dxlc:LayoutItem
+				Label="{DynamicResource Name}">
+				<dxe:TextEdit
+					EditValue="{Binding SelectedKkt.name, Mode=TwoWay}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource KKT}">
+				<dxe:ComboBoxEdit
+					DisplayMember="Name"
+					ValueMember="Id"
+					ItemsSource="{Binding KkmProtocolOptionses}"
+					EditValue="{Binding SelectedKkt.protocol, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource Office}">
+				<dxe:ComboBoxEdit
+					NullText="---"
+					DisplayMember="name"
+					ValueMember="id"
+					ItemsSource="{Binding Offices, Source={x:Static objects:OfflineData.Instance}}"
+					EditValue="{Binding SelectedKkt.office, Mode=TwoWay}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource TaxType}"
+				Visibility="{Binding SelectedKkt.protocol, Converter={dxmvvm:NumericToVisibilityConverter Inverse=True}}">
+				<dxe:ComboBoxEdit
+					DisplayMember="Value"
+					ValueMember="Key"
+					EditValue="{Binding SelectedKkt.tax_type, Mode=TwoWay}"
+					ItemsSource="{Binding TaxTypes}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource TaxGroup}">
+				<dxe:SpinEdit
+					MinValue="0"
+					IsFloatValue="False"
+					MaxValue="10"
+					EditValueType="{x:Type system:Int32}"
+					EditValue="{Binding SelectedKkt.tax, Mode=TwoWay}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutGroup
+				Orientation="Horizontal">
+				<dxlc:LayoutItem
+					ToolTip="{DynamicResource KkmDetalizationInfo}"
+					LabelPosition="Top"
+					Label="{DynamicResource KktRSimple}">
+					<dxe:CheckEdit
+						EditValue="{Binding SelectedKkt.r_simple, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					ToolTip="{DynamicResource KkmTemplateInfo}"
+					Label="{DynamicResource Template}"
+					LabelPosition="Top"
+					IsEnabled="{Binding SelectedKkt.r_simple}">
+					<dxe:TextEdit
+						EditValue="{Binding SelectedKkt.r_tpl, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+			<dxlc:LayoutGroup
+				Orientation="Horizontal">
+				<dxlc:LayoutItem
+					LabelPosition="Top"
+					Label="{DynamicResource KktSSimple}">
+					<dxe:CheckEdit
+						EditValue="{Binding SelectedKkt.s_simple, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					ToolTip="{DynamicResource KkmTemplateSaleInfo}"
+					Label="{DynamicResource Template}"
+					LabelPosition="Top"
+					IsEnabled="{Binding SelectedKkt.s_simple}">
+					<dxe:TextEdit
+						EditValue="{Binding SelectedKkt.s_tpl, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+			<dxlc:LayoutItem
+				Label="{DynamicResource Footer}">
+				<dxe:TextEdit
+					EditValue="{Binding SelectedKkt.footer, Mode=TwoWay}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource OrderPaymentItemSign}">
+				<dxe:ComboBoxEdit
+					DisplayMember="Value"
+					ValueMember="Key"
+					EditValue="{Binding SelectedKkt.order_payment_item_sign, Mode=TwoWay}"
+					ItemsSource="{Binding PaymentItemSigns}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource ProductPaymentItemSign}">
+				<dxe:ComboBoxEdit
+					DisplayMember="Value"
+					ValueMember="Key"
+					EditValue="{Binding SelectedKkt.product_payment_item_sign, Mode=TwoWay}"
+					ItemsSource="{Binding PaymentItemSigns}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutGroup
+				View="GroupBox"
+				Header="Кассир"
+				Orientation="Vertical"
+				Visibility="{Binding SelectedKkt.protocol, Converter={dxmvvm:NumericToVisibilityConverter}}">
+				<dxlc:LayoutItem
+					Label="Кассир">
+					<dxe:TextEdit
+						EditValue="{Binding SelectedKkt.operator, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="ИНН кассира">
+					<dxe:TextEdit
+						EditValue="{Binding SelectedKkt.operator_inn, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem>
+					<TextBlock
+						Foreground="#FF0000FF"
+						Text="Если пусто используются данные из карты сотрудника"
+						TextWrapping="Wrap" />
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+		</dxlc:LayoutControl>
+	</DockPanel>
+</UserControl>

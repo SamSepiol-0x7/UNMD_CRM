@@ -1,0 +1,89 @@
+<UserControl
+	x:Class="ASC.Kassa.KassaBalanceView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:ASC.Kassa" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:gl="clr-namespace:System.Globalization;assembly=mscorlib"
+	VerticalAlignment="Top"
+	DataContext="{Binding Path=KassaBalanceViewModel, Source={StaticResource ViewModelLocator}}"
+	Loaded="{DXEvent OnLoad()}"
+	Unloaded="{DXEvent OnUnload()}">
+	<Grid>
+		<FrameworkElement.Resources>
+			<ResourceDictionary>
+				<ControlTemplate
+					TargetType="{x:Type dx:WaitIndicatorContainer}"
+					x:Key="{dx:WaitIndicatorThemeKey ThemeKeyExtensionInternalBase_x0060_1.ResourceKey=WaitIndicatorContainerTemplate, ThemeKeyExtensionBase_x0060_1.IsThemeIndependent=True}">
+					<Border
+						Background="#00FFFFFF"
+						BorderBrush="#FFB9B9B9"
+						BorderThickness="0">
+						<ContentPresenter />
+					</Border>
+				</ControlTemplate>
+			</ResourceDictionary>
+		</FrameworkElement.Resources>
+		<dxlc:LayoutGroup
+			Orientation="Vertical"
+			View="GroupBox"
+			Header="{DynamicResource Balance}">
+			<FrameworkElement.Resources>
+				<ResourceDictionary>
+					<Style
+						TargetType="{x:Type dxlc:LayoutItem}"
+						x:Key="{x:Type dxlc:LayoutItem}">
+						<Setter
+							Property="HorizontalContentAlignment"
+							Value="Right" />
+					</Style>
+					<Style
+						TargetType="{x:Type TextBlock}"
+						x:Key="{x:Type TextBlock}">
+						<Setter
+							Property="FontWeight"
+							Value="Bold" />
+					</Style>
+					<Style
+						TargetType="{x:Type dxlc:LayoutItemLabel}"
+						x:Key="{x:Type dxlc:LayoutItemLabel}">
+						<Setter
+							Property="FontWeight"
+							Value="Bold" />
+					</Style>
+				</ResourceDictionary>
+			</FrameworkElement.Resources>
+			<dxlc:LayoutItem
+				Label="{DynamicResource Cash}">
+				<TextBlock
+					Text="{Binding Cash, FallbackValue=0, StringFormat={}{0:N2}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}"
+					Foreground="{Binding Path=Cash, Converter={StaticResource Int2ColorConverter}}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource CashLess}">
+				<TextBlock
+					Text="{Binding CashLess, FallbackValue=0, StringFormat={}{0:N2}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}"
+					Foreground="{Binding Path=CashLess, Converter={StaticResource Int2ColorConverter}}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource Card}">
+				<TextBlock
+					Text="{Binding Card, FallbackValue=0, StringFormat={}{0:N2}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}"
+					Foreground="{Binding Path=Card, Converter={StaticResource Int2ColorConverter}}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				LabelPosition="Top"
+				Label=" ">
+				<dx:SimpleButton
+					Content="{DynamicResource WithdrawOrDepositFunds}"
+					Visibility="{Binding IsEnabled, FallbackValue=Collapsed, RelativeSource={RelativeSource Self}, Converter={BooleanToVisibilityConverter}}"
+					Command="{Binding WithdrawFundsCommand}" />
+			</dxlc:LayoutItem>
+		</dxlc:LayoutGroup>
+		<Border
+			Name="cover"
+			Background="#FF000000"
+			Opacity="0.45"
+			Visibility="{Binding DeferedVisibility, ElementName=waitIndicator, Converter={dx:BooleanToVisibilityConverter}}" />
+		<dx:WaitIndicator
+			Name="waitIndicator"
+			Content=""
+			BorderThickness="0"
+			DeferedVisibility="{Binding IsBuzy, Mode=OneWay}" />
+	</Grid>
+</UserControl>

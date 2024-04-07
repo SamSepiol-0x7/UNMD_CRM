@@ -1,0 +1,369 @@
+<dxwui:NavigationPage
+	x:Class="ASC.ClientsView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" xmlns:clients="clr-namespace:ASC.Clients" xmlns:dxwui="http://schemas.devexpress.com/winfx/2008/xaml/windowsui" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:asc="clr-namespace:ASC" xmlns:objects="clr-namespace:ASC.Objects" xmlns:extensions="clr-namespace:ASC.Extensions"
+	Name="ClientsWin"
+	dxwui:NavigationCacheMode="Disabled"
+	DataContext="{dxmvvm:ViewModelSource Type={x:Type clients:ClientsViewModel}}"
+	Loaded="{DXEvent OnLoaded()}">
+	<FrameworkElement.Resources>
+		<ResourceDictionary>
+			<Style
+				TargetType="{x:Type dxwui:AppBarButton}"
+				x:Key="{x:Type dxwui:AppBarButton}">
+				<Setter
+					Property="dxwui:CommandButton.AllowGlyphTheming"
+					Value="True" />
+				<Setter
+					Property="dxwui:CommandButton.IsEllipseEnabled"
+					Value="False" />
+			</Style>
+		</ResourceDictionary>
+	</FrameworkElement.Resources>
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition
+				Width="280" />
+			<ColumnDefinition
+				Width="10*" />
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition
+				Height="199*" />
+			<RowDefinition
+				Height="90" />
+		</Grid.RowDefinitions>
+		<dxwui:AppBar
+			Background="#3f3f3f"
+			HorizontalAlignment="Stretch"
+			VerticalAlignment="Bottom"
+			ItemSpacing="5"
+			HideMode="AlwaysVisible"
+			Grid.Row="1"
+			Grid.ColumnSpan="2">
+			<dxwui:AppBarButton
+				Label="{DynamicResource Import}"
+				HorizontalAlignment="Left"
+				Command="{Binding ImportClientsCommand}"
+				Glyph="{dx:DXImageGrayscale Image=Open_32x32.png}" />
+			<dxwui:AppBarButton
+				Label="{DynamicResource Create}"
+				HorizontalAlignment="Left"
+				Command="{Binding CreateCustomerCommand}"
+				Glyph="{dx:DXImageGrayscale Image=New_32x32.png}" />
+			<dxwui:AppBarButton
+				Label="{DynamicResource Save}"
+				HorizontalAlignment="Left"
+				Command="{Binding MakeImportCommand}"
+				Visibility="{Binding ImportMode, Converter={StaticResource BooleanToVisibilityConverter}}"
+				Glyph="{dx:DXImageGrayscale Image=Save_32x32.png}" />
+			<dxwui:AppBarButton
+				Label="{DynamicResource Refresh}"
+				HorizontalAlignment="Center"
+				Command="{Binding ClientsRefreshCommand}"
+				Glyph="{dx:DXImageGrayscale Image=Refresh_32x32.png}" />
+			<dxwui:AppBarButton
+				Label="{DynamicResource Merge}"
+				HorizontalAlignment="Center"
+				Command="{Binding MergeCustomersCommand}"
+				Visibility="{Binding IsEnabled, Converter={StaticResource BooleanToVisibilityConverter}, RelativeSource={RelativeSource Self}}"
+				Glyph="{dx:DXImage Image=Merge_32x32.png}" />
+			<dxwui:AppBarButton
+				Label="{DynamicResource Print}"
+				HorizontalAlignment="Center"
+				Command="{Binding View.Commands.ShowPrintPreview, ElementName=TableView1}"
+				Glyph="{dx:DXImageGrayscale Image=Print_32x32.png}" />
+			<dxwui:AppBarSeparator />
+			<dxwui:AppBarButton
+				Label="{DynamicResource Options}"
+				HorizontalAlignment="Center"
+				Glyph="{dx:DXImageOffice2013 Image=Properties_32x32.png}">
+				<dxwui:AppBarButtonBase.Flyout>
+					<dxwui:MenuFlyout
+						ShowIndicator="True">
+						<dxwui:MenuFlyoutItem>
+							<StackPanel
+								Orientation="Vertical">
+								<TextBlock
+									Text="{DynamicResource VisitSource}" />
+								<dxe:ComboBoxEdit
+									Width="150"
+									DisplayMember="name"
+									ValueMember="id"
+									ClosePopupOnLostFocus="False"
+									EditValue="{Binding SelectedVisitSource, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+									ItemsSource="{Binding VisitSourcesWithAll, Source={x:Static objects:OfflineData.Instance}}">
+									<dxmvvm:Interaction.Behaviors>
+										<dxmvvm:EventToCommand
+											EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+											PassEventArgsToCommand="True"
+											Command="{Binding ComboBoxClickCommand}" />
+									</dxmvvm:Interaction.Behaviors>
+								</dxe:ComboBoxEdit>
+							</StackPanel>
+						</dxwui:MenuFlyoutItem>
+					</dxwui:MenuFlyout>
+				</dxwui:AppBarButtonBase.Flyout>
+			</dxwui:AppBarButton>
+			<dxg:GridSearchControl
+				Name="searchControl"
+				dxe:SearchTextPostDelay="300"
+				dxe:PostMode="Delayed"
+				dxe:ShowMRUButton="False"
+				ActualShowButtonClose="False"
+				HorizontalAlignment="Right"
+				Margin="23"
+				dxe:ShowClearButton="True"
+				Width="200"
+				dxe:SearchText="{Binding SearchString, Mode=TwoWay}">
+				<dxmvvm:Interaction.Behaviors>
+					<dxmvvm:FocusBehavior />
+				</dxmvvm:Interaction.Behaviors>
+			</dxg:GridSearchControl>
+		</dxwui:AppBar>
+		<dxlc:LayoutControl
+			ItemStyle="{StaticResource LeftMenuLayout}"
+			Orientation="Vertical"
+			ItemSpace="5"
+			Padding="10">
+			<dxlc:LayoutGroup
+				Orientation="Horizontal"
+				View="GroupBox"
+				Header="{DynamicResource Type}">
+				<dxe:ListBoxEdit
+					VerticalAlignment="Top"
+					SelectionMode="Single"
+					DisplayMember="Name"
+					ValueMember="Id"
+					FontSize="{Binding Employee.UiSettings.FontSize, Source={x:Static objects:OfflineData.Instance}}"
+					EditValue="{Binding SelectedClientType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+					ItemsSource="{Binding ClientTypes}">
+					<dxe:ListBoxEdit.ItemContainerStyle>
+						<Style
+							BasedOn="{StaticResource dxe:ListBoxEditItem}"
+							TargetType="{x:Type dxe:ListBoxEditItem}">
+							<Setter
+								Property="Height"
+								Value="{Binding Employee.UiSettings.RowHeight, Source={x:Static objects:OfflineData.Instance}}" />
+							<Setter
+								Property="MinHeight"
+								Value="8" />
+						</Style>
+					</dxe:ListBoxEdit.ItemContainerStyle>
+				</dxe:ListBoxEdit>
+			</dxlc:LayoutGroup>
+			<dxlc:LayoutItem
+				Label="{DynamicResource ShowArhiveClients}"
+				Visibility="{Binding DisplayArchive, Converter={StaticResource BooleanToVisibilityConverter}}">
+				<dxe:CheckEdit
+					EditValue="{Binding ShowArhiveClients, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+			</dxlc:LayoutItem>
+		</dxlc:LayoutControl>
+		<Border
+			BorderThickness="1,1,0,0"
+			BorderBrush="#FFA9A9A9"
+			Grid.Column="1">
+			<dxg:GridControl
+				Name="TableView1"
+				Tag="CustomersGrid"
+				Style="{StaticResource DeDefTable}"
+				Margin="0,0,0,0"
+				ItemsSource="{Binding Items}"
+				SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+				SelectedItems="{Binding SelectedItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+				DXSerializer.AllowProperty="TableView1_OnAllowProperty">
+				<dxmvvm:Interaction.Behaviors>
+					<dxmvvm:EventToCommand
+						EventTriggerBase_x0060_1.EventName="Loaded"
+						Command="{Binding GridInitCommand}"
+						CommandParameter="{Binding ElementName=TableView1}" />
+					<dxmvvm:EventToCommand
+						EventTriggerBase_x0060_1.EventName="Unloaded"
+						Command="{Binding GridUnloadedCommand}"
+						CommandParameter="{Binding ElementName=TableView1}" />
+					<extensions:GridLayoutHelper>
+						<dxmvvm:Interaction.Behaviors>
+							<dxmvvm:EventToCommand
+								EventTriggerBase_x0060_1.EventName="LayoutChanged"
+								Command="{Binding LayoutChangedCommand}"
+								CommandParameter="{Binding ElementName=TableView1}" />
+						</dxmvvm:Interaction.Behaviors>
+					</extensions:GridLayoutHelper>
+				</dxmvvm:Interaction.Behaviors>
+				<dxg:GridColumn
+					Name="Id"
+					FieldName="Id"
+					Header="Id"
+					HorizontalHeaderContentAlignment="Center"
+					Width="100"
+					VisibleIndex="0">
+					<dxg:ColumnBase.EditSettings>
+						<dxe:TextEditSettings
+							HorizontalContentAlignment="Center"
+							MaskType="Numeric"
+							Mask="d6"
+							MaskUseAsDisplayFormat="True" />
+					</dxg:ColumnBase.EditSettings>
+				</dxg:GridColumn>
+				<dxg:GridColumn
+					Name="Customer"
+					Width="20*"
+					Header="{DynamicResource FullName++}"
+					FieldName="Customer"
+					HorizontalHeaderContentAlignment="Center"
+					Binding="{Binding FioOrUrName}" />
+				<dxg:GridColumn
+					Name="Balance"
+					Header="{DynamicResource Balance}"
+					FieldName="Balance"
+					HorizontalHeaderContentAlignment="Center"
+					Width="100"
+					Binding="{Binding Balance}">
+					<dxg:ColumnBase.EditSettings>
+						<dxe:TextEditSettings
+							HorizontalContentAlignment="Right"
+							MaskType="Numeric"
+							Mask="N2"
+							MaskUseAsDisplayFormat="True" />
+					</dxg:ColumnBase.EditSettings>
+				</dxg:GridColumn>
+				<dxg:GridColumn
+					Name="Repairs"
+					Header="{DynamicResource Repairs2}"
+					FieldName="Repairs"
+					HorizontalHeaderContentAlignment="Center"
+					Width="100"
+					Binding="{Binding RepairsCount}">
+					<dxg:ColumnBase.EditSettings>
+						<dxe:TextEditSettings
+							HorizontalContentAlignment="Center" />
+					</dxg:ColumnBase.EditSettings>
+				</dxg:GridColumn>
+				<dxg:GridColumn
+					Name="Purchases"
+					Header="{DynamicResource Label92}"
+					FieldName="Purchases"
+					HorizontalHeaderContentAlignment="Center"
+					Width="100"
+					Binding="{Binding PurchasesCount}">
+					<dxg:ColumnBase.EditSettings>
+						<dxe:TextEditSettings
+							HorizontalContentAlignment="Center" />
+					</dxg:ColumnBase.EditSettings>
+				</dxg:GridColumn>
+				<dxg:GridColumn
+					Name="Type"
+					AllowPrinting="False"
+					Width="50"
+					Header="{DynamicResource Type}"
+					FieldName="Type"
+					HorizontalHeaderContentAlignment="Center"
+					Binding="{Binding Type, Converter={StaticResource ClientTypeToPictureConverter}}">
+					<dxg:ColumnBase.EditSettings>
+						<dxe:ImageEditSettings
+							HorizontalContentAlignment="Center"
+							MaxWidth="16"
+							VerticalContentAlignment="Center"
+							ShowMenu="False" />
+					</dxg:ColumnBase.EditSettings>
+				</dxg:GridColumn>
+				<dxg:GridColumn
+					Name="Phone"
+					Width="5*"
+					Header="{DynamicResource Phone}"
+					FieldName="Phone"
+					HorizontalHeaderContentAlignment="Center"
+					Binding="{Binding Phone}">
+					<dxg:ColumnBase.EditSettings>
+						<dxe:TextEditSettings
+							HorizontalContentAlignment="Center" />
+					</dxg:ColumnBase.EditSettings>
+				</dxg:GridColumn>
+				<dxg:GridColumn
+					Name="Email"
+					Width="5*"
+					Header="Email"
+					FieldName="Email"
+					HorizontalHeaderContentAlignment="Center"
+					Binding="{Binding Email}">
+					<dxg:ColumnBase.EditSettings>
+						<dxe:TextEditSettings
+							HorizontalContentAlignment="Center" />
+					</dxg:ColumnBase.EditSettings>
+				</dxg:GridColumn>
+				<dxg:GridControl.View>
+					<dxg:TableView
+						Name="clientsTableView"
+						IsSynchronizedWithCurrentItem="True"
+						ShowTotalSummary="True"
+						AllowScrollAnimation="True"
+						NavigationStyle="Row"
+						ColumnFilterPopupMode="Excel"
+						AllowEditing="False"
+						AllowGrouping="False"
+						AllowColumnMoving="True"
+						ShowGroupPanel="False"
+						ShowColumnHeaders="True"
+						AllowMoveColumnToDropArea="False"
+						ShowSearchPanelMode="Never"
+						ShowBandsPanel="True"
+						ShowIndicator="False"
+						AllowBestFit="True"
+						AllowColumnFiltering="True"
+						ShowSelectionRectangle="False"
+						ShowFixedTotalSummary="False"
+						SummariesIgnoreNullValues="True"
+						RowMinHeight="{Binding Employee.UiSettings.RowHeight, Source={x:Static objects:OfflineData.Instance}}"
+						FontSize="{Binding Employee.UiSettings.FontSize, Source={x:Static objects:OfflineData.Instance}}">
+						<dxmvvm:Interaction.Behaviors>
+							<dxmvvm:EventToCommand
+								EventTriggerBase_x0060_1.EventName="RowDoubleClick"
+								Command="{Binding ClientDoubleClickCommand}" />
+						</dxmvvm:Interaction.Behaviors>
+						<dxg:TableView.RowStyle>
+							<Style
+								BasedOn="{StaticResource RowStyle}"
+								TargetType="{x:Type dxg:RowControl}">
+								<Style.Triggers>
+									<DataTrigger
+										Value="0"
+										Binding="{Binding Row.State}">
+										<Setter
+											Property="Background"
+											Value="#FFD3D3D3" />
+									</DataTrigger>
+									<DataTrigger
+										Value="True"
+										Binding="{Binding Row.IsBad}">
+										<Setter
+											Property="Background"
+											Value="#FE7171" />
+										<Setter
+											Property="FrameworkElement.ToolTip"
+											Value="{DynamicResource LabelIsBad}" />
+									</DataTrigger>
+								</Style.Triggers>
+							</Style>
+						</dxg:TableView.RowStyle>
+					</dxg:TableView>
+				</dxg:GridControl.View>
+				<dxg:GridControl.TotalSummary>
+					<dxg:GridSummaryItem
+						DisplayFormat=" {0:N0}"
+						SummaryType="Count"
+						FieldName="Id" />
+					<dxg:GridSummaryItem
+						DisplayFormat=" {0:N2}"
+						SummaryType="Sum"
+						FieldName="{DynamicResource Balance}" />
+					<dxg:GridSummaryItem
+						DisplayFormat=" {0:N0}"
+						SummaryType="Sum"
+						FieldName="{DynamicResource Repairs2}" />
+					<dxg:GridSummaryItem
+						DisplayFormat=" {0:N0}"
+						SummaryType="Sum"
+						FieldName="{DynamicResource Label92}" />
+				</dxg:GridControl.TotalSummary>
+			</dxg:GridControl>
+		</Border>
+	</Grid>
+</dxwui:NavigationPage>

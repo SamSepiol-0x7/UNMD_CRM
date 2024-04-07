@@ -1,0 +1,145 @@
+<UserControl
+	x:Class="ASC.View.ACP.CompanyEditView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:ASC.View.ACP" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:extensions="clr-namespace:ASC.Extensions" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:objects="clr-namespace:ASC.Objects"
+	KeyUp="{DXEvent OnKeyUp(@args)}"
+	Loaded="{DXEvent OnLoaded()}"
+	Unloaded="{DXEvent OnUnloaded()}">
+	<FrameworkElement.Resources>
+		<ResourceDictionary>
+			<dxmvvm:BooleanNegationConverter
+				x:Key="BooleanNegationConverter" />
+		</ResourceDictionary>
+	</FrameworkElement.Resources>
+	<DockPanel
+		MaxWidth="900"
+		MaxHeight="700"
+		Margin="10">
+		<StackPanel
+			DockPanel.Dock="Top"
+			Orientation="Horizontal">
+			<TextBlock
+				Style="{StaticResource DialogTitle}"
+				Text="{Binding Title, Mode=OneWay, FallbackValue=Title}" />
+		</StackPanel>
+		<StackPanel
+			Margin="0,10,0,0"
+			HorizontalAlignment="Right"
+			VerticalAlignment="Bottom"
+			DockPanel.Dock="Bottom"
+			Orientation="Horizontal">
+			<dx:SimpleButton
+				Style="{StaticResource SaveButton}"
+				Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={BooleanToVisibilityConverter}}"
+				Command="{Binding SaveCommand}"
+				Glyph="{DXImageGrayscale Image=Save_16x16.png}" />
+			<dx:SimpleButton
+				Style="{StaticResource SaveButton}"
+				Content="{DynamicResource Create}"
+				Margin="10,0,0,0"
+				Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={BooleanToVisibilityConverter}}"
+				Command="{Binding CreateCommand}"
+				Glyph="{DXImageGrayscale Image=New_16x16.png}" />
+			<dx:SimpleButton
+				ToolTip="[Esc]"
+				Style="{StaticResource CancelButton}"
+				Content="{DynamicResource Close}"
+				Margin="10,0,0,0"
+				Command="{Binding CloseCommand}" />
+		</StackPanel>
+		<dxlc:LayoutControl
+			ItemStyle="{StaticResource LeftMenuLayout}"
+			Orientation="Horizontal"
+			ItemSpace="5"
+			Padding="0">
+			<dxlc:LayoutGroup
+				Orientation="Vertical"
+				HorizontalAlignment="Left"
+				Width="250">
+				<extensions:ImageEditEx
+					Height="200"
+					MaxFileSize="248346"
+					dxe:EditValue="{Binding Item.logo, Mode=TwoWay}" />
+				<dxlc:LayoutItem
+					Label="{DynamicResource Inn}">
+					<dxe:TextEdit
+						EditValue="{Binding Item.inn, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource Ogrn}">
+					<dxe:TextEdit
+						EditValue="{Binding Item.ogrn, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource Kpp}">
+					<dxe:TextEdit
+						EditValue="{Binding Item.kpp, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource Site}">
+					<dxe:TextEdit
+						EditValue="{Binding Item.site, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource Email}">
+					<dxe:TextEdit
+						EditValue="{Binding Item.email, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutGroup
+					ItemLabelsAlignment="Local">
+					<dxlc:LayoutItem
+						HorizontalContentAlignment="Right"
+						Label="{DynamicResource ArhFirm}"
+						Visibility="{Binding Item.id, Converter={dxmvvm:NumericToVisibilityConverter}}">
+						<dxe:CheckEdit
+							EditValue="{Binding Item.status, Mode=TwoWay, Converter={StaticResource BooleanNegationConverter}}" />
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+			</dxlc:LayoutGroup>
+			<dxlc:LayoutGroup
+				Orientation="Vertical">
+				<dxlc:LayoutItem
+					Label="{DynamicResource UrName}">
+					<dxe:TextEdit
+						MinWidth="300"
+						MaxLength="254"
+						EditValue="{Binding Item.name, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource UrAddress}">
+					<dxe:TextEdit
+						MaxLength="254"
+						EditValue="{Binding Item.ur_address, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="Тип организации:">
+					<ComboBox
+						DisplayMemberPath="Value"
+						SelectedValuePath="Key"
+						ItemsSource="{Binding CompanyTypes}"
+						SelectedValue="{Binding Item.type, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource Director}">
+					<ComboBox
+						DisplayMemberPath="Fio"
+						SelectedValuePath="Id"
+						SelectedValue="{Binding Item.director, Mode=TwoWay}"
+						ItemsSource="{Binding ActiveUsers, Source={x:Static objects:OfflineData.Instance}}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource ChiefAccountant}">
+					<ComboBox
+						DisplayMemberPath="Fio"
+						SelectedValuePath="Id"
+						SelectedValue="{Binding Item.accountant, Mode=TwoWay}"
+						ItemsSource="{Binding ActiveUsers, Source={x:Static objects:OfflineData.Instance}}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource Description}">
+					<dxe:TextEdit
+						MaxLength="45"
+						EditValue="{Binding Item.description, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+		</dxlc:LayoutControl>
+	</DockPanel>
+</UserControl>

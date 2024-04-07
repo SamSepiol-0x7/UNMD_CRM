@@ -1,0 +1,113 @@
+<UserControl
+	x:Class="ASC.RepairCard.Media.MediaView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:ASC.RepairCard.Media" xmlns:asc="clr-namespace:ASC" xmlns:dxwui="http://schemas.devexpress.com/winfx/2008/xaml/windowsui" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:header="clr-namespace:ASC.RepairCard.Header" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
+	Name="RepairMedia">
+	<FrameworkElement.Resources>
+		<ResourceDictionary>
+			<asc:BindingProxy
+				Data="{Binding}"
+				x:Key="DataContextProxy" />
+		</ResourceDictionary>
+	</FrameworkElement.Resources>
+	<DockPanel>
+		<header:HeaderView
+			DockPanel.Dock="Top"
+			dxmvvm:ViewModelExtensions.Parameter="{Binding DataContext.Repair, ElementName=RepairMedia}"
+			dxmvvm:ViewModelExtensions.ParentViewModel="{Binding DataContext, ElementName=RepairMedia}" />
+		<dxwui:AppBar
+			DockPanel.Dock="Bottom"
+			Background="#3f3f3f"
+			HorizontalAlignment="Stretch"
+			VerticalAlignment="Bottom"
+			ItemSpacing="5"
+			HideMode="AlwaysVisible">
+			<dxwui:AppBarButton
+				Label="{DynamicResource Common}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Command="{Binding OpenRepairCommonCommand}"
+				Glyph="{dx:DXImage Image=Suggestion_32x32.png}" />
+			<dxwui:AppBarButton
+				Label="{DynamicResource Client}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Command="{Binding OpenClientCardCommand}"
+				Visibility="{Binding ConverterParameter=CAN_VIEW_CLIENTS, Converter={StaticResource AclVis}}"
+				Glyph="{dx:DXImage Image=BOCustomer_32x32.png}" />
+			<dxwui:AppBarButton
+				Label="{DynamicResource Control}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Glyph="pack://application:,,,/DevExpress.Images.v17.2;component/DevAV/Actions/ViewSetting_32x32.png"
+				Margin="0,0,-51,0"
+				Width="151"
+				Visibility="{Binding ConverterParameter=CAN_REPAIR_ADMIN, Converter={StaticResource AclVis}}"
+				Command="{Binding OpenRepairAdminCommand}" />
+		</dxwui:AppBar>
+		<Button
+			DockPanel.Dock="Top"
+			Content="{DynamicResource Edit}"
+			HorizontalAlignment="Left"
+			Margin="10"
+			VerticalAlignment="Top"
+			Command="{Binding EditPhotoCommand}" />
+		<dxlc:FlowLayoutControl
+			Name="layoutImages"
+			AllowItemMoving="True"
+			AllowLayerSizing="True"
+			AllowMaximizedElementMoving="True"
+			AnimateItemMoving="True"
+			dx:DragScrolling="False"
+			ShowLayerSeparators="True"
+			ItemsSource="{Binding Images}"
+			ItemsSizeChanged="layoutImagesItemsSizeChanged">
+			<dxlc:FlowLayoutControl.ItemTemplate>
+				<DataTemplate>
+					<local:ImageContainer
+						Width="280"
+						HorizontalAlignment="Center"
+						VerticalAlignment="Center"
+						Cursor="Hand"
+						dx:Content="{Binding}">
+						<Control.Template>
+							<ControlTemplate
+								TargetType="{x:Type local:ImageContainer}">
+								<Grid>
+									<Image
+										Name="root"
+										RenderTransformOrigin="0.5,0.5"
+										Source="{Binding img}">
+										<UIElement.RenderTransform>
+											<ScaleTransform />
+										</UIElement.RenderTransform>
+									</Image>
+									<StackPanel
+										Orientation="Horizontal"
+										VerticalAlignment="Bottom"
+										HorizontalAlignment="Right">
+										<TextBlock
+											Foreground="#FFFFFF00"
+											FontWeight="Bold"
+											Text="{Binding added, Mode=OneWay, StringFormat=dd.MM.yyyy HH:mm, Converter={StaticResource UtcToLocalDateTimeConverter}}" />
+										<dx:SimpleButton
+											Margin="5,0,0,0"
+											Glyph="pack://application:,,,/DevExpress.Images.v17.2;component/DevAV/Actions/Print_16x16.png"
+											Command="{Binding Data.PrinImageCommand, Source={StaticResource DataContextProxy}}"
+											CommandParameter="{Binding img}" />
+										<dx:SimpleButton
+											Margin="5,0,0,0"
+											Glyph="pack://application:,,,/DevExpress.Images.v17.2;component/DevAV/Actions/Save_16x16.png"
+											Command="{Binding Data.SaveImageCommand, Source={StaticResource DataContextProxy}}"
+											CommandParameter="{Binding img}" />
+									</StackPanel>
+								</Grid>
+							</ControlTemplate>
+						</Control.Template>
+					</local:ImageContainer>
+				</DataTemplate>
+			</dxlc:FlowLayoutControl.ItemTemplate>
+		</dxlc:FlowLayoutControl>
+	</DockPanel>
+</UserControl>

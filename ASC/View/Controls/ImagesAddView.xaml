@@ -1,0 +1,68 @@
+<UserControl
+	x:Class="ASC.View.Controls.ImagesAddView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
+	Name="ImagesAddViewControl"
+	VerticalAlignment="Top" xmlns:controls="clr-namespace:ASC.View.Controls"
+	Loaded="{DXEvent OnLoad()}"
+	Unloaded="{DXEvent OnUnload()}">
+	<dxlc:LayoutGroup
+		Orientation="Vertical">
+		<dxlc:LayoutItem
+			Label="{DynamicResource Photos}"
+			LabelPosition="Top">
+			<dx:LoadingDecorator
+				SplashScreenLocation="CenterContainer"
+				IsSplashScreenShown="{Binding LoadingShown}">
+				<dxe:ImageEdit
+					Name="ImageEdit"
+					Width="250"
+					Height="200"
+					ShowMenuMode="Always"
+					Source="{Binding Image.PreviewSource, Mode=OneWay}"
+					EditValue="{Binding Image.img, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+					<dxmvvm:Interaction.Behaviors>
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="EditValueChanged"
+							Command="{Binding ImageValueChangedCommand}" />
+					</dxmvvm:Interaction.Behaviors>
+					<dxe:ImageEdit.MenuTemplate>
+						<ControlTemplate>
+							<StackPanel
+								Orientation="Horizontal">
+								<dxe:ImageEditLoadToolButton />
+								<dxe:ImageEditToolButton
+									ToolTip="Несколько за раз"
+									ImageSource="{dx:DXImage Image=Open2_16x16.png}"
+									Command="{Binding DataContext.SelectImagesCommand, ElementName=ImagesAddViewControl}" />
+								<dxe:ImageEditToolSeparator />
+								<dxe:ImageEditClearToolButton />
+								<dxe:ImageEditSaveToolButton />
+								<dxe:ImageEditToolButton
+									ToolTip="Фото с камеры"
+									Command="{Binding DataContext.TakePictureCommand, ElementName=ImagesAddViewControl}"
+									CommandParameter="{Binding ElementName=ImageEdit}"
+									ImageSource="{dx:DXImage Image=PictureBox_16x16.png}" />
+							</StackPanel>
+						</ControlTemplate>
+					</dxe:ImageEdit.MenuTemplate>
+				</dxe:ImageEdit>
+			</dx:LoadingDecorator>
+		</dxlc:LayoutItem>
+		<dxlc:LayoutItem>
+			<DockPanel>
+				<dx:SimpleButton
+					DockPanel.Dock="Left"
+					HorizontalAlignment="Left"
+					Command="{Binding PrevImageCommand}"
+					Glyph="{DXImageGrayscale Image=Prev_16x16.png}" />
+				<dx:SimpleButton
+					DockPanel.Dock="Right"
+					HorizontalAlignment="Right"
+					Command="{Binding NextImageCommand}"
+					Glyph="{DXImageGrayscale Image=Next_16x16.png}" />
+				<TextBlock
+					HorizontalAlignment="Center"
+					Text="{Binding ImgNumInfo, FallbackValue=1 of 5}" />
+			</DockPanel>
+		</dxlc:LayoutItem>
+	</dxlc:LayoutGroup>
+</UserControl>

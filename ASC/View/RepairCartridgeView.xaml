@@ -1,0 +1,454 @@
+<UserControl
+	x:Class="ASC.View.RepairCartridgeView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:dxdo="http://schemas.devexpress.com/winfx/2008/xaml/docking" xmlns:dxwui="http://schemas.devexpress.com/winfx/2008/xaml/windowsui" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:asc="clr-namespace:ASC" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" xmlns:view="clr-namespace:ASC.View"
+	Loaded="{DXEvent OnLoad()}">
+	<FrameworkElement.Resources>
+		<ResourceDictionary>
+			<dxmvvm:StringToVisibilityConverter
+				x:Key="StringToVisibility" />
+			<Style
+				TargetType="{x:Type dxdo:LayoutPanel}"
+				x:Key="{x:Type dxdo:LayoutPanel}">
+				<Setter
+					Property="dxdo:BaseLayoutItem.ShowCloseButton"
+					Value="False" />
+				<Setter
+					Property="dxdo:LayoutPanel.ShowBorder"
+					Value="False" />
+				<Setter
+					Property="dxdo:BaseLayoutItem.ShowCaption"
+					Value="False" />
+				<Setter
+					Property="dxdo:BaseLayoutItem.AllowDrag"
+					Value="False" />
+				<Setter
+					Property="dxdo:BaseLayoutItem.Margin"
+					Value="0" />
+				<Setter
+					Property="dxdo:BaseLayoutItem.Padding"
+					Value="0" />
+				<Setter
+					Property="MaxHeight"
+					Value="24" />
+			</Style>
+		</ResourceDictionary>
+	</FrameworkElement.Resources>
+	<DockPanel>
+		<dxwui:AppBar
+			DockPanel.Dock="Bottom"
+			HorizontalAlignment="Stretch"
+			VerticalAlignment="Stretch"
+			ItemSpacing="5"
+			HideMode="AlwaysVisible">
+			<dxwui:AppBarButton
+				Name="IssueBnt"
+				Label="{DynamicResource Issue}"
+				HorizontalAlignment="Center"
+				Visibility="{Binding IsEnabled, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed, RelativeSource={RelativeSource Self}}"
+				Command="{Binding IssueCommand}"
+				Glyph="{dx:DXImage Image=Status_32x32.png}" />
+			<dxwui:AppBarSeparator
+				Visibility="{Binding ElementName=IssueBnt, Path=Visibility}" />
+			<dxwui:AppBarButton
+				Label="{DynamicResource Refresh}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Command="{Binding RefreshCommand}"
+				Glyph="{dx:DXImageGrayscale Image=Refresh_32x32.png}" />
+		</dxwui:AppBar>
+		<dxg:GridControl
+			MinHeight="100"
+			AllowMRUFilterList="False"
+			AllowColumnMRUFilterList="False"
+			IsFilterEnabled="False"
+			SelectedItem="{Binding SelectedCartridge, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+			ItemsSource="{Binding Cartridges}">
+			<dxg:GridControl.View>
+				<dxg:CardView
+					Name="view"
+					ScrollMode="Item"
+					AllowScrollToFocusedRow="False"
+					ShowColumnHeaders="False"
+					AllowColumnFiltering="False"
+					ShowFilterPanelMode="Never"
+					ShowCardExpandButton="False"
+					AllowEditing="False"
+					ShowGroupPanel="False"
+					ShowGroupedColumns="False"
+					PrintAutoCardWidth="False"
+					AllowCardResizing="False"
+					SeparatorThickness="0"
+					MaxCardCountInRow="1"
+					CardLayout="Rows"
+					CardAlignment="Stretch"
+					AllowGrouping="False"
+					AutoScrollOnSorting="False"
+					AllowSorting="False"
+					AllowFilterEditor="False"
+					SearchPanelAllowFilter="False"
+					IsGroupPanelMenuEnabled="False">
+					<dxg:CardView.CardHeaderTemplate>
+						<DataTemplate>
+							<DockPanel>
+								<dx:SimpleButton
+									DockPanel.Dock="Left"
+									ToolTip="{DynamicResource Delete}"
+									Padding="0"
+									Command="{Binding DataContext.RemoveCartridgeCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+									Glyph="{DXImageGrayscale Image=Delete_16x16.png}" />
+								<TextBlock
+									Margin="10,0,0,0"
+									FontWeight="Bold"
+									VerticalAlignment="Center"
+									Text="{Binding Data.Id, StringFormat={}{0:D6}}" />
+								<TextBlock
+									Text="["
+									Margin="5,0,0,0"
+									FontWeight="Bold"
+									VerticalAlignment="Center" />
+								<TextBlock
+									FontWeight="Bold"
+									VerticalAlignment="Center"
+									Text="{Binding Data.Maker}" />
+								<TextBlock
+									Margin="5,0,0,0"
+									FontWeight="Bold"
+									VerticalAlignment="Center"
+									Text="{Binding Data.Name}" />
+								<TextBlock
+									Text="]"
+									FontWeight="Bold"
+									VerticalAlignment="Center" />
+								<dx:SimpleButton
+									HorizontalAlignment="Right"
+									DockPanel.Dock="Right"
+									ToolTip="{DynamicResource CartridgeCard}"
+									Padding="0"
+									Command="{Binding DataContext.ShowCartridgeCardCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+									Glyph="{DXImageGrayscale Image=Index_16x16.png}" />
+								<dx:SimpleButton
+									HorizontalAlignment="Right"
+									DockPanel.Dock="Right"
+									Margin="5,0"
+									Padding="0"
+									Command="{Binding DataContext.NavigateCartridgeCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+									Glyph="{DXImageGrayscale Image=Home_16x16.png}" />
+								<dx:SimpleButton
+									HorizontalAlignment="Right"
+									DockPanel.Dock="Right"
+									Padding="5,0"
+									Content="{Binding Data.Customer.FioOrUrName, Mode=OneWay, FallbackValue=Customer}"
+									Command="{Binding DataContext.NavigateCustomerCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+									Glyph="{DXImage Image=BOCustomer_16x16.png}" />
+							</DockPanel>
+						</DataTemplate>
+					</dxg:CardView.CardHeaderTemplate>
+					<dxg:CardView.CardTemplate>
+						<DataTemplate>
+							<dxlc:LayoutControl
+								Padding="0"
+								HorizontalAlignment="Stretch"
+								Orientation="Horizontal">
+								<FrameworkElement.Resources>
+									<ResourceDictionary>
+										<Style
+											TargetType="{x:Type dxlc:LayoutItem}"
+											x:Key="{x:Type dxlc:LayoutItem}">
+											<Setter
+												Property="dxlc:LayoutItem.LabelPosition"
+												Value="Top" />
+										</Style>
+									</ResourceDictionary>
+								</FrameworkElement.Resources>
+								<dxlc:LayoutGroup
+									Orientation="Vertical">
+									<dxlc:LayoutGroup
+										Orientation="Horizontal">
+										<dxlc:LayoutItem
+											LabelPosition="Top"
+											Label="{DynamicResource Sn}"
+											HorizontalAlignment="Left">
+											<dxe:TextEdit
+												IsReadOnly="True"
+												MinWidth="150"
+												EditValue="{Binding Path=Row.SerialNumber, Mode=OneWay}" />
+										</dxlc:LayoutItem>
+										<dxlc:LayoutItem
+											Label="{DynamicResource Refill}"
+											HorizontalAlignment="Left">
+											<dxe:CheckEdit
+												IsReadOnly="True"
+												HorizontalAlignment="Center"
+												EditValue="{Binding Path=Row.Refill, Mode=OneWay}" />
+										</dxlc:LayoutItem>
+										<dxlc:LayoutItem
+											ToolTip="{DynamicResource TonerWeight}"
+											HorizontalAlignment="Left"
+											Label=" ">
+											<dxe:TextEdit
+												HorizontalContentAlignment="Left"
+												Width="70"
+												MaskType="Numeric"
+												Mask="N0"
+												MaskUseAsDisplayFormat="True"
+												IsReadOnly="True"
+												EditValue="{Binding Path=Row.TonerWeight, Mode=OneWay}" />
+										</dxlc:LayoutItem>
+										<dxlc:LayoutItem
+											Label="{DynamicResource OPCDrum}"
+											HorizontalAlignment="Left">
+											<dxe:CheckEdit
+												IsReadOnly="True"
+												HorizontalAlignment="Center"
+												EditValue="{Binding Path=Row.OPCDrum, Mode=OneWay}" />
+										</dxlc:LayoutItem>
+										<dxlc:LayoutItem
+											Label="{DynamicResource Chip}"
+											HorizontalAlignment="Left">
+											<dxe:CheckEdit
+												IsReadOnly="True"
+												HorizontalAlignment="Center"
+												EditValue="{Binding Path=Row.Chip, Mode=OneWay}" />
+										</dxlc:LayoutItem>
+										<dxlc:LayoutItem
+											Label="{DynamicResource CleaningBlade}"
+											HorizontalAlignment="Left">
+											<dxe:CheckEdit
+												IsReadOnly="True"
+												HorizontalAlignment="Center"
+												EditValue="{Binding Path=Row.CleaningBlade, Mode=OneWay}" />
+										</dxlc:LayoutItem>
+										<dxlc:LayoutItem
+											ToolTip="{DynamicResource IsPreAgreedAmount}"
+											Label="{DynamicResource Price}"
+											HorizontalAlignment="Left">
+											<dxe:TextEdit
+												IsReadOnly="True"
+												MinWidth="80"
+												HorizontalContentAlignment="Right"
+												MaskType="Numeric"
+												Mask="N2"
+												MaskUseAsDisplayFormat="True"
+												EditValue="{Binding Path=Row.TotalCost, Mode=OneWay}" />
+										</dxlc:LayoutItem>
+										<dxlc:LayoutItem
+											Label="{DynamicResource Notes}"
+											HorizontalAlignment="Left"
+											Visibility="{Binding Path=Row.CartridgeNotes, Converter={StaticResource StringToVisibility}}">
+											<dxe:TextEdit
+												MaxLength="254"
+												MinWidth="100"
+												EditValue="{Binding Path=Row.CartridgeNotes, Mode=TwoWay}" />
+										</dxlc:LayoutItem>
+										<dxlc:LayoutItem
+											Label="{DynamicResource History}"
+											HorizontalAlignment="Left"
+											Visibility="{Binding Path=Row.HistoryOptionsVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+											<dxe:ComboBoxEdit
+												DisplayMember="Value"
+												ValueMember="Key"
+												MinWidth="150"
+												ItemsSource="{Binding DataContext.HistoryOptions, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+												EditValue="{Binding Path=Row.SelectedHistoryOption, Mode=TwoWay}">
+												<dxmvvm:Interaction.Behaviors>
+													<dxmvvm:EventToCommand
+														EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+														PassEventArgsToCommand="True"
+														Command="{Binding DataContext.ComboBoxClickCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" />
+												</dxmvvm:Interaction.Behaviors>
+											</dxe:ComboBoxEdit>
+										</dxlc:LayoutItem>
+										<dxlc:LayoutItem
+											Label="{DynamicResource Box}"
+											HorizontalAlignment="Left">
+											<dxe:ComboBoxEdit
+												DisplayMember="name"
+												ValueMember="id"
+												MinWidth="100"
+												ItemsSource="{Binding DataContext.Boxes, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+												EditValue="{Binding Path=Row.BoxId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+												<dxe:ButtonEdit.Buttons>
+													<dxe:ButtonInfo
+														ButtonKind="Simple"
+														GlyphKind="Apply"
+														Command="{Binding DataContext.SaveBoxCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" />
+												</dxe:ButtonEdit.Buttons>
+												<dxmvvm:Interaction.Behaviors>
+													<dxmvvm:EventToCommand
+														EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+														PassEventArgsToCommand="True"
+														Command="{Binding DataContext.ComboBoxClickCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" />
+												</dxmvvm:Interaction.Behaviors>
+											</dxe:ComboBoxEdit>
+										</dxlc:LayoutItem>
+									</dxlc:LayoutGroup>
+									<dxlc:LayoutGroup
+										Orientation="Horizontal"
+										IsEnabled="{Binding Path=Row.CanStatusChange}">
+										<dxlc:LayoutItem
+											Label="{DynamicResource ResponsibleEngineer}"
+											HorizontalAlignment="Left">
+											<dxe:ComboBoxEdit
+												MinWidth="150"
+												DisplayMember="FioShort"
+												ValueMember="Id"
+												EditValue="{Binding Path=Row.MasterId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+												ItemsSource="{Binding DataContext.Employees, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
+												<dxmvvm:Interaction.Behaviors>
+													<dxmvvm:EventToCommand
+														EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+														PassEventArgsToCommand="True"
+														Command="{Binding DataContext.ComboBoxClickCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" />
+												</dxmvvm:Interaction.Behaviors>
+											</dxe:ComboBoxEdit>
+										</dxlc:LayoutItem>
+										<dxlc:LayoutItem
+											Label="{DynamicResource Refill}"
+											HorizontalAlignment="Left"
+											IsEnabled="{Binding Path=Row.CanRefill}">
+											<dxe:CheckEdit
+												HorizontalAlignment="Center"
+												EditValue="{Binding Path=Row.MakeRefill, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+										</dxlc:LayoutItem>
+										<dxlc:LayoutItem
+											ToolTip="Coming soon..."
+											HorizontalAlignment="Left"
+											Label=" ">
+											<dxe:SpinEdit
+												IsEnabled="False"
+												HorizontalContentAlignment="Left"
+												AllowSpinOnMouseWheel="False"
+												MinValue="0"
+												Width="70"
+												MaskType="Numeric"
+												Mask="N0"
+												MaskUseAsDisplayFormat="True"
+												IsReadOnly="True"
+												EditValue="{Binding Path=Row.Refill, Mode=OneWay}" />
+										</dxlc:LayoutItem>
+										<dxlc:LayoutItem
+											Label="{DynamicResource OPCDrum}"
+											HorizontalAlignment="Left"
+											IsEnabled="{Binding Path=Row.CanOPCDrum}">
+											<dxe:CheckEdit
+												HorizontalAlignment="Center"
+												EditValue="{Binding Path=Row.MakeOPCDrum, Mode=TwoWay}" />
+										</dxlc:LayoutItem>
+										<dxlc:LayoutItem
+											Label="{DynamicResource Chip}"
+											HorizontalAlignment="Left"
+											IsEnabled="{Binding Path=Row.CanChip}">
+											<dxe:CheckEdit
+												HorizontalAlignment="Center"
+												EditValue="{Binding Path=Row.MakeChip, Mode=TwoWay}" />
+										</dxlc:LayoutItem>
+										<dxlc:LayoutItem
+											Label="{DynamicResource CleaningBlade}"
+											HorizontalAlignment="Left"
+											IsEnabled="{Binding Path=Row.CanCleaningBlade}">
+											<dxe:CheckEdit
+												HorizontalAlignment="Center"
+												EditValue="{Binding Path=Row.MakeCleaningBlade, Mode=TwoWay}" />
+										</dxlc:LayoutItem>
+										<dxlc:LayoutItem
+											Label="{DynamicResource Status}"
+											HorizontalAlignment="Left">
+											<dxe:ComboBoxEdit
+												DisplayMember="Name"
+												ValueMember="Id"
+												MinWidth="150"
+												EditValue="{Binding Path=Row.Status, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+												ItemsSource="{Binding DataContext.StatesList, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
+												<dxe:LookUpEditBase.ItemContainerStyle>
+													<Style
+														TargetType="{x:Type dxe:ComboBoxEditItem}">
+														<Setter
+															Property="IsEnabled"
+															Value="{Binding Enabled}" />
+													</Style>
+												</dxe:LookUpEditBase.ItemContainerStyle>
+												<dxmvvm:Interaction.Behaviors>
+													<dxmvvm:EventToCommand
+														EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+														PassEventArgsToCommand="True"
+														Command="{Binding DataContext.ComboBoxClickCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" />
+												</dxmvvm:Interaction.Behaviors>
+											</dxe:ComboBoxEdit>
+										</dxlc:LayoutItem>
+										<dxlc:LayoutItem
+											Label="{DynamicResource RepairCost}"
+											HorizontalAlignment="Left">
+											<dxe:TextEdit
+												HorizontalContentAlignment="Right"
+												IsReadOnly="True"
+												Mask="N2"
+												MaskType="Numeric"
+												MaskUseAsDisplayFormat="True"
+												MinWidth="100"
+												EditValue="{Binding Path=Row.Total, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+										</dxlc:LayoutItem>
+									</dxlc:LayoutGroup>
+								</dxlc:LayoutGroup>
+								<dxlc:LayoutGroup
+									Orientation="Horizontal">
+									<dxlc:LayoutItem
+										VerticalAlignment="Stretch"
+										MinWidth="200"
+										MaxWidth="400">
+										<dxe:ListBoxEdit
+											IsReadOnly="True"
+											VerticalAlignment="Stretch"
+											ItemsSource="{Binding Path=Row.Works}">
+											<dxe:ListBoxEdit.ItemTemplate>
+												<DataTemplate>
+													<DockPanel>
+														<TextBlock
+															Text="{Binding name}" />
+														<TextBlock
+															DockPanel.Dock="Right"
+															Text="{Binding SelectedCurrency.ShortName, Source={x:Static asc:Auth.CurrencyModel}}" />
+														<TextBlock
+															DockPanel.Dock="Right"
+															Margin="5,0,0,0"
+															Text="{Binding price, StringFormat=N2}" />
+													</DockPanel>
+												</DataTemplate>
+											</dxe:ListBoxEdit.ItemTemplate>
+										</dxe:ListBoxEdit>
+									</dxlc:LayoutItem>
+									<dxlc:LayoutItem
+										VerticalAlignment="Stretch"
+										MinWidth="200"
+										MaxWidth="400">
+										<dxe:ListBoxEdit
+											IsReadOnly="True"
+											VerticalAlignment="Stretch"
+											ItemsSource="{Binding Path=Row.Items}">
+											<dxe:ListBoxEdit.ItemTemplate>
+												<DataTemplate>
+													<StackPanel
+														Orientation="Horizontal">
+														<TextBlock
+															Text="{Binding name}" />
+														<TextBlock
+															Margin="5,0,0,0"
+															Text="{Binding count}" />
+														<TextBlock
+															Margin="5,0,0,0"
+															Text="{Binding Summ}" />
+														<TextBlock
+															Text="{Binding SelectedCurrency.ShortName, Source={x:Static asc:Auth.CurrencyModel}}" />
+													</StackPanel>
+												</DataTemplate>
+											</dxe:ListBoxEdit.ItemTemplate>
+										</dxe:ListBoxEdit>
+									</dxlc:LayoutItem>
+								</dxlc:LayoutGroup>
+							</dxlc:LayoutControl>
+						</DataTemplate>
+					</dxg:CardView.CardTemplate>
+				</dxg:CardView>
+			</dxg:GridControl.View>
+		</dxg:GridControl>
+	</DockPanel>
+</UserControl>

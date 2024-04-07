@@ -1,0 +1,689 @@
+<UserControl
+	x:Class="ASC.Stocktaking.StocktakingView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:dxwui="http://schemas.devexpress.com/winfx/2008/xaml/windowsui" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:converters="clr-namespace:ASC.Converters" xmlns:objects="clr-namespace:ASC.Objects"
+	Name="StocktakingUc" xmlns:stocktaking="clr-namespace:ASC.Stocktaking">
+	<FrameworkElement.Resources>
+		<ResourceDictionary>
+			<converters:StoreTakingStatusToColorConverter
+				x:Key="StatusToColorConverter" />
+			<dxmvvm:NumericToBooleanConverter
+				x:Key="NumericToBooleanConverter" />
+			<ContextMenu
+				DataContext="{Binding DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+				x:Key="StockTakingRowMenu">
+				<MenuItem
+					Header="{DynamicResource ItemCard}"
+					Command="{Binding NavigateItemCardCommand}" />
+				<MenuItem
+					Header="{DynamicResource EditItem}"
+					Command="{Binding NavigateItemEditCommand}" />
+				<MenuItem
+					Header="{DynamicResource ItemsCancellation}"
+					Command="{Binding ItemCancellationCommand}" />
+				<MenuItem
+					Header="{DynamicResource PrintStickers}"
+					Command="{Binding PrintStickersCommand}" />
+				<MenuItem
+					Header="{DynamicResource Media}"
+					Command="{Binding ItemMediaCommand}" />
+			</ContextMenu>
+			<converters:ListInt2ValueConverter
+				x:Key="Int2ValueConverter" />
+		</ResourceDictionary>
+	</FrameworkElement.Resources>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition
+				Height="83*" />
+			<RowDefinition
+				Height="90" />
+		</Grid.RowDefinitions>
+		<dxwui:AppBar
+			Background="#3f3f3f"
+			HorizontalAlignment="Stretch"
+			VerticalAlignment="Stretch"
+			ItemSpacing="5"
+			HideMode="AlwaysVisible"
+			Grid.Row="1"
+			Grid.ColumnSpan="2">
+			<dxwui:AppBarButton
+				Label="{DynamicResource Print}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Command="{Binding View.Commands.ShowPrintPreview, ElementName=gridControl}"
+				Glyph="{dx:DXImageGrayscale Image=Print_32x32.png}" />
+			<dxwui:AppBarButton
+				Label="{DynamicResource Refresh}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Command="{Binding RefreshCommand}"
+				Glyph="{dx:DXImageGrayscale Image=Refresh_32x32.png}" />
+			<dxwui:AppBarButton
+				Label="{DynamicResource Save}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Command="{Binding SaveCommand}"
+				Glyph="{dx:DXImageGrayscale Image=Save_32x32.png}" />
+		</dxwui:AppBar>
+		<dxb:ToolBarControl
+			Style="{StaticResource DefaulToolBar}"
+			BarItemHorizontalIndent="5"
+			Margin="0,0,0,0"
+			Height="30">
+			<dxb:BarItemLinkSeparator />
+			<dxb:BarEditItem
+				Name="Store"
+				Content="{DynamicResource Store}"
+				EditWidth="110"
+				ClosePopupOnChangingEditValue="True"
+				EditValue="{Binding SelectedStore, UpdateSourceTrigger=PropertyChanged}">
+				<dxb:BarEditItem.EditSettings>
+					<dxe:ComboBoxEditSettings
+						DisplayMember="name"
+						PopupMaxHeight="250"
+						IsTextEditable="False"
+						ItemsSource="{Binding Stores}" />
+				</dxb:BarEditItem.EditSettings>
+			</dxb:BarEditItem>
+			<dxb:BarEditItem
+				Content="{DynamicResource Category}"
+				EditWidth="120"
+				ClosePopupOnChangingEditValue="True"
+				IsVisible="{Binding EditValue.id, Converter={StaticResource NumericToBooleanConverter}, ElementName=Store}"
+				EditValue="{Binding SelectedStoreCategory, UpdateSourceTrigger=PropertyChanged}">
+				<dxb:BarEditItem.EditSettings>
+					<dxg:LookUpEditSettings
+						AutoPopulateColumns="False"
+						dxe:ValueMember="id"
+						dxe:DisplayMember="name"
+						dxe:ItemsSource="{Binding StoreCategories}">
+						<dxe:PopupBaseEditSettings.PopupContentTemplate>
+							<ControlTemplate>
+								<dxg:GridControl
+									Name="PART_GridControl"
+									AutoExpandAllGroups="True"
+									AutoGenerateColumns="None">
+									<dxg:GridControl.Columns>
+										<dxg:GridColumn
+											FieldName="name"
+											Header="NAME" />
+									</dxg:GridControl.Columns>
+									<dxg:GridControl.View>
+										<dxg:TreeListView
+											AutoWidth="True"
+											ShowColumnHeaders="False"
+											ShowVerticalLines="False"
+											ShowHorizontalLines="False"
+											ShowIndicator="False"
+											KeyFieldName="id"
+											ParentFieldName="parent"
+											TreeDerivationMode="Selfreference" />
+									</dxg:GridControl.View>
+								</dxg:GridControl>
+							</ControlTemplate>
+						</dxe:PopupBaseEditSettings.PopupContentTemplate>
+					</dxg:LookUpEditSettings>
+				</dxb:BarEditItem.EditSettings>
+			</dxb:BarEditItem>
+			<dxb:BarEditItem
+				Content="{DynamicResource Availability}"
+				EditWidth="120"
+				ClosePopupOnChangingEditValue="True"
+				EditValue="{Binding SelectedItemOption, UpdateSourceTrigger=PropertyChanged}">
+				<dxb:BarEditItem.EditSettings>
+					<dxe:ComboBoxEditSettings
+						ValueMember="Id"
+						DisplayMember="Name"
+						PopupMaxHeight="250"
+						IsTextEditable="False"
+						ItemsSource="{Binding ItemsOptionses}" />
+				</dxb:BarEditItem.EditSettings>
+			</dxb:BarEditItem>
+			<dxb:BarEditItem
+				Content="{DynamicResource State}"
+				EditWidth="110"
+				ClosePopupOnChangingEditValue="True"
+				EditValue="{Binding SelectedState, UpdateSourceTrigger=PropertyChanged}">
+				<dxb:BarEditItem.EditSettings>
+					<dxe:ComboBoxEditSettings
+						ValueMember="id"
+						DisplayMember="name"
+						PopupMaxHeight="250"
+						IsTextEditable="False"
+						ItemsSource="{Binding ItemStatesWithAll}" />
+				</dxb:BarEditItem.EditSettings>
+			</dxb:BarEditItem>
+			<dxb:BarEditItem
+				Content="{DynamicResource Box}"
+				EditWidth="110"
+				ClosePopupOnChangingEditValue="True"
+				IsVisible="{Binding EditValue.id, Converter={StaticResource NumericToBooleanConverter}, ElementName=Store}"
+				EditValue="{Binding SelectedBoxes, Mode=TwoWay, Converter={StaticResource Int2ValueConverter}}">
+				<dxb:BarEditItem.EditSettings>
+					<dxe:ComboBoxEditSettings
+						AutoComplete="True"
+						ValueMember="id"
+						SeparatorString=" / "
+						DisplayMember="name"
+						PopupMaxHeight="550"
+						ItemsSource="{Binding Boxes}">
+						<dxe:BaseEditSettings.StyleSettings>
+							<dxe:CheckedComboBoxStyleSettings />
+						</dxe:BaseEditSettings.StyleSettings>
+					</dxe:ComboBoxEditSettings>
+				</dxb:BarEditItem.EditSettings>
+			</dxb:BarEditItem>
+			<dxb:BarEditItem
+				EditWidth="150"
+				EditValue="{Binding Query, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+				<dxb:BarEditItem.EditTemplate>
+					<DataTemplate>
+						<dxe:ButtonEdit
+							NullValueButtonPlacement="EditBox"
+							AllowDefaultButton="False"
+							Width="150"
+							NullText="{DynamicResource WhatSearch}">
+							<dxmvvm:Interaction.Behaviors>
+								<dxmvvm:KeyToCommand
+									KeyGesture="Return"
+									Command="{Binding DataContext.RefreshCommand, ElementName=StocktakingUc}" />
+							</dxmvvm:Interaction.Behaviors>
+						</dxe:ButtonEdit>
+					</DataTemplate>
+				</dxb:BarEditItem.EditTemplate>
+			</dxb:BarEditItem>
+			<dxb:BarButtonItem
+				BarItemDisplayMode="ContentAndGlyph"
+				Content="{DynamicResource Search}"
+				Command="{Binding RefreshCommand}"
+				Glyph="{dx:DXImageGrayscale Image=Find_16x16.png}" />
+			<dxb:BarEditItem
+				Content2="{DynamicResource SearchInDescription}"
+				EditValue="{Binding SearchInDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+				<dxb:BarEditItem.EditSettings>
+					<dxe:CheckEditSettings />
+				</dxb:BarEditItem.EditSettings>
+			</dxb:BarEditItem>
+			<dxb:BarEditItem
+				EditValue="{Binding SelectedStockTakingFilterOption, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+				<dxb:BarEditItem.EditSettings>
+					<dxe:ComboBoxEditSettings
+						ValueMember="Id"
+						DisplayMember="Name"
+						ItemsSource="{Binding AllStockTakingOptions}">
+						<dxe:LookUpEditSettingsBase.ItemTemplate>
+							<DataTemplate>
+								<Border
+									Background="#00FFFFFF">
+									<StackPanel
+										Orientation="Horizontal">
+										<Rectangle
+											Width="10"
+											Height="10"
+											Margin="6,0,6,0"
+											RadiusX="2"
+											RadiusY="2"
+											Fill="{Binding Color}" />
+										<TextBlock
+											Text="{Binding Name}" />
+									</StackPanel>
+								</Border>
+							</DataTemplate>
+						</dxe:LookUpEditSettingsBase.ItemTemplate>
+						<dxe:TextEditSettings.EditNonEditableTemplate>
+							<ControlTemplate>
+								<Rectangle
+									Margin="2"
+									RadiusX="2"
+									RadiusY="2"
+									Fill="{Binding Color, RelativeSource={RelativeSource TemplatedParent}}" />
+							</ControlTemplate>
+						</dxe:TextEditSettings.EditNonEditableTemplate>
+					</dxe:ComboBoxEditSettings>
+				</dxb:BarEditItem.EditSettings>
+			</dxb:BarEditItem>
+		</dxb:ToolBarControl>
+		<dxg:GridControl
+			Name="gridControl"
+			Tag="StockTakingGrid"
+			HorizontalAlignment="Stretch"
+			SelectionMode="MultipleRow"
+			VerticalAlignment="Stretch"
+			Margin="0,30,0,0"
+			SelectedItems="{Binding SelectedItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+			CurrentItem="{Binding SelectedItem, Mode=TwoWay}"
+			ItemsSource="{Binding Items}"
+			DXSerializer.AllowProperty="TableView1_OnAllowProperty">
+			<dxmvvm:Interaction.Behaviors>
+				<dxmvvm:EventToCommand
+					EventTriggerBase_x0060_1.EventName="Loaded"
+					Command="{Binding GridInitCommand}"
+					CommandParameter="{Binding ElementName=gridControl}" />
+				<dxmvvm:EventToCommand
+					EventTriggerBase_x0060_1.EventName="Unloaded"
+					Command="{Binding GridUnloadedCommand}"
+					CommandParameter="{Binding ElementName=gridControl}" />
+			</dxmvvm:Interaction.Behaviors>
+			<dxg:GridColumn
+				FieldName="UID"
+				HorizontalHeaderContentAlignment="Center"
+				Binding="{Binding UID}" />
+			<dxg:GridColumn
+				FieldName="{DynamicResource Category}"
+				HorizontalHeaderContentAlignment="Center"
+				Binding="{Binding category, Mode=TwoWay}">
+				<dxg:ColumnBase.EditSettings>
+					<dxg:LookUpEditSettings
+						dxe:AllowSpinOnMouseWheel="False"
+						AutoPopulateColumns="False"
+						dxe:ValueMember="id"
+						dxe:DisplayMember="name"
+						dxe:ItemsSource="{Binding ItemCategories}">
+						<dxe:PopupBaseEditSettings.PopupContentTemplate>
+							<ControlTemplate>
+								<dxg:GridControl
+									Name="PART_GridControl"
+									AutoExpandAllGroups="True"
+									AutoGenerateColumns="None">
+									<dxg:GridControl.Columns>
+										<dxg:GridColumn
+											FieldName="name"
+											Header="NAME" />
+									</dxg:GridControl.Columns>
+									<dxg:GridControl.View>
+										<dxg:TreeListView
+											AutoWidth="True"
+											ShowColumnHeaders="False"
+											ShowVerticalLines="False"
+											ShowHorizontalLines="False"
+											ShowIndicator="False"
+											KeyFieldName="id"
+											ParentFieldName="parent"
+											TreeDerivationMode="Selfreference" />
+									</dxg:GridControl.View>
+								</dxg:GridControl>
+							</ControlTemplate>
+						</dxe:PopupBaseEditSettings.PopupContentTemplate>
+					</dxg:LookUpEditSettings>
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				AllowEditing="False"
+				ReadOnly="True"
+				FieldName="{DynamicResource ItemName}"
+				MinWidth="200"
+				MaxWidth="800"
+				Binding="{Binding name, Mode=TwoWay}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:TextEditSettings
+						TextWrapping="Wrap" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				AllowEditing="False"
+				ReadOnly="True"
+				FieldName="{DynamicResource Description}"
+				MinWidth="200"
+				MaxWidth="800"
+				Binding="{Binding description, Mode=TwoWay}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:TextEditSettings
+						TextWrapping="Wrap"
+						AcceptsReturn="True" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				HorizontalHeaderContentAlignment="Center"
+				FieldName="{DynamicResource State}"
+				Binding="{Binding state, Mode=TwoWay}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:ComboBoxEditSettings
+						AllowSpinOnMouseWheel="False"
+						ValueMember="id"
+						DisplayMember="name"
+						ItemsSource="{Binding Path=ItemStates}" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				SortMode="DisplayText"
+				AllowSorting="True"
+				HorizontalHeaderContentAlignment="Center"
+				Width="80"
+				FieldName="{DynamicResource Box}"
+				Binding="{Binding box, Mode=TwoWay}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:ComboBoxEditSettings
+						AllowSpinOnMouseWheel="False"
+						ValueMember="id"
+						DisplayMember="name"
+						ItemsSource="{Binding Path=Boxes}" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				AllowEditing="False"
+				ReadOnly="True"
+				HorizontalHeaderContentAlignment="Center"
+				FieldName="{DynamicResource Count}"
+				Binding="{Binding count, Mode=OneWay}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:TextEditSettings
+						HorizontalContentAlignment="Center" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				Name="InPrice"
+				AllowEditing="False"
+				ReadOnly="True"
+				HorizontalHeaderContentAlignment="Center"
+				FieldName="{DynamicResource InPrice}"
+				Binding="{Binding in_price, Mode=OneWay}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:TextEditSettings
+						Mask="N2"
+						MaskType="Numeric"
+						MaskUseAsDisplayFormat="True"
+						HorizontalContentAlignment="Right" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				Name="InSumm"
+				AllowEditing="False"
+				ReadOnly="True"
+				HorizontalHeaderContentAlignment="Center"
+				FieldName="{DynamicResource TotalPurchaseAmount}"
+				Binding="{Binding InSumm, Mode=OneWay}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:TextEditSettings
+						Mask="N2"
+						MaskType="Numeric"
+						MaskUseAsDisplayFormat="True"
+						HorizontalContentAlignment="Right" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				Name="RetailPrice"
+				AllowEditing="False"
+				ReadOnly="True"
+				HorizontalHeaderContentAlignment="Center"
+				FieldName="{DynamicResource PriceForSale}"
+				Binding="{Binding price2, Mode=OneWay}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:TextEditSettings
+						Mask="N2"
+						MaskType="Numeric"
+						MaskUseAsDisplayFormat="True"
+						HorizontalContentAlignment="Right" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				Name="ScPrice"
+				AllowEditing="False"
+				ReadOnly="True"
+				HorizontalHeaderContentAlignment="Center"
+				FieldName="{DynamicResource PriceForSc}"
+				Binding="{Binding price, Mode=OneWay}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:TextEditSettings
+						Mask="N2"
+						MaskType="Numeric"
+						MaskUseAsDisplayFormat="True"
+						HorizontalContentAlignment="Right" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				Name="ScSumm"
+				AllowEditing="False"
+				ReadOnly="True"
+				HorizontalHeaderContentAlignment="Center"
+				FieldName="{DynamicResource ScSumm}"
+				Binding="{Binding PriceSumm, Mode=OneWay}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:TextEditSettings
+						Mask="N2"
+						MaskType="Numeric"
+						MaskUseAsDisplayFormat="True"
+						HorizontalContentAlignment="Right" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				AllowEditing="False"
+				ReadOnly="True"
+				HorizontalHeaderContentAlignment="Center"
+				FieldName="{DynamicResource Available}"
+				Binding="{Binding Available, Mode=OneWay}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:TextEditSettings
+						HorizontalContentAlignment="Center" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				AllowEditing="False"
+				ReadOnly="True"
+				HorizontalHeaderContentAlignment="Center"
+				FieldName="{DynamicResource Reserve}"
+				Binding="{Binding reserved, Mode=OneWay}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:TextEditSettings
+						HorizontalContentAlignment="Center" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				MinWidth="230"
+				Width="230"
+				AllowPrinting="False"
+				AllowEditing="False"
+				ReadOnly="True"
+				FieldName="{DynamicResource Photos}"
+				HorizontalHeaderContentAlignment="Center">
+				<dxg:ColumnBase.CellTemplate>
+					<DataTemplate>
+						<dxb:GalleryControl
+							DefaultIsGroupCaptionVisible="False"
+							HorizontalAlignment="Stretch"
+							VerticalAlignment="Bottom"
+							Background="#00FFFFFF">
+							<dxb:Gallery
+								AllowFilter="False"
+								GroupCaptionVerticalAlignment="Stretch"
+								GroupCaptionHorizontalAlignment="Stretch"
+								ItemGlyphLocation="Top"
+								ItemMargin="5"
+								ItemCaptionHorizontalAlignment="Stretch"
+								IsItemDescriptionVisible="False"
+								IsItemGlyphVisible="True"
+								ItemContentHorizontalAlignment="Left"
+								GroupItemsMargin="5,0,0,10"
+								ItemGlyphStretch="Fill"
+								ItemGlyphSize="190,150"
+								ItemGlyphHorizontalAlignment="Stretch"
+								ItemGlyphVerticalAlignment="Stretch"
+								AllowSmoothScrolling="True"
+								VerticalScrollbarVisibility="Auto"
+								AllowToolTips="True"
+								GroupsSource="{Binding RowData.Row.Groups}">
+								<dxb:Gallery.GroupStyle>
+									<Style
+										TargetType="{x:Type dxb:GalleryItemGroup}">
+										<Setter
+											Property="dxb:GalleryItemGroup.ItemsSource"
+											Value="{Binding Photos}" />
+										<Setter
+											Property="dxb:GalleryItemGroup.ItemStyle">
+											<Setter.Value>
+												<Style
+													TargetType="{x:Type dxb:GalleryItem}">
+													<Setter
+														Property="dxb:GalleryItem.Glyph"
+														Value="{Binding Source}" />
+													<Setter
+														Property="dxb:GalleryItem.Command"
+														Value="{Binding DataContext.ZoomImageCommand, ElementName=StocktakingUc}" />
+													<Setter
+														Property="dxb:GalleryItem.CommandParameter"
+														Value="{Binding ImageId}" />
+												</Style>
+											</Setter.Value>
+										</Setter>
+									</Style>
+								</dxb:Gallery.GroupStyle>
+							</dxb:Gallery>
+						</dxb:GalleryControl>
+					</DataTemplate>
+				</dxg:ColumnBase.CellTemplate>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				MinWidth="110"
+				AllowEditing="True"
+				ReadOnly="False"
+				HorizontalHeaderContentAlignment="Center"
+				FieldName="{DynamicResource Notes}"
+				Binding="{Binding st_notes, Mode=TwoWay}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:TextEditSettings
+						MaxLength="254"
+						AcceptsReturn="True"
+						VerticalContentAlignment="Top"
+						TextWrapping="Wrap" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				Width="130"
+				MinWidth="120"
+				AllowPrinting="False"
+				AllowEditing="True"
+				ReadOnly="False"
+				FieldName="{DynamicResource Select}"
+				HorizontalHeaderContentAlignment="Center"
+				Binding="{Binding st_state, Mode=OneWay}">
+				<dxg:BaseColumn.HeaderTemplate>
+					<DataTemplate>
+						<dx:RadioButtonList
+							Background="#00FFFFFF"
+							BorderThickness="0"
+							VerticalAlignment="Center"
+							SelectionMode="Single"
+							SelectedValuePath="Id"
+							ItemsSource="{Binding DataContext.StockTakingOptions, ElementName=StocktakingUc}"
+							SelectedValue="{Binding DataContext.SelectedStockTakingOption, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ElementName=StocktakingUc}">
+							<ItemsControl.ItemsPanel>
+								<ItemsPanelTemplate>
+									<StackPanel
+										Orientation="Horizontal" />
+								</ItemsPanelTemplate>
+							</ItemsControl.ItemsPanel>
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<Border
+										CornerRadius="0"
+										Width="16"
+										Height="16"
+										Margin="2,0"
+										Background="{Binding Color}" />
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</dx:RadioButtonList>
+					</DataTemplate>
+				</dxg:BaseColumn.HeaderTemplate>
+				<dxg:ColumnBase.CellTemplate>
+					<DataTemplate>
+						<dx:RadioButtonList
+							Background="#00FFFFFF"
+							BorderThickness="0"
+							VerticalAlignment="Center"
+							SelectionMode="Single"
+							SelectedValuePath="Id"
+							ItemsSource="{Binding DataContext.StockTakingOptions, ElementName=StocktakingUc}"
+							SelectedValue="{Binding RowData.Row.st_state, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+							<ItemsControl.ItemsPanel>
+								<ItemsPanelTemplate>
+									<StackPanel
+										Orientation="Horizontal" />
+								</ItemsPanelTemplate>
+							</ItemsControl.ItemsPanel>
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<Border
+										CornerRadius="0"
+										Width="16"
+										Height="16"
+										Margin="2,0"
+										Background="{Binding Color}" />
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</dx:RadioButtonList>
+					</DataTemplate>
+				</dxg:ColumnBase.CellTemplate>
+			</dxg:GridColumn>
+			<dxg:GridControl.TotalSummary>
+				<dxg:GridSummaryItem
+					DisplayFormat=" {0:N0}"
+					SummaryType="Sum"
+					FieldName="{DynamicResource Count}" />
+				<dxg:GridSummaryItem
+					DisplayFormat=" {0:N2}"
+					SummaryType="Sum"
+					FieldName="{DynamicResource InPrice}" />
+				<dxg:GridSummaryItem
+					DisplayFormat=" {0:N2}"
+					SummaryType="Sum"
+					FieldName="{DynamicResource TotalPurchaseAmount}" />
+				<dxg:GridSummaryItem
+					DisplayFormat=" {0:N2}"
+					SummaryType="Sum"
+					FieldName="{DynamicResource PriceForSale}" />
+				<dxg:GridSummaryItem
+					DisplayFormat=" {0:N2}"
+					SummaryType="Sum"
+					FieldName="{DynamicResource PriceForSc}" />
+				<dxg:GridSummaryItem
+					DisplayFormat=" {0:N2}"
+					SummaryType="Sum"
+					FieldName="{DynamicResource ScSumm}" />
+			</dxg:GridControl.TotalSummary>
+			<dxg:GridControl.View>
+				<dxg:TableView
+					ShowCheckBoxSelectorColumn="True"
+					PrintAutoWidth="True"
+					ShowTotalSummary="True"
+					BestFitMode="AllRows"
+					AllowScrollAnimation="True"
+					NavigationStyle="Cell"
+					ColumnFilterPopupMode="Excel"
+					AllowEditing="True"
+					AllowGrouping="False"
+					AllowColumnMoving="True"
+					ShowGroupPanel="False"
+					ShowColumnHeaders="True"
+					AllowMoveColumnToDropArea="False"
+					ShowBandsPanel="True"
+					ShowIndicator="False"
+					AllowBestFit="True"
+					AllowColumnFiltering="False"
+					ShowSelectionRectangle="False"
+					ShowFixedTotalSummary="False"
+					SummariesIgnoreNullValues="True"
+					RowMinHeight="{Binding Employee.UiSettings.RowHeight, Source={x:Static objects:OfflineData.Instance}}"
+					FontSize="{Binding Employee.UiSettings.FontSize, Source={x:Static objects:OfflineData.Instance}}">
+					<dxmvvm:Interaction.Behaviors>
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="RowDoubleClick"
+							Command="{Binding ItemDoubleClickCommand}" />
+					</dxmvvm:Interaction.Behaviors>
+					<dxg:TableView.RowStyle>
+						<Style
+							TargetType="{x:Type dxg:RowControl}">
+							<Setter
+								Property="FrameworkElement.ContextMenu"
+								Value="{StaticResource StockTakingRowMenu}" />
+							<Setter
+								Property="Background"
+								Value="{Binding Row.st_state, Converter={StaticResource StatusToColorConverter}}" />
+						</Style>
+					</dxg:TableView.RowStyle>
+				</dxg:TableView>
+			</dxg:GridControl.View>
+		</dxg:GridControl>
+	</Grid>
+</UserControl>

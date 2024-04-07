@@ -1,0 +1,85 @@
+<UserControl
+	x:Class="ASC.View.PartRequestsView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:ASC.View" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:objects="clr-namespace:ASC.Objects" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm">
+	<dxg:GridControl
+		SelectedItem="{Binding SelectedPartRequest, Mode=TwoWay}"
+		ItemsSource="{Binding PartRequests}">
+		<dxg:GridControl.Columns>
+			<dxg:GridColumn
+				FieldName="{DynamicResource DateCreate}"
+				HorizontalHeaderContentAlignment="Center"
+				Width="120"
+				Binding="{Binding request_time}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:TextEditSettings
+						HorizontalContentAlignment="Center"
+						MaskType="DateTime"
+						Mask="dd.MM.yyyy  HH:mm"
+						MaskUseAsDisplayFormat="True" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				Header="Плановая дата завершения"
+				FieldName="plan_end_date"
+				HorizontalHeaderContentAlignment="Center"
+				Width="120"
+				Binding="{Binding plan_end_date}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:TextEditSettings
+						NullText="-"
+						HorizontalContentAlignment="Center"
+						MaskType="DateTime"
+						Mask="dd.MM.yyyy  HH:mm"
+						MaskUseAsDisplayFormat="True" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				Width="150"
+				FieldName="{DynamicResource CoWorker}"
+				HorizontalHeaderContentAlignment="Center"
+				Binding="{Binding users.FioShort}" />
+			<dxg:GridColumn
+				ReadOnly="True"
+				Width="100"
+				FieldName="{DynamicResource Status}"
+				HorizontalHeaderContentAlignment="Center"
+				Binding="{Binding state}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:ComboBoxEditSettings
+						DisplayMember="Value"
+						ValueMember="Key"
+						ItemsSource="{Binding PartRequestStatuses}" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+		</dxg:GridControl.Columns>
+		<dxg:GridControl.View>
+			<dxg:TableView
+				IsSynchronizedWithCurrentItem="True"
+				ShowTotalSummary="False"
+				AllowScrollAnimation="True"
+				NavigationStyle="Row"
+				ColumnFilterPopupMode="Excel"
+				AllowEditing="False"
+				AllowGrouping="False"
+				AllowColumnMoving="True"
+				ShowGroupPanel="False"
+				ShowColumnHeaders="True"
+				AllowMoveColumnToDropArea="False"
+				ShowSearchPanelMode="Never"
+				ShowBandsPanel="True"
+				ShowIndicator="False"
+				AllowBestFit="True"
+				AllowColumnFiltering="False"
+				ShowSelectionRectangle="False"
+				ShowFixedTotalSummary="False"
+				SummariesIgnoreNullValues="True"
+				RowMinHeight="{Binding Employee.UiSettings.RowHeight, Source={x:Static objects:OfflineData.Instance}}"
+				FontSize="{Binding Employee.UiSettings.FontSize, Source={x:Static objects:OfflineData.Instance}}">
+				<dxmvvm:Interaction.Behaviors>
+					<dxmvvm:EventToCommand
+						EventTriggerBase_x0060_1.EventName="RowDoubleClick"
+						Command="{Binding RequestDoubleClickCommand}" />
+				</dxmvvm:Interaction.Behaviors>
+			</dxg:TableView>
+		</dxg:GridControl.View>
+	</dxg:GridControl>
+</UserControl>

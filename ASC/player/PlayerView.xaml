@@ -1,0 +1,111 @@
+<dx:ThemedWindow
+	x:Class="ASC.Player.PlayerView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:local="clr-namespace:ASC.Player" xmlns:settings="clr-namespace:ASC.Properties"
+	Title="Player"
+	Style="{StaticResource DeDefaulWindow}"
+	Top="{Binding PlayerTop, Source={x:Static settings:Settings.Default}, Mode=TwoWay}"
+	Left="{Binding PlayerLeft, Source={x:Static settings:Settings.Default}, Mode=TwoWay}"
+	Height="{Binding PlayerHeight, Source={x:Static settings:Settings.Default}, Mode=TwoWay}"
+	Width="{Binding PlayerWidth, Source={x:Static settings:Settings.Default}, Mode=TwoWay}"
+	DataContext="{Binding RelativeSource={RelativeSource Self}}"
+	Closing="Window_Closing"
+	KeyUp="PlayerView_OnKeyUp">
+	<FrameworkElement.Resources>
+		<ResourceDictionary>
+			<BooleanToVisibilityConverter
+				x:Key="BooleanToVisibilityConverter" />
+		</ResourceDictionary>
+	</FrameworkElement.Resources>
+	<Grid
+		Margin="0">
+		<local:VlcControl
+			Name="vlc"
+			HorizontalAlignment="Stretch"
+			VerticalAlignment="Stretch"
+			Margin="0,0,0,41" />
+		<Button
+			Padding="0"
+			ToolTip="{DynamicResource Play}"
+			Width="24"
+			Height="24"
+			HorizontalAlignment="Left"
+			VerticalAlignment="Bottom"
+			Margin="10,0,0,5"
+			Click="OnPlayButtonClick">
+			<Image
+				Source="Images/play.png"
+				Width="16"
+				Height="16" />
+		</Button>
+		<Button
+			Padding="0"
+			ToolTip="{DynamicResource Stop}"
+			Width="24"
+			Height="24"
+			HorizontalAlignment="Left"
+			VerticalAlignment="Bottom"
+			Margin="68,0,0,5"
+			Click="OnStopButtonClick">
+			<Image
+				Source="Images/stop.png"
+				Width="16"
+				Height="16" />
+		</Button>
+		<Button
+			Padding="0"
+			ToolTip="{DynamicResource Pause}"
+			Width="24"
+			Height="24"
+			HorizontalAlignment="Left"
+			VerticalAlignment="Bottom"
+			Margin="39,0,0,5"
+			Click="OnPauseButtonClick">
+			<Image
+				Source="Images/pause.png"
+				Width="16"
+				Height="16" />
+		</Button>
+		<Slider
+			ToolTip="{DynamicResource Volume}"
+			Minimum="0"
+			Maximum="100"
+			HorizontalAlignment="Right"
+			Margin="0,0,17,5"
+			VerticalAlignment="Bottom"
+			Width="92"
+			Height="24"
+			Value="{Binding Volume, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+		<ProgressBar
+			Visibility="Visible"
+			HorizontalAlignment="Stretch"
+			Minimum="0"
+			Maximum="100"
+			Height="7"
+			Margin="0,0,0,34"
+			VerticalAlignment="Bottom"
+			Value="{Binding Progress}" />
+		<Button
+			Padding="0"
+			ToolTip="{DynamicResource Download}"
+			Width="24"
+			Height="24"
+			HorizontalAlignment="Left"
+			VerticalAlignment="Bottom"
+			Margin="97,0,0,5"
+			Click="OnDownloadButtonClick">
+			<Image
+				Source="Images/download.png"
+				Width="16"
+				Height="16" />
+		</Button>
+		<Label
+			FontFamily="Marlett"
+			Foreground="#FF008000"
+			ToolTip="Playing..."
+			FontWeight="Bold"
+			Content="h"
+			HorizontalAlignment="Right"
+			Margin="232,241,0,0"
+			VerticalAlignment="Bottom"
+			Visibility="{Binding isPlaying, Converter={StaticResource BooleanToVisibilityConverter}}" />
+	</Grid>
+</dx:ThemedWindow>

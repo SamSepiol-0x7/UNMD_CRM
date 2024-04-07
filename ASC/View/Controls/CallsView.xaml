@@ -1,0 +1,166 @@
+<UserControl
+	x:Class="ASC.View.Controls.CallsView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:ASC.View.Controls" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:extensions="clr-namespace:ASC.Extensions" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:dxgt="http://schemas.devexpress.com/winfx/2008/xaml/grid/themekeys" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:objects="clr-namespace:ASC.Objects" xmlns:converters="clr-namespace:ASC.Converters">
+	<FrameworkElement.Resources>
+		<ResourceDictionary>
+			<converters:Bool2ColorConverter
+				x:Key="Bool2ColorConverter" />
+		</ResourceDictionary>
+	</FrameworkElement.Resources>
+	<dxg:GridControl
+		Name="GridControl"
+		Tag="CallsGrid"
+		ItemsSource="{Binding Items}"
+		SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+		<dxmvvm:Interaction.Behaviors>
+			<dxmvvm:EventToCommand
+				EventTriggerBase_x0060_1.EventName="Loaded"
+				Command="{Binding GridInitCommand}"
+				CommandParameter="{Binding ElementName=GridControl}" />
+			<dxmvvm:EventToCommand
+				EventTriggerBase_x0060_1.EventName="Unloaded"
+				Command="{Binding GridUnloadedCommand}"
+				CommandParameter="{Binding ElementName=GridControl}" />
+			<extensions:GridLayoutHelper>
+				<dxmvvm:Interaction.Behaviors>
+					<dxmvvm:EventToCommand
+						EventTriggerBase_x0060_1.EventName="LayoutChanged"
+						Command="{Binding LayoutChangedCommand}"
+						CommandParameter="{Binding ElementName=GridControl}" />
+				</dxmvvm:Interaction.Behaviors>
+			</extensions:GridLayoutHelper>
+			<dxmvvm:EventToCommand
+				EventTriggerBase_x0060_1.EventName="CustomSummary"
+				PassEventArgsToCommand="True"
+				Command="{Binding CustomSummaryCommand}" />
+		</dxmvvm:Interaction.Behaviors>
+		<FrameworkElement.Resources>
+			<ResourceDictionary>
+				<Style
+					TargetType="{x:Type dxg:GridColumn}"
+					x:Key="{x:Type dxg:GridColumn}">
+					<Setter
+						Property="dxg:BaseColumn.HorizontalHeaderContentAlignment"
+						Value="Center" />
+				</Style>
+			</ResourceDictionary>
+		</FrameworkElement.Resources>
+		<dxg:GridControl.Columns>
+			<dxg:GridColumn
+				FieldName="Start"
+				Header="{DynamicResource Time}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:TextEditSettings
+						HorizontalContentAlignment="Center"
+						Mask="dd.MM.yyyy HH:mm"
+						MaskType="DateTime"
+						MaskUseAsDisplayFormat="True" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				FieldName="Direction"
+				Header="{DynamicResource Direction}"
+				Binding="{Binding Direction}">
+				<dxg:ColumnBase.CellStyle>
+					<Style
+						TargetType="{x:Type dxg:LightweightCellEditor}"
+						BasedOn="{StaticResource {dxgt:GridRowThemeKey ThemeKeyExtensionInternalBase_x0060_1.ResourceKey=LightweightCellStyle}}">
+						<Setter
+							Property="dxg:LightweightCellEditor.Background"
+							Value="{Binding Path=RowData.Row.IsIncoming, Converter={StaticResource Bool2ColorConverter}}" />
+					</Style>
+				</dxg:ColumnBase.CellStyle>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				FieldName="DurationText"
+				Header="{DynamicResource Duration}"
+				Binding="{Binding DurationText}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:TextEditSettings
+						HorizontalContentAlignment="Center" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				FieldName="SrcText"
+				Header="{DynamicResource Caller}"
+				Binding="{Binding SrcText}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:TextEditSettings
+						TextWrapping="Wrap" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				FieldName="DstText"
+				Header="{DynamicResource ToPhone}"
+				Binding="{Binding DstText}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:TextEditSettings
+						TextWrapping="Wrap" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				FieldName="Duration"
+				Visible="False"
+				ShowInColumnChooser="False"
+				AllowPrinting="False" />
+			<dxg:GridColumn
+				FieldName="Disposition"
+				Header="{DynamicResource State}" />
+			<dxg:GridColumn
+				Header="{DynamicResource Record}">
+				<dxg:ColumnBase.CellTemplate>
+					<DataTemplate>
+						<dx:SimpleButton
+							HorizontalAlignment="Center"
+							VerticalAlignment="Center"
+							Visibility="{Binding RowData.Row.IsRecorded, Converter={StaticResource BooleanToVisibilityConverter}}"
+							CommandParameter="{Binding RowData.Row}"
+							Command="{Binding View.DataContext.PlayCommand}"
+							Glyph="{DXImageGrayscale Image=Next_16x16.png}" />
+					</DataTemplate>
+				</dxg:ColumnBase.CellTemplate>
+			</dxg:GridColumn>
+		</dxg:GridControl.Columns>
+		<dxg:GridControl.View>
+			<dxg:TableView
+				Name="CallsTableView"
+				IsSynchronizedWithCurrentItem="True"
+				ShowTotalSummary="True"
+				AllowScrollAnimation="True"
+				NavigationStyle="Row"
+				ColumnFilterPopupMode="Excel"
+				AllowEditing="False"
+				AllowGrouping="False"
+				AllowColumnMoving="True"
+				ShowGroupPanel="False"
+				ShowColumnHeaders="True"
+				AllowMoveColumnToDropArea="False"
+				ShowSearchPanelMode="Never"
+				ShowBandsPanel="True"
+				ShowIndicator="False"
+				AllowBestFit="True"
+				AllowColumnFiltering="False"
+				ShowSelectionRectangle="False"
+				ShowFixedTotalSummary="False"
+				SummariesIgnoreNullValues="True"
+				SearchControl="{Binding ElementName=searchControl}"
+				RowMinHeight="{Binding Employee.UiSettings.RowHeight, Source={x:Static objects:OfflineData.Instance}}"
+				FontSize="{Binding Employee.UiSettings.FontSize, Source={x:Static objects:OfflineData.Instance}}">
+				<dxmvvm:Interaction.Behaviors>
+					<dxmvvm:EventToCommand
+						EventTriggerBase_x0060_1.EventName="RowDoubleClick"
+						Command="{Binding ItemDoubleClickCommand}" />
+				</dxmvvm:Interaction.Behaviors>
+			</dxg:TableView>
+		</dxg:GridControl.View>
+		<dxg:GridControl.TotalSummary>
+			<dxg:GridSummaryItem
+				DisplayFormat=" {0:N0}"
+				SummaryType="Count"
+				FieldName="CallId" />
+			<dxg:GridSummaryItem
+				SummaryType="Custom"
+				ShowInColumn="DurationText"
+				FieldName="Duration" />
+		</dxg:GridControl.TotalSummary>
+	</dxg:GridControl>
+</UserControl>

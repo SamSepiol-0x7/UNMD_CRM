@@ -1,0 +1,114 @@
+<UserControl
+	x:Class="ASC.View.Employee.EmployeeSalaryRateView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:ASC.View.Employee" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:system="clr-namespace:System;assembly=mscorlib"
+	VerticalAlignment="Top">
+	<FrameworkElement.Resources>
+		<ResourceDictionary>
+			<Style
+				TargetType="{x:Type dxe:TextEdit}"
+				x:Key="{x:Type dxe:TextEdit}">
+				<Setter
+					Property="dxe:TextEdit.MaskType"
+					Value="Numeric" />
+				<Setter
+					Property="dxe:TextEdit.Mask"
+					Value="d" />
+			</Style>
+			<Style
+				TargetType="{x:Type dxe:SpinEdit}"
+				x:Key="{x:Type dxe:SpinEdit}">
+				<Setter
+					Property="dxe:SpinEdit.MinValue"
+					Value="0" />
+				<Setter
+					Property="dxe:SpinEdit.MaxValue"
+					Value="100" />
+				<Setter
+					Property="dxe:SpinEdit.IsFloatValue"
+					Value="False" />
+				<Setter
+					Property="dxe:BaseEdit.EditValueType"
+					Value="{x:Type system:Int32}" />
+			</Style>
+		</ResourceDictionary>
+	</FrameworkElement.Resources>
+	<dxlc:LayoutGroup
+		ItemLabelsAlignment="Local"
+		Orientation="Vertical">
+		<dxlc:LayoutGroup
+			Orientation="Horizontal">
+			<dxlc:LayoutGroup
+				View="GroupBox"
+				Header="{DynamicResource Common}"
+				Orientation="Vertical">
+				<dxlc:LayoutItem
+					Label="{DynamicResource SalaryRate}">
+					<dxe:TextEdit
+						EditValue="{Binding SelectedUser.salary_rate, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource PayDayOff}">
+					<dxe:TextEdit
+						EditValue="{Binding SelectedUser.pay_day_off}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource DeviceInSumm}">
+					<dxe:TextEdit
+						EditValue="{Binding SelectedUser.pay_device_in}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource DeviceOutSumm}">
+					<dxe:TextEdit
+						EditValue="{Binding SelectedUser.pay_device_out}" />
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+			<dxlc:LayoutGroup
+				View="GroupBox"
+				Header="{DynamicResource Repairs}"
+				Orientation="Vertical">
+				<dxlc:LayoutItem
+					Label="{DynamicResource PayRepair}">
+					<dxe:SpinEdit
+						EditValue="{Binding SelectedUser.pay_repair, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource PayRepairQuick}">
+					<dxe:SpinEdit
+						EditValue="{Binding SelectedUser.pay_repair_quick, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource PayCartridgeRefill}">
+					<dxe:SpinEdit
+						EditValue="{Binding SelectedUser.pay_cartridge_refill, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+			<dxlc:LayoutGroup
+				View="GroupBox"
+				Header="{DynamicResource Sales}"
+				Orientation="Vertical">
+				<dxlc:LayoutItem
+					Label="{DynamicResource PaySale}">
+					<dxe:SpinEdit
+						EditValue="{Binding SelectedUser.pay_sale, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource PayForSaleInRepair}">
+					<dxe:CheckEdit
+						EditValue="{Binding SelectedUser.pay_4_sale_in_repair, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+		</dxlc:LayoutGroup>
+		<dxlc:LayoutGroup
+			Orientation="Vertical">
+			<dxlc:LayoutItem
+				Label="Запрет выплаты ЗП">
+				<dxe:CheckEdit
+					EditValue="{Binding SelectedUser.salary_disable, Mode=TwoWay}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="Запрет выплаты аванса">
+				<dxe:CheckEdit
+					EditValue="{Binding SelectedUser.advance_disable, Mode=TwoWay}" />
+			</dxlc:LayoutItem>
+		</dxlc:LayoutGroup>
+	</dxlc:LayoutGroup>
+</UserControl>

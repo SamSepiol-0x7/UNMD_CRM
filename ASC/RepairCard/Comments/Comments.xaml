@@ -1,0 +1,155 @@
+<UserControl
+	x:Class="ASC.RepairCard.Comments.Comments" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:comments="clr-namespace:ASC.RepairCard.Comments" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" xmlns:objects="clr-namespace:ASC.Objects" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:extensions="clr-namespace:ASC.Extensions"
+	DataContext="{dxmvvm:ViewModelSource Type={x:Type comments:CommentsViewModel}}">
+	<dxlc:LayoutGroup
+		Padding="0"
+		Orientation="Vertical">
+		<dxlc:LayoutItem
+			Label="{DynamicResource Message}">
+			<dxe:TextEdit
+				TextWrapping="Wrap"
+				AcceptsReturn="True"
+				VerticalScrollBarVisibility="Visible"
+				EditValue="{Binding Comment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+				<dxmvvm:Interaction.Behaviors>
+					<dxmvvm:EventToCommand
+						EventTriggerBase_x0060_1.EventName="PreviewKeyDown"
+						PassEventArgsToCommand="True"
+						Command="{Binding AddIntCommentCommand}" />
+				</dxmvvm:Interaction.Behaviors>
+			</dxe:TextEdit>
+		</dxlc:LayoutItem>
+		<dxlc:LayoutItem
+			VerticalAlignment="Stretch"
+			MaxHeight="300">
+			<dxg:GridControl
+				Name="CommentsGrid"
+				MinHeight="50"
+				AllowInitiallyFocusedRow="False"
+				Tag="CommentsGrid"
+				ClipboardCopyMode="ExcludeHeader"
+				ItemsSource="{Binding Comments}">
+				<dxmvvm:Interaction.Behaviors>
+					<dxmvvm:EventToCommand
+						EventTriggerBase_x0060_1.EventName="Loaded"
+						Command="{Binding GridInitCommand}"
+						CommandParameter="{Binding ElementName=CommentsGrid}" />
+					<dxmvvm:EventToCommand
+						EventTriggerBase_x0060_1.EventName="Unloaded"
+						Command="{Binding GridUnloadedCommand}"
+						CommandParameter="{Binding ElementName=CommentsGrid}" />
+					<extensions:GridLayoutHelper>
+						<dxmvvm:Interaction.Behaviors>
+							<dxmvvm:EventToCommand
+								EventTriggerBase_x0060_1.EventName="LayoutChanged"
+								Command="{Binding LayoutChangedCommand}"
+								CommandParameter="{Binding ElementName=CommentsGrid}" />
+						</dxmvvm:Interaction.Behaviors>
+					</extensions:GridLayoutHelper>
+				</dxmvvm:Interaction.Behaviors>
+				<dxg:GridColumn
+					Tag="CommentsGrid"
+					FieldName="Date"
+					HorizontalHeaderContentAlignment="Center"
+					Width="120"
+					Binding="{Binding created, Converter={StaticResource UtcToLocalDateTimeConverter}}">
+					<dxg:ColumnBase.EditSettings>
+						<dxe:TextEditSettings
+							MaskType="DateTime"
+							Mask="dd.MM.yyyy HH:mm"
+							MaskUseAsDisplayFormat="True" />
+					</dxg:ColumnBase.EditSettings>
+				</dxg:GridColumn>
+				<dxg:GridColumn
+					FieldName="Employee"
+					HorizontalHeaderContentAlignment="Center"
+					Width="100"
+					Binding="{Binding users.username}">
+					<dxg:ColumnBase.EditSettings>
+						<dxe:TextEditSettings />
+					</dxg:ColumnBase.EditSettings>
+				</dxg:GridColumn>
+				<dxg:GridColumn
+					FieldName="Message"
+					HorizontalHeaderContentAlignment="Center"
+					Width="10*"
+					Binding="{Binding text}">
+					<dxg:ColumnBase.EditSettings>
+						<dxe:TextEditSettings
+							TextWrapping="Wrap" />
+					</dxg:ColumnBase.EditSettings>
+				</dxg:GridColumn>
+				<dxg:GridControl.View>
+					<dxg:TableView
+						ShowHorizontalLines="False"
+						IsSynchronizedWithCurrentItem="True"
+						ShowTotalSummary="False"
+						AllowScrollAnimation="True"
+						NavigationStyle="Row"
+						ColumnFilterPopupMode="Excel"
+						AllowEditing="False"
+						AllowGrouping="False"
+						AllowColumnMoving="False"
+						ShowGroupPanel="False"
+						ShowColumnHeaders="False"
+						AllowMoveColumnToDropArea="False"
+						ShowSearchPanelMode="Never"
+						ShowBandsPanel="True"
+						ShowIndicator="False"
+						AllowBestFit="True"
+						AllowColumnFiltering="False"
+						ShowSelectionRectangle="False"
+						ShowFixedTotalSummary="False"
+						SummariesIgnoreNullValues="True"
+						AllowSorting="False"
+						AllowResizing="True"
+						VerticalScrollbarVisibility="Visible"
+						RowMinHeight="{Binding Employee.UiSettings.RowHeight, Source={x:Static objects:OfflineData.Instance}}"
+						FontSize="{Binding Employee.UiSettings.FontSize, Source={x:Static objects:OfflineData.Instance}}">
+						<dxmvvm:Interaction.Behaviors>
+							<dxmvvm:EventToCommand
+								EventTriggerBase_x0060_1.EventName="RowDoubleClick"
+								Command="{Binding CommentDoubleClickCommand}"
+								CommandParameter="{Binding ElementName=CommentsGrid, Path=SelectedItem}" />
+						</dxmvvm:Interaction.Behaviors>
+						<dxg:DataViewBase.CellTemplate>
+							<DataTemplate>
+								<DockPanel
+									LastChildFill="True">
+									<extensions:ColumnResizeGrip
+										Width="4"
+										DockPanel.Dock="Right"
+										Cursor="SizeWE"
+										Visibility="Collapsed">
+										<Control.Template>
+											<ControlTemplate>
+												<Border
+													Background="#00FFFFFF" />
+											</ControlTemplate>
+										</Control.Template>
+									</extensions:ColumnResizeGrip>
+									<dxe:InplaceBaseEdit
+										Name="PART_Editor" />
+								</DockPanel>
+							</DataTemplate>
+						</dxg:DataViewBase.CellTemplate>
+						<dxg:TableView.RowStyle>
+							<Style
+								TargetType="{x:Type dxg:RowControl}">
+								<Style.Triggers>
+									<DataTrigger
+										Value="Focused"
+										Binding="{Binding Path=SelectionState}">
+										<Setter
+											Property="Background"
+											Value="{DynamicResource UiSelectedRowColor}" />
+									</DataTrigger>
+								</Style.Triggers>
+							</Style>
+						</dxg:TableView.RowStyle>
+					</dxg:TableView>
+				</dxg:GridControl.View>
+			</dxg:GridControl>
+		</dxlc:LayoutItem>
+	</dxlc:LayoutGroup>
+</UserControl>

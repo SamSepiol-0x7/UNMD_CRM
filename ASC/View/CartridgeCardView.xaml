@@ -1,0 +1,318 @@
+<UserControl
+	x:Class="ASC.View.CartridgeCardView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:ASC.View" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:system="clr-namespace:System;assembly=mscorlib" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" xmlns:asc="clr-namespace:ASC" xmlns:objects="clr-namespace:ASC.Objects"
+	Loaded="{DXEvent Handler=OnLoad()}"
+	Unloaded="{DXEvent Handler=OnUnload()}">
+	<DockPanel
+		MaxWidth="1000">
+		<StackPanel
+			Orientation="Horizontal"
+			Margin="10"
+			DockPanel.Dock="Top">
+			<TextBlock
+				Text="{DynamicResource CartridgeCard}" />
+		</StackPanel>
+		<StackPanel
+			HorizontalAlignment="Right"
+			Orientation="Horizontal"
+			Margin="10"
+			DockPanel.Dock="Bottom">
+			<dx:SimpleButton
+				Content="{DynamicResource Save}"
+				Margin="10,0,0,0"
+				Visibility="{Binding Path=IsEnabled, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed, RelativeSource={RelativeSource Self}}"
+				Command="{Binding SaveCommand}"
+				Glyph="{DXImageGrayscale Image=Save_16x16.png}" />
+			<dx:SimpleButton
+				Content="{DynamicResource Create}"
+				Margin="10,0,0,0"
+				Visibility="{Binding Path=IsEnabled, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed, RelativeSource={RelativeSource Self}}"
+				Command="{Binding CreateCommand}"
+				Glyph="{DXImageGrayscale Image=New_16x16.png}" />
+			<dx:SimpleButton
+				Content="{DynamicResource Close}"
+				Margin="10,0,0,0"
+				Command="{Binding CloseCommand}"
+				Glyph="{DXImageGrayscale Image=Close_16x16.png}" />
+		</StackPanel>
+		<dxlc:LayoutControl
+			Orientation="Vertical"
+			VerticalAlignment="Top">
+			<dxlc:LayoutGroup
+				Orientation="Horizontal">
+				<dxlc:LayoutGroup>
+					<dxlc:LayoutItem
+						Width="150"
+						HorizontalAlignment="Left">
+						<dxe:ImageEdit
+							Stretch="UniformToFill"
+							EditValue="{Binding Card.Photo, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+				<dxlc:LayoutGroup
+					Orientation="Vertical">
+					<dxlc:LayoutItem
+						Label="{DynamicResource Label1Copy}">
+						<dxe:ComboBoxEdit
+							ShowError="False"
+							DisplayMember="Name"
+							ValueMember="Id"
+							MinWidth="100"
+							ItemsSource="{Binding Makers}"
+							EditValue="{Binding Card.MakerId, Mode=TwoWay}">
+							<dxmvvm:Interaction.Behaviors>
+								<dxmvvm:EventToCommand
+									EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+									PassEventArgsToCommand="True"
+									Command="{Binding ComboBoxClickCommand}" />
+							</dxmvvm:Interaction.Behaviors>
+						</dxe:ComboBoxEdit>
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource ItemName}">
+						<dxe:TextEdit
+							MinWidth="100"
+							EditValue="{Binding Card.Name, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutGroup
+						Orientation="Horizontal">
+						<dxlc:LayoutItem
+							Label="{DynamicResource Resource}">
+							<dxe:SpinEdit
+								IsFloatValue="False"
+								MinWidth="100"
+								EditValueType="{x:Type system:Int32}"
+								EditValue="{Binding Card.Resource, Mode=TwoWay}" />
+						</dxlc:LayoutItem>
+						<dxlc:LayoutItem
+							Label="{DynamicResource FullWeight}">
+							<dxe:SpinEdit
+								IsFloatValue="False"
+								MinWidth="100"
+								EditValue="{Binding Card.FullWeight, Mode=TwoWay}" />
+						</dxlc:LayoutItem>
+					</dxlc:LayoutGroup>
+					<dxlc:LayoutGroup>
+						<dxlc:LayoutItem
+							Label="{DynamicResource Color}">
+							<dxe:ComboBoxEdit
+								AutoComplete="False"
+								ApplyItemTemplateToSelectedItem="True"
+								DisplayMember="Name"
+								ValueMember="ColorId"
+								Background="{Binding Path=SelectedItem.Color, RelativeSource={RelativeSource Self}}"
+								Foreground="{Binding Path=SelectedItem.Foreground, RelativeSource={RelativeSource Self}}"
+								ItemsSource="{Binding Colors}"
+								EditValue="{Binding Card.Color, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+								<dxmvvm:Interaction.Behaviors>
+									<dxmvvm:EventToCommand
+										EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+										PassEventArgsToCommand="True"
+										Command="{Binding ComboBoxClickCommand}" />
+								</dxmvvm:Interaction.Behaviors>
+								<dxe:LookUpEditBase.ItemTemplate>
+									<DataTemplate>
+										<TextBlock
+											VerticalAlignment="Stretch"
+											Padding="5,0"
+											Text="{Binding Name}"
+											Background="{Binding Color}"
+											Foreground="{Binding Foreground}" />
+									</DataTemplate>
+								</dxe:LookUpEditBase.ItemTemplate>
+							</dxe:ComboBoxEdit>
+						</dxlc:LayoutItem>
+						<dxlc:LayoutItem
+							Label="{DynamicResource TonerWeight}">
+							<dxe:SpinEdit
+								IsFloatValue="False"
+								MinWidth="100"
+								EditValue="{Binding Card.TonerWeight, Mode=TwoWay}" />
+						</dxlc:LayoutItem>
+					</dxlc:LayoutGroup>
+				</dxlc:LayoutGroup>
+			</dxlc:LayoutGroup>
+			<dxlc:LayoutItem
+				Label="{DynamicResource Materials}"
+				LabelPosition="Top"
+				MaxHeight="200">
+				<dxg:GridControl
+					AllowInitiallyFocusedRow="False"
+					MinHeight="100"
+					Style="{StaticResource DeDefTable}"
+					Margin="0,0,0,0"
+					ItemsSource="{Binding Card.Materials}"
+					SelectedItem="{Binding SelectedMaterial, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+					<dxg:GridColumn
+						FieldName="ID"
+						HorizontalHeaderContentAlignment="Center"
+						Width="100"
+						VisibleIndex="0"
+						Binding="{Binding Id}">
+						<dxg:ColumnBase.EditSettings>
+							<dxe:TextEditSettings
+								HorizontalContentAlignment="Center"
+								MaskType="Numeric"
+								Mask="d6"
+								MaskUseAsDisplayFormat="True" />
+						</dxg:ColumnBase.EditSettings>
+					</dxg:GridColumn>
+					<dxg:GridColumn
+						Width="10*"
+						FieldName="{DynamicResource Type}"
+						HorizontalHeaderContentAlignment="Center"
+						Binding="{Binding Type, Mode=TwoWay}">
+						<dxg:ColumnBase.EditSettings>
+							<dxe:ComboBoxEditSettings
+								DisplayMember="Value"
+								ValueMember="Key"
+								ItemsSource="{Binding MaterialTypes}" />
+						</dxg:ColumnBase.EditSettings>
+					</dxg:GridColumn>
+					<dxg:GridColumn
+						Width="100"
+						FieldName="{DynamicResource CountWeight}"
+						HorizontalHeaderContentAlignment="Center"
+						Binding="{Binding Count, Mode=TwoWay}">
+						<dxg:ColumnBase.EditSettings>
+							<dxe:SpinEditSettings
+								MinValue="0"
+								IsFloatValue="True" />
+						</dxg:ColumnBase.EditSettings>
+					</dxg:GridColumn>
+					<dxg:GridColumn
+						HeaderToolTip="{DynamicResource MaterialPriceToolTip}"
+						Width="100"
+						FieldName="{DynamicResource Price}"
+						HorizontalHeaderContentAlignment="Center"
+						Binding="{Binding Price, Mode=TwoWay}">
+						<dxg:ColumnBase.EditSettings>
+							<dxe:SpinEditSettings
+								MaskType="Numeric"
+								Mask="N2"
+								MaskUseAsDisplayFormat="True"
+								MinValue="0"
+								IsFloatValue="True" />
+						</dxg:ColumnBase.EditSettings>
+					</dxg:GridColumn>
+					<dxg:GridColumn
+						Width="100"
+						FieldName="{DynamicResource WorkAmount}"
+						HorizontalHeaderContentAlignment="Center"
+						Binding="{Binding WorksPrice, Mode=TwoWay}">
+						<dxg:ColumnBase.EditSettings>
+							<dxe:SpinEditSettings
+								MinValue="0"
+								MaskType="Numeric"
+								Mask="N2"
+								MaskUseAsDisplayFormat="True"
+								IsFloatValue="True" />
+						</dxg:ColumnBase.EditSettings>
+					</dxg:GridColumn>
+					<dxg:GridColumn
+						Width="100"
+						FieldName="{DynamicResource Total}"
+						HorizontalHeaderContentAlignment="Center"
+						Binding="{Binding Total, Mode=OneWay}">
+						<dxg:ColumnBase.EditSettings>
+							<dxe:TextEditSettings
+								MaskType="Numeric"
+								Mask="N2"
+								MaskUseAsDisplayFormat="True"
+								HorizontalContentAlignment="Right" />
+						</dxg:ColumnBase.EditSettings>
+					</dxg:GridColumn>
+					<dxg:GridColumn
+						Width="20*"
+						FieldName="{DynamicResource ItemName}"
+						HorizontalHeaderContentAlignment="Center"
+						Binding="{Binding Name, Mode=TwoWay}" />
+					<dxg:GridColumn
+						Width="10*"
+						FieldName="{DynamicResource ArticulNoDots}"
+						HorizontalHeaderContentAlignment="Center"
+						Binding="{Binding Articul}">
+						<dxg:ColumnBase.CellTemplate>
+							<DataTemplate>
+								<dxe:TextEdit
+									MaxLength="254"
+									Background="#00FFFFFF"
+									IsReadOnly="True"
+									BorderThickness="0"
+									EditValue="{Binding RowData.Row.Articul, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+									<dxmvvm:Interaction.Behaviors>
+										<dxmvvm:EventToCommand
+											EventTriggerBase_x0060_1.EventName="PreviewMouseUp"
+											Command="{Binding View.DataContext.ArticulClickedCommand}"
+											CommandParameter="{Binding RowData.RowHandle.Value}" />
+									</dxmvvm:Interaction.Behaviors>
+								</dxe:TextEdit>
+							</DataTemplate>
+						</dxg:ColumnBase.CellTemplate>
+					</dxg:GridColumn>
+					<dxg:GridControl.View>
+						<dxg:TableView
+							IsSynchronizedWithCurrentItem="True"
+							ShowTotalSummary="False"
+							AllowScrollAnimation="True"
+							NavigationStyle="Cell"
+							ColumnFilterPopupMode="Excel"
+							AllowEditing="True"
+							AllowGrouping="False"
+							AllowColumnMoving="True"
+							ShowGroupPanel="False"
+							ShowColumnHeaders="True"
+							AllowMoveColumnToDropArea="False"
+							ShowSearchPanelMode="Never"
+							ShowBandsPanel="True"
+							ShowIndicator="False"
+							AllowBestFit="True"
+							AllowColumnFiltering="False"
+							ShowSelectionRectangle="False"
+							ShowFixedTotalSummary="False"
+							SummariesIgnoreNullValues="True"
+							RowMinHeight="{Binding Employee.UiSettings.RowHeight, Source={x:Static objects:OfflineData.Instance}}"
+							FontSize="{Binding Employee.UiSettings.FontSize, Source={x:Static objects:OfflineData.Instance}}">
+							<dxmvvm:Interaction.Behaviors>
+								<dxmvvm:EventToCommand
+									EventTriggerBase_x0060_1.EventName="RowDoubleClick"
+									Command="{Binding MaterialClickCommand}" />
+							</dxmvvm:Interaction.Behaviors>
+						</dxg:TableView>
+					</dxg:GridControl.View>
+				</dxg:GridControl>
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				HorizontalAlignment="Right">
+				<StackPanel
+					Orientation="Horizontal">
+					<dx:SimpleButton
+						Content="{DynamicResource Delete}"
+						Visibility="{Binding IsEnabled, Converter={StaticResource BooleanToVisibilityConverter}, RelativeSource={RelativeSource Self}}"
+						Command="{Binding RemoveMaterialCommand}"
+						Glyph="{DXImageGrayscale Image=Delete_16x16.png}" />
+					<dx:SimpleButton
+						Margin="10,0,0,0"
+						Content="{DynamicResource Add}"
+						Command="{Binding AddMaterialCommand}"
+						Glyph="{DXImageGrayscale Image=Add_16x16.png}" />
+				</StackPanel>
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource Notes}"
+				LabelPosition="Top">
+				<dxe:TextEdit
+					TextWrapping="Wrap"
+					AcceptsReturn="True"
+					VerticalContentAlignment="Top"
+					MinHeight="80"
+					EditValue="{Binding Card.Notes, Mode=TwoWay}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource Archive}"
+				Visibility="{Binding Card.CardId, Converter={StaticResource NumericToVisibility}}">
+				<dxe:CheckEdit
+					EditValue="{Binding Card.Archive, Mode=TwoWay}" />
+			</dxlc:LayoutItem>
+		</dxlc:LayoutControl>
+	</DockPanel>
+</UserControl>

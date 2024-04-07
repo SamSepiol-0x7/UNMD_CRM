@@ -1,0 +1,175 @@
+<UserControl
+	x:Class="ASC.View.Charts.WiolinReportView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:controls="clr-namespace:ASC.View.Controls" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:properties="clr-namespace:ASC.Properties" xmlns:dxwui="http://schemas.devexpress.com/winfx/2008/xaml/windowsui" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:gl="clr-namespace:System.Globalization;assembly=mscorlib" xmlns:charts="clr-namespace:ASC.View.Charts"
+	Loaded="{DXEvent OnLoad()}">
+	<FrameworkElement.Resources>
+		<ResourceDictionary>
+			<Style
+				TargetType="{x:Type dxlc:GroupBox}"
+				x:Key="CustomGroupBoxStyle">
+				<Setter
+					Property="Padding"
+					Value="0" />
+			</Style>
+			<DataTemplate
+				x:Key="ItemTemplate">
+				<DockPanel>
+					<TextBlock
+						HorizontalAlignment="Right"
+						DockPanel.Dock="Right"
+						FontWeight="Bold"
+						Text="{Binding Summ, StringFormat={}{0:N2}, ConverterCulture={x:Static gl:CultureInfo.CurrentCulture}}" />
+					<StackPanel
+						DockPanel.Dock="Left"
+						MinWidth="200"
+						Orientation="Horizontal">
+						<TextBlock
+							Text="{Binding Name}" />
+						<TextBlock
+							Text=": " />
+					</StackPanel>
+				</DockPanel>
+			</DataTemplate>
+			<Style
+				TargetType="{x:Type dxlc:FlowLayoutControl}"
+				x:Key="{x:Type dxlc:FlowLayoutControl}">
+				<Setter
+					Property="dx:ScrollControl.ScrollBars"
+					Value="None" />
+				<Setter
+					Property="MaxWidth"
+					Value="300" />
+				<Setter
+					Property="dxlc:FlowLayoutControl.Orientation"
+					Value="Vertical" />
+				<Setter
+					Property="dxlc:FlowLayoutControl.BreakFlowToFit"
+					Value="False" />
+				<Setter
+					Property="dxlc:FlowLayoutControl.ItemTemplate"
+					Value="{StaticResource ItemTemplate}" />
+			</Style>
+		</ResourceDictionary>
+	</FrameworkElement.Resources>
+	<DockPanel>
+		<dxwui:AppBar
+			DockPanel.Dock="Bottom"
+			Background="#3f3f3f"
+			HorizontalAlignment="Stretch"
+			VerticalAlignment="Bottom"
+			ItemSpacing="5"
+			HideMode="AlwaysVisible">
+			<dxwui:AppBarButton
+				Label="{DynamicResource Refresh}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Command="{Binding RefreshCommand}"
+				Glyph="{dx:DXImageGrayscale Image=Refresh_32x32.png}" />
+		</dxwui:AppBar>
+		<DockPanel
+			Dock="Left">
+			<dxlc:LayoutControl
+				DockPanel.Dock="Left"
+				ItemStyle="{StaticResource LeftMenuLayout}"
+				MaxWidth="400"
+				Orientation="Vertical"
+				ItemSpace="5"
+				Padding="10,10,0,10"
+				Visibility="{Binding ElementName=ExpandButton, Path=IsChecked, Converter={dxmvvm:BooleanToVisibilityConverter}}">
+				<dxlc:LayoutItem
+					Label="{DynamicResource PeriodNoDots}">
+					<controls:MonthDatePickerView />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource Employees}">
+					<dxe:ComboBoxEdit
+						IsReadOnly="True"
+						MaxWidth="250"
+						DisplayMember="FioShort"
+						ValueMember="id"
+						SeparatorString=";"
+						ItemsSource="{Binding Employees}"
+						EditValue="{Binding SelectedEmployees, Mode=TwoWay}">
+						<dxe:BaseEdit.StyleSettings>
+							<dxe:CheckedComboBoxStyleSettings />
+						</dxe:BaseEdit.StyleSettings>
+					</dxe:ComboBoxEdit>
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource PaymentSystems}">
+					<dxe:ComboBoxEdit
+						MaxWidth="250"
+						DisplayMember="name"
+						ValueMember="system_id"
+						SeparatorString=";"
+						ItemsSource="{Binding PaymentSystems}"
+						EditValue="{Binding SelectedPaymentSystems, Mode=TwoWay}">
+						<dxe:BaseEdit.StyleSettings>
+							<dxe:CheckedComboBoxStyleSettings />
+						</dxe:BaseEdit.StyleSettings>
+					</dxe:ComboBoxEdit>
+				</dxlc:LayoutItem>
+			</dxlc:LayoutControl>
+			<Grid
+				DockPanel.Dock="Left">
+				<ToggleButton
+					Name="ExpandButton"
+					Padding="0"
+					Margin="0"
+					Style="{StaticResource HideButtonStyleLeft}"
+					VerticalAlignment="Center"
+					IsChecked="{Binding Path=KassaSidebarExpanded, Source={x:Static properties:Settings.Default}}" />
+			</Grid>
+			<dx:LoadingDecorator
+				IsSplashScreenShown="{Binding IsLoadingData}">
+				<dxlc:LayoutControl
+					GroupBoxStyle="{StaticResource CustomGroupBoxStyle}"
+					VerticalAlignment="Top"
+					HorizontalAlignment="Left"
+					Orientation="Vertical"
+					Visibility="{Binding IsLoadingData, Converter={dxmvvm:BooleanToVisibilityConverter Inverse=True}}">
+					<dxlc:LayoutGroup
+						Padding="0"
+						MinWidth="200"
+						View="GroupBox"
+						Header="Авансы и ЗП">
+						<dxlc:FlowLayoutControl
+							ItemsSource="{Binding Advances}" />
+					</dxlc:LayoutGroup>
+					<dxlc:LayoutGroup
+						Padding="0"
+						MinWidth="200"
+						View="GroupBox"
+						Header="Остатки">
+						<dxlc:FlowLayoutControl
+							ItemsSource="{Binding Balances}" />
+					</dxlc:LayoutGroup>
+					<dxlc:LayoutGroup
+						Padding="0"
+						MinWidth="200"
+						View="GroupBox"
+						Header="Чистая прибыль">
+						<dxlc:FlowLayoutControl
+							ItemsSource="{Binding Profites}" />
+					</dxlc:LayoutGroup>
+					<dxlc:LayoutGroup
+						Padding="0"
+						MinWidth="200"
+						View="GroupBox"
+						Header="Прибыль - аванс">
+						<dxlc:FlowLayoutControl
+							ItemsSource="{Binding ProfitesResult}" />
+					</dxlc:LayoutGroup>
+					<dxlc:LayoutGroup
+						Padding="0"
+						MinWidth="200"
+						View="GroupBox"
+						Header="Прибыль - аванс - карта">
+						<dxlc:FlowLayoutControl
+							ItemsSource="{Binding ProfitesResultSub}" />
+					</dxlc:LayoutGroup>
+				</dxlc:LayoutControl>
+			</dx:LoadingDecorator>
+		</DockPanel>
+	</DockPanel>
+</UserControl>

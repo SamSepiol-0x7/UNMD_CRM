@@ -1,0 +1,1468 @@
+<UserControl
+	x:Class="ASC.View.ACP.VoIPView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:asc="clr-namespace:ASC" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:sys="clr-namespace:System;assembly=mscorlib" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" xmlns:collections="clr-namespace:System.Collections;assembly=mscorlib" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:dxdiag="http://schemas.devexpress.com/winfx/2008/xaml/diagram" xmlns:extensions="clr-namespace:ASC.Extensions" xmlns:conv="clr-namespace:ASC.Converters" xmlns:dxwui="http://schemas.devexpress.com/winfx/2008/xaml/windowsui" xmlns:acp="clr-namespace:ASC.ViewModels.ACP" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:acp1="clr-namespace:ASC.View.ACP">
+	<FrameworkElement.DataContext>
+		<acp:VoIPViewModel />
+	</FrameworkElement.DataContext>
+	<FrameworkElement.Resources>
+		<ResourceDictionary>
+			<asc:BindingProxy
+				Data="{Binding}"
+				x:Key="DataContextProxy" />
+			<conv:BoolInverterConverter
+				x:Key="BoolInverterConverter" />
+		</ResourceDictionary>
+	</FrameworkElement.Resources>
+	<dxmvvm:Interaction.Behaviors>
+		<dxwui:WinUIMessageBoxService
+			WinUIMessageBoxService.Name="MessageService"
+			x:Name="MessageService" />
+	</dxmvvm:Interaction.Behaviors>
+	<Grid>
+		<dx:DXTabControl
+			HorizontalAlignment="Stretch"
+			VerticalAlignment="Stretch"
+			Style="{StaticResource deDefaultTabControl}"
+			p20:SelectorBase_x0060_2.SelectedIndex="{Binding VoipTabIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" xmlns:p20="http://schemas.devexpress.com/winfx/2008/xaml/core/internal">
+			<dx:DXTabControl.View>
+				<dx:TabControlScrollView
+					HeaderLocation="Left"
+					HeaderOrientation="Vertical"
+					AllowAnimation="True"
+					AllowScrollOnMouseWheel="True"
+					HideButtonShowMode="NoWhere"
+					ShowHeaderMenu="False" />
+			</dx:DXTabControl.View>
+			<dx:DXTabItem
+				HeaderedSelectorItemBase_x0060_2.Header="{DynamicResource Dialplan}">
+				<Grid>
+					<dxlc:LayoutControl
+						Orientation="Vertical">
+						<dxlc:LayoutGroup
+							Orientation="Horizontal"
+							VerticalAlignment="Top">
+							<dxlc:LayoutGroup
+								VerticalAlignment="Stretch"
+								HorizontalAlignment="Left"
+								Orientation="Vertical"
+								View="GroupBox"
+								Header="{DynamicResource IntPhoneN}">
+								<dxlc:LayoutItem
+									MaxHeight="250">
+									<dxe:ListBoxEdit
+										MinHeight="100"
+										MinWidth="100"
+										DisplayMember="id"
+										SelectedItem="{Binding SelectedEndpoint, Mode=TwoWay}"
+										ItemsSource="{Binding Endpoints}">
+										<dxmvvm:Interaction.Behaviors>
+											<dxmvvm:EventToCommand
+												EventTriggerBase_x0060_1.EventName="MouseDoubleClick"
+												Command="{Binding ShowEndpointEditCommand}" />
+										</dxmvvm:Interaction.Behaviors>
+									</dxe:ListBoxEdit>
+								</dxlc:LayoutItem>
+								<dxlc:LayoutItem>
+									<TextBlock
+										Foreground="#FF0000FF"
+										Text="{DynamicResource EditHelp}"
+										TextWrapping="Wrap" />
+								</dxlc:LayoutItem>
+								<dxlc:LayoutItem
+									HorizontalContentAlignment="Right">
+									<StackPanel
+										Orientation="Horizontal">
+										<dx:SimpleButton
+											Content="{DynamicResource Delete}"
+											Command="{Binding DeleteEndpointCommand}"
+											Glyph="{DXImageGrayscale Image=Delete_16x16.png}" />
+										<dx:SimpleButton
+											Content="{DynamicResource Create}"
+											Margin="5,0,0,0"
+											Command="{Binding ShowCreateEndpointCommand}"
+											Glyph="{DXImageGrayscale Image=Add_16x16.png}" />
+									</StackPanel>
+								</dxlc:LayoutItem>
+							</dxlc:LayoutGroup>
+							<dxlc:LayoutGroup
+								Orientation="Vertical"
+								VerticalAlignment="Stretch"
+								Header="{DynamicResource CallSources}"
+								View="GroupBox"
+								HorizontalAlignment="Left">
+								<dxlc:LayoutItem>
+									<ListBox
+										Width="150"
+										MinHeight="100"
+										ItemsSource="{Binding Contextsts}"
+										SelectedItem="{Binding SelectedContext, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+								</dxlc:LayoutItem>
+							</dxlc:LayoutGroup>
+							<dxlc:LayoutGroup
+								Orientation="Vertical"
+								View="GroupBox"
+								Header="{DynamicResource Dialplan}"
+								IsEnabled="{Binding DialplanSelected}">
+								<dxlc:LayoutItem
+									MaxHeight="300">
+									<dxg:GridControl
+										MinHeight="100"
+										IsFilterEnabled="False"
+										Margin="0,0,0,33"
+										ItemsSource="{Binding ContextDialplan}">
+										<dxg:GridControl.View>
+											<dxg:TableView
+												ShowGroupPanel="False"
+												AllowGrouping="False"
+												AllowColumnMoving="False"
+												AllowSorting="False"
+												AllowColumnFiltering="False"
+												AllowFilterEditor="False"
+												ShowSearchPanelMode="Never" />
+										</dxg:GridControl.View>
+										<dxg:GridColumn
+											GroupIndex="0"
+											FieldName="Расширение"
+											HorizontalHeaderContentAlignment="Center"
+											Binding="{Binding exten}" />
+										<dxg:GridColumn
+											FieldName="Очерёдность"
+											HorizontalHeaderContentAlignment="Center"
+											Binding="{Binding priority}" />
+										<dxg:GridColumn
+											FieldName="App"
+											Binding="{Binding app}" />
+										<dxg:GridColumn
+											FieldName="App data"
+											Width="250*"
+											Binding="{Binding appdata}" />
+									</dxg:GridControl>
+								</dxlc:LayoutItem>
+								<dxlc:LayoutItem>
+									<StackPanel
+										Orientation="Horizontal"
+										VerticalAlignment="Bottom"
+										HorizontalAlignment="Right">
+										<Button
+											Margin="5,0,0,0"
+											HorizontalAlignment="Right"
+											VerticalAlignment="Bottom"
+											Command="{Binding ClearDialPlanCommand}">
+											<StackPanel
+												Orientation="Horizontal">
+												<Image
+													Source="../../Resources/Remove.png"
+													Style="{StaticResource 16X16Image}" />
+												<Label
+													Content="{DynamicResource Clear}"
+													Margin="5,0,0,0" />
+											</StackPanel>
+										</Button>
+										<dx:SimpleButton
+											Style="{StaticResource SaveButton}"
+											Margin="10,0,0,0"
+											Command="{Binding SaveDialplanCommand}" />
+									</StackPanel>
+								</dxlc:LayoutItem>
+							</dxlc:LayoutGroup>
+						</dxlc:LayoutGroup>
+						<dxlc:LayoutGroup
+							View="GroupBox"
+							Header="{DynamicResource DialplanEditor}"
+							Orientation="Vertical"
+							VerticalAlignment="Stretch">
+							<dxlc:LayoutItem
+								VerticalAlignment="Top">
+								<StackPanel
+									Orientation="Horizontal"
+									VerticalAlignment="Top"
+									HorizontalAlignment="Left">
+									<Label
+										VerticalContentAlignment="Center"
+										Content="{DynamicResource ToExten}"
+										ContentStringFormat="{}{0}:"
+										Margin="5,0,0,0" />
+									<dxe:ComboBoxEdit
+										Width="130"
+										Margin="5,0,0,0"
+										ItemsSource="{Binding DialplanExtens}"
+										EditValue="{Binding SelectedDialplanExten, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+										<dxmvvm:Interaction.Behaviors>
+											<dxmvvm:EventToCommand
+												EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+												PassEventArgsToCommand="True"
+												Command="{Binding ComboBoxClickCommand}" />
+										</dxmvvm:Interaction.Behaviors>
+									</dxe:ComboBoxEdit>
+									<StackPanel
+										Orientation="Horizontal"
+										Visibility="{Binding AfterExtenVisibility}">
+										<Label
+											VerticalContentAlignment="Center"
+											Content="{DynamicResource After}"
+											ContentStringFormat="{}{0}:"
+											Margin="5,0,0,0" />
+										<dxe:ComboBoxEdit
+											DisplayMember="Actions.Name"
+											Width="130"
+											Margin="5,0,0,0"
+											ItemsSource="{Binding ExistDialplanActions}"
+											EditValue="{Binding SelectedExistDialplanActions, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+											<dxmvvm:Interaction.Behaviors>
+												<dxmvvm:EventToCommand
+													EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+													PassEventArgsToCommand="True"
+													Command="{Binding ComboBoxClickCommand}" />
+											</dxmvvm:Interaction.Behaviors>
+										</dxe:ComboBoxEdit>
+									</StackPanel>
+									<Label
+										VerticalContentAlignment="Center"
+										Content="{DynamicResource Add}"
+										ContentStringFormat="{}{0}:"
+										Margin="5,0,0,0" />
+									<dxe:ComboBoxEdit
+										Width="130"
+										Margin="5,0,0,0"
+										DisplayMember="Name"
+										ItemsSource="{Binding AllDialplanActions}"
+										EditValue="{Binding NewDialplanAction, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+										<dxmvvm:Interaction.Behaviors>
+											<dxmvvm:EventToCommand
+												EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+												PassEventArgsToCommand="True"
+												Command="{Binding ComboBoxClickCommand}" />
+										</dxmvvm:Interaction.Behaviors>
+									</dxe:ComboBoxEdit>
+									<StackPanel
+										Orientation="Horizontal"
+										Margin="5,0,0,0"
+										HorizontalAlignment="Center"
+										Visibility="{Binding ActionToTrunkVis}">
+										<Label
+											Content="{DynamicResource Trunks}"
+											VerticalAlignment="Center"
+											ContentStringFormat="{}{0}:" />
+										<dxe:ComboBoxEdit
+											Margin="5,0,0,0"
+											DisplayMember="id"
+											Width="130"
+											ItemsSource="{Binding ZadarmaEndpointses}"
+											EditValue="{Binding SelectedTrunk, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+											<dxmvvm:Interaction.Behaviors>
+												<dxmvvm:EventToCommand
+													EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+													PassEventArgsToCommand="True"
+													Command="{Binding ComboBoxClickCommand}" />
+											</dxmvvm:Interaction.Behaviors>
+										</dxe:ComboBoxEdit>
+									</StackPanel>
+									<StackPanel
+										Orientation="Horizontal"
+										Margin="5,0,0,0"
+										HorizontalAlignment="Center"
+										Visibility="{Binding ActionToDongleVis}">
+										<Label
+											Content="{DynamicResource UsbModems}"
+											VerticalAlignment="Center"
+											ContentStringFormat="{}{0}:" />
+										<ComboBox
+											Margin="5,0,0,0"
+											DisplayMemberPath="Name"
+											SelectedValuePath="Name"
+											Width="130"
+											ItemsSource="{Binding DongleDevicesConfig}"
+											SelectedValue="{Binding SelectedDialDongle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+									</StackPanel>
+									<StackPanel
+										Orientation="Horizontal"
+										Margin="5,0,0,0"
+										HorizontalAlignment="Center"
+										Visibility="{Binding ActionToQueueVis}">
+										<Label
+											Content="{DynamicResource Queues}"
+											VerticalAlignment="Center"
+											ContentStringFormat="{}{0}:" />
+										<ComboBox
+											DisplayMemberPath="name"
+											Width="100"
+											Margin="5,0,0,0"
+											ItemsSource="{Binding Queues}"
+											SelectedItem="{Binding SelectedDialplanQueue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+									</StackPanel>
+									<StackPanel
+										Orientation="Horizontal"
+										Margin="5,0,0,0"
+										HorizontalAlignment="Center"
+										Visibility="{Binding ActionPlayFileVis}">
+										<Label
+											Content="{DynamicResource Path}"
+											VerticalAlignment="Center"
+											ContentStringFormat="{}{0}:" />
+										<dxe:TextEdit
+											IsEnabled="False"
+											Width="130"
+											Margin="5,0,0,0"
+											EditValue="{Binding NewDialplanActionFilePath, Mode=TwoWay}" />
+										<Button
+											Margin="5,0,0,0"
+											Content="{DynamicResource SelectFile}"
+											Command="{Binding SelectAudioFileCommand}" />
+									</StackPanel>
+									<StackPanel
+										Orientation="Horizontal"
+										Margin="5,0,0,0"
+										HorizontalAlignment="Center"
+										Visibility="{Binding ActionSaveSmsVis}">
+										<Label
+											Content="{DynamicResource AsteriskDbPassword}"
+											VerticalAlignment="Center"
+											ContentStringFormat="{}{0}:" />
+										<dxe:TextEdit
+											Width="130"
+											Margin="5,0,0,0"
+											EditValue="{Binding NewDialplanActionAsteriskDbPassword, Mode=TwoWay}" />
+									</StackPanel>
+									<StackPanel
+										Orientation="Horizontal"
+										Margin="5,0,0,0"
+										HorizontalAlignment="Center"
+										Visibility="{Binding ActionToIntNumberVis}">
+										<Label
+											Content="{DynamicResource IntPhoneN}"
+											VerticalAlignment="Center"
+											ContentStringFormat="{}{0}:" />
+										<ComboBox
+											Margin="5,0,0,0"
+											Width="150"
+											DisplayMemberPath="IntPhoneAndFio"
+											SelectedValue="id"
+											IsEnabled="{Binding NewDialplanActionSipUserCalled, Converter={StaticResource BoolInverterConverter}}"
+											SelectedItem="{Binding NewDialplanActionSipUser, Mode=TwoWay}"
+											ItemsSource="{Binding DialplanSipUsers}" />
+										<CheckBox
+											VerticalAlignment="Center"
+											Margin="5,0,0,0"
+											Content="{DynamicResource CalledNumber}"
+											IsChecked="{Binding NewDialplanActionSipUserCalled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+									</StackPanel>
+									<dx:SimpleButton
+										Style="{StaticResource SaveButton}"
+										Margin="5,0,0,0"
+										Command="{Binding AddDialplanActionCommand}" />
+								</StackPanel>
+							</dxlc:LayoutItem>
+							<dxlc:LayoutItem
+								VerticalAlignment="Stretch"
+								MaxHeight="800">
+								<dxdiag:DiagramControl
+									MinHeight="200"
+									TreeLayoutDirection="LeftToRight"
+									ToolboxVisibility="Closed"
+									SelectedStencils="BasicShapes, ArrowShapes"
+									ShowGrid="False"
+									ShowPageBreaks="False"
+									ShowRulers="False"
+									CanvasSizeMode="Fill">
+									<dxmvvm:Interaction.Behaviors>
+										<extensions:DiagramOrgChartBehaviorEx
+											dxdiag:ChildrenPath="Children"
+											dxdiag:ItemsSource="{Binding ExtenVisObjs}">
+											<dxdiag:DiagramDataBindingBehaviorBase.TemplateDiagram>
+												<dxdiag:DiagramControl
+													CanvasSizeMode="Fill"
+													SelectedStencils="TemplateDesigner, BasicShapes"
+													ShowPageBreaks="False"
+													Theme="Linear">
+													<dxdiag:DiagramConnector
+														CanDelete="False"
+														CanEdit="False"
+														CanCopyWithoutParent="False"
+														CanMove="False"
+														CanSelect="False"
+														CanDeleteWithoutParent="False"
+														CanCopy="False"
+														Points="(Empty)"
+														ThemeStyleId="ConnectorId.Subtle1"
+														Type="Curved" />
+													<dxdiag:DiagramContainer
+														Anchors="Left, Top"
+														CanDelete="False"
+														CanCopyWithoutParent="True"
+														ConnectionPoints="0.5,0 1,0.5 0.5,1 0,0.5"
+														CanAddItems="False"
+														CanCopy="False"
+														DragMode="ByAnyPoint"
+														Height="105"
+														ItemsCanChangeParent="False"
+														ItemsCanAttachConnectorEndPoint="False"
+														ItemsCanAttachConnectorBeginPoint="False"
+														ItemsCanSelect="False"
+														ItemsCanEdit="False"
+														ItemsCanCopyWithoutParent="False"
+														ItemsCanMove="False"
+														ItemsCanRotate="False"
+														ItemsCanSnapToOtherItems="False"
+														ItemsCanDeleteWithoutParent="False"
+														ItemsCanSnapToThisItem="False"
+														ItemsCanResize="False"
+														Position="350,30"
+														ThemeStyleId="Variant1"
+														TemplateName="QueueTemplate"
+														Width="150">
+														<dxdiag:DiagramShape
+															Anchors="Left, Right, Bottom"
+															FontSize="14"
+															Height="45"
+															Position="10,20"
+															StrokeThickness="0"
+															VerticalContentAlignment="Top"
+															Width="130">
+															<dxdiag:DiagramItem.Bindings>
+																<dxdiag:DiagramBinding
+																	Expression="Name"
+																	PropertyName="Content" />
+															</dxdiag:DiagramItem.Bindings>
+														</dxdiag:DiagramShape>
+														<dxdiag:DiagramShape
+															Anchors="Left, Top, Right"
+															Background="#001BA1E2"
+															FontSize="11"
+															Height="43"
+															Position="10,40"
+															StrokeThickness="0"
+															Width="130">
+															<dxdiag:DiagramItem.Bindings>
+																<dxdiag:DiagramBinding
+																	Expression="AdditionalInfo"
+																	PropertyName="Content" />
+															</dxdiag:DiagramItem.Bindings>
+														</dxdiag:DiagramShape>
+														<dxdiag:DiagramShape
+															ToolTip="{DynamicResource Priority}"
+															Anchors="Left, Top, Right"
+															Background="#001BA1E2"
+															FontSize="11"
+															Height="43"
+															Position="10,60"
+															StrokeThickness="0"
+															Width="130">
+															<dxdiag:DiagramItem.Bindings>
+																<dxdiag:DiagramBinding
+																	Expression="Priority"
+																	PropertyName="Content" />
+															</dxdiag:DiagramItem.Bindings>
+														</dxdiag:DiagramShape>
+													</dxdiag:DiagramContainer>
+												</dxdiag:DiagramControl>
+											</dxdiag:DiagramDataBindingBehaviorBase.TemplateDiagram>
+										</extensions:DiagramOrgChartBehaviorEx>
+									</dxmvvm:Interaction.Behaviors>
+								</dxdiag:DiagramControl>
+							</dxlc:LayoutItem>
+							<dxlc:LayoutItem
+								VerticalAlignment="Bottom">
+								<StackPanel
+									Orientation="Horizontal"
+									VerticalAlignment="Bottom"
+									HorizontalAlignment="Left">
+									<Label
+										VerticalContentAlignment="Center"
+										Content="{DynamicResource SelectExten}"
+										ContentStringFormat="{}{0}:" />
+									<dxe:ComboBoxEdit
+										Width="130"
+										Margin="5,0,0,0"
+										ItemsSource="{Binding DialplanExtens}"
+										EditValue="{Binding SelectedDialplanExten, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+										<dxmvvm:Interaction.Behaviors>
+											<dxmvvm:EventToCommand
+												EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+												PassEventArgsToCommand="True"
+												Command="{Binding ComboBoxClickCommand}" />
+										</dxmvvm:Interaction.Behaviors>
+									</dxe:ComboBoxEdit>
+									<Label
+										VerticalContentAlignment="Center"
+										Content="{DynamicResource ExistActions}"
+										ContentStringFormat="{}{0}:"
+										Margin="5,0,0,0" />
+									<dxe:ComboBoxEdit
+										DisplayMember="Actions.Name"
+										Width="130"
+										Margin="5,0,0,0"
+										ItemsSource="{Binding ExistDialplanActions}"
+										EditValue="{Binding SelectedExistDialplanActions, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+										<dxmvvm:Interaction.Behaviors>
+											<dxmvvm:EventToCommand
+												EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+												PassEventArgsToCommand="True"
+												Command="{Binding ComboBoxClickCommand}" />
+										</dxmvvm:Interaction.Behaviors>
+									</dxe:ComboBoxEdit>
+									<Button
+										Margin="5,0,0,0"
+										Command="{Binding RemoveDialplanActionCommand}">
+										<StackPanel
+											Orientation="Horizontal">
+											<Image
+												Source="../../Resources/Remove.png"
+												Style="{StaticResource 16X16Image}" />
+											<Label
+												Content="{DynamicResource Delete}"
+												Margin="10,0,0,0" />
+										</StackPanel>
+									</Button>
+								</StackPanel>
+							</dxlc:LayoutItem>
+						</dxlc:LayoutGroup>
+					</dxlc:LayoutControl>
+				</Grid>
+			</dx:DXTabItem>
+			<dx:DXTabItem
+				HeaderedSelectorItemBase_x0060_2.Header="{DynamicResource Queues}">
+				<dxlc:LayoutControl
+					Orientation="Vertical">
+					<dxlc:LayoutGroup
+						Header="{DynamicResource Queues}"
+						VerticalAlignment="Top"
+						View="GroupBox"
+						Orientation="Horizontal">
+						<dxlc:LayoutGroup
+							Orientation="Vertical"
+							HorizontalAlignment="Left">
+							<dxlc:LayoutItem>
+								<StackPanel
+									Orientation="Horizontal"
+									HorizontalAlignment="Left"
+									VerticalAlignment="Top">
+									<Label
+										Content="{DynamicResource Name}"
+										ContentStringFormat="{}{0}:" />
+									<dxe:TextEdit
+										Mask="[a-zA-Z0-9\/\_\-]+"
+										MaskType="RegEx"
+										Width="90"
+										Margin="5,0,0,0"
+										EditValue="{Binding NewQueueName, Mode=TwoWay}" />
+									<Button
+										Content="{DynamicResource Add}"
+										Margin="5,0,0,0"
+										Command="{Binding AddQueueCommand}" />
+								</StackPanel>
+							</dxlc:LayoutItem>
+							<dxlc:LayoutGroup
+								View="GroupBox"
+								Header="{DynamicResource QueuesList}">
+								<dxlc:LayoutItem>
+									<ListBox
+										DisplayMemberPath="name"
+										HorizontalAlignment="Stretch"
+										VerticalAlignment="Top"
+										Height="200"
+										ItemsSource="{Binding Queues}"
+										SelectedItem="{Binding SelectedQueue}" />
+								</dxlc:LayoutItem>
+							</dxlc:LayoutGroup>
+						</dxlc:LayoutGroup>
+						<dxlc:LayoutGroup
+							Orientation="Vertical"
+							View="GroupBox"
+							HorizontalAlignment="Left"
+							Header="{DynamicResource QueueSettings}"
+							IsEnabled="{Binding CanEditQueue, Mode=OneWay}">
+							<dxlc:LayoutItem>
+								<StackPanel
+									Orientation="Vertical"
+									HorizontalAlignment="Left"
+									VerticalAlignment="Top">
+									<StackPanel
+										Orientation="Horizontal"
+										HorizontalAlignment="Right">
+										<Label
+											Content="{DynamicResource QueueTimeout}"
+											ContentStringFormat="{}{0}:" />
+										<dxe:SpinEdit
+											HorizontalContentAlignment="Center"
+											Width="100"
+											MinValue="5"
+											IsFloatValue="False"
+											ShowError="False"
+											Margin="5,0,0,0"
+											EditValue="{Binding SelectedQueue.timeout, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+									</StackPanel>
+									<StackPanel
+										Orientation="Horizontal"
+										Margin="0,5,0,0"
+										HorizontalAlignment="Right">
+										<Label
+											Content="{DynamicResource Ringinuse}"
+											ContentStringFormat="{}{0}:" />
+										<dxe:ComboBoxEdit
+											HorizontalContentAlignment="Center"
+											Width="100"
+											ShowError="False"
+											Margin="5,0,0,0"
+											EditValue="{Binding SelectedQueue.ringinuse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+											<dxe:LookUpEditBase.ItemsSource>
+												<collections:ArrayList>
+													<sys:String>yes</sys:String>
+													<sys:String>no</sys:String>
+												</collections:ArrayList>
+											</dxe:LookUpEditBase.ItemsSource>
+										</dxe:ComboBoxEdit>
+									</StackPanel>
+									<StackPanel
+										Orientation="Horizontal"
+										Margin="0,5,0,0"
+										HorizontalAlignment="Right">
+										<Label
+											Content="{DynamicResource QueueAutofill}"
+											ContentStringFormat="{}{0}:" />
+										<dxe:ComboBoxEdit
+											HorizontalContentAlignment="Center"
+											Width="100"
+											ShowError="False"
+											Margin="5,0,0,0"
+											EditValue="{Binding SelectedQueue.autofill, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+											<dxe:LookUpEditBase.ItemsSource>
+												<collections:ArrayList>
+													<sys:String>yes</sys:String>
+													<sys:String>no</sys:String>
+												</collections:ArrayList>
+											</dxe:LookUpEditBase.ItemsSource>
+										</dxe:ComboBoxEdit>
+									</StackPanel>
+									<StackPanel
+										Orientation="Horizontal"
+										Margin="0,5,0,0"
+										HorizontalAlignment="Right">
+										<Label
+											Content="{DynamicResource QueueStrategy}"
+											ContentStringFormat="{}{0}:" />
+										<dxe:ComboBoxEdit
+											HorizontalContentAlignment="Center"
+											Width="100"
+											ShowError="False"
+											Margin="5,0,0,0"
+											EditValue="{Binding SelectedQueue.strategy, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+											<dxe:LookUpEditBase.ItemsSource>
+												<collections:ArrayList>
+													<sys:String>ringall</sys:String>
+													<sys:String>leastrecent</sys:String>
+													<sys:String>fewestcalls</sys:String>
+													<sys:String>random</sys:String>
+													<sys:String>rrmemory</sys:String>
+													<sys:String>linear</sys:String>
+													<sys:String>wrandom</sys:String>
+													<sys:String>rrordered</sys:String>
+												</collections:ArrayList>
+											</dxe:LookUpEditBase.ItemsSource>
+										</dxe:ComboBoxEdit>
+									</StackPanel>
+									<StackPanel
+										Orientation="Horizontal"
+										Margin="0,5,0,0"
+										HorizontalAlignment="Right">
+										<Label
+											Content="{DynamicResource QueueWeight}"
+											ContentStringFormat="{}{0}:" />
+										<dxe:SpinEdit
+											HorizontalContentAlignment="Center"
+											MinValue="0"
+											IsFloatValue="False"
+											Width="100"
+											ShowError="False"
+											Margin="5,0,0,0"
+											EditValue="{Binding SelectedQueue.weight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+									</StackPanel>
+								</StackPanel>
+							</dxlc:LayoutItem>
+							<dxlc:LayoutItem>
+								<StackPanel
+									Orientation="Horizontal"
+									VerticalAlignment="Bottom"
+									HorizontalAlignment="Right">
+									<Button
+										VerticalAlignment="Top"
+										Command="{Binding DeleteQueueCommand}">
+										<StackPanel
+											Orientation="Horizontal">
+											<Image
+												Source="/ASC;component/Resources/Remove.png"
+												Width="16"
+												Height="16" />
+											<Label
+												Content="{DynamicResource Delete}"
+												Margin="10,0,0,0" />
+										</StackPanel>
+									</Button>
+									<dx:SimpleButton
+										Style="{StaticResource SaveButton}"
+										Margin="10,0,0,0"
+										Command="{Binding SaveQueueCommand}" />
+								</StackPanel>
+							</dxlc:LayoutItem>
+						</dxlc:LayoutGroup>
+						<dxlc:LayoutGroup
+							Orientation="Vertical"
+							View="GroupBox"
+							Header="{DynamicResource QueueMembers}">
+							<dxlc:LayoutItem>
+								<StackPanel
+									Orientation="Horizontal"
+									HorizontalAlignment="Left"
+									VerticalAlignment="Top">
+									<ComboBox
+										Width="150"
+										DisplayMemberPath="id"
+										SelectedItem="{Binding SelectedEndpoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+										ItemsSource="{Binding Endpoints}" />
+									<Button
+										Margin="5,0,0,0"
+										Content="{DynamicResource Add}"
+										Command="{Binding AddUserToQueueCommand}" />
+								</StackPanel>
+							</dxlc:LayoutItem>
+							<dxlc:LayoutItem
+								MaxHeight="500">
+								<dxg:GridControl
+									MinHeight="100"
+									Style="{StaticResource DeDefTable}"
+									SelectedItem="{Binding SelectedQueueMember, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+									ItemsSource="{Binding QueueMembers}">
+									<dxg:GridColumn
+										FieldName="{DynamicResource Delete}"
+										AllowEditing="False"
+										ReadOnly="True"
+										Width="70"
+										HorizontalHeaderContentAlignment="Center">
+										<dxg:ColumnBase.DisplayTemplate>
+											<ControlTemplate>
+												<Grid>
+													<Button
+														VerticalAlignment="Center"
+														HorizontalAlignment="Center"
+														Command="{Binding Data.DeleteUserFromQueueCommand, Source={StaticResource DataContextProxy}}">
+														<Image
+															Source="../../Resources/trash.png"
+															Style="{StaticResource 16X16Image}" />
+													</Button>
+												</Grid>
+											</ControlTemplate>
+										</dxg:ColumnBase.DisplayTemplate>
+									</dxg:GridColumn>
+									<dxg:GridColumn
+										FieldName="{DynamicResource IntPhoneN}"
+										ReadOnly="True"
+										HorizontalHeaderContentAlignment="Center"
+										Binding="{Binding membername, Mode=OneWay}" />
+									<dxg:GridColumn
+										FieldName="{DynamicResource Penalty}"
+										HorizontalHeaderContentAlignment="Center"
+										AllowEditing="True"
+										Binding="{Binding penalty, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+										<dxg:ColumnBase.EditSettings>
+											<dxe:SpinEditSettings
+												MinValue="0"
+												IsFloatValue="False"
+												HorizontalContentAlignment="Center"
+												Mask="d"
+												MaskUseAsDisplayFormat="True" />
+										</dxg:ColumnBase.EditSettings>
+									</dxg:GridColumn>
+									<dxg:GridControl.View>
+										<dxg:TableView
+											ShowIndicator="False"
+											AllowEditing="True"
+											ShowGroupPanel="False"
+											ShowBandsPanel="False"
+											AllowFilterEditor="False"
+											AllowGrouping="False"
+											AllowColumnMoving="False"
+											AllowSorting="False"
+											NavigationStyle="Cell"
+											UseIndicatorForSelection="False" />
+									</dxg:GridControl.View>
+								</dxg:GridControl>
+							</dxlc:LayoutItem>
+							<dxlc:LayoutItem
+								HorizontalAlignment="Right">
+								<dx:SimpleButton
+									Style="{StaticResource SaveButton}"
+									Command="{Binding SaveQueueMembersCommand}" />
+							</dxlc:LayoutItem>
+						</dxlc:LayoutGroup>
+					</dxlc:LayoutGroup>
+					<dxlc:LayoutItem
+						MaxHeight="500"
+						VerticalAlignment="Stretch">
+						<dxdiag:DiagramControl
+							ToolboxVisibility="Closed"
+							SelectedStencils="BasicShapes, ArrowShapes"
+							ShowGrid="False"
+							ShowPageBreaks="False"
+							ShowRulers="False"
+							CanvasSizeMode="Fill"
+							MinHeight="200">
+							<dxmvvm:Interaction.Behaviors>
+								<extensions:DiagramOrgChartBehaviorEx
+									GenerateItem="dataBindingBehavior_GenerateItem"
+									dxdiag:ChildrenPath="Members"
+									PrimarySelection="{Binding SelectedDiagramItem, Mode=OneWayToSource}"
+									dxdiag:ItemsSource="{Binding QueueDiagram}">
+									<dxdiag:DiagramDataBindingBehaviorBase.TemplateDiagram>
+										<dxdiag:DiagramControl
+											CanvasSizeMode="Fill"
+											SelectedStencils="TemplateDesigner, BasicShapes"
+											ShowPageBreaks="False"
+											Theme="Linear">
+											<dxdiag:DiagramConnector
+												CanDelete="False"
+												CanEdit="False"
+												CanCopyWithoutParent="False"
+												CanMove="False"
+												CanSelect="False"
+												CanDeleteWithoutParent="False"
+												CanCopy="False"
+												Points="(Empty)"
+												ThemeStyleId="ConnectorId.Subtle1"
+												Type="Curved" />
+											<dxdiag:DiagramContainer
+												Anchors="Left, Top"
+												CanDelete="False"
+												CanCopyWithoutParent="True"
+												ConnectionPoints="0.5,0 1,0.5 0.5,1 0,0.5"
+												CanAddItems="False"
+												CanCopy="False"
+												DragMode="ByAnyPoint"
+												Height="105"
+												ItemsCanChangeParent="False"
+												ItemsCanAttachConnectorEndPoint="False"
+												ItemsCanAttachConnectorBeginPoint="False"
+												ItemsCanSelect="False"
+												ItemsCanEdit="False"
+												ItemsCanCopyWithoutParent="False"
+												ItemsCanMove="False"
+												ItemsCanRotate="False"
+												ItemsCanSnapToOtherItems="False"
+												ItemsCanDeleteWithoutParent="False"
+												ItemsCanSnapToThisItem="False"
+												ItemsCanResize="False"
+												Position="350,30"
+												ThemeStyleId="Variant1"
+												TemplateName="QueueTemplate"
+												Width="150">
+												<dxdiag:DiagramShape
+													Anchors="Left, Right, Bottom"
+													FontSize="14"
+													Height="45"
+													Position="10,40"
+													StrokeThickness="0"
+													VerticalContentAlignment="Top"
+													Width="130">
+													<dxdiag:DiagramItem.Bindings>
+														<dxdiag:DiagramBinding
+															Expression="Name"
+															PropertyName="Content" />
+													</dxdiag:DiagramItem.Bindings>
+												</dxdiag:DiagramShape>
+											</dxdiag:DiagramContainer>
+											<dxdiag:DiagramContainer
+												Anchors="Left, Top"
+												CanDelete="False"
+												CanCopyWithoutParent="True"
+												ConnectionPoints="0.5,0 1,0.5 0.5,1 0,0.5"
+												CanAddItems="False"
+												CanCopy="False"
+												DragMode="ByAnyPoint"
+												Height="105"
+												ItemsCanChangeParent="False"
+												ItemsCanAttachConnectorEndPoint="False"
+												ItemsCanAttachConnectorBeginPoint="False"
+												ItemsCanSelect="False"
+												ItemsCanEdit="False"
+												ItemsCanCopyWithoutParent="False"
+												ItemsCanMove="False"
+												ItemsCanRotate="False"
+												ItemsCanSnapToOtherItems="False"
+												ItemsCanDeleteWithoutParent="False"
+												ItemsCanSnapToThisItem="False"
+												ItemsCanResize="False"
+												Position="60,30"
+												ThemeStyleId="Variant1"
+												TemplateName="QueueMemberTemplate"
+												Width="150">
+												<dxdiag:DiagramShape
+													Anchors="Left, Top, Right"
+													Background="#001BA1E2"
+													FontSize="11"
+													Height="43"
+													Position="10,10"
+													StrokeThickness="0"
+													Width="130">
+													<dxdiag:DiagramItem.Bindings>
+														<dxdiag:DiagramBinding
+															Expression="membername"
+															PropertyName="Content" />
+													</dxdiag:DiagramItem.Bindings>
+												</dxdiag:DiagramShape>
+											</dxdiag:DiagramContainer>
+										</dxdiag:DiagramControl>
+									</dxdiag:DiagramDataBindingBehaviorBase.TemplateDiagram>
+								</extensions:DiagramOrgChartBehaviorEx>
+							</dxmvvm:Interaction.Behaviors>
+						</dxdiag:DiagramControl>
+					</dxlc:LayoutItem>
+				</dxlc:LayoutControl>
+			</dx:DXTabItem>
+			<dx:DXTabItem
+				HeaderedSelectorItemBase_x0060_2.Header="{DynamicResource Service}">
+				<Grid>
+					<StackPanel
+						Orientation="Horizontal"
+						VerticalAlignment="Top"
+						HorizontalAlignment="Left">
+						<Button
+							CommandParameter="core reload"
+							HorizontalAlignment="Left"
+							VerticalAlignment="Top"
+							Content="{DynamicResource Restart}"
+							Margin="10,10,0,0"
+							Command="{Binding CliExecuteCommand}" />
+						<Button
+							CommandParameter="dongle show devices"
+							HorizontalAlignment="Left"
+							VerticalAlignment="Top"
+							Content="{DynamicResource UsbModemsList}"
+							Margin="10,10,0,0"
+							Command="{Binding CliExecuteCommand}" />
+					</StackPanel>
+					<dxe:TextEdit
+						VerticalContentAlignment="Top"
+						VerticalScrollBarVisibility="Visible"
+						AcceptsReturn="True"
+						IsReadOnly="True"
+						Background="#FF000000"
+						BorderThickness="1"
+						BorderBrush="#FF0000FF"
+						Foreground="#FF008000"
+						HorizontalAlignment="Stretch"
+						VerticalAlignment="Top"
+						Height="300"
+						Margin="10,37,10,0"
+						EditValue="{Binding AsteriskConsole, Mode=OneWay}" />
+					<dxe:TextEdit
+						NullText="{DynamicResource InputCommand}"
+						HorizontalAlignment="Stretch"
+						VerticalAlignment="Top"
+						Margin="10,342,10,0"
+						EditValue="{Binding AsteriskConsoleCommand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+						<UIElement.InputBindings>
+							<KeyBinding
+								Key="Enter"
+								Command="{Binding ExecuteConsoleCommand}" />
+						</UIElement.InputBindings>
+					</dxe:TextEdit>
+				</Grid>
+			</dx:DXTabItem>
+			<dx:DXTabItem
+				HeaderedSelectorItemBase_x0060_2.Header="{DynamicResource UsbModems}">
+				<Grid>
+					<GroupBox
+						Header="{DynamicResource Defaults}"
+						HorizontalAlignment="Left"
+						VerticalAlignment="Top"
+						Margin="10,10,0,0">
+						<Grid>
+							<StackPanel
+								Orientation="Vertical"
+								VerticalAlignment="Top">
+								<StackPanel
+									Orientation="Horizontal"
+									HorizontalAlignment="Right">
+									<Label
+										Content="Context"
+										ContentStringFormat="{}{0}:" />
+									<dxe:TextEdit
+										HorizontalContentAlignment="Center"
+										Mask="[a-zA-Z0-9\-]+"
+										MaskType="RegEx"
+										Width="100"
+										Margin="5,0,0,0"
+										EditValue="{Binding DongleDefaultConfig.Context, Mode=TwoWay}" />
+								</StackPanel>
+								<StackPanel
+									Orientation="Horizontal"
+									HorizontalAlignment="Right"
+									Margin="0,5,0,0">
+									<Label
+										Content="{DynamicResource Rxgain}"
+										ContentStringFormat="{}{0}:" />
+									<dxe:SpinEdit
+										HorizontalContentAlignment="Center"
+										MinValue="-10"
+										MaxValue="10"
+										IsFloatValue="False"
+										Width="100"
+										Margin="5,0,0,0"
+										EditValue="{Binding DongleDefaultConfig.Rxgain, Mode=TwoWay}" />
+								</StackPanel>
+								<StackPanel
+									Orientation="Horizontal"
+									HorizontalAlignment="Right"
+									Margin="0,5,0,0">
+									<Label
+										Content="{DynamicResource Txgain}"
+										ContentStringFormat="{}{0}:" />
+									<dxe:SpinEdit
+										HorizontalContentAlignment="Center"
+										MinValue="-10"
+										MaxValue="10"
+										IsFloatValue="False"
+										Width="100"
+										Margin="5,0,0,0"
+										EditValue="{Binding DongleDefaultConfig.Txgain, Mode=TwoWay}" />
+								</StackPanel>
+								<StackPanel
+									Orientation="Horizontal"
+									HorizontalAlignment="Right"
+									Margin="0,5,0,0">
+									<Label
+										Content="{DynamicResource DisableSms}"
+										ContentStringFormat="{}{0}:" />
+									<dxe:ComboBoxEdit
+										HorizontalContentAlignment="Center"
+										Width="100"
+										Margin="5,0,0,0"
+										EditValue="{Binding DongleDefaultConfig.Disablesms, Mode=TwoWay}">
+										<dxe:LookUpEditBase.ItemsSource>
+											<collections:ArrayList>
+												<sys:String>yes</sys:String>
+												<sys:String>no</sys:String>
+											</collections:ArrayList>
+										</dxe:LookUpEditBase.ItemsSource>
+									</dxe:ComboBoxEdit>
+								</StackPanel>
+								<StackPanel
+									Orientation="Horizontal"
+									HorizontalAlignment="Right"
+									Margin="0,5,0,0">
+									<Label
+										Content="{DynamicResource AutodeleteSms}"
+										ContentStringFormat="{}{0}:" />
+									<dxe:ComboBoxEdit
+										HorizontalContentAlignment="Center"
+										Width="100"
+										Margin="5,0,0,0"
+										EditValue="{Binding DongleDefaultConfig.Autodeletesms, Mode=TwoWay}">
+										<dxe:LookUpEditBase.ItemsSource>
+											<collections:ArrayList>
+												<sys:String>yes</sys:String>
+												<sys:String>no</sys:String>
+											</collections:ArrayList>
+										</dxe:LookUpEditBase.ItemsSource>
+									</dxe:ComboBoxEdit>
+								</StackPanel>
+								<Button
+									Content="{DynamicResource Save}"
+									Margin="0,5,0,0"
+									Command="{Binding SaveDongleDefaultSettingsCommand}" />
+							</StackPanel>
+						</Grid>
+					</GroupBox>
+					<GroupBox
+						Header="{DynamicResource UsbModems}"
+						HorizontalAlignment="Left"
+						VerticalAlignment="Top"
+						Margin="10,208,0,0"
+						Height="253"
+						Width="232">
+						<Grid>
+							<StackPanel
+								Orientation="Vertical"
+								HorizontalAlignment="Right"
+								VerticalAlignment="Top">
+								<StackPanel
+									Orientation="Horizontal"
+									HorizontalAlignment="Right"
+									VerticalAlignment="Top">
+									<Label
+										Content="{DynamicResource Name}"
+										ContentStringFormat="{}{0}:" />
+									<dxe:TextEdit
+										Mask="[a-zA-Z0-9\-]+"
+										Width="130"
+										Margin="5,0,0,0"
+										EditValue="{Binding NewModemName, Mode=TwoWay}" />
+								</StackPanel>
+								<StackPanel
+									Orientation="Horizontal"
+									HorizontalAlignment="Right"
+									Margin="0,5,0,0">
+									<Label
+										Content="Audio"
+										ContentStringFormat="{}{0}:" />
+									<dxe:TextEdit
+										Mask="[a-zA-Z0-9\/]+"
+										MaskType="RegEx"
+										Width="130"
+										Margin="5,0,0,0"
+										EditValue="{Binding NewDongleDeviceAudio, Mode=TwoWay}" />
+								</StackPanel>
+								<StackPanel
+									Orientation="Horizontal"
+									HorizontalAlignment="Right"
+									Margin="0,5,0,0">
+									<Label
+										Content="Data"
+										ContentStringFormat="{}{0}:" />
+									<dxe:TextEdit
+										Mask="[a-zA-Z0-9\/]+"
+										MaskType="RegEx"
+										Width="130"
+										Margin="5,0,0,0"
+										EditValue="{Binding NewDongleDeviceData, Mode=TwoWay}" />
+								</StackPanel>
+								<StackPanel
+									Orientation="Horizontal"
+									HorizontalAlignment="Right"
+									Margin="0,5,0,0">
+									<Button
+										Content="{DynamicResource Add}"
+										Command="{Binding AddModemCommand}" />
+								</StackPanel>
+							</StackPanel>
+							<ListBox
+								VerticalAlignment="Stretch"
+								HorizontalAlignment="Stretch"
+								DisplayMemberPath="Name"
+								Margin="0,108,0,0"
+								SelectedItem="{Binding SelectedDongleDevice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+								ItemsSource="{Binding DongleDevicesConfig}" />
+						</Grid>
+					</GroupBox>
+					<GroupBox
+						Header="{DynamicResource ModemSettings}"
+						HorizontalAlignment="Left"
+						VerticalAlignment="Top"
+						Margin="247,208,0,0"
+						Width="390"
+						IsEnabled="{Binding CanEditDongleDevice, Mode=OneWay}">
+						<Grid>
+							<StackPanel
+								Orientation="Vertical"
+								VerticalAlignment="Top">
+								<StackPanel
+									Orientation="Horizontal"
+									HorizontalAlignment="Right">
+									<Label
+										Content="Audio"
+										ContentStringFormat="{}{0}:" />
+									<dxe:TextEdit
+										Mask="[a-zA-Z0-9\/]+"
+										MaskType="RegEx"
+										Width="100"
+										Margin="5,0,0,0"
+										EditValue="{Binding SelectedDongleDevice.Audio, Mode=TwoWay}" />
+								</StackPanel>
+								<StackPanel
+									Orientation="Horizontal"
+									HorizontalAlignment="Right"
+									Margin="0,5,0,0">
+									<Label
+										Content="Data"
+										ContentStringFormat="{}{0}:" />
+									<dxe:TextEdit
+										Mask="[a-zA-Z0-9\/]+"
+										MaskType="RegEx"
+										Width="100"
+										Margin="5,0,0,0"
+										EditValue="{Binding SelectedDongleDevice.Data, Mode=TwoWay}" />
+								</StackPanel>
+								<StackPanel
+									Orientation="Horizontal"
+									HorizontalAlignment="Right"
+									Margin="0,5,0,0">
+									<Label
+										Content="Context"
+										ContentStringFormat="{}{0}:" />
+									<dxe:TextEdit
+										HorizontalContentAlignment="Center"
+										Mask="[a-zA-Z0-9\-]+"
+										MaskType="RegEx"
+										Width="100"
+										Margin="5,0,0,0"
+										MaskShowPlaceHolders="False"
+										EditValue="{Binding SelectedDongleDevice.Context, Mode=TwoWay}" />
+								</StackPanel>
+								<StackPanel
+									Orientation="Horizontal"
+									HorizontalAlignment="Right"
+									Margin="0,5,0,0">
+									<Label
+										Content="{DynamicResource Rxgain}"
+										ContentStringFormat="{}{0}:" />
+									<dxe:SpinEdit
+										HorizontalContentAlignment="Center"
+										MinValue="-10"
+										MaxValue="10"
+										IsFloatValue="False"
+										Width="100"
+										Margin="5,0,0,0"
+										EditValue="{Binding SelectedDongleDevice.Rxgain, Mode=TwoWay}" />
+								</StackPanel>
+								<StackPanel
+									Orientation="Horizontal"
+									HorizontalAlignment="Right"
+									Margin="0,5,0,0">
+									<Label
+										Content="{DynamicResource Txgain}"
+										ContentStringFormat="{}{0}:" />
+									<dxe:SpinEdit
+										HorizontalContentAlignment="Center"
+										MinValue="-10"
+										MaxValue="10"
+										IsFloatValue="False"
+										Width="100"
+										Margin="5,0,0,0"
+										EditValue="{Binding SelectedDongleDevice.Txgain, Mode=TwoWay}" />
+								</StackPanel>
+								<StackPanel
+									Orientation="Horizontal"
+									HorizontalAlignment="Right"
+									Margin="0,5,0,0">
+									<Label
+										Content="{DynamicResource DisableSms}"
+										ContentStringFormat="{}{0}:" />
+									<dxe:ComboBoxEdit
+										HorizontalContentAlignment="Center"
+										Width="100"
+										Margin="5,0,0,0"
+										EditValue="{Binding SelectedDongleDevice.Disablesms, Mode=TwoWay}">
+										<dxe:LookUpEditBase.ItemsSource>
+											<collections:ArrayList>
+												<sys:String>yes</sys:String>
+												<sys:String>no</sys:String>
+											</collections:ArrayList>
+										</dxe:LookUpEditBase.ItemsSource>
+									</dxe:ComboBoxEdit>
+								</StackPanel>
+								<StackPanel
+									Orientation="Horizontal"
+									HorizontalAlignment="Right"
+									Margin="0,5,0,0">
+									<Label
+										Content="{DynamicResource AutodeleteSms}"
+										ContentStringFormat="{}{0}:" />
+									<dxe:ComboBoxEdit
+										HorizontalContentAlignment="Center"
+										Width="100"
+										Margin="5,0,0,0"
+										EditValue="{Binding SelectedDongleDevice.Autodeletesms, Mode=TwoWay}">
+										<dxe:LookUpEditBase.ItemsSource>
+											<collections:ArrayList>
+												<sys:String>yes</sys:String>
+												<sys:String>no</sys:String>
+											</collections:ArrayList>
+										</dxe:LookUpEditBase.ItemsSource>
+									</dxe:ComboBoxEdit>
+								</StackPanel>
+								<StackPanel
+									Orientation="Horizontal"
+									HorizontalAlignment="Right">
+									<Button
+										Margin="0,5,0,0"
+										Command="{Binding RemoveDongleDeviceCommand}">
+										<StackPanel
+											Orientation="Horizontal">
+											<Image
+												Source="../../Resources/Remove.png"
+												Style="{StaticResource 16X16Image}" />
+											<Label
+												Content="{DynamicResource Delete}"
+												Margin="10,0,0,0" />
+										</StackPanel>
+									</Button>
+									<Button
+										Margin="10,5,0,0"
+										Command="{Binding RestartDongleDeviceCommand}">
+										<StackPanel
+											Orientation="Horizontal">
+											<Image
+												Source="../../Resources/refresh.png"
+												Style="{StaticResource 16X16Image}" />
+											<Label
+												Content="{DynamicResource Restart}"
+												Margin="10,0,0,0" />
+										</StackPanel>
+									</Button>
+									<Button
+										Style="{StaticResource ButtonSave}"
+										Margin="10,5,0,0"
+										Command="{Binding SaveDongleDeviceSettingsCommand}" />
+								</StackPanel>
+							</StackPanel>
+						</Grid>
+					</GroupBox>
+				</Grid>
+			</dx:DXTabItem>
+			<dx:DXTabItem
+				HeaderedSelectorItemBase_x0060_2.Header="Zadarma">
+				<Grid>
+					<GroupBox
+						Header="{DynamicResource SipTrunks}"
+						HorizontalAlignment="Left"
+						VerticalAlignment="Top"
+						Margin="10,10,0,0">
+						<Grid>
+							<StackPanel
+								Orientation="Vertical">
+								<StackPanel
+									Orientation="Horizontal"
+									HorizontalAlignment="Right">
+									<Label
+										Content="{DynamicResource SipLogin}"
+										ContentStringFormat="{}{0}:" />
+									<dxe:TextEdit
+										MaskType="Numeric"
+										Mask="d"
+										Width="130"
+										Margin="5,0,0,0"
+										EditValue="{Binding NewZadarmaEndpoint.id, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+								</StackPanel>
+								<StackPanel
+									Orientation="Horizontal"
+									HorizontalAlignment="Right"
+									Margin="0,5,0,0">
+									<Label
+										Content="{DynamicResource PhoneShort}"
+										ContentStringFormat="{}{0}:" />
+									<dxe:TextEdit
+										MaskType="Numeric"
+										Mask="d"
+										Width="130"
+										Margin="5,0,0,0"
+										EditValue="{Binding NewZadarmaAorContact, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+								</StackPanel>
+								<Button
+									Content="{DynamicResource Add}"
+									Margin="0,5,0,0"
+									Command="{Binding AddZadarmaTrunkCommand}" />
+								<ListBox
+									Margin="0,5,0,0"
+									HorizontalAlignment="Stretch"
+									MinHeight="200"
+									DisplayMemberPath="id"
+									Height="168"
+									ItemsSource="{Binding ZadarmaEndpointses}"
+									SelectedItem="{Binding SelectedZadarmaEndpoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+							</StackPanel>
+						</Grid>
+					</GroupBox>
+					<GroupBox
+						Header="{DynamicResource Settings}"
+						HorizontalAlignment="Left"
+						VerticalAlignment="Top"
+						Margin="228,10,0,0"
+						IsEnabled="{Binding TrunkSelected, Mode=OneWay}">
+						<Grid>
+							<StackPanel
+								Orientation="Vertical"
+								HorizontalAlignment="Right"
+								VerticalAlignment="Top">
+								<StackPanel
+									Orientation="Horizontal"
+									HorizontalAlignment="Right">
+									<Label
+										Content="{DynamicResource SipTransport}"
+										ContentStringFormat="{}{0}:" />
+									<dxe:TextEdit
+										Mask="[a-zA-Z0-9\/\-\_]+"
+										MaskType="RegEx"
+										IsEnabled="False"
+										Width="150"
+										Margin="5,0,0,0"
+										EditValue="{Binding SelectedZadarmaEndpoint.transport}" />
+								</StackPanel>
+								<StackPanel
+									Orientation="Horizontal"
+									HorizontalAlignment="Right"
+									Margin="0,5,0,0">
+									<Label
+										Content="{DynamicResource PhoneShort}"
+										ContentStringFormat="{}{0}:" />
+									<dxe:TextEdit
+										MaskType="Numeric"
+										Mask="d"
+										Width="150"
+										Margin="5,0,0,0"
+										EditValue="{Binding SelectedZadarmaAor.ContactPhone, Mode=TwoWay}" />
+								</StackPanel>
+								<StackPanel
+									Orientation="Horizontal"
+									HorizontalAlignment="Right"
+									Margin="0,5,0,0">
+									<Label
+										Content="{DynamicResource Context}"
+										ContentStringFormat="{}{0}:" />
+									<dxe:TextEdit
+										Mask="[a-zA-Z0-9\/\-\_]+"
+										MaskType="RegEx"
+										Width="150"
+										Margin="5,0,0,0"
+										EditValue="{Binding SelectedZadarmaEndpoint.context, Mode=TwoWay}" />
+								</StackPanel>
+								<StackPanel
+									Orientation="Horizontal"
+									HorizontalAlignment="Right"
+									Margin="0,5,0,0">
+									<Label
+										Content="{DynamicResource Codec}"
+										ContentStringFormat="{}{0}:" />
+									<dxe:ComboBoxEdit
+										SeparatorString=","
+										Width="150"
+										Margin="5,0,0,0"
+										EditValue="{Binding SelectedZadarmaEndpoint.AllowList, Mode=TwoWay}">
+										<dxe:LookUpEditBase.ItemsSource>
+											<collections:ArrayList>
+												<sys:String>alaw</sys:String>
+												<sys:String>ulaw</sys:String>
+												<sys:String>g722</sys:String>
+											</collections:ArrayList>
+										</dxe:LookUpEditBase.ItemsSource>
+										<dxe:BaseEdit.StyleSettings>
+											<dxe:CheckedComboBoxStyleSettings />
+										</dxe:BaseEdit.StyleSettings>
+									</dxe:ComboBoxEdit>
+								</StackPanel>
+								<StackPanel
+									Orientation="Horizontal"
+									HorizontalAlignment="Right">
+									<Button
+										HorizontalAlignment="Right"
+										Margin="0,5,0,0"
+										Command="{Binding DeleteZadarmaTrunkCommand}">
+										<StackPanel
+											Orientation="Horizontal">
+											<Image
+												Source="../../Resources/Remove.png"
+												Style="{StaticResource 16X16Image}" />
+											<Label
+												Content="{DynamicResource Delete}"
+												Margin="10,0,0,0" />
+										</StackPanel>
+									</Button>
+									<Button
+										Margin="10,5,0,0"
+										Style="{StaticResource ButtonSave}"
+										Command="{Binding SaveZadarmaTrunkCommand}" />
+								</StackPanel>
+							</StackPanel>
+						</Grid>
+					</GroupBox>
+				</Grid>
+			</dx:DXTabItem>
+		</dx:DXTabControl>
+	</Grid>
+</UserControl>

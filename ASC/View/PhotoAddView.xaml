@@ -1,0 +1,73 @@
+<UserControl
+	x:Class="ASC.View.PhotoAddView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:viewModel="clr-namespace:ASC.ViewModel" xmlns:extensions="clr-namespace:ASC.Extensions"
+	Name="PhotoAddViewUC"
+	MinHeight="200" xmlns:view="clr-namespace:ASC.View">
+	<DockPanel
+		Margin="10">
+		<StackPanel
+			DockPanel.Dock="Bottom"
+			HorizontalAlignment="Right"
+			Orientation="Horizontal">
+			<dx:SimpleButton
+				Margin="10,0,0,0"
+				Style="{StaticResource SaveButton}"
+				Command="{Binding SaveCommand}" />
+			<dx:SimpleButton
+				Margin="10,0,0,0"
+				Style="{StaticResource CancelButton}"
+				Command="{Binding CloseCommand}" />
+		</StackPanel>
+		<dx:LoadingDecorator
+			OwnerLock="LoadingContent"
+			SplashScreenLocation="CenterWindow"
+			IsSplashScreenShown="{Binding IsLoadingData}">
+			<ItemsControl
+				Background="#FFF0F8FF"
+				HorizontalAlignment="Stretch"
+				Height="150"
+				Margin="0,0,4,10"
+				VerticalAlignment="Top"
+				ItemsSource="{Binding Items}">
+				<ItemsControl.ItemsPanel>
+					<ItemsPanelTemplate>
+						<StackPanel
+							Orientation="Horizontal"
+							CanHorizontallyScroll="True" />
+					</ItemsPanelTemplate>
+				</ItemsControl.ItemsPanel>
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<dxe:ImageEdit
+							ShowMenuMode="Always"
+							MinWidth="200"
+							Margin="5"
+							Source="{Binding PreviewSource}"
+							EditValue="{Binding img}">
+							<dxe:ImageEdit.MenuTemplate>
+								<ControlTemplate>
+									<StackPanel
+										Orientation="Horizontal">
+										<dxe:ImageEditLoadToolButton />
+										<dxe:ImageEditToolSeparator />
+										<dxe:ImageEditClearToolButton />
+										<extensions:ImageEditTakePictureButtonEx />
+									</StackPanel>
+								</ControlTemplate>
+							</dxe:ImageEdit.MenuTemplate>
+						</dxe:ImageEdit>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+				<Control.Template>
+					<ControlTemplate
+						TargetType="{x:Type ItemsControl}">
+						<ScrollViewer
+							HorizontalScrollBarVisibility="Visible"
+							VerticalScrollBarVisibility="Disabled">
+							<ItemsPresenter />
+						</ScrollViewer>
+					</ControlTemplate>
+				</Control.Template>
+			</ItemsControl>
+		</dx:LoadingDecorator>
+	</DockPanel>
+</UserControl>

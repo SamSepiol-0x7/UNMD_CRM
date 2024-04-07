@@ -1,0 +1,353 @@
+<UserControl
+	x:Class="ASC.View.ProductsMoveView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:ASC.View" xmlns:dxwui="http://schemas.devexpress.com/winfx/2008/xaml/windowsui" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:objects="clr-namespace:ASC.Objects" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" xmlns:extensions="clr-namespace:ASC.Extensions" xmlns:controls="clr-namespace:ASC.View.Controls" xmlns:system="clr-namespace:System;assembly=mscorlib" xmlns:converters="clr-namespace:ASC.Converters"
+	Name="ProductsMoveViewUC"
+	Loaded="{DXEvent OnLoad()}">
+	<FrameworkElement.Resources>
+		<ResourceDictionary>
+			<system:Boolean
+				x:Key="TrueValue">True</system:Boolean>
+			<system:Int32
+				x:Key="ZeroValue">0</system:Int32>
+			<converters:NumericNegationConverter
+				x:Key="NumericNegationConverter" />
+		</ResourceDictionary>
+	</FrameworkElement.Resources>
+	<DockPanel>
+		<dxwui:AppBar
+			Background="#3f3f3f"
+			DockPanel.Dock="Bottom"
+			HorizontalAlignment="Stretch"
+			VerticalAlignment="Bottom"
+			ItemSpacing="5"
+			HideMode="AlwaysVisible">
+			<dxwui:AppBarButton
+				Label="{DynamicResource Print}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Visibility="{Binding IsEnabled, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed, RelativeSource={RelativeSource Self}}"
+				Command="{Binding PrintCommand}"
+				CommandParameter="{Binding ElementName=ProductsMoveViewUC}"
+				Glyph="{dx:DXImageGrayscale Image=Print_32x32.png}" />
+			<dxwui:AppBarButton
+				Label="{DynamicResource Add}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Visibility="{Binding IsEnabled, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed, RelativeSource={RelativeSource Self}}"
+				Command="{Binding AddItemCommand}"
+				Glyph="{dx:DXImageGrayscale Image=Add_32x32.png}" />
+			<dxwui:AppBarButton
+				Label="{DynamicResource Send}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Visibility="{Binding IsEnabled, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed, RelativeSource={RelativeSource Self}}"
+				Command="{Binding ItemsMoveDispatchCommand}"
+				Glyph="{dx:DXImageGrayscale Image=Cube_32x32.png}" />
+			<dxwui:AppBarButton
+				Label="{DynamicResource ItemsArrived}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Visibility="{Binding IsEnabled, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed, RelativeSource={RelativeSource Self}}"
+				Command="{Binding ItemsMoveArrivedCommand}"
+				Glyph="{dx:DXImageGrayscale Image=Apply_32x32.png}" />
+		</dxwui:AppBar>
+		<dxlc:LayoutControl
+			DockPanel.Dock="Left"
+			ItemStyle="{StaticResource LeftMenuLayout}"
+			Orientation="Vertical"
+			ItemSpace="5"
+			Padding="10">
+			<dxlc:LayoutItem
+				Label="{DynamicResource DocumentNumber}"
+				Visibility="{Binding Document.Id, Converter={dxmvvm:NumericToVisibilityConverter}}">
+				<dxe:TextEdit
+					HorizontalContentAlignment="Center"
+					IsReadOnly="True"
+					MaskUseAsDisplayFormat="True"
+					MaskType="Numeric"
+					Mask="d6"
+					EditValue="{Binding Document.Id, Mode=OneWay}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource DateCreate}"
+				Visibility="{Binding Document.Id, Converter={dxmvvm:NumericToVisibilityConverter}}">
+				<TextBox
+					VerticalContentAlignment="Center"
+					TextAlignment="Center"
+					IsReadOnly="True"
+					Text="{Binding Document.Date, StringFormat=dd.MM.yyyy}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource Company}">
+				<ComboBox
+					SelectedValuePath="Id"
+					DisplayMemberPath="Name"
+					ItemsSource="{Binding Companies, Source={x:Static objects:OfflineData.Instance}}"
+					SelectedValue="{Binding Document.CompanyId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+					IsReadOnly="{Binding Document.Id, Converter={dxmvvm:NumericToBooleanConverter}}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource Store}">
+				<controls:StoreSelectView
+					dxmvvm:ViewModelExtensions.Parameter="{Binding Path=DataContext.Document.StoreId, Mode=OneWay, ElementName=ProductsMoveViewUC}"
+					dxmvvm:ViewModelExtensions.ParentViewModel="{Binding Path=DataContext, ElementName=ProductsMoveViewUC}"
+					IsEnabled="{Binding Path=DataContext.Document.Id, ElementName=ProductsMoveViewUC, Converter={dxmvvm:NumericToBooleanConverter Inverse=True}}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource StoreDestination}">
+				<controls:StoreSelectView
+					dxmvvm:ViewModelExtensions.Parameter="{Binding Path=DataContext.Document.ToStoreId, TargetNullValue={StaticResource ZeroValue}, Mode=OneWay, ElementName=ProductsMoveViewUC, Converter={StaticResource NumericNegationConverter}}"
+					dxmvvm:ViewModelExtensions.ParentViewModel="{Binding Path=DataContext, ElementName=ProductsMoveViewUC}"
+					IsEnabled="{Binding Path=DataContext.Document.Id, ElementName=ProductsMoveViewUC, Converter={dxmvvm:NumericToBooleanConverter Inverse=True}}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource Category}"
+				Visibility="{Binding Document.Id, Converter={dxmvvm:NumericToVisibilityConverter Inverse=True}}">
+				<dxg:LookUpEdit
+					dxe:PopupContentTemplate="{StaticResource StoreCategories}"
+					dxe:ShowError="False"
+					AutoPopulateColumns="False"
+					dxe:ValueMember="id"
+					dxe:DisplayMember="name"
+					IsEnabled="{Binding Document.ToStoreId, Converter={dxmvvm:NumericToBooleanConverter}}"
+					dxe:EditValue="{Binding CategoryForAll, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+					dxe:ItemsSource="{Binding Categories}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutGroup
+				Orientation="Vertical"
+				Visibility="{Binding Document.DestinationStore.office, FallbackValue=Collapsed, Converter={dxmvvm:NumericToVisibilityConverter}}">
+				<dxlc:LayoutItem
+					Label="Списать средства с офиса">
+					<dxe:CheckEdit
+						IsReadOnly="{Binding Document.Id, Converter={dxmvvm:NumericToBooleanConverter}}"
+						EditValue="{Binding Document.DestinationPay, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource Office}"
+					Visibility="{Binding Document.DestinationPay, FallbackValue=Collapsed, Converter={dxmvvm:BooleanToVisibilityConverter}}">
+					<dxe:ComboBoxEdit
+						IsReadOnly="True"
+						ValueMember="id"
+						DisplayMember="name"
+						PopupMaxHeight="250"
+						IsTextEditable="False"
+						EditValue="{Binding Document.DestinationStore.office, Mode=OneWay}"
+						ItemsSource="{Binding Offices, Source={x:Static objects:OfflineData.Instance}}" />
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+			<dxlc:LayoutItem
+				Label="{DynamicResource Print}"
+				Visibility="{Binding Document.Id, Converter={dxmvvm:NumericToVisibilityConverter Inverse=True}}">
+				<dxe:CheckEdit
+					EditValue="{Binding PrintDocument, Mode=TwoWay}" />
+			</dxlc:LayoutItem>
+		</dxlc:LayoutControl>
+		<DockPanel>
+			<Border
+				BorderThickness="1"
+				BorderBrush="#FFA9A9A9">
+				<dxg:GridControl
+					Name="MoveGrid"
+					Tag="MoveGrid"
+					AllowInitiallyFocusedRow="False"
+					ItemsSource="{Binding Document.Items}"
+					SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+					DXSerializer.AllowProperty="MoveGrid_OnAllowProperty">
+					<dxmvvm:Interaction.Behaviors>
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="Loaded"
+							Command="{Binding GridInitCommand}"
+							CommandParameter="{Binding ElementName=MoveGrid}" />
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="Unloaded"
+							Command="{Binding GridUnloadedCommand}"
+							CommandParameter="{Binding ElementName=MoveGrid}" />
+						<extensions:GridLayoutHelper>
+							<dxmvvm:Interaction.Behaviors>
+								<dxmvvm:EventToCommand
+									EventTriggerBase_x0060_1.EventName="LayoutChanged"
+									Command="{Binding LayoutChangedCommand}"
+									CommandParameter="{Binding ElementName=MoveGrid}" />
+							</dxmvvm:Interaction.Behaviors>
+						</extensions:GridLayoutHelper>
+					</dxmvvm:Interaction.Behaviors>
+					<FrameworkElement.Resources>
+						<ResourceDictionary>
+							<Style
+								TargetType="{x:Type dxg:GridColumn}"
+								x:Key="{x:Type dxg:GridColumn}">
+								<Style.Setters>
+									<Setter
+										Property="dxg:BaseColumn.HorizontalHeaderContentAlignment"
+										Value="Center" />
+								</Style.Setters>
+							</Style>
+						</ResourceDictionary>
+					</FrameworkElement.Resources>
+					<dxg:GridControl.Columns>
+						<dxg:GridColumn
+							Name="ID"
+							FieldName="ID"
+							Width="30">
+							<dxg:BaseColumn.HeaderTemplate>
+								<DataTemplate>
+									<Image
+										ToolTip="{DynamicResource Delete}"
+										Width="16"
+										Height="16"
+										Source="/Resources/trash.png" />
+								</DataTemplate>
+							</dxg:BaseColumn.HeaderTemplate>
+							<dxg:ColumnBase.CellTemplate>
+								<DataTemplate>
+									<dx:SimpleButton
+										VerticalAlignment="Center"
+										Glyph="../Resources/trash.png"
+										GlyphAlignment="Top"
+										Width="20"
+										Height="20"
+										Padding="0,1"
+										Margin="0,1"
+										Command="{Binding View.DataContext.RemoveItemCommand}"
+										CommandParameter="{Binding RowData.Row.id}" />
+								</DataTemplate>
+							</dxg:ColumnBase.CellTemplate>
+						</dxg:GridColumn>
+						<dxg:GridColumn
+							Name="Articul"
+							Header="{DynamicResource ArticulNoDots}"
+							Binding="{Binding articul}">
+							<dxg:ColumnBase.EditSettings>
+								<dxe:TextEditSettings
+									HorizontalContentAlignment="Center"
+									Mask="d6"
+									MaskType="Numeric"
+									MaskUseAsDisplayFormat="True" />
+							</dxg:ColumnBase.EditSettings>
+						</dxg:GridColumn>
+						<dxg:GridColumn
+							Name="Name"
+							Width="*"
+							Header="{DynamicResource ItemName}"
+							ReadOnly="True"
+							Binding="{Binding name, Mode=OneWay}" />
+						<dxg:GridColumn
+							Name="Category"
+							Header="{DynamicResource Category}"
+							Binding="{Binding category, Mode=TwoWay}">
+							<dxg:ColumnBase.CellTemplate>
+								<DataTemplate>
+									<dxg:LookUpEdit
+										Name="PART_Editor"
+										dxe:ShowError="False"
+										dxe:PopupContentTemplate="{StaticResource StoreCategories}"
+										AutoPopulateColumns="False"
+										dxe:ValueMember="id"
+										dxe:DisplayMember="name"
+										dxe:ItemsSource="{Binding View.DataContext.Categories}" />
+								</DataTemplate>
+							</dxg:ColumnBase.CellTemplate>
+						</dxg:GridColumn>
+						<dxg:GridColumn
+							Name="Quantity"
+							FieldName="Quantity"
+							Header="{DynamicResource Count}"
+							Binding="{Binding BuyCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+							<dxg:ColumnBase.CellTemplate>
+								<DataTemplate>
+									<extensions:NoErrorSpinEdit
+										Name="PART_Editor"
+										dxe:MinValue="1"
+										dxe:ShowError="False"
+										dxe:AllowDefaultButton="True"
+										dxe:IsFloatValue="False"
+										dxe:MaxValue="{Binding RowData.Row.Available}" />
+								</DataTemplate>
+							</dxg:ColumnBase.CellTemplate>
+						</dxg:GridColumn>
+						<dxg:GridColumn
+							Name="Available"
+							Header="{DynamicResource Available}"
+							ReadOnly="True"
+							Binding="{Binding Available, Mode=OneWay}">
+							<dxg:ColumnBase.EditSettings>
+								<dxe:TextEditSettings
+									HorizontalContentAlignment="Center" />
+							</dxg:ColumnBase.EditSettings>
+						</dxg:GridColumn>
+						<dxg:GridColumn
+							Name="Price"
+							FieldName="Price"
+							Header="{DynamicResource Price}"
+							Binding="{Binding BuyCost, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+							<dxg:ColumnBase.EditSettings>
+								<dxe:SpinEditSettings
+									AllowDefaultButton="False"
+									IsFloatValue="False"
+									Mask="N2"
+									MaskUseAsDisplayFormat="True"
+									MaskType="Numeric" />
+							</dxg:ColumnBase.EditSettings>
+						</dxg:GridColumn>
+						<dxg:GridColumn
+							FieldName="Summ"
+							UnboundType="Decimal"
+							UnboundExpression="[Price] * [Quantity]"
+							Header="{DynamicResource Summ}">
+							<dxg:ColumnBase.EditSettings>
+								<dxe:SpinEditSettings
+									AllowDefaultButton="False"
+									IsFloatValue="False"
+									Mask="N2"
+									MaskUseAsDisplayFormat="True"
+									MaskType="Numeric" />
+							</dxg:ColumnBase.EditSettings>
+						</dxg:GridColumn>
+					</dxg:GridControl.Columns>
+					<dxg:GridControl.View>
+						<dxg:TableView
+							ShowTotalSummary="True"
+							AllowScrollAnimation="True"
+							NavigationStyle="Cell"
+							ColumnFilterPopupMode="Excel"
+							AllowGrouping="False"
+							AllowColumnMoving="True"
+							ShowGroupPanel="False"
+							ShowColumnHeaders="True"
+							AllowMoveColumnToDropArea="False"
+							ShowSearchPanelMode="Never"
+							ShowBandsPanel="True"
+							ShowIndicator="False"
+							AllowBestFit="True"
+							AllowColumnFiltering="False"
+							ShowSelectionRectangle="False"
+							ShowFixedTotalSummary="False"
+							SummariesIgnoreNullValues="True"
+							RowMinHeight="{Binding Employee.UiSettings.RowHeight, Source={x:Static objects:OfflineData.Instance}}"
+							FontSize="{Binding Employee.UiSettings.FontSize, Source={x:Static objects:OfflineData.Instance}}"
+							AllowEditing="{Binding Document.Id, Converter={dxmvvm:NumericToBooleanConverter Inverse=True}}">
+							<dxmvvm:Interaction.Behaviors>
+								<dxmvvm:EventToCommand
+									EventTriggerBase_x0060_1.EventName="RowDoubleClick"
+									Command="{Binding ItemDoubleClickCommand}" />
+							</dxmvvm:Interaction.Behaviors>
+						</dxg:TableView>
+					</dxg:GridControl.View>
+					<dxg:GridControl.TotalSummary>
+						<dxg:GridSummaryItem
+							DisplayFormat=" {0:N0}"
+							SummaryType="Sum"
+							FieldName="Quantity" />
+						<dxg:GridSummaryItem
+							DisplayFormat=" {0:N2}"
+							SummaryType="Sum"
+							FieldName="Summ" />
+					</dxg:GridControl.TotalSummary>
+				</dxg:GridControl>
+			</Border>
+		</DockPanel>
+	</DockPanel>
+</UserControl>

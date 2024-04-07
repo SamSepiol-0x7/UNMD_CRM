@@ -1,0 +1,8 @@
+<dxwui:NavigationPage
+	x:Class="ASC.ClientCard.CustomerEditView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:dxwui="http://schemas.devexpress.com/winfx/2008/xaml/windowsui" xmlns:view="clr-namespace:ASC.View"
+	Name="CustomerEditUc" xmlns:clientcard="clr-namespace:ASC.ClientCard"
+	DataContext="{Binding Path=CustomerEditViewModel, Source={StaticResource ViewModelLocator}}">
+	<Grid>
+		<view:CustomerEditCommonView />
+	</Grid>
+</dxwui:NavigationPage>

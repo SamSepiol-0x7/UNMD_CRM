@@ -1,0 +1,713 @@
+<UserControl
+	x:Class="ASC.Workspace.Repairs.RepairsView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:asc="clr-namespace:ASC" xmlns:converters="clr-namespace:ASC.Converters" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:properties="clr-namespace:ASC.Properties" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" xmlns:dxwui="http://schemas.devexpress.com/winfx/2008/xaml/windowsui" xmlns:themes="http://schemas.devexpress.com/winfx/2008/xaml/editors/themekeys" xmlns:extensions="clr-namespace:ASC.Extensions" xmlns:objects="clr-namespace:ASC.Objects"
+	Name="RepairUserControl" xmlns:repairs="clr-namespace:ASC.Workspace.Repairs"
+	Unloaded="{DXEvent OnUnload()}"
+	Loaded="{DXEvent OnLoad()}">
+	<FrameworkElement.Resources>
+		<ResourceDictionary>
+			<converters:StateToWorkshopOptionsName
+				x:Key="StateToWorkshopOptionsName" />
+			<converters:LockVisiblityConverter
+				x:Key="LockVisiblityConverter" />
+			<converters:Progress2Color
+				x:Key="Progress2Color" />
+			<DataTemplate
+				x:Key="LockHeader">
+				<StackPanel
+					Orientation="Horizontal">
+					<Image
+						Style="{StaticResource 16X16Image}"
+						Source="{dx:DXImage Image=Info_16x16.png}" />
+				</StackPanel>
+			</DataTemplate>
+			<ControlTemplate
+				TargetType="{x:Type ContentControl}"
+				x:Key="{themes:ProgressBarEditThemeKey ThemeKeyExtensionInternalBase_x0060_1.ResourceKey=PanelLeftSideHorizontalTemplate}">
+				<Border
+					Margin="0"
+					CornerRadius="0">
+					<Border.Background>
+						<LinearGradientBrush
+							EndPoint="0.5,1"
+							StartPoint="0.5,0">
+							<GradientStop
+								Color="{Binding Path=Value, Converter={StaticResource Progress2Color}}" />
+						</LinearGradientBrush>
+					</Border.Background>
+				</Border>
+			</ControlTemplate>
+			<ControlTemplate
+				TargetType="{x:Type dxe:RangeEditBasePanel}"
+				x:Key="{themes:ProgressBarEditStyleThemeKey ThemeKeyExtensionInternalBase_x0060_1.ResourceKey=PanelTemplateHorizontal, ThemeKeyExtensionBase_x0060_1.IsThemeIndependent=True}">
+				<Grid>
+					<Grid
+						Name="root">
+						<FrameworkElement.Resources>
+							<ResourceDictionary>
+								<dxe:GridLengthConverter
+									x:Key="GridLengthConverter" />
+							</ResourceDictionary>
+						</FrameworkElement.Resources>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition
+								Name="leftColumn"
+								Width="{Binding Path=(dxe:RangeEditBaseInfo.LayoutInfo).LeftSidePosition, Converter={StaticResource GridLengthConverter}}" />
+							<ColumnDefinition
+								Name="rightColumn"
+								Width="{Binding Path=(dxe:RangeEditBaseInfo.LayoutInfo).RightSidePosition, Converter={StaticResource GridLengthConverter}}" />
+						</Grid.ColumnDefinitions>
+						<ContentControl
+							Name="back"
+							Grid.ColumnSpan="2"
+							Style="{DynamicResource {themes:ProgressBarEditThemeKey ThemeKeyExtensionInternalBase_x0060_1.ResourceKey=PanelBackgroundHorizontalStyle}}" />
+						<ContentControl
+							Name="left"
+							Grid.Column="0"
+							Style="{DynamicResource {themes:ProgressBarEditThemeKey ThemeKeyExtensionInternalBase_x0060_1.ResourceKey=PanelLeftSideHorizontalStyle}}" />
+						<ContentControl
+							Name="right"
+							Grid.Column="1"
+							Style="{DynamicResource {themes:ProgressBarEditThemeKey ThemeKeyExtensionInternalBase_x0060_1.ResourceKey=PanelRightSideHorizontalStyle}}" />
+						<ContentControl
+							Name="foreground"
+							Grid.ColumnSpan="2"
+							Style="{DynamicResource {themes:ProgressBarEditThemeKey ThemeKeyExtensionInternalBase_x0060_1.ResourceKey=PanelForegroundStyle}}" />
+					</Grid>
+					<ContentControl
+						Name="PART_InnerContent"
+						Margin="5,0,0,0"
+						Grid.ColumnSpan="2"
+						Style="{DynamicResource {themes:ProgressBarEditThemeKey ThemeKeyExtensionInternalBase_x0060_1.ResourceKey=ContentStyle}}"
+						Content="{Binding Content, Mode=OneWay}"
+						ContentTemplate="{Binding Path=(dxe:BaseEdit.OwnerEdit).ContentTemplate}" />
+				</Grid>
+			</ControlTemplate>
+			<Style
+				TargetType="{x:Type ContentControl}"
+				x:Key="{themes:ProgressBarEditThemeKey ThemeKeyExtensionInternalBase_x0060_1.ResourceKey=ContentStyle}">
+				<Setter
+					Property="Focusable"
+					Value="True" />
+				<Setter
+					Property="VerticalAlignment"
+					Value="{Binding Path=(dxe:BaseEdit.OwnerEdit).VerticalContentAlignment}" />
+				<Setter
+					Property="HorizontalAlignment"
+					Value="{Binding Path=(dxe:BaseEdit.OwnerEdit).HorizontalContentAlignment}" />
+				<Setter
+					Property="Foreground"
+					Value="#FF000000" />
+			</Style>
+		</ResourceDictionary>
+	</FrameworkElement.Resources>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition
+				Height="219*" />
+			<RowDefinition
+				Height="90" />
+		</Grid.RowDefinitions>
+		<dxg:GridControl
+			Name="RepairsGridControl"
+			Tag="RepairsGrid"
+			SelectionMode="Row"
+			AllowInitiallyFocusedRow="False"
+			FilterString="{Binding RpFilter, Source={x:Static properties:Settings.Default}, Mode=TwoWay}"
+			SelectedItems="{Binding SelectedItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+			CurrentItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+			ItemsSource="{Binding Items}">
+			<dxmvvm:Interaction.Behaviors>
+				<dxmvvm:EventToCommand
+					EventTriggerBase_x0060_1.EventName="Loaded"
+					Command="{Binding GridInitCommand}"
+					CommandParameter="{Binding ElementName=RepairsGridControl}" />
+				<dxmvvm:EventToCommand
+					EventTriggerBase_x0060_1.EventName="Unloaded"
+					Command="{Binding GridUnloadedCommand}"
+					CommandParameter="{Binding ElementName=RepairsGridControl}" />
+				<extensions:GridLayoutHelper>
+					<dxmvvm:Interaction.Behaviors>
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="LayoutChanged"
+							Command="{Binding LayoutChangedCommand}"
+							CommandParameter="{Binding ElementName=RepairsGridControl}" />
+					</dxmvvm:Interaction.Behaviors>
+				</extensions:GridLayoutHelper>
+			</dxmvvm:Interaction.Behaviors>
+			<FrameworkElement.ContextMenu>
+				<ContextMenu>
+					<MenuItem
+						Header="{DynamicResource ClientCard}"
+						Command="{Binding OpenCustomerCardCommand}">
+						<MenuItem.Icon>
+							<Image
+								Source="pack://application:,,,/ASC;component/Resources/user.png" />
+						</MenuItem.Icon>
+					</MenuItem>
+					<MenuItem
+						Header="{DynamicResource CreateInvoice}"
+						Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Converter={dx:BooleanToVisibilityConverter}}"
+						Command="{Binding CreateInvoiceCommand}" />
+					<MenuItem
+						Header="{DynamicResource Delete}"
+						Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Converter={dx:BooleanToVisibilityConverter}}"
+						Command="{Binding DeleteCommand}">
+						<MenuItem.Icon>
+							<Image
+								Source="pack://application:,,,/ASC;component/Resources/trash.png" />
+						</MenuItem.Icon>
+					</MenuItem>
+				</ContextMenu>
+			</FrameworkElement.ContextMenu>
+			<dxg:GridControl.View>
+				<dxg:TableView
+					Name="TableView"
+					ShowIndicator="False"
+					AllowEditing="False"
+					AllowGrouping="False"
+					AllowColumnMoving="True"
+					AllowMoveColumnToDropArea="False"
+					ShowBandsPanel="False"
+					AllowRowFixing="None"
+					ShowBandsInCustomizationForm="False"
+					ShowGroupPanel="False"
+					ShowColumnHeaders="True"
+					CheckBoxSelectorColumnWidth="20"
+					UseIndicatorForSelection="True"
+					BestFitMode="VisibleRows"
+					BestFitArea="Rows"
+					NavigationStyle="Row"
+					FocusedRowHandle="{Binding FocusedRow, Mode=TwoWay}"
+					RowMinHeight="{Binding Employee.UiSettings.RowHeight, Source={x:Static objects:OfflineData.Instance}}"
+					FontSize="{Binding Employee.UiSettings.FontSize, Source={x:Static objects:OfflineData.Instance}}"
+					ShowCheckBoxSelectorColumn="{Binding Path=Mode, Mode=OneWay, Converter={dxmvvm:BooleanNegationConverter}}">
+					<dxmvvm:Interaction.Behaviors>
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="RowDoubleClick"
+							Command="{Binding RepairDoubleClickCommand}" />
+					</dxmvvm:Interaction.Behaviors>
+					<dxg:TableView.RowStyle>
+						<Style
+							TargetType="{x:Type dxg:RowControl}">
+							<Style.Triggers>
+								<DataTrigger
+									Value="Focused"
+									Binding="{Binding Path=SelectionState}">
+									<Setter
+										Property="Background"
+										Value="{DynamicResource UiSelectedRowColor}" />
+								</DataTrigger>
+								<DataTrigger
+									Value="True"
+									Binding="{Binding Row.IsColored}">
+									<Setter
+										Property="Background"
+										Value="{Binding Row.Color}" />
+								</DataTrigger>
+							</Style.Triggers>
+						</Style>
+					</dxg:TableView.RowStyle>
+				</dxg:TableView>
+			</dxg:GridControl.View>
+			<dxg:GridColumn
+				Name="Lock"
+				HeaderTemplate="{StaticResource LockHeader}"
+				HorizontalHeaderContentAlignment="Center">
+				<dxg:ColumnBase.CellTemplate>
+					<DataTemplate>
+						<StackPanel
+							Orientation="Horizontal"
+							HorizontalAlignment="Center">
+							<Image
+								Margin="3,0"
+								ToolTip="{DynamicResource VendorWarranty}"
+								Style="{StaticResource 16X16Image}"
+								Source="{dx:DXImage Image=Country_16x16.png}"
+								Visibility="{Binding RowData.Row.VendorId, Converter={dxmvvm:NumericToVisibilityConverter}}" />
+							<Label
+								Style="{StaticResource RepairListLabels}"
+								ToolTip="{DynamicResource Warranty}"
+								Content="{DynamicResource WarrantyShort}"
+								Foreground="#FFFF0000"
+								Visibility="{Binding RowData.Row.WarrantyVisibility}" />
+							<Image
+								Margin="3,0"
+								Source="pack://application:,,,/ASC;component/Resources/fire.png"
+								ToolTip="{DynamicResource CheckBoxExpressRepair}"
+								Style="{StaticResource 16X16Image}"
+								Visibility="{Binding RowData.Row.ExpressVisibility}" />
+							<Label
+								Style="{StaticResource RepairListLabels}"
+								ToolTip="{DynamicResource IsRegular}"
+								Content="{DynamicResource DealerShort}"
+								Foreground="#FF0000FF"
+								Visibility="{Binding RowData.Row.RegularVisibility}" />
+							<Label
+								Style="{StaticResource RepairListLabels}"
+								ToolTip="{DynamicResource Agent}"
+								Content="{DynamicResource AgentShort}"
+								Foreground="#E400FF"
+								Visibility="{Binding RowData.Row.AgentVisibility}" />
+							<Label
+								Style="{StaticResource RepairListLabels}"
+								ToolTip="{DynamicResource LabelIsBad}"
+								Content="!"
+								Foreground="#FFFF0000"
+								Visibility="{Binding RowData.Row.BadVisibility}" />
+							<Label
+								Style="{StaticResource RepairListLabels}"
+								Content="{DynamicResource OfficeShort}"
+								Foreground="#FF008000"
+								ToolTip="{Binding RowData.Row.OfficesList}"
+								Visibility="{Binding RowData.Row.OrderMovingVisibility}" />
+							<Ellipse
+								Margin="3,0"
+								VerticalAlignment="Center"
+								Height="5"
+								Width="5"
+								Fill="#FF008000"
+								ToolTip="{DynamicResource NewClient}"
+								Visibility="{Binding RowData.Row.IsNewClient, Converter={StaticResource BooleanToVisibilityConverter}}" />
+							<Image
+								Margin="3,0"
+								Source="{dx:DXImage Image=BOPermission_16x16.png}"
+								ToolTip="{Binding RowData.Row.LockEmployee.Fio}">
+								<FrameworkElement.Style>
+									<Style
+										BasedOn="{StaticResource 16X16Image}"
+										TargetType="{x:Type Image}">
+										<Setter
+											Property="Visibility">
+											<Setter.Value>
+												<MultiBinding
+													Converter="{StaticResource LockVisiblityConverter}">
+													<Binding
+														Path="RowData.Row.LockUserId" />
+													<Binding
+														Path="RowData.Row.LockTime" />
+												</MultiBinding>
+											</Setter.Value>
+										</Setter>
+									</Style>
+								</FrameworkElement.Style>
+							</Image>
+						</StackPanel>
+					</DataTemplate>
+				</dxg:ColumnBase.CellTemplate>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				Name="Id"
+				FieldName="{DynamicResource Id}"
+				HorizontalHeaderContentAlignment="Center"
+				Binding="{Binding OfficeAndRepairId}">
+				<dxg:ColumnBase.CellTemplate>
+					<DataTemplate>
+						<StackPanel
+							Orientation="Horizontal"
+							VerticalAlignment="Center"
+							HorizontalAlignment="Center">
+							<TextBlock
+								VerticalAlignment="Center"
+								Text="{Binding RowData.Row.OfficeAndRepairId}">
+								<FrameworkElement.Style>
+									<Style
+										TargetType="{x:Type TextBlock}">
+										<Style.Triggers>
+											<DataTrigger
+												Value="True"
+												Binding="{Binding RowData.Row.IsOrderMoving}">
+												<Setter
+													Property="FrameworkElement.ToolTip"
+													Value="{Binding RowData.Row.OfficesList}" />
+											</DataTrigger>
+										</Style.Triggers>
+									</Style>
+								</FrameworkElement.Style>
+							</TextBlock>
+							<Rectangle
+								Width="4"
+								HorizontalAlignment="Stretch"
+								Margin="5,0,0,0">
+								<FrameworkElement.Style>
+									<Style
+										TargetType="{x:Type Rectangle}">
+										<Setter
+											Property="Visibility"
+											Value="Hidden" />
+										<Style.Triggers>
+											<DataTrigger
+												Value="1"
+												Binding="{Binding RowData.Row.InformedStatus}">
+												<Setter
+													Property="Visibility"
+													Value="Visible" />
+												<Setter
+													Property="FrameworkElement.ToolTip"
+													Value="{DynamicResource ClientInformed}" />
+												<Setter
+													Property="Fill"
+													Value="{StaticResource ClientInformedColor}" />
+											</DataTrigger>
+											<DataTrigger
+												Value="2"
+												Binding="{Binding RowData.Row.InformedStatus}">
+												<Setter
+													Property="Visibility"
+													Value="Visible" />
+												<Setter
+													Property="FrameworkElement.ToolTip"
+													Value="{DynamicResource ClientNotAnswer}" />
+												<Setter
+													Property="Fill"
+													Value="{StaticResource ClientNotAnswerColor}" />
+											</DataTrigger>
+											<DataTrigger
+												Value="3"
+												Binding="{Binding RowData.Row.InformedStatus}">
+												<Setter
+													Property="Visibility"
+													Value="Visible" />
+												<Setter
+													Property="FrameworkElement.ToolTip"
+													Value="{DynamicResource ClientNotAvailable}" />
+												<Setter
+													Property="Fill"
+													Value="{StaticResource ClientNotAnswerColor}" />
+											</DataTrigger>
+											<DataTrigger
+												Value="4"
+												Binding="{Binding RowData.Row.InformedStatus}">
+												<Setter
+													Property="Visibility"
+													Value="Visible" />
+												<Setter
+													Property="FrameworkElement.ToolTip"
+													Value="{DynamicResource ClientOther}" />
+												<Setter
+													Property="Fill"
+													Value="{StaticResource ClientOtherColor}" />
+											</DataTrigger>
+										</Style.Triggers>
+									</Style>
+								</FrameworkElement.Style>
+							</Rectangle>
+						</StackPanel>
+					</DataTemplate>
+				</dxg:ColumnBase.CellTemplate>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				Name="Device"
+				FieldName="{DynamicResource Hardware}"
+				HorizontalHeaderContentAlignment="Center"
+				Binding="{Binding DeviceOverview, Mode=OneWay}" />
+			<dxg:GridColumn
+				Name="SerialNumber"
+				FieldName="{DynamicResource SerialNumber}"
+				HorizontalHeaderContentAlignment="Center"
+				Binding="{Binding SerialNumber, Mode=OneWay}" />
+			<dxg:GridColumn
+				Name="Fault"
+				FieldName="{DynamicResource Fault}"
+				HorizontalHeaderContentAlignment="Center"
+				Binding="{Binding Fault, Mode=OneWay}" />
+			<dxg:GridColumn
+				Name="Master"
+				FieldName="{DynamicResource Master}"
+				HorizontalHeaderContentAlignment="Center"
+				Binding="{Binding MasterEmployee.FioShort, Mode=OneWay}" />
+			<dxg:GridColumn
+				Name="Status"
+				FieldName="{DynamicResource Status}"
+				HorizontalHeaderContentAlignment="Center"
+				Binding="{Binding State, Converter={StaticResource StateToWorkshopOptionsName}, Mode=OneWay}">
+				<dxg:ColumnBase.CellTemplate>
+					<DataTemplate>
+						<Border
+							Background="{Binding RowData.Row.StateColor}">
+							<TextBlock
+								HorizontalAlignment="Left"
+								Padding="5,0,5,0"
+								VerticalAlignment="Center"
+								Text="{Binding RowData.Row.State, Converter={StaticResource StateToWorkshopOptionsName}, Mode=OneWay}" />
+						</Border>
+					</DataTemplate>
+				</dxg:ColumnBase.CellTemplate>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				Name="Summ"
+				FieldName="{DynamicResource Summ}"
+				HorizontalHeaderContentAlignment="Center"
+				Binding="{Binding ShowRepairCost, Mode=OneWay}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:TextEditSettings
+						Style="{StaticResource GridClassicOrNot}" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				Name="InDate"
+				UnboundType="DateTime"
+				FieldName="{DynamicResource InDate}"
+				HorizontalHeaderContentAlignment="Center"
+				Binding="{Binding InDate, Mode=OneWay, Converter={StaticResource UtcToLocalDateTimeConverter}}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:DateEditSettings
+						HorizontalContentAlignment="Center"
+						DisplayFormat="dd.MM.yyyy HH:mm"
+						AllowNullInput="True"
+						NullText="--.--.----" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				Name="OutDate"
+				UnboundType="DateTime"
+				FieldName="{DynamicResource OutDate}"
+				HorizontalHeaderContentAlignment="Center"
+				Binding="{Binding OutDate, Mode=OneWay, Converter={StaticResource UtcToLocalDateTimeConverter}}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:DateEditSettings
+						HorizontalContentAlignment="Center"
+						DisplayFormat="dd.MM.yyyy HH:mm"
+						AllowNullInput="True"
+						NullText="--.--.----" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				Name="Customer"
+				FieldName="{DynamicResource ClientFullName}"
+				HorizontalHeaderContentAlignment="Center"
+				Binding="{Binding FioOrUrName, Mode=OneWay}" />
+			<dxg:GridColumn
+				Name="CustomerPhone"
+				FieldName="{DynamicResource Phone}"
+				Binding="{Binding ClientPhone}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:TextEditSettings
+						HorizontalContentAlignment="Center" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				Name="Box"
+				FieldName="{DynamicResource Box}"
+				SortMode="Value"
+				AllowSorting="True"
+				HorizontalHeaderContentAlignment="Center"
+				Binding="{Binding BoxName, Mode=OneWay}">
+				<dxg:ColumnBase.EditSettings>
+					<dxe:TextEditSettings
+						HorizontalContentAlignment="Center" />
+				</dxg:ColumnBase.EditSettings>
+			</dxg:GridColumn>
+			<dxg:GridColumn
+				Name="Manager"
+				FieldName="{DynamicResource Manager}"
+				Binding="{Binding CurrentManagerEmployee.FioShort, Mode=OneWay}" />
+			<dxg:GridColumn
+				Name="Progress"
+				MinWidth="60"
+				FieldName="{DynamicResource Status}"
+				HorizontalHeaderContentAlignment="Center">
+				<dxg:ColumnBase.CellTemplate>
+					<DataTemplate>
+						<Grid
+							ToolTip="{StaticResource ProgressToolTip}">
+							<dxe:ProgressBarEdit
+								VerticalAlignment="Top"
+								Height="10"
+								HorizontalAlignment="Stretch"
+								Minimum="0"
+								Maximum="100"
+								Value="{Binding RowData.Row.LastStatusProgress, Mode=OneWay}" />
+							<dxe:ProgressBarEdit
+								ContentDisplayMode="Content"
+								FontSize="11"
+								Margin="0,10,0,0"
+								VerticalAlignment="Stretch"
+								HorizontalAlignment="Stretch"
+								Minimum="0"
+								Maximum="100"
+								Content="{Binding RowData.Row.InRepairDaysString, Mode=OneWay}"
+								Value="{Binding RowData.Row.RepairProgress, Mode=OneWay}" />
+						</Grid>
+					</DataTemplate>
+				</dxg:ColumnBase.CellTemplate>
+			</dxg:GridColumn>
+		</dxg:GridControl>
+		<dxwui:AppBar
+			HorizontalAlignment="Stretch"
+			VerticalAlignment="Stretch"
+			ItemSpacing="0"
+			HideMode="AlwaysVisible"
+			Grid.Row="1">
+			<dxe:ToggleSwitch
+				CheckedStateContent="{DynamicResource Repairs}"
+				UncheckedStateContent="{DynamicResource Cartridges}"
+				ContentPlacement="Far"
+				HorizontalAlignment="Left"
+				Margin="25"
+				ToolTip="{DynamicResource Mode}"
+				IsChecked="{Binding Path=Mode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+				Visibility="{Binding cartridge_enable, Source={x:Static asc:Auth.Config}, Converter={StaticResource BooleanToVisibilityConverter}}">
+				<ContentControl.ContentTemplate>
+					<DataTemplate>
+						<TextBlock
+							VerticalAlignment="Center"
+							Margin="10,0,0,0"
+							Foreground="#FFFFFFFF"
+							Text="{Binding}" />
+					</DataTemplate>
+				</ContentControl.ContentTemplate>
+			</dxe:ToggleSwitch>
+			<dxwui:AppBarButton
+				Label="{DynamicResource Refill}"
+				Command="{Binding RefillItemsCommand}"
+				Visibility="{Binding Path=Mode, Mode=OneWay, Converter={dx:BooleanToVisibilityConverter Invert=True}}"
+				Glyph="{dx:DXImageGrayscale Image=FillBackground_32x32.png}" />
+			<dxwui:AppBarButton
+				Label="{DynamicResource NewRepair}"
+				Command="{Binding AcceptNewCommand}"
+				Glyph="{dx:DXImageGrayscale Image=New_32x32.png}" />
+			<dxwui:AppBarButton
+				Label="{DynamicResource Refresh}"
+				Command="{Binding RefreshOrdersCommand}"
+				Glyph="{dx:DXImageGrayscale Image=Refresh_32x32.png}" />
+			<dxwui:AppBarButton
+				Label="{DynamicResource Print}"
+				Command="{Binding View.Commands.ShowPrintPreview, ElementName=RepairsGridControl}"
+				Glyph="{dx:DXImageGrayscale Image=Print_32x32.png}" />
+			<dxwui:AppBarSeparator />
+			<dxwui:AppBarButton
+				Label="{DynamicResource Options}"
+				Glyph="{dx:DXImageOffice2013 Image=Properties_32x32.png}">
+				<dxwui:AppBarButtonBase.Flyout>
+					<dxwui:MenuFlyout
+						ShowIndicator="True">
+						<dxe:CheckEdit
+							Name="OnlyMy"
+							Content="{DynamicResource OnlyUserOrder}"
+							IsChecked="{Binding OnlyMyOrders, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+						<dxwui:MenuFlyoutItem>
+							<FrameworkElement.Style>
+								<Style
+									TargetType="{x:Type dxwui:MenuFlyoutItem}">
+									<Setter
+										Property="Visibility"
+										Value="Visible" />
+									<Style.Triggers>
+										<DataTrigger
+											Value="True"
+											Binding="{Binding Path=IsChecked, ElementName=OnlyMy}">
+											<Setter
+												Property="Visibility"
+												Value="Collapsed" />
+										</DataTrigger>
+									</Style.Triggers>
+								</Style>
+							</FrameworkElement.Style>
+							<dxe:ComboBoxEdit
+								Width="150"
+								DisplayMember="name"
+								ValueMember="id"
+								ClosePopupOnLostFocus="False"
+								IsEnabled="{Binding CanOfficeSelect}"
+								ItemsSource="{Binding OfficesWithAll, Source={x:Static objects:OfflineData.Instance}}"
+								EditValue="{Binding SelectedOffice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+								<dxmvvm:Interaction.Behaviors>
+									<dxmvvm:EventToCommand
+										EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+										PassEventArgsToCommand="True"
+										Command="{Binding ComboBoxClickCommand}" />
+								</dxmvvm:Interaction.Behaviors>
+							</dxe:ComboBoxEdit>
+						</dxwui:MenuFlyoutItem>
+						<dxe:ComboBoxEdit
+							Width="150"
+							HorizontalAlignment="Stretch"
+							DisplayMember="Name"
+							ValueMember="Id"
+							ClosePopupOnLostFocus="False"
+							EditValue="{Binding SelectedStatus, UpdateSourceTrigger=PropertyChanged}"
+							ItemsSource="{Binding WorkshopOptions}">
+							<dxmvvm:Interaction.Behaviors>
+								<dxmvvm:EventToCommand
+									EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+									PassEventArgsToCommand="True"
+									Command="{Binding ComboBoxClickCommand}" />
+							</dxmvvm:Interaction.Behaviors>
+						</dxe:ComboBoxEdit>
+						<dxe:ComboBoxEdit
+							Width="150"
+							DisplayMember="Fio"
+							ValueMember="Uid"
+							HorizontalAlignment="Stretch"
+							ClosePopupOnLostFocus="False"
+							IsEnabled="{Binding CanUserSelect, Mode=OneWay}"
+							EditValue="{Binding SelectedUserFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+							ItemsSource="{Binding Users}">
+							<dxmvvm:Interaction.Behaviors>
+								<dxmvvm:EventToCommand
+									EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+									PassEventArgsToCommand="True"
+									Command="{Binding ComboBoxClickCommand}" />
+							</dxmvvm:Interaction.Behaviors>
+						</dxe:ComboBoxEdit>
+						<dxe:ComboBoxEdit
+							Width="150"
+							DisplayMember="Name"
+							ValueMember="Id"
+							HorizontalAlignment="Stretch"
+							ClosePopupOnLostFocus="False"
+							EditValue="{Binding SelectedCustomerType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+							ItemsSource="{Binding CustomerTypes}">
+							<dxmvvm:Interaction.Behaviors>
+								<dxmvvm:EventToCommand
+									EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+									PassEventArgsToCommand="True"
+									Command="{Binding ComboBoxClickCommand}" />
+							</dxmvvm:Interaction.Behaviors>
+						</dxe:ComboBoxEdit>
+						<ComboBox
+							Width="150"
+							HorizontalAlignment="Center"
+							SelectedValuePath="Days"
+							DisplayMemberPath="Name"
+							SelectedValue="{Binding SelectedWarrantyOption, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+							ItemsSource="{Binding WarrantyList}">
+							<FrameworkElement.Style>
+								<Style
+									TargetType="{x:Type ComboBox}">
+									<Setter
+										Property="IsEnabled"
+										Value="False" />
+									<Style.Triggers>
+										<DataTrigger
+											Value="8"
+											Binding="{Binding SelectedStatus}">
+											<Setter
+												Property="IsEnabled"
+												Value="True" />
+										</DataTrigger>
+									</Style.Triggers>
+								</Style>
+							</FrameworkElement.Style>
+						</ComboBox>
+					</dxwui:MenuFlyout>
+				</dxwui:AppBarButtonBase.Flyout>
+			</dxwui:AppBarButton>
+			<dxg:GridSearchControl
+				Name="searchControl"
+				dxe:SearchTextPostDelay="300"
+				dxe:PostMode="Delayed"
+				dxe:ShowMRUButton="False"
+				ActualShowButtonClose="False"
+				HorizontalAlignment="Right"
+				Margin="23"
+				dxe:ShowClearButton="True"
+				Width="200"
+				dxe:SearchText="{Binding SearchString, Mode=TwoWay}">
+				<dxmvvm:Interaction.Behaviors>
+					<dxmvvm:FocusBehavior />
+				</dxmvvm:Interaction.Behaviors>
+			</dxg:GridSearchControl>
+		</dxwui:AppBar>
+	</Grid>
+</UserControl>

@@ -1,0 +1,412 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:dxwui="http://schemas.devexpress.com/winfx/2008/xaml/windowsui" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:system="clr-namespace:System;assembly=mscorlib" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid">
+	<system:Double
+		x:Key="editorHeight">34</system:Double>
+	<system:Double
+		x:Key="editorFontSize">14</system:Double>
+	<system:Double
+		x:Key="LeftSidebarMaxWidth">400</system:Double>
+	<SolidColorBrush
+		Color="#FF191919"
+		x:Key="editorFontBrush" />
+	<Color
+		x:Key="AppBarBackgroundColor">#3f3f3f</Color>
+	<SolidColorBrush
+		Color="{StaticResource AppBarBackgroundColor}"
+		x:Key="appBarBackgroundBrush" />
+	<BitmapImage
+		UriSource="../Resources/save.png"
+		x:Key="FolderIcon" />
+	<Style
+		TargetType="{x:Type dxwui:AppBar}"
+		x:Key="{x:Type dxwui:AppBar}">
+		<Setter
+			Property="Background"
+			Value="{StaticResource appBarBackgroundBrush}" />
+	</Style>
+	<Style
+		TargetType="{x:Type Control}"
+		x:Key="AppBarItemBaseStyle">
+		<Setter
+			Property="HorizontalAlignment"
+			Value="Center" />
+	</Style>
+	<Style
+		TargetType="{x:Type dxwui:AppBarButton}"
+		BasedOn="{StaticResource AppBarItemBaseStyle}"
+		x:Key="AppBarButtonBaseStyle">
+		<Setter
+			Property="dxwui:CommandButton.IsEllipseEnabled"
+			Value="False" />
+		<Setter
+			Property="dxwui:CommandButton.AllowGlyphTheming"
+			Value="True" />
+		<Setter
+			Property="dxwui:CommandButton.GlyphStretch"
+			Value="None" />
+	</Style>
+	<Style
+		TargetType="{x:Type dxwui:AppBarButton}"
+		BasedOn="{StaticResource AppBarButtonBaseStyle}"
+		x:Key="{x:Type dxwui:AppBarButton}" />
+	<Style
+		TargetType="{x:Type dxwui:AppBarSeparator}"
+		BasedOn="{StaticResource AppBarItemBaseStyle}"
+		x:Key="{x:Type dxwui:AppBarSeparator}" />
+	<dxmvvm:ObjectToObjectConverter
+		x:Key="InvoiceStatusToPicture">
+		<dxmvvm:MapItem
+			Source="3"
+			Target="pack://application:,,,/ASC;component/Resources/InvoiceStatuses/archive.png" />
+		<dxmvvm:MapItem
+			Source="2"
+			Target="pack://application:,,,/ASC;component/Resources/InvoiceStatuses/paid.png" />
+		<dxmvvm:MapItem
+			Source="1"
+			Target="pack://application:,,,/ASC;component/Resources/InvoiceStatuses/wait.png" />
+	</dxmvvm:ObjectToObjectConverter>
+	<dxmvvm:ObjectToObjectConverter
+		x:Key="ActivityStatusToPicture">
+		<dxmvvm:MapItem
+			Source="False"
+			Target="pack://application:,,,/ASC;component/Resources/InvoiceStatuses/archive.png" />
+		<dxmvvm:MapItem
+			Source="True"
+			Target="pack://application:,,,/ASC;component/Resources/InvoiceStatuses/paid.png" />
+	</dxmvvm:ObjectToObjectConverter>
+	<dxmvvm:ObjectToObjectConverter
+		x:Key="PriorityToPictureConverter">
+		<dxmvvm:MapItem
+			Source="3"
+			Target="pack://application:,,,/ASC;component/Resources/Priorities/LowPriority.png" />
+		<dxmvvm:MapItem
+			Source="1"
+			Target="pack://application:,,,/ASC;component/Resources/Priorities/NormalPriority.png" />
+		<dxmvvm:MapItem
+			Source="2"
+			Target="pack://application:,,,/ASC;component/Resources/Priorities/HighPriority.png" />
+	</dxmvvm:ObjectToObjectConverter>
+	<dxmvvm:ObjectToObjectConverter
+		x:Key="BoxStatusToPictureConverter">
+		<dxmvvm:MapItem
+			Source="3"
+			Target="pack://application:,,,/ASC;component/Resources/Statuses/Empty.png" />
+		<dxmvvm:MapItem
+			Source="1"
+			Target="pack://application:,,,/ASC;component/Resources/Statuses/Completed.png" />
+		<dxmvvm:MapItem
+			Source="2"
+			Target="pack://application:,,,/ASC;component/Resources/Statuses/InProgress.png" />
+	</dxmvvm:ObjectToObjectConverter>
+	<dxmvvm:ObjectToObjectConverter
+		x:Key="WpTypeToPictureConverter">
+		<dxmvvm:MapItem
+			Source="1"
+			Target="{dx:DXImageGrayscale Image=Customization_32x32.png}" />
+		<dxmvvm:MapItem
+			Source="2"
+			Target="{dx:DXImageGrayscale Image=FullShoppingCart_32x32.png}" />
+	</dxmvvm:ObjectToObjectConverter>
+	<dxmvvm:ObjectToObjectConverter
+		x:Key="StatusToPictureConverter">
+		<dxmvvm:MapItem
+			Source="0"
+			Target="pack://application:,,,/ASC;component/Resources/Statuses/Deferred.png" />
+		<dxmvvm:MapItem
+			Source="1"
+			Target="pack://application:,,,/ASC;component/Resources/Statuses/NotStarted.png" />
+		<dxmvvm:MapItem
+			Source="2"
+			Target="pack://application:,,,/ASC;component/Resources/Statuses/Completed.png" />
+		<dxmvvm:MapItem
+			Source="3"
+			Target="pack://application:,,,/ASC;component/Resources/Statuses/Deferred.png" />
+		<dxmvvm:MapItem
+			Source="4"
+			Target="pack://application:,,,/ASC;component/Resources/Statuses/InProgress.png" />
+		<dxmvvm:MapItem
+			Source="5"
+			Target="pack://application:,,,/ASC;component/Resources/Statuses/Cancelled.png" />
+	</dxmvvm:ObjectToObjectConverter>
+	<dxmvvm:ObjectToObjectConverter
+		x:Key="ClientTypeToPictureConverter">
+		<dxmvvm:MapItem
+			Source="0"
+			Target="pack://application:,,,/ASC;component/Resources/user.png" />
+		<dxmvvm:MapItem
+			Source="1"
+			Target="pack://application:,,,/ASC;component/Resources/users.png" />
+	</dxmvvm:ObjectToObjectConverter>
+	<dxmvvm:ObjectToObjectConverter
+		x:Key="StatusToTextConverter">
+		<dxmvvm:MapItem
+			Source="0"
+			Target="{StaticResource Created}" />
+		<dxmvvm:MapItem
+			Source="1"
+			Target="{StaticResource NotStarted}" />
+		<dxmvvm:MapItem
+			Source="2"
+			Target="{StaticResource TaskComplete}" />
+		<dxmvvm:MapItem
+			Source="3"
+			Target="{StaticResource Holded}" />
+		<dxmvvm:MapItem
+			Source="4"
+			Target="{StaticResource InProgress}" />
+		<dxmvvm:MapItem
+			Source="5"
+			Target="{StaticResource Cancelled2}" />
+	</dxmvvm:ObjectToObjectConverter>
+	<Style
+		TargetType="{x:Type dxe:ComboBoxEdit}"
+		x:Key="PriorityComboBox">
+		<Setter
+			Property="dxe:TextEditBase.EditNonEditableTemplate">
+			<Setter.Value>
+				<ControlTemplate>
+					<StackPanel
+						HorizontalAlignment="Left"
+						VerticalAlignment="Center"
+						Orientation="Horizontal">
+						<dx:PixelSnapper>
+							<Image
+								Margin="5"
+								Source="{Binding SelectedItem.Key, Converter={StaticResource PriorityToPictureConverter}}" />
+						</dx:PixelSnapper>
+						<TextBlock
+							VerticalAlignment="Center"
+							Text="{Binding SelectedItem.Value}" />
+					</StackPanel>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+		<Setter
+			Property="dxe:LookUpEditBase.ItemTemplate">
+			<Setter.Value>
+				<DataTemplate>
+					<StackPanel
+						Orientation="Horizontal">
+						<Image
+							Margin="0,0,5,0"
+							Source="{Binding Key, Converter={StaticResource PriorityToPictureConverter}}" />
+						<TextBlock
+							VerticalAlignment="Center"
+							Text="{Binding Value}" />
+					</StackPanel>
+				</DataTemplate>
+			</Setter.Value>
+		</Setter>
+		<Setter
+			Property="dxe:ButtonEdit.IsTextEditable"
+			Value="False" />
+	</Style>
+	<Style
+		TargetType="{x:Type dxe:ComboBoxEdit}"
+		x:Key="ComboBoxStatusEditStyle">
+		<Setter
+			Property="dxe:TextEditBase.EditNonEditableTemplate">
+			<Setter.Value>
+				<ControlTemplate>
+					<StackPanel
+						HorizontalAlignment="Left"
+						VerticalAlignment="Center"
+						Orientation="Horizontal">
+						<dx:PixelSnapper>
+							<Image
+								Margin="5"
+								Source="{Binding SelectedItem.Key, Converter={StaticResource StatusToPictureConverter}}" />
+						</dx:PixelSnapper>
+						<TextBlock
+							VerticalAlignment="Center"
+							Text="{Binding SelectedItem.Value}" />
+					</StackPanel>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+		<Setter
+			Property="dxe:LookUpEditBase.ItemTemplate">
+			<Setter.Value>
+				<DataTemplate>
+					<StackPanel
+						Orientation="Horizontal">
+						<Image
+							Margin="0,0,5,0"
+							Source="{Binding Key, Converter={StaticResource StatusToPictureConverter}}" />
+						<TextBlock
+							VerticalAlignment="Center"
+							Text="{Binding Value}" />
+					</StackPanel>
+				</DataTemplate>
+			</Setter.Value>
+		</Setter>
+		<Setter
+			Property="dxe:ButtonEdit.IsTextEditable"
+			Value="False" />
+	</Style>
+	<Style
+		TargetType="{x:Type ToggleButton}"
+		x:Key="HideButtonStyle">
+		<Setter
+			Property="Background"
+			Value="#00FFFFFF" />
+		<Setter
+			Property="Template">
+			<Setter.Value>
+				<ControlTemplate
+					TargetType="{x:Type ToggleButton}">
+					<Border
+						BorderThickness="0"
+						Background="{TemplateBinding Background}">
+						<Grid>
+							<Image
+								Stretch="None"
+								VerticalAlignment="Center"
+								HorizontalAlignment="Center"
+								Source="pack://application:,,,/ASC;component/Resources/ArrowLeft.png"
+								Visibility="{TemplateBinding IsChecked, Converter={dxmvvm:BooleanToVisibilityConverter Inverse=True}}" />
+							<Image
+								Stretch="None"
+								VerticalAlignment="Center"
+								HorizontalAlignment="Center"
+								Source="pack://application:,,,/ASC;component/Resources/ArrowRight.png"
+								Visibility="{TemplateBinding IsChecked, Converter={dxmvvm:BooleanToVisibilityConverter}}" />
+						</Grid>
+					</Border>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+	<Style
+		TargetType="{x:Type ToggleButton}"
+		x:Key="HideButtonStyleLeft">
+		<Setter
+			Property="Background"
+			Value="#00FFFFFF" />
+		<Setter
+			Property="Template">
+			<Setter.Value>
+				<ControlTemplate
+					TargetType="{x:Type ToggleButton}">
+					<Border
+						BorderThickness="0"
+						Background="{TemplateBinding Background}">
+						<Grid>
+							<Image
+								Stretch="None"
+								VerticalAlignment="Center"
+								HorizontalAlignment="Center"
+								Source="pack://application:,,,/ASC;component/Resources/ArrowRight.png"
+								Visibility="{TemplateBinding IsChecked, Converter={dxmvvm:BooleanToVisibilityConverter Inverse=True}}" />
+							<Image
+								Stretch="None"
+								VerticalAlignment="Center"
+								HorizontalAlignment="Center"
+								Source="pack://application:,,,/ASC;component/Resources/ArrowLeft.png"
+								Visibility="{TemplateBinding IsChecked, Converter={dxmvvm:BooleanToVisibilityConverter}}" />
+						</Grid>
+					</Border>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+	<ControlTemplate
+		x:Key="StoreCategories">
+		<dxg:GridControl
+			Name="PART_GridControl"
+			AutoExpandAllGroups="True"
+			AutoGenerateColumns="None">
+			<dxg:GridControl.Columns>
+				<dxg:GridColumn
+					FieldName="name"
+					Header="NAME" />
+			</dxg:GridControl.Columns>
+			<dxg:GridControl.View>
+				<dxg:TreeListView
+					AutoWidth="True"
+					ShowColumnHeaders="False"
+					ShowVerticalLines="False"
+					ShowHorizontalLines="False"
+					ShowIndicator="False"
+					KeyFieldName="id"
+					ParentFieldName="parent"
+					TreeDerivationMode="Selfreference" />
+			</dxg:GridControl.View>
+		</dxg:GridControl>
+	</ControlTemplate>
+	<Image
+		Margin="0"
+		MaxHeight="16"
+		MaxWidth="16"
+		Source="{dx:DXImageGrayscale Image=Copy_16x16.png}"
+		x:Key="CopyImage" />
+	<Style
+		TargetType="{x:Type dxe:ButtonEdit}"
+		x:Key="CopyButtonEdit">
+		<Setter
+			Property="dxe:ButtonEdit.AllowDefaultButton"
+			Value="False" />
+		<Setter
+			Property="MinWidth"
+			Value="150" />
+		<Setter
+			Property="dxe:BaseEdit.IsReadOnly"
+			Value="True" />
+		<Setter
+			Property="dxe:ButtonEdit.ShowEditorButtons"
+			Value="False" />
+		<Setter
+			Property="dxe:BaseEdit.ShowBorder"
+			Value="True" />
+		<Setter
+			Property="MinHeight"
+			Value="18" />
+		<Setter
+			Property="dxe:ButtonEdit.Buttons">
+			<Setter.Value>
+				<dxe:ButtonInfoCollection>
+					<dxe:ButtonInfo
+						Name="ButtonInfoCopy"
+						ToolTip="{DynamicResource Copy}"
+						GlyphKind="Custom"
+						Content="{StaticResource CopyImage}"
+						Command="{Binding CopyToClipboardCommand}"
+						CommandParameter="{Binding EditValue, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=dxe:ButtonEdit}}" />
+				</dxe:ButtonInfoCollection>
+			</Setter.Value>
+		</Setter>
+		<Style.Triggers>
+			<EventTrigger
+				RoutedEvent="MouseEnter">
+				<EventTrigger.Actions>
+					<BeginStoryboard>
+						<Storyboard>
+							<BooleanAnimationUsingKeyFrames
+								BeginTime="00:00:00"
+								Storyboard.TargetProperty="(dxe:ButtonEdit.ShowEditorButtons)">
+								<DiscreteBooleanKeyFrame
+									KeyTime="00:00:00"
+									Value="True" />
+							</BooleanAnimationUsingKeyFrames>
+						</Storyboard>
+					</BeginStoryboard>
+				</EventTrigger.Actions>
+			</EventTrigger>
+			<EventTrigger
+				RoutedEvent="MouseLeave">
+				<EventTrigger.Actions>
+					<BeginStoryboard>
+						<Storyboard>
+							<BooleanAnimationUsingKeyFrames
+								BeginTime="00:00:00"
+								Storyboard.TargetProperty="(dxe:ButtonEdit.ShowEditorButtons)">
+								<DiscreteBooleanKeyFrame
+									KeyTime="00:00:00"
+									Value="False" />
+							</BooleanAnimationUsingKeyFrames>
+						</Storyboard>
+					</BeginStoryboard>
+				</EventTrigger.Actions>
+			</EventTrigger>
+		</Style.Triggers>
+	</Style>
+</ResourceDictionary>

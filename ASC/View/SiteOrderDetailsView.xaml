@@ -1,0 +1,97 @@
+<UserControl
+	x:Class="ASC.View.SiteOrderDetailsView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:ASC.View" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core">
+	<dxlc:LayoutGroup
+		Orientation="Horizontal">
+		<dxlc:LayoutGroup
+			ItemLabelsAlignment="Local"
+			Header="{DynamicResource OrderInfo}"
+			Orientation="Vertical"
+			View="GroupBox">
+			<dxlc:LayoutItem
+				Label="{DynamicResource DateCreate}">
+				<dxe:TextEdit
+					MinWidth="150"
+					MaskType="DateTime"
+					Mask="dd.MM.yyyy"
+					IsReadOnly="True"
+					MaskUseAsDisplayFormat="True"
+					EditValue="{Binding SiteOrder.DateAdded, Mode=OneWay}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource PaymentMethod}">
+				<dxe:TextEdit
+					IsReadOnly="True"
+					EditValue="{Binding SiteOrder.PaymentMethod, Mode=OneWay}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource ShippingMethod}">
+				<dxe:TextEdit
+					IsReadOnly="True"
+					EditValue="{Binding SiteOrder.ShippingMethod, Mode=OneWay}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource Status}">
+				<dxe:ComboBoxEdit
+					DisplayMember="Name"
+					ValueMember="Id"
+					EditValue="{Binding SiteOrder.OrderStatusId, Mode=TwoWay}"
+					ItemsSource="{Binding SiteOrder.Statuses}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource TrackNumber}">
+				<dxe:TextEdit
+					EditValue="{Binding SiteOrder.TrackNo, Mode=TwoWay}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				HorizontalContentAlignment="Right">
+				<dx:SimpleButton
+					Content="{DynamicResource Open}"
+					Command="{Binding OpenSiteOrderCommand}" />
+			</dxlc:LayoutItem>
+		</dxlc:LayoutGroup>
+		<dxlc:LayoutGroup
+			ItemLabelsAlignment="Local"
+			Header="{DynamicResource ShippingAddress}"
+			Orientation="Vertical"
+			View="GroupBox">
+			<dxlc:LayoutItem
+				Label="{DynamicResource Recepient}">
+				<dxe:TextEdit
+					TextWrapping="Wrap"
+					IsReadOnly="True"
+					EditValue="{Binding SiteOrder.ShippingFullname, Mode=OneWay}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource Address}">
+				<dxe:TextEdit
+					TextWrapping="Wrap"
+					IsReadOnly="True"
+					EditValue="{Binding SiteOrder.ShippingAddress1, Mode=OneWay}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource Address}">
+				<dxe:TextEdit
+					IsReadOnly="True"
+					EditValue="{Binding SiteOrder.ShippingAddress2, Mode=OneWay}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource Country}">
+				<dxe:TextEdit
+					IsReadOnly="True"
+					EditValue="{Binding SiteOrder.ShippingCountry, Mode=OneWay}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource City}">
+				<dxe:TextEdit
+					IsReadOnly="True"
+					EditValue="{Binding SiteOrder.ShippingCity, Mode=OneWay}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource PostIndex}">
+				<dxe:TextEdit
+					IsReadOnly="True"
+					EditValue="{Binding SiteOrder.ShippingPostcode, Mode=OneWay}" />
+			</dxlc:LayoutItem>
+		</dxlc:LayoutGroup>
+	</dxlc:LayoutGroup>
+</UserControl>

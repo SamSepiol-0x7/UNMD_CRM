@@ -1,0 +1,351 @@
+<UserControl
+	x:Class="ASC.View.RepairCartridgeFullAdminView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:dxdo="http://schemas.devexpress.com/winfx/2008/xaml/docking" xmlns:dxwui="http://schemas.devexpress.com/winfx/2008/xaml/windowsui" xmlns:viewModel="clr-namespace:ASC.ViewModel" xmlns:view="clr-namespace:ASC.View" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:objects="clr-namespace:ASC.Objects" xmlns:attributes="clr-namespace:ASC.ViewModels.Attributes"
+	Name="RepairCardAdmin"
+	Loaded="{DXEvent OnLoad()}">
+	<FrameworkElement.Resources>
+		<ResourceDictionary>
+			<dxmvvm:NumericToVisibilityConverter
+				Inverse="True"
+				x:Key="NumericToVisibilityConverterInv" />
+			<DataTemplate
+				DataType="{x:Type attributes:PanelViewModel}"
+				x:Key="{DataTemplateKey {x:Type attributes:PanelViewModel}}">
+				<view:PanelView />
+			</DataTemplate>
+			<DataTemplate
+				DataType="{x:Type attributes:DatePickerViewModel}"
+				x:Key="{DataTemplateKey {x:Type attributes:DatePickerViewModel}}">
+				<view:DatePickerView />
+			</DataTemplate>
+			<DataTemplate
+				DataType="{x:Type attributes:ComboBoxViewModel}"
+				x:Key="{DataTemplateKey {x:Type attributes:ComboBoxViewModel}}">
+				<view:ComboBoxView />
+			</DataTemplate>
+			<DataTemplate
+				DataType="{x:Type viewModel:AdditionalFieldAsLabelViewModel}"
+				x:Key="{DataTemplateKey {x:Type viewModel:AdditionalFieldAsLabelViewModel}}">
+				<view:AdditionalFieldAsLabelView />
+			</DataTemplate>
+			<Style
+				TargetType="{x:Type dxdo:LayoutPanel}"
+				x:Key="{x:Type dxdo:LayoutPanel}">
+				<Setter
+					Property="dxdo:BaseLayoutItem.ShowCloseButton"
+					Value="False" />
+				<Setter
+					Property="dxdo:LayoutPanel.ShowBorder"
+					Value="False" />
+				<Setter
+					Property="dxdo:BaseLayoutItem.ShowCaption"
+					Value="False" />
+				<Setter
+					Property="dxdo:BaseLayoutItem.AllowDrag"
+					Value="False" />
+				<Setter
+					Property="dxdo:BaseLayoutItem.Margin"
+					Value="0" />
+				<Setter
+					Property="dxdo:BaseLayoutItem.Padding"
+					Value="0" />
+				<Setter
+					Property="MaxHeight"
+					Value="24" />
+			</Style>
+		</ResourceDictionary>
+	</FrameworkElement.Resources>
+	<DockPanel>
+		<dxwui:AppBar
+			DockPanel.Dock="Bottom"
+			Background="#3f3f3f"
+			HorizontalAlignment="Stretch"
+			VerticalAlignment="Stretch"
+			ItemSpacing="5"
+			HideMode="AlwaysVisible">
+			<dxwui:AppBarButton
+				Label="{DynamicResource Save}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Command="{Binding AdminSaveChangesCommand}"
+				Glyph="{dx:DXImageGrayscale Image=Save_32x32.png}" />
+			<dxwui:AppBarSeparator />
+			<dxwui:AppBarButton
+				Label="{DynamicResource Common}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Command="{Binding OpenRepairCommonCommand}"
+				Glyph="{dx:DXImage Image=Suggestion_32x32.png}" />
+			<dxwui:AppBarButton
+				Label="{DynamicResource Client}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Command="{Binding OpenClientCardCommand}"
+				Visibility="{Binding ConverterParameter=CAN_VIEW_CLIENTS, Converter={StaticResource AclVis}}"
+				Glyph="{dx:DXImage Image=BOCustomer_32x32.png}" />
+			<dxwui:AppBarButton
+				Label="{DynamicResource History}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Command="{Binding OpenRepairHistoryCommand}"
+				Visibility="{Binding IsEnabled, Converter={StaticResource BooleanToVisibilityConverter}, RelativeSource={RelativeSource Self}}"
+				Glyph="{dx:DXImageOffice2013 Image=HistoryItem_32x32.png}" />
+			<dxwui:AppBarButton
+				Label="{DynamicResource Media}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Command="{Binding OpenMediaCommand}"
+				Glyph="{dx:DXImage Image=VideoContent_32x32.png}" />
+		</dxwui:AppBar>
+		<dxlc:LayoutControl
+			ItemStyle="{StaticResource LeftMenuLayout}"
+			Orientation="Horizontal"
+			ItemSpace="5"
+			Padding="10"
+			dx:ScrollBars="Auto">
+			<dxlc:LayoutGroup
+				HorizontalAlignment="Left"
+				Orientation="Vertical">
+				<dxlc:LayoutItem
+					Label="{DynamicResource OrderNumber}">
+					<dxe:ButtonEdit
+						Style="{StaticResource CopyButtonEdit}"
+						DisplayFormatString="d6"
+						EditValue="{Binding Repair.id, Mode=OneWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutGroup
+					Orientation="Horizontal">
+					<dxlc:LayoutItem
+						Label="{DynamicResource WarrantyRepair}">
+						<dxe:CheckEdit
+							IsChecked="{Binding Repair.is_warranty, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						HorizontalAlignment="Right"
+						Label="{DynamicResource CheckBoxExpressRepair}">
+						<dxe:CheckEdit
+							IsChecked="{Binding Repair.express_repair, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+				<dxlc:LayoutGroup
+					Orientation="Horizontal">
+					<dxlc:LayoutItem
+						Label="{DynamicResource WasInService}">
+						<dxe:CheckEdit
+							IsChecked="{Binding Repair.is_repeat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						HorizontalAlignment="Right"
+						Label="{DynamicResource CheckBoxCanFormat}">
+						<dxe:CheckEdit
+							IsChecked="{Binding Repair.can_format, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+				<dxlc:LayoutGroup
+					Orientation="Horizontal">
+					<dxlc:LayoutItem
+						Label="{DynamicResource CheckBoxThirdPartySc}">
+						<dxe:CheckEdit
+							IsChecked="{Binding Repair.thirs_party_sc, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						HorizontalAlignment="Right"
+						Label="{DynamicResource SmsSend}">
+						<dxe:CheckEdit
+							IsChecked="{Binding Repair.sms_inform, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+				<dxlc:LayoutItem
+					Label="{DynamicResource TermsControl}">
+					<dxe:CheckEdit
+						IsChecked="{Binding Repair.termsControl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutGroup
+					Orientation="Horizontal"
+					View="GroupBox"
+					Header="{DynamicResource AdminStatusChange}">
+					<dxlc:LayoutItem>
+						<dxe:ComboBoxEdit
+							DisplayMember="Name"
+							ValueMember="Id"
+							ItemsSource="{Binding AllWorkshopOptions}"
+							EditValue="{Binding Repair.new_state, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+							<dxmvvm:Interaction.Behaviors>
+								<dxmvvm:EventToCommand
+									EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+									PassEventArgsToCommand="True"
+									Command="{Binding ComboBoxClickCommand}" />
+								<dxmvvm:EventToCommand
+									EventTriggerBase_x0060_1.EventName="PopupClosed"
+									Command="{Binding AdminChangeStateCommand}" />
+							</dxmvvm:Interaction.Behaviors>
+						</dxe:ComboBoxEdit>
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+				<dxlc:LayoutItem
+					Label="{DynamicResource Company}">
+					<dxe:ComboBoxEdit
+						ValueMember="Id"
+						DisplayMember="Name"
+						ItemsSource="{Binding Companies, Source={x:Static objects:OfflineData.Instance}}"
+						EditValue="{Binding Repair.company, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource Payment}">
+					<dxe:ComboBoxEdit
+						DisplayMember="Name"
+						ValueMember="Id"
+						ItemsSource="{Binding PaymentOptionses}"
+						EditValue="{Binding Repair.payment_system, Mode=TwoWay}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Label="{DynamicResource Invoice}"
+					Visibility="{Binding Repair.invoice, Converter={StaticResource NumericToVisibility}}">
+					<dxe:ButtonEdit
+						IsReadOnly="True"
+						AllowDefaultButton="False"
+						EditValue="{Binding Repair.invoice1.num}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem>
+					<dx:SimpleButton
+						Content="{DynamicResource Documents}"
+						Command="{Binding ShowPrintDocumentsCommand}"
+						Glyph="{DXImageGrayscale Image=Print_16x16.png}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem>
+					<dx:SimpleButton
+						Content="{DynamicResource PrintStickers}"
+						Command="{Binding PrintStickerCommand}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem>
+					<dx:SimpleButton
+						Content="{DynamicResource PrintDocumentLoss}"
+						Command="{Binding PrintDocumentLossCommand}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem>
+					<dx:SimpleButton
+						Content="{DynamicResource PrintCheck2}"
+						Command="{Binding KkmReprintCheckCommand}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem>
+					<dx:SimpleButton
+						Content="{DynamicResource OfficeChange}"
+						Command="{Binding OfficeChangeCommand}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem>
+					<dx:SimpleButton
+						Content="{DynamicResource ClientChange}"
+						Command="{Binding ClientChangeCommand}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem>
+					<dx:SimpleButton
+						Content="{DynamicResource MasterChange}"
+						Command="{Binding MasterChangeCommand}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem>
+					<dx:SimpleButton
+						Content="{DynamicResource ManagerChange}"
+						Command="{Binding ManagerChangeCommand}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Visibility="{Binding Repair.invoice, Converter={StaticResource NumericToVisibility}}">
+					<dx:SimpleButton
+						Content="{DynamicResource InvoiceChange}"
+						Command="{Binding ChangeInvoiceCommand}" />
+				</dxlc:LayoutItem>
+				<dxlc:LayoutItem
+					Visibility="{Binding IsEnabled, ElementName=CancellationButton, Converter={dx:BooleanToVisibilityConverter}}">
+					<dx:SimpleButton
+						Name="CancellationButton"
+						Content="{DynamicResource CancelOut}"
+						Glyph="{DXImageGrayscale Image=Undo_16x16.png}"
+						Command="{Binding ShowOrderCancellationCommand}" />
+				</dxlc:LayoutItem>
+			</dxlc:LayoutGroup>
+			<dxlc:LayoutGroup
+				Margin="10,0,0,0"
+				Orientation="Vertical">
+				<dxlc:LayoutGroup
+					Orientation="Vertical"
+					View="GroupBox"
+					Header="{DynamicResource DeviceInfo}">
+					<dxlc:LayoutItem
+						Label="{DynamicResource Label1Copy}">
+						<dxe:ComboBoxEdit
+							ValueMember="Id"
+							DisplayMember="Name"
+							EditValue="{Binding Repair.maker, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+							ItemsSource="{Binding Makers}">
+							<dxmvvm:Interaction.Behaviors>
+								<dxmvvm:EventToCommand
+									EventTriggerBase_x0060_1.EventName="EditValueChanged"
+									Command="{Binding MakersChangedCommand}" />
+								<dxmvvm:EventToCommand
+									EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+									PassEventArgsToCommand="True"
+									Command="{Binding ComboBoxClickCommand}" />
+							</dxmvvm:Interaction.Behaviors>
+						</dxe:ComboBoxEdit>
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource Label1Copy1}">
+						<dxe:ComboBoxEdit
+							ShowError="False"
+							DisplayMember="Name"
+							ValueMember="Id"
+							HorizontalAlignment="Stretch"
+							FindMode="Always"
+							FilterCondition="Contains"
+							IncrementalFiltering="True"
+							ValidateOnTextInput="False"
+							AutoComplete="False"
+							ItemsSource="{Binding Models}"
+							EditValue="{Binding CardId, Mode=TwoWay}">
+							<dxmvvm:Interaction.Behaviors>
+								<dxmvvm:EventToCommand
+									EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+									PassEventArgsToCommand="True"
+									Command="{Binding ComboBoxClickCommand}" />
+							</dxmvvm:Interaction.Behaviors>
+						</dxe:ComboBoxEdit>
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource SerialNumber}">
+						<dxe:TextEdit
+							MaxLength="254"
+							CharacterCasing="Upper"
+							Text="{Binding Repair.serial_number, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource Fault}">
+						<dxe:TextEdit
+							MaxLength="254"
+							Text="{Binding Repair.fault, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource Look}">
+						<dxe:TextEdit
+							MaxLength="254"
+							Text="{Binding Repair.look, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource Complect}">
+						<dxe:TextEdit
+							MaxLength="254"
+							Text="{Binding Repair.complect, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource Notes}">
+						<dxe:TextEdit
+							MaxLength="254"
+							Text="{Binding Repair.ext_notes, Mode=TwoWay}" />
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+			</dxlc:LayoutGroup>
+		</dxlc:LayoutControl>
+	</DockPanel>
+</UserControl>

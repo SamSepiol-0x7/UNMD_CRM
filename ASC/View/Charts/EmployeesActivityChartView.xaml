@@ -1,0 +1,253 @@
+<UserControl
+	x:Class="ASC.View.Charts.EmployeesActivityChartView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:dxwui="http://schemas.devexpress.com/winfx/2008/xaml/windowsui" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:objects="clr-namespace:ASC.Objects" xmlns:controls="clr-namespace:ASC.View.Controls" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:extensions="clr-namespace:ASC.Extensions" xmlns:properties="clr-namespace:ASC.Properties" xmlns:charts="clr-namespace:ASC.View.Charts">
+	<DockPanel>
+		<dxwui:AppBar
+			DockPanel.Dock="Bottom"
+			Background="#3f3f3f"
+			HorizontalAlignment="Stretch"
+			VerticalAlignment="Bottom"
+			ItemSpacing="0"
+			HideMode="AlwaysVisible">
+			<dxwui:AppBarButton
+				Label="{DynamicResource Refresh}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Command="{Binding RefreshCommand}"
+				Glyph="{dx:DXImageGrayscale Image=Refresh_32x32.png}" />
+			<dxwui:AppBarButton
+				Label="{DynamicResource Print}"
+				AllowGlyphTheming="True"
+				HorizontalAlignment="Center"
+				IsEllipseEnabled="False"
+				Command="{Binding PrintTableCommand}"
+				CommandParameter="{Binding ElementName=TableView}"
+				Glyph="{dx:DXImageGrayscale Image=Print_32x32.png}" />
+		</dxwui:AppBar>
+		<DockPanel
+			Dock="Left"
+			HorizontalAlignment="Left">
+			<dxlc:LayoutControl
+				DockPanel.Dock="Left"
+				ItemStyle="{StaticResource LeftMenuLayout}"
+				ItemSpace="5"
+				Orientation="Vertical"
+				Visibility="{Binding ElementName=ExpandButton, Path=IsChecked, Converter={dxmvvm:BooleanToVisibilityConverter}}">
+				<dxlc:LayoutGroup
+					ItemLabelsAlignment="Local">
+					<dxlc:LayoutItem
+						Label="{DynamicResource Office}">
+						<dxe:ComboBoxEdit
+							AutoComplete="False"
+							DisplayMember="name"
+							ValueMember="id"
+							EditValue="{Binding SelectedOffice, Mode=TwoWay}"
+							ItemsSource="{Binding OfficesWithAll, Source={x:Static objects:OfflineData.Instance}}" />
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+				<controls:PeriodView />
+				<dxlc:LayoutItem
+					Label="{DynamicResource ShowArhiveUsers}"
+					HorizontalContentAlignment="Right">
+					<dxe:CheckEdit
+						EditValue="{Binding ShowArchive, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+				</dxlc:LayoutItem>
+			</dxlc:LayoutControl>
+			<Grid
+				DockPanel.Dock="Left">
+				<ToggleButton
+					Name="ExpandButton"
+					Padding="0"
+					Margin="0"
+					Style="{StaticResource HideButtonStyleLeft}"
+					VerticalAlignment="Center"
+					IsChecked="{Binding Path=KassaSidebarExpanded, Source={x:Static properties:Settings.Default}}" />
+			</Grid>
+		</DockPanel>
+		<dxg:GridControl
+			Name="TableView1"
+			Tag="EmployeeActivityGrid"
+			AllowInitiallyFocusedRow="False"
+			ItemsSource="{Binding Items}"
+			SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+			<FrameworkElement.Resources>
+				<ResourceDictionary>
+					<Style
+						TargetType="{x:Type dxg:GridColumn}"
+						x:Key="{x:Type dxg:GridColumn}">
+						<Setter
+							Property="dxg:BaseColumn.HorizontalHeaderContentAlignment"
+							Value="Center" />
+					</Style>
+				</ResourceDictionary>
+			</FrameworkElement.Resources>
+			<dxmvvm:Interaction.Behaviors>
+				<dxmvvm:EventToCommand
+					EventTriggerBase_x0060_1.EventName="Loaded"
+					Command="{Binding GridInitCommand}"
+					CommandParameter="{Binding ElementName=TableView1}" />
+				<dxmvvm:EventToCommand
+					EventTriggerBase_x0060_1.EventName="Unloaded"
+					Command="{Binding GridUnloadedCommand}"
+					CommandParameter="{Binding ElementName=TableView1}" />
+				<extensions:GridLayoutHelper>
+					<dxmvvm:Interaction.Behaviors>
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="LayoutChanged"
+							Command="{Binding LayoutChangedCommand}"
+							CommandParameter="{Binding ElementName=TableView1}" />
+					</dxmvvm:Interaction.Behaviors>
+				</extensions:GridLayoutHelper>
+			</dxmvvm:Interaction.Behaviors>
+			<dxg:GridControl.Columns>
+				<dxg:GridColumn
+					Name="Employee"
+					Width="150"
+					FieldName="{DynamicResource CoWorker}"
+					Binding="{Binding Employee.FioShort}" />
+				<dxg:GridColumn
+					Name="Office"
+					Width="150"
+					FieldName="{DynamicResource Office}"
+					Binding="{Binding Employee.OfficeId}">
+					<dxg:ColumnBase.EditSettings>
+						<dxe:ComboBoxEditSettings
+							AllowDefaultButton="False"
+							ValueMember="id"
+							DisplayMember="name"
+							ItemsSource="{Binding OfficesWithAll, Source={x:Static objects:OfflineData.Instance}}" />
+					</dxg:ColumnBase.EditSettings>
+				</dxg:GridColumn>
+				<dxg:GridColumn
+					Name="IsOnline"
+					AllowPrinting="False"
+					FieldName="{DynamicResource Online}"
+					Binding="{Binding IsOnline, Converter={StaticResource ActivityStatusToPicture}, FallbackValue=---}">
+					<dxg:ColumnBase.EditSettings>
+						<dxe:ImageEditSettings
+							HorizontalContentAlignment="Center"
+							MaxWidth="18"
+							VerticalContentAlignment="Center" />
+					</dxg:ColumnBase.EditSettings>
+				</dxg:GridColumn>
+				<dxg:GridColumn
+					Name="LastActivity"
+					Width="120"
+					FieldName="{DynamicResource LastActivity}"
+					Binding="{Binding Employee.LastActivity, Converter={StaticResource UtcToLocalDateTimeConverter}}">
+					<dxg:ColumnBase.EditSettings>
+						<dxe:TextEditSettings
+							HorizontalContentAlignment="Center"
+							NullText="---"
+							MaskUseAsDisplayFormat="True"
+							MaskType="DateTime"
+							Mask="dd.MM.yyyy HH:mm" />
+					</dxg:ColumnBase.EditSettings>
+				</dxg:GridColumn>
+				<dxg:GridColumn
+					Name="LastLogin"
+					Width="120"
+					FieldName="{DynamicResource LastLogin}"
+					Binding="{Binding Employee.LastLogin, Converter={StaticResource UtcToLocalDateTimeConverter}}">
+					<dxg:ColumnBase.EditSettings>
+						<dxe:TextEditSettings
+							HorizontalContentAlignment="Center"
+							NullText="---"
+							MaskUseAsDisplayFormat="True"
+							MaskType="DateTime"
+							Mask="dd.MM.yyyy HH:mm" />
+					</dxg:ColumnBase.EditSettings>
+				</dxg:GridColumn>
+				<dxg:GridColumn
+					Name="Ip"
+					Width="150"
+					FieldName="IP"
+					Binding="{Binding Ip}">
+					<dxg:ColumnBase.EditSettings>
+						<dxe:TextEditSettings
+							HorizontalContentAlignment="Center"
+							NullText="---" />
+					</dxg:ColumnBase.EditSettings>
+				</dxg:GridColumn>
+				<dxg:GridColumn
+					FieldName="ActivityCount"
+					ReadOnly="True"
+					Header="{DynamicResource Activity}"
+					AllowColumnFiltering="False"
+					AllowSorting="False"
+					MinWidth="30"
+					Width="100*">
+					<dxg:ColumnBase.EditSettings>
+						<dxe:SparklineEditSettings>
+							<dxe:BaseEditSettings.StyleSettings>
+								<dxe:BarSparklineStyleSettings
+									Brush="#00879C" />
+							</dxe:BaseEditSettings.StyleSettings>
+						</dxe:SparklineEditSettings>
+					</dxg:ColumnBase.EditSettings>
+				</dxg:GridColumn>
+			</dxg:GridControl.Columns>
+			<dxg:GridControl.View>
+				<dxg:TableView
+					Name="TableView"
+					IsSynchronizedWithCurrentItem="True"
+					ShowTotalSummary="False"
+					AllowScrollAnimation="True"
+					NavigationStyle="Row"
+					ColumnFilterPopupMode="Excel"
+					AllowEditing="False"
+					PrintAutoWidth="True"
+					AllowGrouping="False"
+					AllowColumnMoving="True"
+					ShowGroupPanel="False"
+					ShowColumnHeaders="True"
+					AllowMoveColumnToDropArea="False"
+					ShowSearchPanelMode="Never"
+					ShowBandsPanel="True"
+					ShowIndicator="False"
+					AllowBestFit="True"
+					AllowColumnFiltering="False"
+					ShowSelectionRectangle="False"
+					ShowFixedTotalSummary="False"
+					SummariesIgnoreNullValues="True"
+					RowMinHeight="{Binding Employee.UiSettings.RowHeight, Source={x:Static objects:OfflineData.Instance}}"
+					FontSize="{Binding Employee.UiSettings.FontSize, Source={x:Static objects:OfflineData.Instance}}">
+					<dxmvvm:Interaction.Behaviors>
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="RowDoubleClick"
+							Command="{Binding ItemDoubleClickCommand}" />
+					</dxmvvm:Interaction.Behaviors>
+					<dxg:TableView.RowStyle>
+						<Style
+							BasedOn="{StaticResource RowStyle}"
+							TargetType="{x:Type dxg:RowControl}">
+							<Setter
+								Property="FrameworkElement.ContextMenu">
+								<Setter.Value>
+									<ContextMenu>
+										<MenuItem
+											Header="{DynamicResource NewTask}"
+											Command="{Binding View.DataContext.CreateTaskCommand}">
+											<MenuItem.Icon>
+												<Image
+													Source="{dx:DXImageOffice2013 Image=EditTask_16x16.png}" />
+											</MenuItem.Icon>
+										</MenuItem>
+										<MenuItem
+											Header="{DynamicResource SalaryCount}"
+											Command="{Binding View.DataContext.SaralyReportCommand}">
+											<MenuItem.Icon>
+												<Image
+													Source="{dx:DXImageGrayscale Image=Currency_16x16.png}" />
+											</MenuItem.Icon>
+										</MenuItem>
+									</ContextMenu>
+								</Setter.Value>
+							</Setter>
+						</Style>
+					</dxg:TableView.RowStyle>
+				</dxg:TableView>
+			</dxg:GridControl.View>
+		</dxg:GridControl>
+	</DockPanel>
+</UserControl>

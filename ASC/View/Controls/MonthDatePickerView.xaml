@@ -1,0 +1,11 @@
+<UserControl
+	x:Class="ASC.View.Controls.MonthDatePickerView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:ASC.View.Controls" xmlns:extensions="clr-namespace:ASC.Extensions">
+	<DatePicker
+		extensions:DatePickerCalendar.IsMonthYear="True"
+		extensions:DatePickerDateFormat.DateFormat="MMM-yyyy"
+		Text="MMM-yyyy"
+		HorizontalAlignment="Left"
+		VerticalAlignment="Center"
+		Width="130"
+		SelectedDate="{Binding Period, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+</UserControl>

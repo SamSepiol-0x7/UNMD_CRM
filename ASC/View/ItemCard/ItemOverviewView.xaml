@@ -1,0 +1,401 @@
+<dxwui:NavigationPage
+	x:Class="ASC.View.ItemCard.ItemOverviewView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:asc="clr-namespace:ASC" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:dxwui="http://schemas.devexpress.com/winfx/2008/xaml/windowsui" xmlns:itemCard="clr-namespace:ASC.View.ItemCard"
+	dxwui:NavigationCacheMode="Disabled"
+	DataContext="{Binding Path=ProductOverviewViewModel, Source={StaticResource ViewModelLocator}}">
+	<FrameworkElement.Resources>
+		<ResourceDictionary>
+			<asc:BindingProxy
+				Data="{Binding}"
+				x:Key="BindingProxy" />
+		</ResourceDictionary>
+	</FrameworkElement.Resources>
+	<dx:LoadingDecorator
+		SplashScreenLocation="CenterContainer"
+		IsSplashScreenShown="{Binding IsLoadingData}">
+		<dxlc:LayoutControl
+			Orientation="Vertical"
+			HorizontalAlignment="Left">
+			<dxlc:LayoutItem
+				MinWidth="300"
+				Label="{DynamicResource ItemName}">
+				<TextBox
+					IsReadOnly="True"
+					HorizontalAlignment="Stretch"
+					VerticalContentAlignment="Center"
+					Text="{Binding Item.name, Mode=OneWay}" />
+			</dxlc:LayoutItem>
+			<dxlc:LayoutGroup
+				Orientation="Horizontal"
+				HorizontalAlignment="Left">
+				<dxlc:LayoutGroup
+					Orientation="Vertical"
+					MaxWidth="600">
+					<dxlc:LayoutGroup
+						Orientation="Horizontal">
+						<dxlc:LayoutItem
+							Label="{DynamicResource Available}">
+							<TextBox
+								MinWidth="50"
+								IsReadOnly="True"
+								Text="{Binding Item.Available, Mode=OneWay}" />
+						</dxlc:LayoutItem>
+						<dxlc:LayoutItem>
+							<dxe:ComboBoxEdit
+								DisplayMember="ShortName"
+								ValueMember="UnitInt"
+								IsReadOnly="True"
+								AllowDefaultButton="False"
+								ItemsSource="{Binding Units}"
+								EditValue="{Binding Item.units, Mode=OneWay}" />
+						</dxlc:LayoutItem>
+					</dxlc:LayoutGroup>
+					<dxlc:LayoutGroup
+						Orientation="Horizontal">
+						<dxlc:LayoutItem
+							Label="{DynamicResource Count}">
+							<TextBox
+								IsReadOnly="True"
+								Text="{Binding Item.count, Mode=OneWay}">
+								<FrameworkElement.Style>
+									<Style
+										TargetType="{x:Type TextBox}">
+										<Style.Triggers>
+											<DataTrigger
+												Value="0"
+												Binding="{Binding Item.count}">
+												<Setter
+													Property="Foreground"
+													Value="#FFFF0000" />
+											</DataTrigger>
+										</Style.Triggers>
+									</Style>
+								</FrameworkElement.Style>
+							</TextBox>
+						</dxlc:LayoutItem>
+						<dxlc:LayoutItem
+							Label="{DynamicResource Reserve}">
+							<TextBox
+								IsReadOnly="True"
+								Text="{Binding Item.reserved, Mode=OneWay}" />
+						</dxlc:LayoutItem>
+					</dxlc:LayoutGroup>
+					<dxlc:LayoutItem
+						Label="{DynamicResource Box}">
+						<dxe:TextEdit
+							IsReadOnly="True"
+							EditValue="{Binding Item.boxes.name, Mode=OneWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource Category}">
+						<dxg:LookUpEdit
+							dxe:IsReadOnly="True"
+							dxe:AllowDefaultButton="False"
+							AutoPopulateColumns="False"
+							dxe:ValueMember="id"
+							dxe:DisplayMember="name"
+							dxe:EditValue="{Binding Item.category, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+							dxe:ItemsSource="{Binding StoreCategories}">
+							<dxe:PopupBaseEdit.PopupContentTemplate>
+								<ControlTemplate>
+									<dxg:GridControl
+										Name="PART_GridControl"
+										AutoExpandAllGroups="True"
+										AutoGenerateColumns="None">
+										<dxg:GridControl.Columns>
+											<dxg:GridColumn
+												FieldName="name"
+												Header="NAME" />
+										</dxg:GridControl.Columns>
+										<dxg:GridControl.View>
+											<dxg:TreeListView
+												AutoWidth="True"
+												ShowColumnHeaders="False"
+												ShowVerticalLines="False"
+												ShowHorizontalLines="False"
+												ShowIndicator="False"
+												KeyFieldName="id"
+												ParentFieldName="parent"
+												TreeDerivationMode="Selfreference" />
+										</dxg:GridControl.View>
+									</dxg:GridControl>
+								</ControlTemplate>
+							</dxe:PopupBaseEdit.PopupContentTemplate>
+						</dxg:LookUpEdit>
+					</dxlc:LayoutItem>
+					<dxlc:LayoutGroup
+						Orientation="Horizontal">
+						<dxlc:LayoutItem
+							Label="{DynamicResource Articul}"
+							MinWidth="90">
+							<TextBox
+								VerticalContentAlignment="Center"
+								IsReadOnly="True"
+								FontWeight="Bold"
+								Text="{Binding Item.articul, StringFormat={}{0:D6}}" />
+						</dxlc:LayoutItem>
+						<dxlc:LayoutItem
+							Label="{DynamicResource UID}">
+							<TextBox
+								VerticalContentAlignment="Center"
+								IsReadOnly="True"
+								Text="{Binding Item.UID, Mode=OneWay}" />
+						</dxlc:LayoutItem>
+					</dxlc:LayoutGroup>
+					<dxlc:LayoutItem
+						Label="{DynamicResource DateCreate}">
+						<TextBox
+							IsReadOnly="True"
+							Text="{Binding Item.created, StringFormat=dd.MM.yyyy  HH:mm, Converter={StaticResource UtcToLocalDateTimeConverter}}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource Store}">
+						<dxe:TextEdit
+							Focusable="False"
+							IsReadOnly="True"
+							EditValue="{Binding Item.stores.name, Mode=OneWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource Sn}"
+						Visibility="{Binding Item.stores.it_vis_sn, Converter={StaticResource BooleanToVisibilityConverter}}">
+						<TextBox
+							IsReadOnly="True"
+							Text="{Binding Item.SN, Mode=OneWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource PartNumber}"
+						Visibility="{Binding Item.stores.it_vis_pn, Converter={StaticResource BooleanToVisibilityConverter}}">
+						<TextBox
+							IsReadOnly="True"
+							AcceptsReturn="True"
+							TextWrapping="Wrap"
+							Text="{Binding Item.PN, Mode=OneWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource BarCode}"
+						Visibility="{Binding Item.stores.it_vis_barcode, Converter={StaticResource BooleanToVisibilityConverter}}">
+						<TextBox
+							IsReadOnly="True"
+							Text="{Binding Item.ext_barcode, Mode=OneWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Visibility="{Binding Item.is_realization, Converter={StaticResource BooleanToVisibilityConverter}}">
+						<Grid>
+							<Rectangle
+								Fill="#FF6495ED"
+								Stroke="#FF000000" />
+							<StackPanel
+								HorizontalAlignment="Center"
+								Orientation="Horizontal">
+								<Label
+									Content="{DynamicResource RealizatorItem}"
+									ContentStringFormat="{}{0}"
+									Margin="0,-1,0,0"
+									FontSize="11"
+									HorizontalContentAlignment="Center" />
+							</StackPanel>
+						</Grid>
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource State}">
+						<dxe:TextEdit
+							IsReadOnly="True"
+							EditValue="{Binding Item.items_state.name, Mode=OneWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource Warranty}"
+						Visibility="{Binding Item.stores.it_vis_warranty, Converter={StaticResource BooleanToVisibilityConverter}}">
+						<dxe:ComboBoxEdit
+							AllowDefaultButton="False"
+							DisplayMember="Name"
+							ValueMember="Days"
+							IsReadOnly="True"
+							ItemsSource="{Binding WarrantyOptionses}"
+							EditValue="{Binding Item.warranty, Mode=OneWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource DealerWarranty}"
+						Visibility="{Binding Item.stores.it_vis_warranty_dealer, Converter={StaticResource BooleanToVisibilityConverter}}">
+						<dxe:TextEdit
+							IsReadOnly="True"
+							NullText="---"
+							EditValue="{Binding Item.EndDealerWarranty, Mode=OneWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource PurchaseCost}"
+						Visibility="{Binding CanEdit, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
+						<dxe:TextEdit
+							HorizontalContentAlignment="Right"
+							Mask="N2"
+							MaskType="Numeric"
+							MaskUseAsDisplayFormat="True"
+							IsReadOnly="True"
+							EditValue="{Binding Item.in_price, Mode=OneWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource PriceForSc}"
+						Visibility="{Binding it_vis_price_for_sc, Source={x:Static asc:Auth.Config}, Converter={StaticResource BooleanToVisibilityConverter}}">
+						<dxe:TextEdit
+							HorizontalContentAlignment="Right"
+							Mask="N2"
+							MaskType="Numeric"
+							MaskUseAsDisplayFormat="True"
+							IsReadOnly="True"
+							EditValue="{Binding Item.Price1Raw, Mode=OneWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource PriceOpt}"
+						Visibility="{Binding it_vis_opt, Source={x:Static asc:Auth.Config}, Converter={StaticResource BooleanToVisibilityConverter}}">
+						<dxe:TextEdit
+							HorizontalContentAlignment="Right"
+							Mask="N2"
+							MaskType="Numeric"
+							MaskUseAsDisplayFormat="True"
+							IsReadOnly="True"
+							EditValue="{Binding Item.Price3Raw, Mode=OneWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource PriceOpt2}"
+						Visibility="{Binding it_vis_opt2, Source={x:Static asc:Auth.Config}, Converter={StaticResource BooleanToVisibilityConverter}}">
+						<dxe:TextEdit
+							HorizontalContentAlignment="Right"
+							Mask="N2"
+							MaskType="Numeric"
+							MaskUseAsDisplayFormat="True"
+							IsReadOnly="True"
+							EditValue="{Binding Item.Price4Raw, Mode=OneWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource PriceOpt3}"
+						Visibility="{Binding it_vis_opt3, Source={x:Static asc:Auth.Config}, Converter={StaticResource BooleanToVisibilityConverter}}">
+						<dxe:TextEdit
+							HorizontalContentAlignment="Right"
+							Mask="N2"
+							MaskType="Numeric"
+							MaskUseAsDisplayFormat="True"
+							IsReadOnly="True"
+							EditValue="{Binding Item.Price5Raw, Mode=OneWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource PriceForSale}"
+						Visibility="{Binding it_vis_rozn, Source={x:Static asc:Auth.Config}, Converter={StaticResource BooleanToVisibilityConverter}}">
+						<dxe:TextEdit
+							HorizontalContentAlignment="Right"
+							Mask="N2"
+							MaskType="Numeric"
+							MaskUseAsDisplayFormat="True"
+							IsReadOnly="True"
+							EditValue="{Binding Item.Price2Raw, Mode=OneWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutGroup
+						Orientation="Horizontal">
+						<dxlc:LayoutItem
+							Label="{DynamicResource StartRate}">
+							<dxe:TextEdit
+								HorizontalContentAlignment="Right"
+								IsReadOnly="True"
+								EditValue="{Binding Item.currency_rate, Mode=OneWay}" />
+						</dxlc:LayoutItem>
+						<dxlc:LayoutItem
+							Label="{DynamicResource CurrentRate}">
+							<DockPanel>
+								<Image
+									Margin="5,0,0,0"
+									DockPanel.Dock="Right"
+									ToolTip="{DynamicResource CurrencyBinding}"
+									Style="{StaticResource 16X16Image}"
+									Visibility="{Binding IsCurrencyBinding, Converter={StaticResource BooleanToVisibilityConverter}}"
+									Source="{dx:DXImage Image=Currency2_16x16.png}" />
+								<dxe:TextEdit
+									HorizontalContentAlignment="Right"
+									IsReadOnly="True"
+									EditValue="{Binding CurrentRate, Mode=OneWay}" />
+							</DockPanel>
+						</dxlc:LayoutItem>
+					</dxlc:LayoutGroup>
+					<dxlc:LayoutItem
+						Visibility="{Binding Item.WarrantyProgressVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+						<dxe:ProgressBarEdit
+							MinHeight="20"
+							ToolTip="{DynamicResource DealerWarranty}"
+							ContentDisplayMode="Content"
+							Minimum="0"
+							Maximum="100"
+							Content="{Binding Item.EndDealerWarranty, Mode=OneWay}"
+							Value="{Binding Item.DealerWarranty, Mode=OneWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem>
+						<itemCard:ProductAttributesView
+							DataContext="{Binding ProductAttributesVM}" />
+					</dxlc:LayoutItem>
+				</dxlc:LayoutGroup>
+				<dxlc:LayoutGroup
+					Orientation="Vertical"
+					MinWidth="300"
+					MaxWidth="500">
+					<dxlc:LayoutItem
+						LabelPosition="Top"
+						Label="{DynamicResource ItemDescription}"
+						Visibility="{Binding Item.stores.it_vis_description, Converter={StaticResource BooleanToVisibilityConverter}}">
+						<TextBox
+							IsReadOnly="True"
+							MinHeight="50"
+							TextWrapping="Wrap"
+							VerticalScrollBarVisibility="Auto"
+							AcceptsReturn="True"
+							VerticalAlignment="Top"
+							Text="{Binding Item.description, Mode=OneWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						LabelPosition="Top"
+						Label="{DynamicResource Notes}"
+						Visibility="{Binding Item.stores.it_vis_notes, Converter={StaticResource BooleanToVisibilityConverter}}">
+						<TextBox
+							AcceptsReturn="True"
+							IsReadOnly="True"
+							Height="50"
+							TextWrapping="Wrap"
+							VerticalAlignment="Top"
+							Text="{Binding Item.notes, Mode=OneWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:LayoutItem
+						Label="{DynamicResource IshopEnable}"
+						Visibility="{Binding online_store, Source={x:Static asc:Auth.Config}, Converter={dxmvvm:NumericToVisibilityConverter}}">
+						<dxe:CheckEdit
+							IsReadOnly="True"
+							EditValue="{Binding Item.shop_enable, Mode=OneWay}" />
+					</dxlc:LayoutItem>
+					<dxlc:FlowLayoutControl
+						AllowItemMoving="False"
+						Padding="0"
+						MaxHeight="200"
+						Orientation="Vertical"
+						ItemsSource="{Binding Images}">
+						<dxlc:FlowLayoutControl.ItemTemplate>
+							<DataTemplate>
+								<Grid>
+									<Image
+										MaxHeight="170"
+										Source="{Binding preview}">
+										<dxmvvm:Interaction.Behaviors>
+											<dxmvvm:EventToCommand
+												EventTriggerBase_x0060_1.EventName="MouseLeftButtonDown"
+												CommandParameter="{Binding id}"
+												Command="{Binding Data.ZoomImageCommand, Source={StaticResource BindingProxy}}" />
+										</dxmvvm:Interaction.Behaviors>
+									</Image>
+									<dx:SimpleButton
+										Glyph="pack://application:,,,/DevExpress.Images.v17.2;component/DevAV/Actions/Save_16x16.png"
+										VerticalAlignment="Bottom"
+										Margin="5,0,0,0"
+										HorizontalAlignment="Right"
+										Command="{Binding Data.SaveImageCommand, Source={StaticResource BindingProxy}}"
+										CommandParameter="{Binding id}" />
+								</Grid>
+							</DataTemplate>
+						</dxlc:FlowLayoutControl.ItemTemplate>
+					</dxlc:FlowLayoutControl>
+				</dxlc:LayoutGroup>
+			</dxlc:LayoutGroup>
+		</dxlc:LayoutControl>
+	</dx:LoadingDecorator>
+</dxwui:NavigationPage>

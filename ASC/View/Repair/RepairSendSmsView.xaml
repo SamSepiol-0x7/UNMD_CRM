@@ -1,0 +1,79 @@
+<UserControl
+	x:Class="ASC.View.Repair.RepairSendSmsView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:ASC.View.Repair" xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
+	DataContext="{Binding Path=RepairSendSmsViewModel, Source={StaticResource ViewModelLocator}}">
+	<DockPanel
+		Width="850">
+		<StackPanel
+			DockPanel.Dock="Bottom"
+			Orientation="Horizontal"
+			HorizontalAlignment="Right">
+			<FrameworkElement.Resources>
+				<ResourceDictionary>
+					<Style
+						TargetType="{x:Type dx:SimpleButton}"
+						x:Key="{x:Type dx:SimpleButton}">
+						<Setter
+							Property="Height"
+							Value="25" />
+					</Style>
+				</ResourceDictionary>
+			</FrameworkElement.Resources>
+			<dx:SimpleButton
+				Style="{StaticResource SaveButton}"
+				Content="{DynamicResource Send}"
+				Command="{Binding SendCommand}"
+				Glyph="{DXImageGrayscale Image=SendFile_16x16.png}" />
+			<dx:SimpleButton
+				Style="{StaticResource CancelButton}"
+				Margin="10,0,0,0"
+				Command="{Binding CloseCommand}" />
+		</StackPanel>
+		<dxlc:LayoutControl
+			Orientation="Vertical">
+			<dxlc:LayoutItem
+				Label="{DynamicResource Template}">
+				<dxe:ComboBoxEdit
+					DisplayMember="name"
+					ValueMember="id"
+					ItemsSource="{Binding Items}"
+					SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+					<dxmvvm:Interaction.Behaviors>
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+							PassEventArgsToCommand="True"
+							Command="{Binding ComboBoxClickCommand}" />
+					</dxmvvm:Interaction.Behaviors>
+				</dxe:ComboBoxEdit>
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource Recepient}">
+				<dxe:ComboBoxEdit
+					InvalidValueBehavior="AllowLeaveEditor"
+					ShowError="False"
+					TabIndex="3"
+					ValueMember="phone_clean"
+					DisplayMember="phone_clean"
+					ItemsSource="{Binding Phones}"
+					EditValue="{Binding Tel, Mode=TwoWay}">
+					<dxmvvm:Interaction.Behaviors>
+						<dxmvvm:EventToCommand
+							EventTriggerBase_x0060_1.EventName="PreviewMouseLeftButtonDown"
+							PassEventArgsToCommand="True"
+							Command="{Binding ComboBoxClickCommand}" />
+					</dxmvvm:Interaction.Behaviors>
+				</dxe:ComboBoxEdit>
+			</dxlc:LayoutItem>
+			<dxlc:LayoutItem
+				Label="{DynamicResource Message}"
+				LabelPosition="Top">
+				<dxe:TextEdit
+					VerticalContentAlignment="Top"
+					MinHeight="100"
+					MaxHeight="300"
+					AcceptsReturn="True"
+					TextWrapping="Wrap"
+					EditValue="{Binding MessageText, Mode=TwoWay}" />
+			</dxlc:LayoutItem>
+		</dxlc:LayoutControl>
+	</DockPanel>
+</UserControl>
